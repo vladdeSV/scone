@@ -7,7 +7,7 @@ import std.conv : to;
 import std.string : toStringz;
 
 enum Color{
-    fg_black        = 0,
+    fg_black        = 30,
     fg_blue         = FOREGROUND_INTENSITY |                                     FOREGROUND_BLUE,
     fg_blue_dark    =                                                            FOREGROUND_BLUE,
     fg_cyan         = FOREGROUND_INTENSITY |                  FOREGROUND_GREEN | FOREGROUND_BLUE,
@@ -24,15 +24,15 @@ enum Color{
     fg_yellow       = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN                  ,
     fg_yellow_dark  =                        FOREGROUND_RED | FOREGROUND_GREEN                  ,
 
-    bg_black        = 10                                                                        ,
+    bg_black        = 90                                                                        ,
     bg_blue         = BACKGROUND_INTENSITY |                                     BACKGROUND_BLUE,
     bg_blue_dark    =                                                            BACKGROUND_BLUE,
     bg_cyan         = BACKGROUND_INTENSITY |                  BACKGROUND_GREEN | BACKGROUND_BLUE,
     bg_cyan_dark    =                                         BACKGROUND_GREEN | BACKGROUND_BLUE,
     bg_gray         = BACKGROUND_INTENSITY                                                      ,
+    bg_gray_dark    =                        BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE,
     bg_green        = BACKGROUND_INTENSITY |                  BACKGROUND_GREEN                  ,
     bg_green_dark   =                                         BACKGROUND_GREEN                  ,
-    bg_grey_dark    =                        BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE,
     bg_magenta      = BACKGROUND_INTENSITY | BACKGROUND_RED |                    BACKGROUND_BLUE,
     bg_magenta_dark =                        BACKGROUND_RED |                    BACKGROUND_BLUE,
     bg_red          = BACKGROUND_INTENSITY | BACKGROUND_RED                                     ,
