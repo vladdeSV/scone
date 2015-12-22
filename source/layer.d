@@ -2,6 +2,8 @@ module scone.layer;
 
 import std.conv : to;
 import std.string : wrap;
+import std.uni : isWhite;
+import winconsole;
 
 struct Slot
 {
@@ -54,12 +56,32 @@ class Layer
             output ~= to!string(arg);
         }
 
-        output = wrap(wrapped, w - col, null, null, 0);
+        //Wrap string and remove last character (which is a '\n')
+        output = wrap(output, w - col, null, null, 0)[0 .. $ - 1];
+
+        //Make sure the string is force wrapped if needed
+        int charactersSinceLastWhitespace, put;
+        foreach(n, c; output)
+        {
+            if(std.uni.isWhite(c))
+            {
+                charactersSinceLastWhitespace = 0;
+            }
+
+            if(charactersSinceLastWhitespace >= w - col - 1)
+            {
+                output.insertInPlace(n + put, "\n");
+                ++put;
+                charactersSinceLastWhitespace = 0;
+            }
+
+            ++charactersSinceLastWhitespace;
+        }
 
         int wx, wy;
         foreach(c; output)
         {
-            if(c =='\n' || wx >= w - col)
+            if(c =='\n')
             {
                 ++wy;
                 wx = 0;
@@ -72,12 +94,17 @@ class Layer
                 break;
             }
 
-            m_slots[row + wy][col + wx] = c;
+            m_canavas[row + wy][col + wx] = c;
             ++wx;
         }
     }
 
     auto snap()
+    {
+
+    }
+
+    auto print()
     {
 
     }
