@@ -1,15 +1,15 @@
 import std.stdio;
 
 import scone.core;
-import winconsole;
+import scone.winconsole;
 
 void main()
 {
-    sconeInit("testing", 50, 25);
+    sconeInit(SconeModule.WINDOW);
 
     foreach(n, c; "hello!")
     {
-	   winWriteCharacter(10 + n, 5, c);
+	   win_writeCharacter(10 + n, 5, c, Color.fg_white | Color.bg_black);
     }
 
     readln();

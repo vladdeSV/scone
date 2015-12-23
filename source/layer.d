@@ -3,7 +3,6 @@ module scone.layer;
 import std.conv : to;
 import std.string : wrap;
 import std.uni : isWhite;
-import winconsole;
 
 struct Slot
 {
