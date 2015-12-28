@@ -1,7 +1,8 @@
 module scone.utility;
 
 public:
-enum Color{
+enum fg
+{
     black,
     blue,
     blue_dark,
@@ -17,7 +18,27 @@ enum Color{
     red_dark,
     white,
     yellow,
-    yellow_dark,
+    yellow_dark
+}
+
+enum bg
+{
+    black,
+    blue,
+    blue_dark,
+    cyan,
+    cyan_dark,
+    gray,
+    gray_dark,
+    green,
+    green_dark,
+    magenta,
+    magenta_dark,
+    red,
+    red_dark,
+    white,
+    yellow,
+    yellow_dark
 }
 
 protected:

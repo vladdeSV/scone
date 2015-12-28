@@ -3,15 +3,15 @@ module scone.layer;
 import scone.window;
 import scone.utility;
 import std.conv : to;
-import std.array;
+import std.array : insertInPlace;
 import std.string : wrap;
 import std.uni : isWhite;
 
 struct Slot
 {
     char character;
-    Color foreground = Color.white;
-    Color background = Color.black;
+    fg foreground = fg.white;
+    bg background = bg.black;
 }
 
 class Layer
@@ -53,13 +53,102 @@ class Layer
 
     auto write(Args...)(int col, int row, Args args)
     {
-        Color fg, bg;
+        //TODO: Check if col or row are > 0 and < borders
 
-        foreach(arg; args)
+        Slot[] slots;
+        fg foreground = fg.white;
+        bg background = bg.black;
+
+        foreach (arg; args)
         {
-            static if(is(typeof(arg) == Slot))
+            //BUG: static if(is(typeof(nameThatDoesNotExist) == Slot)){} //Works
+            static if(is(typeof(arg) == fg))
             {
-                m_canavas[col][row] = arg;
+                foreground = arg;
+            }
+            else static if(is(typeof(arg) == bg))
+            {
+                background = arg;
+            }
+            else static if(is(typeof(arg) == Slot))
+            {
+                slots ~= arg;
+            }
+            else
+            {
+                foreach(c; to!string(arg))
+                {
+                    slots ~= Slot(c, foreground, background);
+                }
+            }
+        }
+
+        if(!slots.length)
+        {
+            m_canavas[row][col].foreground = foreground;
+            m_canavas[row][col].background = background;
+        }
+        else
+        {
+            Slot nls = Slot('\n');
+
+            char[] chars;
+            chars.length = slots.length;
+            foreach(n, slot; slots)
+            {
+                chars[n] = slot.character;
+            }
+
+            int charactersSinceLastWhitespace, put;
+
+            foreach(n, c; chars)
+            {
+                if(isWhite(c))
+                {
+                    charactersSinceLastWhitespace = 0;
+                }
+
+                if(charactersSinceLastWhitespace >= w - col - 1)
+                {
+                    chars.insertInPlace(n + put, "\n");
+                    ++put;
+                    charactersSinceLastWhitespace = 0;
+                }
+
+                ++charactersSinceLastWhitespace;
+            }
+
+            chars = wrap(chars, w - col, null, null, 0)[0 .. $ - 1];
+
+            put = 0;
+            foreach(n, c; chars)
+            {
+                if(c != slots[n + put].character)
+                {
+                    slots.insertInPlace(n + put, nls);
+                    ++put;
+                }
+            }
+
+            int wx, wy;
+            foreach(slot; slots)
+            {
+                if(slot.character == '\n')
+                {
+                    ++wy;
+                    wx = 0;
+                    continue;
+                }
+
+                //TODO: Split into arrays and set slices
+
+                if(wy >= h - row)
+                {
+                    break;
+                }
+
+                m_canavas[row + wy][col + wx] = slot;
+                ++wx;
             }
         }
 
