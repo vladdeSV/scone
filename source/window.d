@@ -1,7 +1,9 @@
 module scone.window;
 
-import scone.core;
-import scone.winconsole;
+import scone.layer : Slot;
+import scone.utility;
+version(Windows) public import scone.winconsole;
+//version(Posix) public import scone.posixterminal;
 
 protected:
 
@@ -41,15 +43,15 @@ auto windowClose()
     }
 }
 
-auto writeCharacter(int x, int y, char c, int attributes)
+auto writeSlot(int x, int y, Slot slot)
 {
      version (Windows)
     {
-        win_writeCharacter(x, y, c, attributes);
+        win_writeSlot(x, y, slot);
     }
     version (Posix)
     {
-        //posix_writeCharacter(x, y, c, attributes);
+        //posix_writeSlot(x, y, slot);
     }
 }
 
@@ -61,7 +63,7 @@ auto setCursor(int x, int y)
     }
     version (Posix)
     {
-
+        //posix_setCursor(x,y);
     }
 
 }
@@ -74,33 +76,33 @@ auto title(string title) @property
     }
     version (Posix)
     {
-
+        //posix_title = title;
     }
 }
 
-///** Set cursor visible. */
-//auto cursorVisible(bool visible) @property
-//{
-//    version (Windows)
-//    {
-//        win_cursorVisible = visible;
-//    }
-//    version (Posix)
-//    {
+/** Set cursor visible. */
+auto cursorVisible(bool visible) @property
+{
+    version (Windows)
+    {
+        win_cursorVisible = visible;
+    }
+    version (Posix)
+    {
+        //posix_cursorVisible = visible;
+    }
 
-//    }
+}
 
-//}
-
-///** Set line wrapping. */
-//auto lineWrapping(bool lw) @property
-//{
-//    version (Windows)
-//    {
-//        win_lineWrapping = lw;
-//    }
-//    version (Posix)
-//    {
-
-//    }
-//}
+/** Set line wrapping. */
+auto lineWrapping(bool lw) @property
+{
+    version (Windows)
+    {
+        win_lineWrapping = lw;
+    }
+    version (Posix)
+    {
+        //posix_lineWrapping = lw;
+    }
+}

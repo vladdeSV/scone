@@ -2,6 +2,7 @@ module scone.winconsole;
 
 version (Windows):
 
+import scone.layer;
 import core.sys.windows.windows;
 import std.algorithm : max, min;
 import std.conv : to;
@@ -26,7 +27,7 @@ enum Color{
     fg_yellow       = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN                  ,
     fg_yellow_dark  =                        FOREGROUND_RED | FOREGROUND_GREEN                  ,
 
-    bg_black        = 0                                                                        ,
+    bg_black        = 0                                                                         ,
     bg_blue         = BACKGROUND_INTENSITY |                                     BACKGROUND_BLUE,
     bg_blue_dark    =                                                            BACKGROUND_BLUE,
     bg_cyan         = BACKGROUND_INTENSITY |                  BACKGROUND_GREEN | BACKGROUND_BLUE,
@@ -80,16 +81,16 @@ auto win_exitConsole()
     win_lineWrapping = true;
 }
 
-auto win_writeCharacter(int x, int y, char c, int attributes = Color.fg_red | Color.bg_white)
+auto win_writeSlot(int x, int y, Slot slot)
 {
     ushort wx = to!ushort(x), wy = to!ushort(y);
     COORD charBufSize = {1,1};
     COORD characterPos = {0,0};
     SMALL_RECT writeArea = {wx, wy, wx, wy};
     CHAR_INFO character;
-    character.AsciiChar = c;
-    //character.UnicodeChar = to!wchar(c);
-    character.Attributes = to!ushort(attributes);
+    character.AsciiChar = slot.character;
+    //character.UnicodeChar = to!wchar(slot.character);
+    character.Attributes = to!ushort(slot.attributes);
     WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
 }
 

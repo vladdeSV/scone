@@ -1,13 +1,18 @@
 module scone.layer;
 
+import scone.window;
 import std.conv : to;
+import std.array;
 import std.string : wrap;
 import std.uni : isWhite;
+
+version(Windows) public import scone.winconsole : Color;
+//version(Posix) public import scone.posixterminal : Color;
 
 struct Slot
 {
     char character;
-
+    int attributes;
     //TODO: Will hold more properties
 }
 
@@ -38,6 +43,8 @@ class Layer
             row = m_slots[n][] = Slot(' ');
         }
 
+        m_backbuffer = m_slots;
+
         //NOTE: Can I do this in a cleaner way?
         m_canavas = new Slot[][](height - (2 * border.length), width - (2 * border.length));
         foreach(n, ref row; m_canavas)
@@ -48,64 +55,109 @@ class Layer
 
     auto write(Args...)(int col, int row, Args args)
     {
-        string output;
 
         foreach(arg; args)
         {
-            output ~= to!string(arg);
+            static if(is(typeof(change) == Slot))
+            {
+                m_canavas[y][x] = arg;
+            }
         }
 
-        //Wrap string and remove last character (which is a '\n')
-        output = wrap(output, w - col, null, null, 0)[0 .. $ - 1];
+        //string output;
 
-        //Make sure the string is force wrapped if needed
-        int charactersSinceLastWhitespace, put;
-        foreach(n, c; output)
-        {
-            if(std.uni.isWhite(c))
-            {
-                charactersSinceLastWhitespace = 0;
-            }
+        //foreach(arg; args)
+        //{
+        //    output ~= to!string(arg);
+        //}
 
-            if(charactersSinceLastWhitespace >= w - col - 1)
-            {
-                output.insertInPlace(n + put, "\n");
-                ++put;
-                charactersSinceLastWhitespace = 0;
-            }
+        ////Wrap string and remove last character (which is a '\n')
+        //output = wrap(output, w - col, null, null, 0)[0 .. $ - 1];
 
-            ++charactersSinceLastWhitespace;
-        }
+        ////Make sure the string is force wrapped if needed
+        //int charactersSinceLastWhitespace, put;
+        //foreach(n, c; output)
+        //{
+        //    if(isWhite(c))
+        //    {
+        //        charactersSinceLastWhitespace = 0;
+        //    }
 
-        int wx, wy;
-        foreach(c; output)
-        {
-            if(c =='\n')
-            {
-                ++wy;
-                wx = 0;
-            }
+        //    if(charactersSinceLastWhitespace >= w - col - 1)
+        //    {
+        //        output.insertInPlace(n + put, "\n");
+        //        ++put;
+        //        charactersSinceLastWhitespace = 0;
+        //    }
 
-            //TODO: Split into arrays and set slices
+        //    ++charactersSinceLastWhitespace;
+        //}
 
-            if(wy >= h - row)
-            {
-                break;
-            }
+        //int wx, wy;
+        //foreach(c; output)
+        //{
+        //    if(c =='\n')
+        //    {
+        //        ++wy;
+        //        wx = 0;
+        //    }
 
-            m_canavas[row + wy][col + wx] = c;
-            ++wx;
-        }
+        //    //TODO: Split into arrays and set slices
+
+        //    if(wy >= h - row)
+        //    {
+        //        break;
+        //    }
+
+        //    m_canavas[row + wy][col + wx] = c;
+        //    ++wx;
+        //}
     }
 
-    auto snap()
+    Slot[][] snap()
     {
+        foreach(sublayer; m_sublayers)
+        {
+            if(!sublayer.m_visible)
+            {
+                continue;
+            }
 
+            auto sublayerSlots = sublayer.snap();
+
+            foreach(ly, row; sublayerSlots)
+            {
+                foreach(lx, slot; row)
+                {
+                    if(sublayer.x + lx < x || sublayer.x + lx > x + w || sublayer.y + ly < y || sublayer.y + ly > y + h)
+                    {
+                        continue;
+                    }
+
+                    m_slots[y][x] = sublayerSlots[y][x];
+                }
+            }
+        }
+
+        return m_slots;
     }
 
     auto print()
     {
+        snap();
 
+        foreach(sy, row; m_slots)
+        {
+            foreach(sx, slot; row)
+            {
+                if(m_slots[sy][sx] != m_backbuffer[sy][sx])
+                {
+                    writeSlot(sx,sy, slot);
+                }
+            }
+        }
+
+        m_backbuffer = m_slots;
     }
 
     @property
@@ -145,5 +197,5 @@ private:
     int m_w, m_h;
     bool m_visible, m_translucent;
     Slot[] m_border;
-    Slot[][] m_slots, m_canavas;
+    Slot[][] m_slots, m_canavas, m_backbuffer;
 }
