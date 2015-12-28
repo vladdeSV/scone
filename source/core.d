@@ -1,6 +1,6 @@
 module scone.core;
 
-import scone.utility;
+public import scone.utility;
 public import scone.layer;
 public import scone.window;
 

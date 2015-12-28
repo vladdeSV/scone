@@ -2,48 +2,13 @@ module scone.winconsole;
 
 version (Windows):
 
-import scone.layer;
 import core.sys.windows.windows;
+import scone.layer;
+import scone.utility;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
-
-enum Color{
-    fg_black        = 0                                                                         ,
-    fg_blue         = FOREGROUND_INTENSITY |                                     FOREGROUND_BLUE,
-    fg_blue_dark    =                                                            FOREGROUND_BLUE,
-    fg_cyan         = FOREGROUND_INTENSITY |                  FOREGROUND_GREEN | FOREGROUND_BLUE,
-    fg_cyan_dark    =                                         FOREGROUND_GREEN | FOREGROUND_BLUE,
-    fg_gray         = FOREGROUND_INTENSITY                                                      ,
-    fg_green        = FOREGROUND_INTENSITY |                  FOREGROUND_GREEN                  ,
-    fg_green_dark   =                                         FOREGROUND_GREEN                  ,
-    fg_grey_dark    =                        FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
-    fg_magenta      = FOREGROUND_INTENSITY | FOREGROUND_RED |                    FOREGROUND_BLUE,
-    fg_magenta_dark =                        FOREGROUND_RED |                    FOREGROUND_BLUE,
-    fg_red          = FOREGROUND_INTENSITY | FOREGROUND_RED                                     ,
-    fg_red_dark     =                        FOREGROUND_RED                                     ,
-    fg_white        = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
-    fg_yellow       = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN                  ,
-    fg_yellow_dark  =                        FOREGROUND_RED | FOREGROUND_GREEN                  ,
-
-    bg_black        = 0                                                                         ,
-    bg_blue         = BACKGROUND_INTENSITY |                                     BACKGROUND_BLUE,
-    bg_blue_dark    =                                                            BACKGROUND_BLUE,
-    bg_cyan         = BACKGROUND_INTENSITY |                  BACKGROUND_GREEN | BACKGROUND_BLUE,
-    bg_cyan_dark    =                                         BACKGROUND_GREEN | BACKGROUND_BLUE,
-    bg_gray         = BACKGROUND_INTENSITY                                                      ,
-    bg_gray_dark    =                        BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE,
-    bg_green        = BACKGROUND_INTENSITY |                  BACKGROUND_GREEN                  ,
-    bg_green_dark   =                                         BACKGROUND_GREEN                  ,
-    bg_magenta      = BACKGROUND_INTENSITY | BACKGROUND_RED |                    BACKGROUND_BLUE,
-    bg_magenta_dark =                        BACKGROUND_RED |                    BACKGROUND_BLUE,
-    bg_red          = BACKGROUND_INTENSITY | BACKGROUND_RED                                     ,
-    bg_red_dark     =                        BACKGROUND_RED                                     ,
-    bg_white        = BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE,
-    bg_yellow       = BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN                  ,
-    bg_yellow_dark  =                        BACKGROUND_RED | BACKGROUND_GREEN
-}
 
 protected:
 
@@ -62,7 +27,8 @@ auto win_initConsole()
         assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
 
     win_cursorVisible = false;
-    win_lineWrapping = false;
+    //win_lineWrapping = false;
+    win_setCursor(0,0);
 
     /+
     ushort ww = to!ushort(w), wh = to!ushort(h);
@@ -78,7 +44,7 @@ auto win_initConsole()
 auto win_exitConsole()
 {
     win_cursorVisible = true;
-    win_lineWrapping = true;
+    //win_lineWrapping = true;
 }
 
 auto win_writeSlot(int x, int y, Slot slot)
@@ -90,7 +56,8 @@ auto win_writeSlot(int x, int y, Slot slot)
     CHAR_INFO character;
     character.AsciiChar = slot.character;
     //character.UnicodeChar = to!wchar(slot.character);
-    character.Attributes = to!ushort(slot.attributes);
+    //character.Attributes = attributesFromSlot(slot);
+    character.Attributes = attributesFromSlot(slot);
     WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
 }
 
@@ -103,6 +70,7 @@ auto win_setCursor(int x, int y)
     SetConsoleCursorPosition(_hConsoleOutput, change);
 }
 
+/** Set window title */
 auto win_title(string title) @property
 {
     SetConsoleTitleA(title.toStringz);
@@ -124,6 +92,117 @@ auto win_lineWrapping(bool lw) @property
 }
 
 private:
+
 HANDLE _hConsoleOutput, _hConsoleInput, _hConsoleError;
 CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 //private SMALL_RECT _oldWindowSize;
+
+ushort attributesFromSlot(Slot slot)
+{
+    ushort attributes;
+
+    switch(slot.foreground)
+    {
+    case Color.blue:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
+        break;
+    case Color.blue_dark:
+        attributes |= FOREGROUND_BLUE;
+        break;
+    case Color.cyan:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case Color.cyan_dark:
+        attributes |= FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case Color.gray:
+        attributes |= FOREGROUND_INTENSITY;
+        break;
+    case Color.gray_dark:
+        attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case Color.green:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN;
+        break;
+    case Color.green_dark:
+        attributes |= FOREGROUND_GREEN;
+        break;
+    case Color.magenta:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;
+        break;
+    case Color.magenta_dark:
+        attributes |= FOREGROUND_RED | FOREGROUND_BLUE;
+        break;
+    case Color.red:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED;
+        break;
+    case Color.red_dark:
+        attributes |= FOREGROUND_RED;
+        break;
+    case Color.white:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case Color.yellow:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN;
+        break;
+    case Color.yellow_dark:
+        attributes |= FOREGROUND_RED | FOREGROUND_GREEN;
+        break;
+    default:
+        break;
+    }
+
+    switch(slot.background)
+    {
+    case Color.blue:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
+        break;
+    case Color.blue_dark:
+        attributes |= BACKGROUND_BLUE;
+        break;
+    case Color.cyan:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_BLUE;
+        break;
+    case Color.cyan_dark:
+        attributes |= BACKGROUND_GREEN | BACKGROUND_BLUE;
+        break;
+    case Color.gray:
+        attributes |= BACKGROUND_INTENSITY;
+        break;
+    case Color.gray_dark:
+        attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+        break;
+    case Color.green:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN;
+        break;
+    case Color.green_dark:
+        attributes |= BACKGROUND_GREEN;
+        break;
+    case Color.magenta:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE;
+        break;
+    case Color.magenta_dark:
+        attributes |= BACKGROUND_RED | BACKGROUND_BLUE;
+        break;
+    case Color.red:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED;
+        break;
+    case Color.red_dark:
+        attributes |= BACKGROUND_RED;
+        break;
+    case Color.white:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+        break;
+    case Color.yellow:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN;
+        break;
+    case Color.yellow_dark:
+        attributes |= BACKGROUND_RED | BACKGROUND_GREEN;
+        break;
+    default:
+        break;
+    }
+
+    //return to!ushort(attributes);
+    return attributes;
+}

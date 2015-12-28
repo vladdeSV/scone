@@ -1,5 +1,25 @@
 module scone.utility;
 
+public:
+enum Color{
+    black,
+    blue,
+    blue_dark,
+    cyan,
+    cyan_dark,
+    gray,
+    gray_dark,
+    green,
+    green_dark,
+    magenta,
+    magenta_dark,
+    red,
+    red_dark,
+    white,
+    yellow,
+    yellow_dark,
+}
+
 protected:
 __gshared bool moduleWindow   = false;
 __gshared bool moduleKeyboard = false;

@@ -3,6 +3,8 @@ import std.stdio;
 import scone.core;
 import std.random;
 
+import scone.winconsole;
+
 void main()
 {
     sconeInit(SconeModule.Window);
@@ -11,7 +13,7 @@ void main()
 
     foreach(n, c; "hello!")
     {
-        //write(10 + n, 6, Slot(c, Color.fg_red));
+        layer.write(10, 6 + n, Slot(c, Color.red, Color.white));
     }
 
     layer.print();

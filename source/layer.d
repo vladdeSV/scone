@@ -1,19 +1,17 @@
 module scone.layer;
 
 import scone.window;
+import scone.utility;
 import std.conv : to;
 import std.array;
 import std.string : wrap;
 import std.uni : isWhite;
 
-version(Windows) public import scone.winconsole : Color;
-//version(Posix) public import scone.posixterminal : Color;
-
 struct Slot
 {
     char character;
-    int attributes;
-    //TODO: Will hold more properties
+    Color foreground = Color.white;
+    Color background = Color.black;
 }
 
 class Layer
@@ -43,24 +41,25 @@ class Layer
             row = m_slots[n][] = Slot(' ');
         }
 
-        m_backbuffer = m_slots;
-
         //NOTE: Can I do this in a cleaner way?
         m_canavas = new Slot[][](height - (2 * border.length), width - (2 * border.length));
         foreach(n, ref row; m_canavas)
         {
             row = m_slots[border.length + n][border.length .. width - border.length];
         }
+
+        m_backbuffer = m_slots;
     }
 
     auto write(Args...)(int col, int row, Args args)
     {
+        Color fg, bg;
 
         foreach(arg; args)
         {
-            static if(is(typeof(change) == Slot))
+            static if(is(typeof(arg) == Slot))
             {
-                m_canavas[y][x] = arg;
+                m_canavas[col][row] = arg;
             }
         }
 
@@ -150,10 +149,10 @@ class Layer
         {
             foreach(sx, slot; row)
             {
-                if(m_slots[sy][sx] != m_backbuffer[sy][sx])
-                {
+                //if(slot != m_backbuffer[sy][sx])
+                //{
                     writeSlot(sx,sy, slot);
-                }
+                //}
             }
         }
 
