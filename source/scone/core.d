@@ -76,9 +76,3 @@ bool hasFlag(SconeModule check, SconeModule type)
 {
     return ((check & type) == type);
 }
-
-
-bool hasFlag2(Enum)(Enum check, Enum type) if (is(typeof(Enum) == enum))
-{
-    return ((check & type) == type);
-}
