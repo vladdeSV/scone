@@ -35,6 +35,7 @@ class Layer
         m_translucent = true;
 
         m_slots = new Slot[][](height, width);
+        m_backbuffer = new Slot[][](height, width);
 
         foreach(n, ref row; m_slots)
         {
@@ -47,8 +48,6 @@ class Layer
         {
             row = m_slots[border.length + n][border.length .. width - border.length];
         }
-
-        m_backbuffer = m_slots;
     }
 
     auto write(Args...)(int col, int row, Args args)
@@ -90,16 +89,16 @@ class Layer
         else
         {
             Slot nls = Slot('\n');
-
             char[] chars;
+
             chars.length = slots.length;
             foreach(n, slot; slots)
             {
                 chars[n] = slot.character;
             }
 
-            int charactersSinceLastWhitespace, put;
 
+            int charactersSinceLastWhitespace, put;
             foreach(n, c; chars)
             {
                 if(isWhite(c))
@@ -110,7 +109,6 @@ class Layer
                 if(charactersSinceLastWhitespace >= w - col - 1)
                 {
                     chars.insertInPlace(n + put, ' ');
-                    //chars[n + put] = ' ';
                     ++put;
                     charactersSinceLastWhitespace = 0;
                 }
@@ -138,8 +136,6 @@ class Layer
                     continue;
                 }
 
-                //TODO: Split into arrays and set slices
-
                 if(wy >= h - row)
                 {
                     break;
@@ -149,55 +145,6 @@ class Layer
                 ++wx;
             }
         }
-
-        //string output;
-
-        //foreach(arg; args)
-        //{
-        //    output ~= to!string(arg);
-        //}
-
-        ////Wrap string and remove last character (which is a '\n')
-        //output = wrap(output, w - col, null, null, 0)[0 .. $ - 1];
-
-        ////Make sure the string is force wrapped if needed
-        //int charactersSinceLastWhitespace, put;
-        //foreach(n, c; output)
-        //{
-        //    if(isWhite(c))
-        //    {
-        //        charactersSinceLastWhitespace = 0;
-        //    }
-
-        //    if(charactersSinceLastWhitespace >= w - col - 1)
-        //    {
-        //        output.insertInPlace(n + put, "\n");
-        //        ++put;
-        //        charactersSinceLastWhitespace = 0;
-        //    }
-
-        //    ++charactersSinceLastWhitespace;
-        //}
-
-        //int wx, wy;
-        //foreach(c; output)
-        //{
-        //    if(c =='\n')
-        //    {
-        //        ++wy;
-        //        wx = 0;
-        //    }
-
-        //    //TODO: Split into arrays and set slices
-
-        //    if(wy >= h - row)
-        //    {
-        //        break;
-        //    }
-
-        //    m_canavas[row + wy][col + wx] = c;
-        //    ++wx;
-        //}
     }
 
     Slot[][] snap()
@@ -236,14 +183,13 @@ class Layer
         {
             foreach(sx, slot; row)
             {
-                //if(slot != m_backbuffer[sy][sx])
-                //{
+                if(slot != m_backbuffer[sy][sx])
+                {
                     writeSlot(sx,sy, slot);
-                //}
+                    m_backbuffer[sy][sx] = slot;
+                }
             }
         }
-
-        m_backbuffer = m_slots;
     }
 
     @property
