@@ -4,7 +4,7 @@ import std.stdio;
 
 void main()
 {
-    sconeInit(SconeModule.Window);
+    sconeInit(SconeModule.WINDOW);
 
     auto layer = new Layer(40, 20);
 

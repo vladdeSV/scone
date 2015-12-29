@@ -3,6 +3,8 @@ module scone.utility;
 public:
 enum fg
 {
+    init,
+
     black,
     blue,
     blue_dark,
@@ -23,6 +25,8 @@ enum fg
 
 enum bg
 {
+    init,
+
     black,
     blue,
     blue_dark,

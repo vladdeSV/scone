@@ -6,24 +6,24 @@ public import scone.window;
 
 enum SconeModule
 {
-    None = 0,
-    Window = 1,
-    Keyboard = 2,
-    Audio = 4 /* audio is unused/unimplemented */,
-    All = Window | Keyboard | Audio
+    NONE = 0,
+    WINDOW = 1,
+    KEYBOARD = 2,
+    AUDIO = 4 /* audio is unused/unimplemented */,
+    ALL = WINDOW | KEYBOARD | AUDIO
 }
 
-auto sconeInit(SconeModule cm = SconeModule.All)
+auto sconeInit(SconeModule cm = SconeModule.ALL)
 {
-    if(hasFlag(cm, SconeModule.Window))
+    if(hasFlag(cm, SconeModule.WINDOW))
     {
         windowInit();
     }
-    if(hasFlag(cm, SconeModule.Keyboard))
+    if(hasFlag(cm, SconeModule.KEYBOARD))
     {
        //keyboardInit();
     }
-    if(hasFlag(cm, SconeModule.Audio))
+    if(hasFlag(cm, SconeModule.AUDIO))
     {
        //audioInit();
     }
@@ -43,21 +43,21 @@ auto getModuleState(SconeModule cm)
 {
     bool r = true;
 
-    if(hasFlag(cm, SconeModule.None))
+    if(hasFlag(cm, SconeModule.NONE))
     {
-        return !(moduleWindow || moduleKeyboard || moduleAudio);
+        return !(moduleWINDOW || moduleKEYBOARD || moduleAUDIO);
     }
-    if(hasFlag(cm, SconeModule.Window))
+    if(hasFlag(cm, SconeModule.WINDOW))
     {
-        r &= moduleWindow;
+        r &= moduleWINDOW;
     }
-    if(hasFlag(cm, SconeModule.Keyboard))
+    if(hasFlag(cm, SconeModule.KEYBOARD))
     {
-        r &= moduleKeyboard;
+        r &= moduleKEYBOARD;
     }
-    if(hasFlag(cm, SconeModule.Audio))
+    if(hasFlag(cm, SconeModule.AUDIO))
     {
-        r &= moduleAudio;
+        r &= moduleAUDIO;
     }
 
     return r;
@@ -68,7 +68,7 @@ auto getModuleState(SconeModule cm)
 */
 auto sconeRunning()
 {
-    return !getModuleState(SconeModule.None);
+    return !getModuleState(SconeModule.NONE);
 }
 
 private:
