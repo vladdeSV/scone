@@ -61,7 +61,6 @@ class Layer
 
         foreach (arg; args)
         {
-            //BUG: static if(is(typeof(nameThatDoesNotExist) == Slot)){} //Works
             static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
@@ -110,7 +109,8 @@ class Layer
 
                 if(charactersSinceLastWhitespace >= w - col - 1)
                 {
-                    chars.insertInPlace(n + put, "\n");
+                    chars.insertInPlace(n + put, ' ');
+                    //chars[n + put] = ' ';
                     ++put;
                     charactersSinceLastWhitespace = 0;
                 }
@@ -120,13 +120,11 @@ class Layer
 
             chars = wrap(chars, w - col, null, null, 0)[0 .. $ - 1];
 
-            put = 0;
             foreach(n, c; chars)
             {
-                if(c != slots[n + put].character)
+                if(c == '\n')
                 {
-                    slots.insertInPlace(n + put, nls);
-                    ++put;
+                    slots[n] = nls;
                 }
             }
 
