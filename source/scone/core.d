@@ -45,19 +45,19 @@ auto getModuleState(SconeModule cm)
 
     if(hasFlag(cm, SconeModule.NONE))
     {
-        return !(moduleWINDOW || moduleKEYBOARD || moduleAUDIO);
+        return !(moduleWindow || moduleKeyboard || moduleAudio);
     }
     if(hasFlag(cm, SconeModule.WINDOW))
     {
-        r &= moduleWINDOW;
+        r &= moduleWindow;
     }
     if(hasFlag(cm, SconeModule.KEYBOARD))
     {
-        r &= moduleKEYBOARD;
+        r &= moduleKeyboard;
     }
     if(hasFlag(cm, SconeModule.AUDIO))
     {
-        r &= moduleAUDIO;
+        r &= moduleAudio;
     }
 
     return r;
