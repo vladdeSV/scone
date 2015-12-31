@@ -1,7 +1,47 @@
 module scone.keyboard;
 
-version(Windows) public import scone.windows.winkeyboard;
+version(Windows)
+{
+    import scone.windows.winkeyboard;
+    import core.sys.windows.windows;
+}
 //version(Posix) public import scone.posix.posixkeyboard;
+
+
+struct KeyEvent
+{
+    auto keyDown() @property
+    {
+        version(Windows) return cast(bool) _winKey.bKeyDown;
+        //version(Posix) return ;
+    }
+
+    auto repeated() @property
+    {
+        version(Windows) return _winKey.wRepeatCount > 1; //TODO: Test to see if one press makes repeated equal to one or zero
+        //version(Posix) return ;
+    }
+
+    auto repeatedAmount() @property
+    {
+        version(Windows) return cast(int) _winKey.wRepeatCount;
+        //version(Posix) return ;
+    }
+
+    auto key() @property
+    {
+        version(Windows) return win_getKeyFromKeyEventRecord(_winKey);
+        //version(Posix) return ;
+    }
+
+    auto controlKey() @property
+    {
+        version(Windows) return win_getControlKeyFromKeyEventRecord(_winKey);
+        //version(Posix) return ;
+    }
+
+    version(Windows) private KEY_EVENT_RECORD _winKey;
+}
 
 enum Key
 {
