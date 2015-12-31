@@ -3,7 +3,6 @@ module scone.windows.winkeyboard;
 version(Windows):
 
 import scone.keyboard;
-import std.conv : to;
 import core.sys.windows.windows;
 
 struct KeyEvent
@@ -23,9 +22,14 @@ struct KeyEvent
         return cast(int) _winKey.wRepeatCount;
     }
 
-    auto key()
+    auto key() @property
     {
-        return _winKey.wVirtualKeyCode;
+        return win_getKeyFromKeyEventRecord(_winKey);
+    }
+
+    auto controlKey() @property
+    {
+        return win_getControlKeyFromKeyEventRecord(_winKey);
     }
 
     private KEY_EVENT_RECORD _winKey;
@@ -33,9 +37,9 @@ struct KeyEvent
 
 private:
 
-auto getKeyFromVirtualKey(WORD vk)
+auto win_getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
 {
-    switch(vk)
+    switch(k.wVirtualKeyCode)
     {
         case WindowsVirtualKey.K_0:
         return Key.SK_0;
@@ -310,6 +314,33 @@ auto getKeyFromVirtualKey(WORD vk)
         return Key.SK_PERIOD;
         default:
         return Key.UNKNOWN;
+    }
+}
+
+auto win_getControlKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
+{
+    switch(k.dwControlKeyState)
+    {
+        case WindowsControlKey.CAPSLOCK_ON:
+        return ControlKey.CAPSLOCK;
+        case WindowsControlKey.NUMLOCK_ON:
+        return ControlKey.NUMLOCK;
+        case WindowsControlKey.SCROLLLOCK_ON:
+        return ControlKey.SCROLL_LOCK;
+        case WindowsControlKey.SHIFT_PRESSED:
+        return ControlKey.SHIFT;
+        case WindowsControlKey.ENHANCED_KEY:
+        return ControlKey.ENHANCED;
+        case WindowsControlKey.LEFT_ALT_PRESSED:
+        return ControlKey.ALT_LEFT;
+        case WindowsControlKey.RIGHT_ALT_PRESSED:
+        return ControlKey.ALT_RIGHT;
+        case WindowsControlKey.LEFT_CTRL_PRESSED:
+        return ControlKey.CTRL_LEFT;
+        case WindowsControlKey.RIGHT_CTRL_PRESSED:
+        return ControlKey.CTRL_RIGHT;
+        default:
+        return ControlKey.NONE;
     }
 }
 
@@ -690,4 +721,3 @@ enum WindowsControlKey
     //The right CTRL key is pressed
     RIGHT_CTRL_PRESSED = 0x0004
 }
-

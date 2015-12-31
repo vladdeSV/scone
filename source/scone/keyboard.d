@@ -436,6 +436,8 @@ enum Key
 
 enum ControlKey
 {
+    NONE,
+
     //The CAPS LOCK light is on
     CAPSLOCK,
 
@@ -448,8 +450,8 @@ enum ControlKey
     //The SHIFT key is pressed
     SHIFT,
 
-    ////The key is enhanced
-    //ENHANCED,
+    //The key is enhanced (?)
+    ENHANCED,
 
     //The left ALT key is pressed
     ALT_LEFT,
@@ -463,50 +465,3 @@ enum ControlKey
     //The right CTRL key is pressed
     CTRL_RIGHT
 }
-
-/+
-version(Posix)
-struct Key
-{
-    auto keyDown() @property
-    {
-    }
-
-    auto repeated() @property
-    {
-    }
-
-    auto repeatedAmount() @property
-    {
-    }
-
-    auto key()
-    {
-    }
-}
-
-struct WinKey
-{
-    auto win_keyDown() @property
-    {
-        return cast(bool) _winKey.bKeyDown;
-    }
-
-    auto win_repeated() @property
-    {
-        return _winKey.wRepeatCount > 0;
-    }
-
-    auto win_repeatedAmount() @property
-    {
-        return cast(int) _winKey.wRepeatCount;
-    }
-
-    auto win_key()
-    {
-        return _winKey.wVirtualKeyCode;
-    }
-
-    private KEY_EVENT_RECORD _winKey;
-}
-+/
