@@ -1,5 +1,7 @@
 module scone.utility;
 
+import scone.keyboard;
+
 enum fg
 {
     init,
@@ -48,3 +50,4 @@ package(scone):
 __gshared bool moduleWindow   = false;
 __gshared bool moduleKeyboard = false;
 __gshared bool moduleAudio    = false;
+__gshared KeyEvent[] keyInputs;

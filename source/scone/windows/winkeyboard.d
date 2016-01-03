@@ -3,13 +3,17 @@ module scone.windows.winkeyboard;
 version(Windows):
 package(scone):
 
+import core.sys.windows.windows;
+import core.Thread;
 import scone.keyboard;
 import scone.utility;
-import core.sys.windows.windows;
 
-private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
-private INPUT_RECORD _inputBuffer;
-private HANDLE _hConsoleInput;
+private __gshared
+{
+    DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
+    HANDLE _hConsoleInput;
+    INPUT_RECORD[128] _inputBuffer;
+}
 
 auto win_initKeyboard()
 {
@@ -26,10 +30,37 @@ auto win_initKeyboard()
     if(!SetConsoleMode(_hConsoleInput, _mode))
         assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
 
-    //while (moduleKeyboard)
-    //{
-    //    ReadConsoleInputA(_hConsoleInput, &_inputBuffer, 128, &_inputsRead);
-    //}
+    Thread inputThread = new ThreadInput().start();
+
+}
+
+class ThreadInput : Thread
+{
+    this()
+    {
+        super(&init);
+        this.isDaemon(true);
+    }
+
+    auto init()
+    {
+        while (moduleKeyboard)
+        {
+            ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
+
+            foreach(inbuf; _inputBuffer)
+            switch(inbuf.EventType)
+            {
+                case KEY_EVENT:
+                //FIXME: massive performance slowdown
+                keyInputs ~= KeyEvent(inbuf.KeyEvent);
+                break;
+
+                default:
+                break;
+            }
+        }
+    }
 }
 
 auto win_exitKeyboard()

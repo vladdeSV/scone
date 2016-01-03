@@ -1,50 +1,5 @@
 module scone.keyboard;
 
-package(scone):
-
-import scone.utility;
-
-version(Windows)
-{
-    import scone.windows.winkeyboard;
-    import core.sys.windows.windows;
-}
-//version(Posix) public import scone.posix.posixkeyboard;
-
-auto keyboardInit()
-{
-    if(!moduleKeyboard)
-    {
-        version (Windows)
-        {
-            win_initKeyboard();
-        }
-        version (Posix)
-        {
-            //posix_initKeyboard();
-        }
-
-        moduleKeyboard = true;
-    }
-}
-
-auto keyboardClose()
-{
-    if(moduleKeyboard)
-    {
-        version(Windows)
-        {
-            win_exitKeyboard();
-        }
-        version(Posix)
-        {
-            //posix_exitKeyboard();
-        }
-
-        moduleKeyboard = false;
-    }
-}
-
 struct KeyEvent
 {
     version(Windows) this(KEY_EVENT_RECORD k)
@@ -113,6 +68,63 @@ struct KeyEvent
     }
 
     version(Windows) private KEY_EVENT_RECORD m_winKey;
+}
+
+auto getInputs()
+{
+    auto temp = keyInputs;
+    clearInputs();
+    return temp;
+}
+
+auto clearInputs()
+{
+    keyInputs = null;
+}
+
+package(scone):
+
+import scone.utility;
+
+version(Windows)
+{
+    import scone.windows.winkeyboard;
+    import core.sys.windows.windows;
+}
+//version(Posix) public import scone.posix.posixkeyboard;
+
+auto keyboardInit()
+{
+    if(!moduleKeyboard)
+    {
+        version (Windows)
+        {
+            win_initKeyboard();
+        }
+        version (Posix)
+        {
+            //posix_initKeyboard();
+        }
+
+        moduleKeyboard = true;
+    }
+}
+
+auto keyboardClose()
+{
+    if(moduleKeyboard)
+    {
+        version(Windows)
+        {
+            win_exitKeyboard();
+        }
+        version(Posix)
+        {
+            //posix_exitKeyboard();
+        }
+
+        moduleKeyboard = false;
+    }
 }
 
 enum Key

@@ -50,6 +50,9 @@ class Layer
         }
     }
 
+    /**
+     * Bugs: entering a shit loads of spaces causes range violation. caused in the forced wrap part (because not inserting a newline thing)
+     */
     auto write(Args...)(int col, int row, Args args)
     {
         //TODO: Check if col or row are > 0 and < borders
@@ -136,7 +139,7 @@ class Layer
                     continue;
                 }
 
-                if(wy >= h - row)
+                if(row + wy >= h)
                 {
                     break;
                 }
