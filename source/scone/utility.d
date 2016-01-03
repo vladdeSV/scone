@@ -2,6 +2,12 @@ module scone.utility;
 
 import scone.keyboard;
 
+//General flag checking
+bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
+{
+    return ((check & type) == type);
+}
+
 enum fg
 {
     init,

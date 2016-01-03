@@ -71,9 +71,3 @@ auto sconeRunning()
 {
     return !getModuleState(SconeModule.NONE);
 }
-
-private:
-bool hasFlag(SconeModule check, SconeModule type)
-{
-    return ((check & type) == type);
-}

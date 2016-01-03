@@ -195,6 +195,14 @@ class Layer
         }
     }
 
+    auto clear()
+    {
+        foreach(ref row; m_slots)
+        {
+            row[] = Slot(' ');
+        }
+    }
+
     @property
     {
         const

@@ -55,6 +55,11 @@ struct KeyEvent
         }
     }
 
+    auto hasControlKey(ControlKey ck)
+    {
+        return hasFlag(controlKey, ck);
+    }
+
     auto controlKey() @property
     {
         version(Windows)
@@ -65,6 +70,11 @@ struct KeyEvent
         {
             return 0;
         }
+    }
+
+    version(Windows) auto getVK()
+    {
+        return m_winKey.wVirtualKeyCode;
     }
 
     version(Windows) private KEY_EVENT_RECORD m_winKey;
@@ -193,11 +203,11 @@ enum Key
     //SELECT key
     SK_SELECT,
 
-    ////PRINT key
-    //SK_PRINT,
+    //PRINT key
+    SK_PRINT,
 
-    ////EXECUTE key
-    //SK_EXECUTE,
+    //EXECUTE key
+    SK_EXECUTE,
 
     //PRINT SCREEN key
     SK_PRINT_SCREEN,
@@ -542,50 +552,65 @@ enum Key
     //For any country/region, the '.' key
     SK_PERIOD,
 
-    ////Used to pass Unicode characters as if they were keystrokes. The SK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
-    //SK_PACKET,
+    //Used to pass Unicode characters as if they were keystrokes. The SK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
+    SK_PACKET,
 
-    ////Erase EOF key
-    //SK_EREOF,
+    //Erase EOF key
+    SK_EREOF,
 
-    ////Play key
-    //SK_PLAY,
+    //Play key
+    SK_PLAY,
 
-    ////Zoom key
-    //SK_ZOOM,
+    //Zoom key
+    SK_ZOOM,
 
-    ////Clear key
-    //SK_OEM_CLEAR
+    //Clear key
+    SK_ATTN,
+    SK_CRSEL,
+    SK_EXSEL,
+    SK_MENU,
+    SK_OEM_1,
+    SK_OEM_2,
+    SK_OEM_3,
+    SK_OEM_4,
+    SK_OEM_5,
+    SK_OEM_6,
+    SK_OEM_7,
+    SK_OEM_8,
+    SK_OEM_102,
+    SK_OEM_CLEAR,
+    SK_PROCESSKEY,
+
+    SK_BUTTON_LEFT,
+    SK_BUTTON_RIGHT,
+    SK_CLICK,
+    SK_CANCEL,
+    SK_XBUTTON1,
+    SK_XBUTTON2,
 }
 
 enum ControlKey
 {
-    NONE,
+    NONE = 0,
 
     //The CAPS LOCK light is on
-    CAPSLOCK,
+    CAPSLOCK = 1,
 
     //The NUM LOCK light is on
-    NUMLOCK,
+    NUMLOCK = 2,
 
     //The SCROLL LOCK light is on
-    SCROLL_LOCK,
+    SCROLLLOCK = 4,
 
     //The SHIFT key is pressed
-    SHIFT,
+    SHIFT = 8,
 
     //The key is enhanced (?)
-    ENHANCED,
+    ENHANCED = 16,
 
     //The left ALT key is pressed
-    ALT_LEFT,
-
-    //The right ALT key is pressed
-    ALT_RIGHT,
+    ALT = 32,
 
     //The left CTRL key is pressed
-    CTRL_LEFT,
-
-    //The right CTRL key is pressed
-    CTRL_RIGHT
+    CTRL = 64,
 }

@@ -26,6 +26,7 @@ auto win_initConsole()
     //win_lineWrapping = false;
     win_setCursor(0,0);
 
+    //SetConsoleOutputCP(65001);
 
     ////Set up the required window size:
     //SMALL_RECT windowSize = {0, 0, to!ushort(w), to!ushort(h)};
