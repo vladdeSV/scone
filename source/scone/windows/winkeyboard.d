@@ -1,7 +1,6 @@
 module scone.windows.winkeyboard;
 
 version(Windows):
-protected:
 
 import scone.keyboard;
 import core.sys.windows.windows;

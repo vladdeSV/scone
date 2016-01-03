@@ -7,40 +7,74 @@ version(Windows)
 }
 //version(Posix) public import scone.posix.posixkeyboard;
 
-
 struct KeyEvent
 {
+    version(Windows) this(KEY_EVENT_RECORD k)
+    {
+        m_winKey = k;
+    }
+
     auto keyDown() @property
     {
-        version(Windows) return cast(bool) _winKey.bKeyDown;
-        //version(Posix) return ;
+        version(Windows)
+        {
+            return cast(bool) m_winKey.bKeyDown;
+        }
+        version(Posix)
+        {
+            return 0;
+        }
     }
 
     auto repeated() @property
     {
-        version(Windows) return _winKey.wRepeatCount > 1; //TODO: Test to see if one press makes repeated equal to one or zero
-        //version(Posix) return ;
+        version(Windows)
+        {
+            return m_winKey.wRepeatCount > 1; //TODO: Test to see if one press makes repeated equal to one or zero
+        }
+        version(Posix)
+        {
+            return 0;
+        }
     }
 
     auto repeatedAmount() @property
     {
-        version(Windows) return cast(int) _winKey.wRepeatCount;
-        //version(Posix) return ;
+        version(Windows)
+        {
+            return cast(int) m_winKey.wRepeatCount;
+        }
+        version(Posix)
+        {
+            return 0;
+        }
     }
 
     auto key() @property
     {
-        version(Windows) return win_getKeyFromKeyEventRecord(_winKey);
-        //version(Posix) return ;
+        version(Windows)
+        {
+            return win_getKeyFromKeyEventRecord(m_winKey);
+        }
+        version(Posix)
+        {
+            return 0;
+        }
     }
 
     auto controlKey() @property
     {
-        version(Windows) return win_getControlKeyFromKeyEventRecord(_winKey);
-        //version(Posix) return ;
+        version(Windows)
+        {
+            return win_getControlKeyFromKeyEventRecord(m_winKey);
+        }
+        version(Posix)
+        {
+            return 0;
+        }
     }
 
-    version(Windows) private KEY_EVENT_RECORD _winKey;
+    version(Windows) private KEY_EVENT_RECORD m_winKey;
 }
 
 enum Key

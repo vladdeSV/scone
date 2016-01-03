@@ -10,8 +10,6 @@ import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
 
-protected:
-
 auto win_initConsole()
 {
 

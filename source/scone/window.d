@@ -5,8 +5,6 @@ import scone.utility;
 version(Windows) public import scone.windows.winconsole;
 //version(Posix) public import scone.posixterminal;
 
-protected:
-
 auto windowInit()
 {
     if(!moduleWindow)
