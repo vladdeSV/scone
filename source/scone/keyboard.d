@@ -140,8 +140,6 @@ auto keyboardClose()
 enum Key
 {
     UNKNOWN,
-    ////Control-break processing
-    //SK_CANCEL,
 
     //BACKSPACE key
     SK_BACKSPACE,

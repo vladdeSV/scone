@@ -553,6 +553,9 @@ auto win_getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
         case WindowsVirtualKey.VK_PAUSE:
         return             Key.SK_PAUSE;
 
+        case WindowsVirtualKey.VK_CANCEL:
+        return             Key.SK_CANCEL;
+
         default:
         return Key.UNKNOWN;
     }
