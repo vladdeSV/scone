@@ -44,6 +44,7 @@ enum bg
     yellow_dark
 }
 
+package(scone):
 __gshared bool moduleWindow   = false;
 __gshared bool moduleKeyboard = false;
 __gshared bool moduleAudio    = false;

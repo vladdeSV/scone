@@ -1,9 +1,42 @@
 module scone.windows.winkeyboard;
 
 version(Windows):
+package(scone):
 
 import scone.keyboard;
+import scone.utility;
 import core.sys.windows.windows;
+
+private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
+private INPUT_RECORD _inputBuffer;
+private HANDLE _hConsoleInput;
+
+auto win_initKeyboard()
+{
+    moduleKeyboard = true;
+
+    _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
+
+    if(_hConsoleInput == INVALID_HANDLE_VALUE)
+        assert(0, "_hConsoleInput == INVALID_HANDLE_VALUE");
+
+    if(!GetConsoleMode(_hConsoleInput, &_oldMode))
+        assert(0, "GetConsoleMode(_hConsoleInput, &_oldMode)");
+
+    if(!SetConsoleMode(_hConsoleInput, _mode))
+        assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
+
+    //while (moduleKeyboard)
+    //{
+    //    ReadConsoleInputA(_hConsoleInput, &_inputBuffer, 128, &_inputsRead);
+    //}
+}
+
+auto win_exitKeyboard()
+{
+    if(!SetConsoleMode(_hConsoleInput, _oldMode))
+        assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
+}
 
 auto win_getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
 {

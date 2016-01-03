@@ -1,11 +1,49 @@
 module scone.keyboard;
 
+package(scone):
+
+import scone.utility;
+
 version(Windows)
 {
     import scone.windows.winkeyboard;
     import core.sys.windows.windows;
 }
 //version(Posix) public import scone.posix.posixkeyboard;
+
+auto keyboardInit()
+{
+    if(!moduleKeyboard)
+    {
+        version (Windows)
+        {
+            win_initKeyboard();
+        }
+        version (Posix)
+        {
+            //posix_initKeyboard();
+        }
+
+        moduleKeyboard = true;
+    }
+}
+
+auto keyboardClose()
+{
+    if(moduleKeyboard)
+    {
+        version(Windows)
+        {
+            win_exitKeyboard();
+        }
+        version(Posix)
+        {
+            //posix_exitKeyboard();
+        }
+
+        moduleKeyboard = false;
+    }
+}
 
 struct KeyEvent
 {

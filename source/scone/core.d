@@ -3,6 +3,7 @@ module scone.core;
 public import scone.utility;
 public import scone.layer;
 public import scone.window;
+public import scone.keyboard;
 
 enum SconeModule
 {
@@ -21,7 +22,7 @@ auto sconeInit(SconeModule cm = SconeModule.ALL)
     }
     if(hasFlag(cm, SconeModule.KEYBOARD))
     {
-       //keyboardInit();
+       keyboardInit();
     }
     if(hasFlag(cm, SconeModule.AUDIO))
     {
@@ -32,7 +33,7 @@ auto sconeInit(SconeModule cm = SconeModule.ALL)
 auto sconeClose()
 {
     windowClose();
-    //keyboardClose();
+    keyboardClose();
     //audioClose();
 }
 

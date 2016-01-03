@@ -1,6 +1,7 @@
 module scone.windows.winconsole;
 
 version (Windows):
+package(scone):
 
 import core.sys.windows.windows;
 import scone.layer;
@@ -14,13 +15,10 @@ auto win_initConsole()
 {
 
     _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-    _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
     _hConsoleError  = GetStdHandle(STD_ERROR_HANDLE);
 
     if(_hConsoleOutput == INVALID_HANDLE_VALUE)
         assert(0, "_hConsoleOutput == INVALID_HANDLE_VALUE");
-    if(_hConsoleInput == INVALID_HANDLE_VALUE)
-        assert(0, "_hConsoleInput == INVALID_HANDLE_VALUE");
     if(_hConsoleError == INVALID_HANDLE_VALUE)
         assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
 
@@ -91,7 +89,7 @@ auto win_lineWrapping(bool lw) @property
 
 private:
 
-HANDLE _hConsoleOutput, _hConsoleInput, _hConsoleError;
+HANDLE _hConsoleOutput, _hConsoleError;
 CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 //private SMALL_RECT _oldWindowSize;
 
