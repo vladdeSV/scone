@@ -4,8 +4,9 @@ import scone.window;
 import scone.utility;
 import std.conv : to;
 import std.array : insertInPlace;
-import std.string : wrap;
+import std.string : wrap, strip;
 import std.uni : isWhite;
+import std.experimental.logger;
 
 struct Slot
 {
@@ -23,7 +24,7 @@ class Layer
         this(null, 0, 0, width, height, border);
     }
 
-    this(Layer parent, int x, int y, int width, int height, Slot[] border = null)
+    this(Layer parent, int x, int y, int width, int height, Slot[] border = null) /*if (parent !is null) //For future use */
     {
         m_parent = parent;
         m_x = x;
@@ -47,6 +48,11 @@ class Layer
         foreach(n, ref row; m_canavas)
         {
             row = m_slots[border.length + n][border.length .. width - border.length];
+        }
+
+        if(m_parent !is null)
+        {
+            m_parent.addLayer(this);
         }
     }
 
@@ -94,12 +100,54 @@ class Layer
             Slot nls = Slot('\n');
             char[] chars;
 
+            int borderLength = m_border.length * 2;
+
             chars.length = slots.length;
             foreach(n, slot; slots)
             {
                 chars[n] = slot.character;
             }
 
+            //TODO: while(findInArray(chars, "  ")) { replaceInArray(chars, "  ", " "); }
+
+            //I the code above to replace all selected code below
+
+            ////////////////////////////////////////////////////////////////////////////////
+            bool sf;
+            Slot[] tempSlots;
+            char[] tempChars;
+
+            for(int i; i < chars.length - 1;)
+            {
+                if(!(chars[i] == ' ' && sf))
+                {
+                    if(chars[i] == ' ')
+                    {
+                        sf = true;
+                    }
+                    else
+                    {
+                        sf = false;
+                    }
+                    tempChars ~= chars[i];
+                    tempSlots ~= slots[i];
+                }
+                ++i;
+            }
+
+            chars = tempChars;
+            slots = tempSlots;
+
+            //Ugly check to see if first or last characters are spaces.
+            if(slots[0] == Slot(' '))
+            {
+                slots = slots[1 .. $];
+            }
+            if(slots[$ - 1] == Slot(' '))
+            {
+                slots = slots[0 .. $ - 1];
+            }
+            ////////////////////////////////////////////////////////////////////////////////
 
             int charactersSinceLastWhitespace, put;
             foreach(n, c; chars)
@@ -109,7 +157,7 @@ class Layer
                     charactersSinceLastWhitespace = 0;
                 }
 
-                if(charactersSinceLastWhitespace >= w - col - 1)
+                if(charactersSinceLastWhitespace >= w - col - borderLength - 1)
                 {
                     chars.insertInPlace(n + put, ' ');
                     ++put;
@@ -119,7 +167,7 @@ class Layer
                 ++charactersSinceLastWhitespace;
             }
 
-            chars = wrap(chars, w - col, null, null, 0)[0 .. $ - 1];
+            chars = strip(wrap(chars, w - col - borderLength, null, null, 0));
 
             foreach(n, c; chars)
             {
@@ -167,10 +215,10 @@ class Layer
                 {
                     if(sublayer.x + lx < x || sublayer.x + lx > x + w || sublayer.y + ly < y || sublayer.y + ly > y + h)
                     {
+                        log("Outside range");
                         continue;
                     }
-
-                    m_slots[y][x] = sublayerSlots[y][x];
+                    m_slots[sublayer.y + ly][sublayer.x + lx] = slot;
                 }
             }
         }
@@ -195,9 +243,19 @@ class Layer
         }
     }
 
+    //Sets all drawable tiles to be blank
     auto clear()
     {
-        foreach(ref row; m_slots)
+        foreach(ref row; m_canavas)
+        {
+            row[] = Slot(' ');
+        }
+    }
+
+    //Prints out all tiles.
+    auto flush()
+    {
+        foreach(ref row; m_backbuffer)
         {
             row[] = Slot(' ');
         }
@@ -241,4 +299,9 @@ private:
     bool m_visible, m_translucent;
     Slot[] m_border;
     Slot[][] m_slots, m_canavas, m_backbuffer;
+
+    auto addLayer(Layer sublayer)
+    {
+        m_sublayers ~= sublayer;
+    }
 }
