@@ -8,13 +8,6 @@ import core.Thread;
 import scone.keyboard;
 import scone.utility;
 
-private __gshared
-{
-    DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
-    HANDLE _hConsoleInput;
-    INPUT_RECORD[128] _inputBuffer;
-}
-
 auto win_initKeyboard()
 {
     moduleKeyboard = true;
@@ -970,4 +963,11 @@ enum WindowsControlKey
 
     //The right CTRL key is pressed
     RIGHT_CTRL_PRESSED = 0x0004
+}
+
+private __gshared
+{
+    DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
+    HANDLE _hConsoleInput;
+    INPUT_RECORD[128] _inputBuffer;
 }

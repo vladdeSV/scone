@@ -26,6 +26,8 @@ auto win_initConsole()
     //win_lineWrapping = false;
     win_setCursor(0,0);
 
+    //TODO: clear the screen?
+
     //SetConsoleOutputCP(65001);
 
     ////Set up the required window size:
@@ -86,6 +88,12 @@ auto win_cursorVisible(bool visible) @property
 auto win_lineWrapping(bool lw) @property
 {
     lw ? SetConsoleMode(_hConsoleOutput, 0x0002) : SetConsoleMode(_hConsoleOutput, 0x0);
+}
+
+auto win_windowSize() @property
+{
+    GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
+    return [_consoleScreenBufferInfo.srWindow.Right  - _consoleScreenBufferInfo.srWindow.Left + 1, _consoleScreenBufferInfo.srWindow.Bottom - _consoleScreenBufferInfo.srWindow.Top  + 1];
 }
 
 private:

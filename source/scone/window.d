@@ -43,6 +43,13 @@ auto windowClose()
     }
 }
 
+/**
+ * Writes out a slot at (x, y)
+ * Params:
+ *   x    = The x position to write to
+ *   y    = The y position to write to
+ *   slot = The slot which will be written
+ */
 auto writeSlot(int x, int y, ref Slot slot)
 {
      version (Windows)
@@ -55,6 +62,7 @@ auto writeSlot(int x, int y, ref Slot slot)
     }
 }
 
+/** Set the cursor position */
 auto setCursor(int x, int y)
 {
     version (Windows)
@@ -68,6 +76,7 @@ auto setCursor(int x, int y)
 
 }
 
+/** Set the title */
 auto title(string title) @property
 {
     version (Windows)
@@ -104,5 +113,21 @@ auto lineWrapping(bool lw) @property
     version (Posix)
     {
         //posix_lineWrapping = lw;
+    }
+}
+
+/**
+ * Get the window size
+ * Returns: int[2], where [0] = w, [1] = h
+ */
+public auto windowSize() @property
+{
+    version (Windows)
+    {
+        return win_windowSize;
+    }
+    version (Posix)
+    {
+        //return posix_windowSize;
     }
 }
