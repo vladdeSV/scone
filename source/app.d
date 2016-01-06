@@ -14,7 +14,7 @@ void main()
 
 
     layer.write(0, 1, fg.red, bg.white, "hello there kott and blubeeries, wat are yoy doing this beautyiur beuirituyr nightrevening?? i am stiitngi ghere hanad dtyryugin to progrmamam this game enrgniergn that is for the solnosle");
-    layer.write(0,1, "        .hello  yo                                                        what's up?.   ");
+    //layer.write(0,1, "        .hello  yo                                                        what's up?.   ");
     //layer.print();
 
     while (gameloop)

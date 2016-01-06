@@ -57,7 +57,7 @@ class Layer
     }
 
     /**
-     * Bugs: entering a shit loads of spaces causes range violation. caused in the forced wrap part (because not inserting a newline thing)
+     *
      */
     auto write(Args...)(int col, int row, Args args)
     {
@@ -100,7 +100,25 @@ class Layer
             Slot nls = Slot('\n');
             char[] chars;
 
-            int borderLength = m_border.length * 2;
+            int usableWidth = w - col - m_border.length * 2;
+
+            int charactersSinceLastWhitespace, put;
+            foreach(n, slot; slots)
+            {
+                if(isWhite(slot.character))
+                {
+                    charactersSinceLastWhitespace = 0;
+                }
+
+                if(charactersSinceLastWhitespace >= usableWidth - 1)
+                {
+                    slots.insertInPlace(n + put, nls);
+                    ++put;
+                    charactersSinceLastWhitespace = 0;
+                }
+
+                ++charactersSinceLastWhitespace;
+            }
 
             chars.length = slots.length;
             foreach(n, slot; slots)
@@ -109,65 +127,46 @@ class Layer
             }
 
             //TODO: while(findInArray(chars, "  ")) { replaceInArray(chars, "  ", " "); }
-
             //I the code above to replace all selected code below
+            //////////////////////////////////////////////////////////////////////////////////
+            //bool sf;
+            //Slot[] tempSlots;
+            //char[] tempChars;
 
-            ////////////////////////////////////////////////////////////////////////////////
-            bool sf;
-            Slot[] tempSlots;
-            char[] tempChars;
+            //for(int i; i < chars.length - 1;)
+            //{
+            //    if(!(chars[i] == ' ' && sf))
+            //    {
+            //        if(chars[i] == ' ')
+            //        {
+            //            sf = true;
+            //        }
+            //        else
+            //        {
+            //            sf = false;
+            //        }
+            //        tempChars ~= chars[i];
+            //        tempSlots ~= slots[i];
+            //    }
+            //    ++i;
+            //}
 
-            for(int i; i < chars.length - 1;)
-            {
-                if(!(chars[i] == ' ' && sf))
-                {
-                    if(chars[i] == ' ')
-                    {
-                        sf = true;
-                    }
-                    else
-                    {
-                        sf = false;
-                    }
-                    tempChars ~= chars[i];
-                    tempSlots ~= slots[i];
-                }
-                ++i;
-            }
+            //chars = tempChars;
+            //slots = tempSlots;
 
-            chars = tempChars;
-            slots = tempSlots;
+            ////Ugly check to see if first or last characters are spaces.
+            //if(slots[0] == Slot(' '))
+            //{
+            //    slots = slots[1 .. $];
+            //}
+            //if(slots[$ - 1] == Slot(' '))
+            //{
+            //    slots = slots[0 .. $ - 1];
+            //}
+            //////////////////////////////////////////////////////////////////////////////////
 
-            //Ugly check to see if first or last characters are spaces.
-            if(slots[0] == Slot(' '))
-            {
-                slots = slots[1 .. $];
-            }
-            if(slots[$ - 1] == Slot(' '))
-            {
-                slots = slots[0 .. $ - 1];
-            }
-            ////////////////////////////////////////////////////////////////////////////////
 
-            int charactersSinceLastWhitespace, put;
-            foreach(n, c; chars)
-            {
-                if(isWhite(c))
-                {
-                    charactersSinceLastWhitespace = 0;
-                }
-
-                if(charactersSinceLastWhitespace >= w - col - borderLength - 1)
-                {
-                    chars.insertInPlace(n + put, ' ');
-                    ++put;
-                    charactersSinceLastWhitespace = 0;
-                }
-
-                ++charactersSinceLastWhitespace;
-            }
-
-            chars = strip(wrap(chars, w - col - borderLength, null, null, 0));
+            chars = strip(wrap(chars, usableWidth, null, null, 0));
 
             foreach(n, c; chars)
             {
@@ -192,6 +191,8 @@ class Layer
                     break;
                 }
 
+                //log(slots.length, ", ", col + wx, ", ", slot);
+
                 m_canavas[row + wy][col + wx] = slot;
                 ++wx;
             }
@@ -215,7 +216,6 @@ class Layer
                 {
                     if(sublayer.x + lx < x || sublayer.x + lx > x + w || sublayer.y + ly < y || sublayer.y + ly > y + h)
                     {
-                        log("Outside range");
                         continue;
                     }
                     m_slots[sublayer.y + ly][sublayer.x + lx] = slot;
