@@ -44,7 +44,7 @@ auto win_exitConsole()
     //win_lineWrapping = true;
 }
 
-auto win_writeSlot(int x, int y, Slot slot)
+auto win_writeSlot(int x, int y, ref Slot slot)
 {
     ushort wx = to!ushort(x), wy = to!ushort(y);
     COORD charBufSize = {1,1};

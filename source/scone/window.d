@@ -43,7 +43,7 @@ auto windowClose()
     }
 }
 
-auto writeSlot(int x, int y, Slot slot)
+auto writeSlot(int x, int y, ref Slot slot)
 {
      version (Windows)
     {

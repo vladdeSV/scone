@@ -82,6 +82,7 @@ struct KeyEvent
 
 auto getInputs()
 {
+    version(Windows) win_getInput();
     auto temp = keyInputs;
     clearInputs();
     return temp;

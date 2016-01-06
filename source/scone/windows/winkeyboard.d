@@ -29,44 +29,31 @@ auto win_initKeyboard()
 
     if(!SetConsoleMode(_hConsoleInput, _mode))
         assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
-
-    Thread inputThread = new ThreadInput().start();
-
-}
-
-class ThreadInput : Thread
-{
-    this()
-    {
-        super(&init);
-        this.isDaemon(true);
-    }
-
-    auto init()
-    {
-        while (moduleKeyboard)
-        {
-            ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
-
-            foreach(inbuf; _inputBuffer)
-            switch(inbuf.EventType)
-            {
-                case KEY_EVENT:
-                //FIXME: massive performance slowdown
-                keyInputs ~= KeyEvent(inbuf.KeyEvent);
-                break;
-
-                default:
-                break;
-            }
-        }
-    }
 }
 
 auto win_exitKeyboard()
 {
     if(!SetConsoleMode(_hConsoleInput, _oldMode))
         assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
+}
+
+auto win_getInput()
+{
+    ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
+
+    foreach(currentInput; _inputBuffer)
+    {
+        switch(currentInput.EventType)
+        {
+            case KEY_EVENT:
+            //FIXME: massive performance slowdown
+            keyInputs ~= KeyEvent(currentInput.KeyEvent);
+            break;
+
+            default:
+            break;
+        }
+    }
 }
 
 public auto win_getWindowsVirtualKey(WORD wrd)
