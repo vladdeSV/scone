@@ -78,7 +78,7 @@ bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
 }
 
 package(scone):
-__gshared bool moduleWindow   = false;
-__gshared bool moduleKeyboard = false;
-__gshared bool moduleAudio    = false;
-__gshared KeyEvent[] keyInputs;
+bool moduleWindow   = false;
+bool moduleKeyboard = false;
+bool moduleAudio    = false;
+KeyEvent[] keyInputs;

@@ -121,7 +121,7 @@ auto lineWrapping(bool lw) @property
  * Get the window size
  * Returns: int[2], where [0] = w, [1] = h
  */
-public auto windowSize() @property
+auto windowSize() @property
 {
     version (Windows)
     {

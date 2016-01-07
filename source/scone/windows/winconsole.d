@@ -108,6 +108,9 @@ ushort attributesFromSlot(Slot slot)
 
     switch(slot.foreground)
     {
+    case fg.init:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
     case fg.blue:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
         break;
@@ -159,6 +162,9 @@ ushort attributesFromSlot(Slot slot)
 
     switch(slot.background)
     {
+    case bg.init:
+        attributes |= 0;
+        break;
     case bg.blue:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
         break;

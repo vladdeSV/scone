@@ -259,6 +259,8 @@ class Layer
     /** Prints all the layers in the correct order */
     auto print()
     {
+        if(m_parent !is null) log("Warning: print() was not called from the parent layer!");
+
         snap();
 
         foreach(sy, row; m_slots)
@@ -302,11 +304,11 @@ class Layer
             {
                 foreach(lx, slot; row)
                 {
-                    if(sublayer.x + lx < x || sublayer.x + lx > x + w || sublayer.y + ly < y || sublayer.y + ly > y + h)
+                    if(sublayer.x + lx < 0 || sublayer.x + lx > w || sublayer.y + ly < 0 || sublayer.y + ly > h)
                     {
                         continue;
                     }
-                    m_slots[sublayer.y + ly][sublayer.x + lx] = slot;
+                    m_canavas[sublayer.y + ly][sublayer.x + lx] = slot;
                 }
             }
         }
@@ -384,39 +386,37 @@ class Layer
         }
 
         /** Set the x position of the layer */
-        auto x(int x) @property
+        auto x(int x)
         {
             return m_x = x;
         }
 
         /** Set the y position of the layer */
-        auto y(int y) @property
+        auto y(int y)
         {
             return m_y = y;
         }
 
         /** Set the width of the layer */
-        auto w(int w) @property
+        auto w(int w)
         {
             return m_w = w;
         }
 
         /** Set the height of the layer */
-        auto h(int h) @property
+        auto h(int h)
         {
             return m_h = h;
         }
 
-        const
-        {
-            /**
-             * Returns: slot at the specific x and y coordinates
-             */
-            auto getSlot(int x, int y)
-            {
-                return m_slots[y][x];
-            }
-        }
+    }
+
+    /**
+     * Returns: slot at the specific x and y coordinates
+     */
+    auto getSlot(int x, int y) const
+    {
+        return m_slots[y][x];
     }
 
         /** Moves a layer to the front */
