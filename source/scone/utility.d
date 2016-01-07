@@ -2,12 +2,7 @@ module scone.utility;
 
 import scone.keyboard;
 
-//General flag checking
-bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
-{
-    return ((check & type) == type);
-}
-
+///All foreground colors
 enum fg
 {
     init,
@@ -30,6 +25,7 @@ enum fg
     yellow_dark
 }
 
+///All background colors
 enum bg
 {
     init,
@@ -50,6 +46,12 @@ enum bg
     white,
     yellow,
     yellow_dark
+}
+
+//General flag checking
+bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
+{
+    return ((check & type) == type);
 }
 
 package(scone):

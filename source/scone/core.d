@@ -14,6 +14,22 @@ enum SconeModule
     ALL = WINDOW | KEYBOARD | AUDIO
 }
 
+/**
+ * Initializes in SDL style
+ *
+ * Examples:
+ * --------------------
+ * sconeInit(SconeModule.WINDOW); //Initializes scone, where only drawing to the console screen will work
+ * --------------------
+ * Examples:
+ * --------------------
+ * sconeInit(SconeModule.ALL); //Initializes scone, where you can use all modules (drawing to the screen, getting key inputs)
+ * --------------------
+ * Examples:
+ * --------------------
+ * sconeInit(SconeModule.WINDOW | SconeModule.AUDIO); //Initializes scone, where you can draw to the screen and get key inputs.
+ * --------------------
+ */
 auto sconeInit(SconeModule cm = SconeModule.ALL)
 {
     if(hasFlag(cm, SconeModule.WINDOW))
@@ -30,6 +46,7 @@ auto sconeInit(SconeModule cm = SconeModule.ALL)
     }
 }
 
+///Closes scone
 auto sconeClose()
 {
     windowClose();
@@ -37,7 +54,7 @@ auto sconeClose()
     //audioClose();
 }
 
-/*
+/**
 * Returns: bool, true if all modules entered are active.
 */
 auto getModuleState(SconeModule cm)
