@@ -1,12 +1,17 @@
 module scone.keyboard;
 
+
 struct KeyEvent
 {
-    version(Windows) this(KEY_EVENT_RECORD k)
+    package(scone) version(Windows) this(KEY_EVENT_RECORD k)
     {
         m_winKey = k;
     }
 
+    /**
+     * Check if the button is pressed or released.
+     * Returns: bool, true if pressed, false if not
+     */
     auto keyDown() @property
     {
         version(Windows)
@@ -19,19 +24,12 @@ struct KeyEvent
         }
     }
 
+    /**
+     * Check the amount of times an event has been repeated since last check (held down).
+     * Returns: int, the amount of repeats
+     * Note: This is a bit unstable. I suggest you don't use /vladde
+     */
     auto repeated() @property
-    {
-        version(Windows)
-        {
-            return m_winKey.wRepeatCount > 1; //TODO: Test to see if one press makes repeated equal to one or zero
-        }
-        version(Posix)
-        {
-            return 0;
-        }
-    }
-
-    auto repeatedAmount() @property
     {
         version(Windows)
         {
@@ -43,6 +41,10 @@ struct KeyEvent
         }
     }
 
+    /**
+     * Get the key being pressed down.
+     * Returns: Key (enum) of the key being pressed
+     */
     auto key() @property
     {
         version(Windows)
@@ -55,12 +57,28 @@ struct KeyEvent
         }
     }
 
+    /**
+     * Check to see if the KeyEvent has a certain control key pressed.
+     * Returns: true, if all control keys entered are pressed
+     *
+     * Example:
+     * --------------------
+     * foreach(input; getInputs())
+     * {
+     *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT | ControlKey.SHIFT))
+     *     {
+     *         //do something...
+     *     }
+     * }
+     * --------------------
+     */
     auto hasControlKey(ControlKey ck)
     {
         return hasFlag(controlKey, ck);
     }
 
-    auto controlKey() @property
+    ///Do not use
+    private auto controlKey() @property
     {
         version(Windows)
         {
@@ -72,14 +90,14 @@ struct KeyEvent
         }
     }
 
-    version(Windows) auto getVK()
-    {
-        return m_winKey.wVirtualKeyCode;
-    }
-
     version(Windows) private KEY_EVENT_RECORD m_winKey;
 }
 
+/**
+ * Get all inputs since last function call.
+ * Returns: KeyEvent[], of all key presses since last call
+ * (Windows) Note: Can store a maximum of 128 key presses. This should however not be a problem, since `getInputs()` should be called each game tick
+ */
 auto getInputs()
 {
     version(Windows) win_getInput();
@@ -88,6 +106,10 @@ auto getInputs()
     return temp;
 }
 
+/**
+ * Clears all buffered inputs.
+ * Useful if you have a loading screen of some sort, and need to clear key presses once loaded.
+ */
 auto clearInputs()
 {
     keyInputs = null;

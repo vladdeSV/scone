@@ -27,7 +27,7 @@ enum SconeModule
  * --------------------
  * Examples:
  * --------------------
- * sconeInit(SconeModule.WINDOW | SconeModule.AUDIO); //Initializes scone, where you can draw to the screen and get key inputs.
+ * sconeInit(SconeModule.WINDOW | SconeModule.KEYBOARD); //Initializes scone, where you can draw to the screen and get key inputs.
  * --------------------
  */
 auto sconeInit(SconeModule cm = SconeModule.ALL)
@@ -55,9 +55,20 @@ auto sconeClose()
 }
 
 /**
-* Returns: bool, true if all modules entered are active.
-*/
-auto getModuleState(SconeModule cm)
+ * Returns: bool, true if all modules entered are active.
+ * Examples:
+ * --------------------
+ * sconeInit(SconeModule.WINDOW | SconeModule.KEYBOARD);
+ *
+ * assert( getModuleState(SconeModule.WINDOW));
+ * assert( getModuleState(SconeModule.WINDOW | SconeModule.KEYBOARD));
+ * assert(!getModuleState(SconeModule.NONE));
+ *
+ * sconeClose();
+ * assert( getModuleState(SconeModule.NONE));
+ * --------------------
+ */
+private auto getModuleState(SconeModule cm)
 {
     bool r = true;
 
@@ -73,17 +84,17 @@ auto getModuleState(SconeModule cm)
     {
         r &= moduleKeyboard;
     }
-    if(hasFlag(cm, SconeModule.AUDIO))
-    {
-        r &= moduleAudio;
-    }
+    //if(hasFlag(cm, SconeModule.AUDIO))
+    //{
+    //    r &= moduleAudio;
+    //}
 
     return r;
 }
 
 /**
-* Returns: bool, true if any module is running
-*/
+ * Returns: bool, true if any module is running
+ */
 auto sconeRunning()
 {
     return !getModuleState(SconeModule.NONE);

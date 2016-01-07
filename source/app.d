@@ -1,6 +1,7 @@
 //hello there kott and blubeeries, wat are yoy doing this beautyiur beuirituyr nightrevening?? i am stiitngi ghere hanad dtyryugin to progrmamam this game enrgniergn that is for the solnosle
 import scone.core;
 import std.random;
+import std.stdio;
 
 void main()
 {
@@ -8,7 +9,7 @@ void main()
 
     sconeInit();
 
-    auto window = new Layer(40,24);
+    auto window = new Layer(40,UNDEF);
     auto layer = new Layer(window, 0,0, UNDEF, UNDEF, [ Slot('*', fg.red, bg.white), Slot(' ') ]);
 
     while (gameloop)
@@ -22,7 +23,7 @@ void main()
             }
 
             layer.clear();
-            layer.write(0,0, "Key: ", input.key, ", VK: ", win_getWindowsVirtualKey(input.getVK()), "\nPressed: ", input.keyDown, "\nRepeated: ", input.repeatedAmount, "\nControl key: ", input.controlKey);
+            layer.write(0,0, "Key: ", input.key, "\nPressed: ", input.keyDown, "\nRepeated: ", input.repeated);
         }
         layer.print();
     }

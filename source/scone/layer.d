@@ -28,7 +28,7 @@ enum UNDEF = -1;
  * Examples:
  * --------------------
  * Slot slot1 = Slot('d', fg.red, bg.white); //'d' character with RED foreground color and WHITE background color
- * Slot slot2 = Slot('g'); //'g' character with WHITE foreground color and BLACK background color
+ * Slot slot2 = Slot('g');
  *
  * auto layer = new Layer();
  * layer.write(0,0, slot1);
@@ -39,8 +39,8 @@ enum UNDEF = -1;
 struct Slot
 {
     char character;
-    fg foreground = fg.white;
-    bg background = bg.black;
+    fg foreground = fg.init;
+    bg background = bg.init;
 }
 
 /**
@@ -103,7 +103,7 @@ class Layer
      * Layer layer = new Layer(window, 1, 1, 20, 10); //Creates a sub-layer at position (1, 1) inside `window`, and with the width = 20, height = 10
      * --------------------
      *
-     * Errors on: If (width - border.length) is smaller than 0, or if (height - border.length) is smaller than 0.
+     * Note: Errors if (width - border.length) is smaller than 0, or if (height - border.length) is smaller than 0.
      */
     this(Layer parent, int x, int y, int width = 0, int height = 0, Slot[] border = null)
     in
@@ -131,11 +131,9 @@ class Layer
      * layer.write(10,17, bg.white, fg.green); //Changes the slots' color to RED and the background to WHITE.
      *
      * layer.write(10,18, 'D', bg.red); //Watch out: This will print "D" with the default color and the default background-color.
-     *
      * --------------------
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
      * Note: Expect unexpected behavior when sending in arrays.
-     * Throws: RangeViolation if string is unwrap-able.
      */
     auto write(Args...)(int col, int row, Args args)
     {
@@ -285,7 +283,7 @@ class Layer
     }
 
     /** Grabs all slots of the layer and all sub-layers merged as one layer */
-    Slot[][] snap()
+    private Slot[][] snap()
     {
         foreach(sublayer; m_sublayers)
         {

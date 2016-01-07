@@ -2,7 +2,30 @@ module scone.utility;
 
 import scone.keyboard;
 
-///All foreground colors
+/**
+ * All colors
+ * --------------------
+ * //Available colors:
+ * init
+ *
+ * black
+ * blue
+ * blue_dark
+ * cyan
+ * cyan_dark
+ * gray
+ * gray_dark
+ * green
+ * green_dark
+ * magenta
+ * magenta_dark
+ * red
+ * red_dark
+ * white
+ * yellow
+ * yellow_dark
+ * --------------------
+ */
 enum fg
 {
     init,
@@ -25,7 +48,7 @@ enum fg
     yellow_dark
 }
 
-///All background colors
+///ditto
 enum bg
 {
     init,
