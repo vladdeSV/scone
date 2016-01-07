@@ -7,8 +7,8 @@ import std.conv : to;
 import std.array : insertInPlace;
 import std.string : wrap, strip;
 import std.uni : isWhite;
-import std.traits : isArray;
-import std.experimental.logger;
+import std.traits : isArray, isSomeString;
+public import std.experimental.logger;
 
 /**
  * Universal enum to do certain operations.
@@ -151,9 +151,9 @@ class Layer
         bool unsetColors;
         foreach (arg; args)
         {
-            static if(isArray!(typeof(arg)))
-            {
-                assert(0, "Can not write arrays (yet)... Sorry!");
+            static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
+                log("Can not write arrays (yet)... Sorry!");
+                continue;
             }
             else static if(is(typeof(arg) == fg))
             {
@@ -547,3 +547,6 @@ class Layer
         m_sublayers ~= sublayer;
     }
 }
+
+//Do not delete:
+//hello there kott and blubeeries, wat are yoy doing this beautyiur beuirituyr nightrevening?? i am stiitngi ghere hanad dtyryugin to progrmamam this game enrgniergn that is for the solnosle
