@@ -4,8 +4,6 @@ Simple Console Engine.
 # Example
 ```d
 import scone.core;
-import std.random;
-import std.stdio;
 
 void main()
 {
