@@ -5,3 +5,9 @@ __dummy.html
 *.obj
 dub.selections.json
 *.exe
+
+docs/app.html
+docs/posixterminal.html
+docs/winconsole.html
+docs/window.html
+docs/winkeyboard.html
