@@ -4,8 +4,9 @@ package(scone):
 
 import scone.layer : Slot;
 import scone.utility;
-version(Windows) public import scone.windows.winconsole;
-//version(Posix) public import scone.posixterminal;
+
+version(Windows) import scone.windows.winconsole;
+//version(Posix) import scone.posixterminal;
 
 auto windowInit()
 {

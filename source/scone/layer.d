@@ -7,10 +7,35 @@ import std.conv : to;
 import std.array : insertInPlace;
 import std.string : wrap, strip;
 import std.uni : isWhite;
+import std.traits : isArray;
 import std.experimental.logger;
 
+/**
+ * Universal enum to do certain operations.
+ *
+ * As it is less than 1, it is used to set dynamic width and height for layers.
+ * Examples:
+ * --------------------
+ * auto layer = new Layer(UNDEF, 20);
+ * --------------------
+ *
+ */
 enum UNDEF = -1;
 
+/**
+ * Slot structure
+ *
+ * Examples:
+ * --------------------
+ * Slot slot1 = Slot('d', fg.red, bg.white); //'d' character with RED foreground color and WHITE background color
+ * Slot slot2 = Slot('g'); //'g' character with WHITE foreground color and BLACK background color
+ *
+ * auto layer = new Layer();
+ * layer.write(0,0, slot1);
+ * layer.write(0,1, slot2);
+ * --------------------
+ *
+ */
 struct Slot
 {
     char character;
@@ -18,6 +43,9 @@ struct Slot
     bg background = bg.black;
 }
 
+/**
+ * Layer class
+ */
 class Layer
 {
     //@nogc: //In the future, make entire Layer @nogc
@@ -28,7 +56,6 @@ class Layer
      * Params:
      *   width  = Width of the main layer. If less than 1, get set to the consoles width (in slots)
      *   height = Height of the main layer. If less than 1, get set to the consoles height (in slots)
-     *   border = Array of `Slot`, where the first slot represents the outmost border row, and the last represents the innermost.
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      *
@@ -46,7 +73,7 @@ class Layer
      *
      * Standards: width = 80, height = 24
      */
-    this(int width = 0, int height = 0, Slot[] border = null)
+    this(int width = 0, int height = 0/*, Slot[] border = null*/)
     {
         auto size = windowSize;
 
@@ -56,7 +83,7 @@ class Layer
         if(width  < 1) width  = size[0];
         if(height < 1) height = size[1];
 
-        init(null, 0, 0, width, height, border);
+        init(null, 0, 0, width, height/*, border*/);
     }
 
     /**
@@ -65,8 +92,8 @@ class Layer
      *   parent = Parent layer.
      *   x =      X position inside the parent
      *   y =      Y position inside the parent
-     *   width =  Width of the sublayer
-     *   height = Height of the sublayer
+     *   width =  Width of the sublayer. If less than 1, set to parent width.
+     *   height = Height of the sublayer If less than 1, set to parent width.
      *   border = Array of `Slot`, where the first slot represents the outmost border row, and the last represents the innermost.
      *
      * Examples:
@@ -75,14 +102,21 @@ class Layer
      * //Creates a sublayer to `window`
      * Layer layer = new Layer(window, 1, 1, 20, 10); //Creates a sub-layer at position (1, 1) inside `window`, and with the width = 20, height = 10
      * --------------------
+     *
+     * Errors on: If (width - border.length) is smaller than 0, or if (height - border.length) is smaller than 0.
      */
-    this(Layer parent, int x, int y, int width, int height, Slot[] border = null)
+    this(Layer parent, int x, int y, int width = 0, int height = 0, Slot[] border = null)
     in
     {
-        assert(parent !is null, "\n\nLayer parent cannot be null!\n");
+        assert(parent !is null, "\n\nLayer parent can not be null!\n");
+        assert(width  - border.length*2 > 0, "\n\nThe border is too thick for the width. There are no available slots in the layer.\n");
+        assert(height - border.length*2 > 0, "\n\nThe border is too thick for the height. There are no available slots in the layer.\n");
     }
     body
     {
+        if(width < 1)  width  = parent.w;
+        if(height < 1) height = parent.h;
+
         parent.addLayer(this);
         init(parent, x, y, width, height, border);
     }
@@ -100,6 +134,7 @@ class Layer
      *
      * --------------------
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
+     * Note: Expect unexpected behavior when sending in arrays.
      * Throws: RangeViolation if string is unwrap-able.
      */
     auto write(Args...)(int col, int row, Args args)
@@ -442,7 +477,9 @@ class Layer
             auto to = min(m_sublayers.length - 1, currentPosition + amount);
             //Create a slice with layer at the end and the others sub layers before, and then set the slice in parent.m_sublayers[].
             m_sublayers[currentPosition .. to + 1] = m_sublayers[currentPosition + 1 .. to + 1] ~ layer;
-        }else{
+        }
+        else
+        {
             //Check if amount goes of bounds. If so, simply set to 0.
             auto from = max(0, currentPosition - amount);
             //Create a slice with layer at the start, and the others after.
@@ -462,7 +499,7 @@ class Layer
     Slot[] m_border;
     Slot[][] m_slots, m_canavas, m_backbuffer;
 
-    auto init(Layer parent, int x, int y, int width, int height, Slot[] border)
+    auto init(Layer parent, int x, int y, int width, int height, Slot[] border = null)
     {
         m_parent = parent;
         m_x = x;
@@ -486,6 +523,20 @@ class Layer
         foreach(n, ref row; m_canavas)
         {
             row = m_slots[border.length + n][border.length .. width - border.length];
+        }
+
+        foreach_reverse(n, slot; border)
+        {
+            foreach(ry; 0 .. height)
+            {
+                foreach(rx; 0 .. width)
+                {
+                    if(ry == n || ry == height - n - 1 || rx == n || rx == width - n - 1)
+                    {
+                        m_slots[ry][rx] = slot;
+                    }
+                }
+            }
         }
     }
 

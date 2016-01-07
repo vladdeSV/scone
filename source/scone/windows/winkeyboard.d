@@ -32,8 +32,15 @@ auto win_exitKeyboard()
 
 auto win_getInput()
 {
-    ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
+    DWORD read = 0;
+    GetNumberOfConsoleInputEvents(_hConsoleInput, &read);
 
+    if(!read)
+    {
+        return;
+    }
+
+    ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
     foreach(currentInput; _inputBuffer)
     {
         switch(currentInput.EventType)
