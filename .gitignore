@@ -5,6 +5,7 @@ __dummy.html
 *.obj
 dub.selections.json
 *.exe
+*.lib
 
 docs/app.html
 docs/posixterminal.html
