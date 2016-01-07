@@ -254,6 +254,24 @@ class Layer
         }
     }
 
+    /** Prints all the layers in the correct order */
+    auto print()
+    {
+        snap();
+
+        foreach(sy, row; m_slots)
+        {
+            foreach(sx, slot; row)
+            {
+                if(slot != m_backbuffer[sy][sx])
+                {
+                    writeSlot(sx,sy, slot);
+                    m_backbuffer[sy][sx] = slot;
+                }
+            }
+        }
+    }
+
     /** Draws a rectangle of slots */
     auto drawRectangle(int left, int top, int width, int height, Slot slot)
     {
@@ -292,24 +310,6 @@ class Layer
         }
 
         return m_slots;
-    }
-
-    /** Prints all the layers in the correct order */
-    auto print()
-    {
-        snap();
-
-        foreach(sy, row; m_slots)
-        {
-            foreach(sx, slot; row)
-            {
-                if(slot != m_backbuffer[sy][sx])
-                {
-                    writeSlot(sx,sy, slot);
-                    m_backbuffer[sy][sx] = slot;
-                }
-            }
-        }
     }
 
     //Sets all drawable tiles to be blank
