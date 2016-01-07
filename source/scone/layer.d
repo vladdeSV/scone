@@ -133,7 +133,7 @@ class Layer
      * layer.write(10,18, 'D', bg.red); //Watch out: This will print "D" with the default color and the default background-color.
      * --------------------
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
-     * Note: Expect unexpected behavior when sending in arrays.
+     * Note: Writing arrays has been explicitly been disabled.
      */
     auto write(Args...)(int col, int row, Args args)
     {
@@ -151,7 +151,11 @@ class Layer
         bool unsetColors;
         foreach (arg; args)
         {
-            static if(is(typeof(arg) == fg))
+            static if(isArray!(typeof(arg)))
+            {
+                assert(0, "Can not write arrays (yet)... Sorry!");
+            }
+            else static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
                 unsetColors = true;
