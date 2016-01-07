@@ -78,7 +78,7 @@ class Layer
         auto size = windowSize;
 
         if(width > size[0] || height > size[1])
-            assert(0, format("\n\nWindow is too small. Minimum size needs to be %sx%s slots, but window size is %sx%s\n", width, height, size[0], size[1]));
+            assert(0, sconeErrorMessage("Window is too small. Minimum size needs to be %sx%s slots, but window size is %sx%s", width, height, size[0], size[1]));
 
         if(width  < 1) width  = size[0];
         if(height < 1) height = size[1];
@@ -108,9 +108,9 @@ class Layer
     this(Layer parent, int x, int y, int width = 0, int height = 0, Slot[] border = null)
     in
     {
-        assert(parent !is null, "\n\nLayer parent can not be null!\n");
-        assert(width  - border.length*2 > 0, "\n\nThe border is too thick for the width. There are no available slots in the layer.\n");
-        assert(height - border.length*2 > 0, "\n\nThe border is too thick for the height. There are no available slots in the layer.\n");
+        assert(parent !is null, sconeErrorMessage("Layer parent can not be null!"));
+        assert(width  - border.length*2 > 0, sconeErrorMessage("The border is too thick for the width. There are no available slots in the layer."));
+        assert(height - border.length*2 > 0, sconeErrorMessage("The border is too thick for the height. There are no available slots in the layer."));
     }
     body
     {
@@ -447,7 +447,7 @@ class Layer
     auto moveLayer(Layer layer, int amount)
     in
     {
-        assert(layer.m_parent is this, "\n\nSublayer must be moved via parent");
+        assert(layer.m_parent is this, sconeErrorMessage("Sublayer must be moved via parent"));
     }
     body
     {
@@ -470,7 +470,7 @@ class Layer
         //In case the layer wasn't found, just staph. This should never happen.
         if(currentPosition == UNDEF)
         {
-            assert(0, "Something has gone wrong, real bad. A sublayer does not have a parent");
+            assert(0, sconeErrorMessage("Something has gone wrong, real bad. A sublayer does not have a parent"));
         }
         //Depending on if we want to move backwards or forwards, do different things.
         if(forwards)
@@ -546,6 +546,11 @@ class Layer
     {
         m_sublayers ~= sublayer;
     }
+}
+
+auto sconeErrorMessage(Args...)(string msg, Args args)
+{
+    return format("\n\n" ~ msg ~ '\n', args);
 }
 
 //Do not delete:
