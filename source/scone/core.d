@@ -1,9 +1,9 @@
 module scone.core;
 
-public import scone.utility;
-public import scone.layer;
-public import scone.window;
-public import scone.keyboard;
+import scone.utility;
+import scone.layer;
+import scone.window;
+import scone.keyboard;
 
 enum SconeModule
 {
@@ -40,10 +40,10 @@ auto sconeInit(SconeModule cm = SconeModule.ALL)
     {
        keyboardInit();
     }
-    if(hasFlag(cm, SconeModule.AUDIO))
-    {
+    //if(hasFlag(cm, SconeModule.AUDIO))
+    //{
     //   audioInit();
-    }
+    //}
 }
 
 ///Closes scone
