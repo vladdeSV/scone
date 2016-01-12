@@ -1,13 +1,15 @@
 module scone.layer;
 
-import scone.window;
+import scone.core;
 import scone.utility;
+import scone.window;
 import std.format : format;
-import std.conv : to;
+import std.conv : to, text;
 import std.array : insertInPlace;
 import std.string : wrap, strip;
 import std.uni : isWhite;
 import std.traits : isArray, isSomeString;
+version(Posix) import std.stdio : write;
 public import std.experimental.logger;
 
 /**
@@ -74,12 +76,14 @@ class Layer
      * Standards: width = 80, height = 24
      */
     this(int width = 0, int height = 0/*, Slot[] border = null*/)
+    in
     {
         auto size = windowSize;
-
-        if(width > size[0] || height > size[1])
-            assert(0, sconeErrorMessage("Window is too small. Minimum size needs to be %sx%s slots, but window size is %sx%s", width, height, size[0], size[1]));
-
+        sconeCrash(width > size[0] || height > size[1], "Window is too small. Minimum size needs to be %sx%s slots, but window size is %sx%s", width, height, size[0], size[1]);
+    }
+    body
+    {
+        auto size = windowSize;
         if(width  < 1) width  = size[0];
         if(height < 1) height = size[1];
 
@@ -108,9 +112,9 @@ class Layer
     this(Layer parent, int x, int y, int width = 0, int height = 0, Slot[] border = null)
     in
     {
-        assert(parent !is null, sconeErrorMessage("Layer parent can not be null!"));
-        assert(width  - border.length*2 > 0, sconeErrorMessage("The border is too thick for the width. There are no available slots in the layer."));
-        assert(height - border.length*2 > 0, sconeErrorMessage("The border is too thick for the height. There are no available slots in the layer."));
+        sconeCrash(parent !is null, "Layer parent can not be null!");
+        sconeCrash(width  - border.length*2 > 0, "The border is too thick for the width. There are no available slots in the layer.");
+        sconeCrash(height - border.length*2 > 0, "The border is too thick for the height. There are no available slots in the layer.");
     }
     body
     {
@@ -258,21 +262,77 @@ class Layer
 
     /** Prints all the layers in the correct order */
     auto print()
+    in
+    {
+        //Makes sure the window isn't resized to a smaller size than the game.
+        //TODO: Make a test to see how performance heavy this is (probably not that much)
+        auto a = windowSize();
+        sconeCrash(a[0] < x || a[1] < y, "The window is smaller than the layer");
+    }
+    body
     {
         if(m_parent !is null) log("Warning: print() was not called from the parent layer!");
 
         snap();
 
-        foreach(sy, row; m_slots)
+        version(Windows)
         {
-            foreach(sx, slot; row)
+            foreach(sy, row; m_slots)
             {
-                if(slot != m_backbuffer[sy][sx])
+                foreach(sx, slot; row)
                 {
-                    writeSlot(sx,sy, slot);
-                    m_backbuffer[sy][sx] = slot;
+                    if(slot != m_backbuffer[sy][sx])
+                    {
+                        writeSlot(sx,sy, slot);
+                        m_backbuffer[sy][sx] = slot;
+                    }
                 }
             }
+        }
+        else version(Posix)
+        {
+            //Temporary string that will be printed out for each line.
+            string printed;
+            //Loop through all rows.
+            foreach (sy, row; m_slots)
+            {
+                int f = UNDEF, l;
+                foreach(sx, slot; m_slots[sy])
+                {
+                    if(slot != m_backbuffer[sy][sx])
+                    {
+                        if(f == UNDEF)
+                        {
+                            f = sx;
+                        }
+
+                        l = sx;
+
+                        m_backbuffer[sy][sx] = slot;
+                    }
+                }
+
+                if(f == UNDEF)
+                {
+                    continue;
+                }
+
+                //Loop from the first changed slot to the last edited slot.
+                foreach (px; f .. l + 1)
+                {
+                    printed ~= text("\033[", 0, ";", cast(int)m_slots[sy][px].foreground, ";", cast(int)m_slots[sy][px].background, "m", m_slots[sy][px].character, "\033[0m");
+                }
+
+                //Set the cursor at the firstly edited slot...
+                setCursor(f, sy);
+                //...and then print out the string.
+                std.stdio.write(printed);
+
+                //Reset 'printed'.
+                printed = null;
+            }
+            //Flush. Without this problems may occur.
+            stdout.flush(); //TODO: Check if I need this for POSIX. I know this caused a lot of problems on the Windows console, but you know... this part is POSIX only
         }
     }
 
@@ -447,7 +507,7 @@ class Layer
     auto moveLayer(Layer layer, int amount)
     in
     {
-        assert(layer.m_parent is this, sconeErrorMessage("Sublayer must be moved via parent"));
+        sconeCrash(layer.m_parent is this, "Sublayer must be moved via parent");
     }
     body
     {
@@ -470,7 +530,7 @@ class Layer
         //In case the layer wasn't found, just staph. This should never happen.
         if(currentPosition == UNDEF)
         {
-            assert(0, sconeErrorMessage("Something has gone wrong, real bad. A sublayer does not have a parent"));
+            sconeCrash("Something has gone wrong, real bad. A sublayer does not have a parent");
         }
         //Depending on if we want to move backwards or forwards, do different things.
         if(forwards)
@@ -548,9 +608,17 @@ class Layer
     }
 }
 
-auto sconeErrorMessage(Args...)(string msg, Args args)
+auto sconeCrash(Args...)(bool check, string msg, Args args)
 {
-    return format("\n\n" ~ msg ~ '\n', args);
+    if(check)
+    {
+        sconeCrash(msg, args);
+    }
+}
+auto sconeCrash(Args...)(string msg, Args args)
+{
+    sconeClose();
+    assert(0, format("\n\n" ~ msg ~ '\n', args));
 }
 
 //Do not delete:
