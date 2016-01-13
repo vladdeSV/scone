@@ -1,6 +1,8 @@
 module scone.utility;
 
 import scone.keyboard;
+import scone.core : sconeClose;
+import std.format : format;
 
 /**
  * All colors
@@ -78,6 +80,20 @@ bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
 }
 
 package(scone):
+
+auto sconeCrash(Args...)(bool check, string msg, Args args)
+{
+    if(check)
+    {
+        sconeCrash(msg, args);
+    }
+}
+auto sconeCrash(Args...)(string msg, Args args)
+{
+    sconeClose();
+    assert(0, format("\n\n" ~ msg ~ '\n', args));
+}
+
 bool moduleWindow   = false;
 bool moduleKeyboard = false;
 bool moduleAudio    = false;

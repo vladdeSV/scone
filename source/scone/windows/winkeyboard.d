@@ -4,7 +4,7 @@ version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
-import core.Thread;
+import core.thread;
 import scone.keyboard;
 import scone.utility;
 

@@ -3,7 +3,7 @@ Simple Console Engine.
 
 # Example
 ```d
-import scone.core;
+import scone;
 
 void main()
 {
@@ -12,7 +12,7 @@ void main()
     sconeInit();
 
     auto window = new Layer(40,UNDEF);
-    auto layer = new Layer(window, 0,0, UNDEF, UNDEF, [ Slot('*', fg.red, bg.white), Slot('#', fg.white, bg.red), Slot(' ') ]);
+    auto layer = new Layer(window, 10, 5, 25, 10, [ Slot('*', fg.red, bg.white), Slot('#', fg.white, bg.red), Slot(' ') ]);
 
     while (gameloop)
     {
@@ -28,7 +28,7 @@ void main()
             layer.clear();
             layer.write(0,0, "Key: ", input.key, "\nPressed: ", input.keyDown);
         }
-        layer.print();
+        window.print();
     }
 
     sconeClose();

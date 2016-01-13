@@ -608,18 +608,5 @@ class Layer
     }
 }
 
-auto sconeCrash(Args...)(bool check, string msg, Args args)
-{
-    if(check)
-    {
-        sconeCrash(msg, args);
-    }
-}
-auto sconeCrash(Args...)(string msg, Args args)
-{
-    sconeClose();
-    assert(0, format("\n\n" ~ msg ~ '\n', args));
-}
-
 //Do not delete:
 //hello there kott and blubeeries, wat are yoy doing this beautyiur beuirituyr nightrevening?? i am stiitngi ghere hanad dtyryugin to progrmamam this game enrgniergn that is for the solnosle
