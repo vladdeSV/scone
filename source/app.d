@@ -10,6 +10,8 @@ void main()
 {
     sconeInit();
 
+    title = "Pong";
+
     layer = new Layer(0,0);
     ball = new Ball();
 
@@ -31,7 +33,6 @@ void main()
     while(running){
         updatePlates();
         tick(clock.reset());
-        //Thread.sleep(100.msecs);
     }
 
     sconeClose();

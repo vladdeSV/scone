@@ -72,13 +72,13 @@ auto setCursor(int x, int y)
     }
     version (Posix)
     {
-        //posix_setCursor(x,y);
+        posix_setCursor(x,y);
     }
 
 }
 
 /** Set the title */
-auto title(string title) @property
+public auto title(string title) @property
 {
     version (Windows)
     {
@@ -86,7 +86,7 @@ auto title(string title) @property
     }
     version (Posix)
     {
-        //posix_title = title;
+        posix_title = title;
     }
 }
 
@@ -99,7 +99,7 @@ auto cursorVisible(bool visible) @property
     }
     version (Posix)
     {
-        //posix_cursorVisible = visible;
+        posix_cursorVisible = visible;
     }
 
 }
@@ -109,11 +109,11 @@ auto lineWrapping(bool lw) @property
 {
     version (Windows)
     {
-        win_lineWrapping = lw;
+        //win_lineWrapping = lw;
     }
     version (Posix)
     {
-        //posix_lineWrapping = lw;
+        posix_lineWrapping = lw;
     }
 }
 
@@ -129,6 +129,6 @@ auto windowSize() @property
     }
     version (Posix)
     {
-        //return posix_windowSize;
+        return posix_windowSize;
     }
 }
