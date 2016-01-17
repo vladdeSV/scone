@@ -75,7 +75,7 @@ class Layer
      *
      * Standards: width = 80, height = 24
      */
-    this(int width = 0, int height = 0/*, Slot[] border = null*/)
+    this(int width = 0, int height = 0, Slot[] border = null)
     in
     {
         auto size = windowSize;
@@ -87,7 +87,7 @@ class Layer
         if(width  < 1) width  = size[0];
         if(height < 1) height = size[1];
 
-        init(null, 0, 0, width, height/*, border*/);
+        init(null, 0, 0, width, height, border);
     }
 
     /**
@@ -198,6 +198,7 @@ class Layer
         else
         {
             //This part is annoying to understand. Not even I know exactly what I've written
+            //Don't mess with this part. Don't touch it.
 
             Slot nls = Slot('\n');
             char[] chars;
@@ -266,7 +267,7 @@ class Layer
     {
         //Makes sure the window isn't resized to a smaller size than the game.
         //TODO: Make a test to see how performance heavy this is (probably not that much)
-        auto a = windowSize();
+        int[2] a = windowSize();
         sconeCrash(a[0] < x || a[1] < y, "The window is smaller than the layer");
     }
     body
@@ -507,13 +508,16 @@ class Layer
     auto moveLayer(Layer layer, int amount)
     in
     {
-        sconeCrash(layer.m_parent is this, "Sublayer must be moved via parent");
+        sconeCrash(layer.m_parent !is this, "Sublayer must be moved via parent");
     }
     body
     {
-        //If we're not supposed to move anything, just staph
+        //If we're not supposed to move anything, stop
         if(!amount)
+        {
             return;
+        }
+
         //If we're moving this a positive amount, it's forward. Otherwise backwards.
         bool forwards;
         if(amount > 0) //If we're moving a positive amount...
@@ -561,7 +565,7 @@ class Layer
     Slot[] m_border;
     Slot[][] m_slots, m_canavas, m_backbuffer;
 
-    auto init(Layer parent, int x, int y, int width, int height, Slot[] border = null)
+    auto init(Layer parent, int x, int y, int width, int height, Slot[] border)
     {
         m_parent = parent;
         m_x = x;
