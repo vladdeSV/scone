@@ -112,9 +112,9 @@ class Layer
     this(Layer parent, int x, int y, int width = 0, int height = 0, Slot[] border = null)
     in
     {
-        sconeCrash(parent !is null, "Layer parent can not be null!");
-        sconeCrash(width  - border.length*2 > 0, "The border is too thick for the width. There are no available slots in the layer.");
-        sconeCrash(height - border.length*2 > 0, "The border is too thick for the height. There are no available slots in the layer.");
+        sconeCrash(parent is null, "Layer parent can not be null!");
+        sconeCrash(width  - border.length*2 <= 0, "The border is too thick for the width. There are no available slots in the layer.");
+        sconeCrash(height - border.length*2 <= 0, "The border is too thick for the height. There are no available slots in the layer.");
     }
     body
     {
