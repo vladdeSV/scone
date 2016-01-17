@@ -1,4 +1,5 @@
 name "scone"
 description "Simple Console Engine"
 copyright "Copyright © 2015, Vladimirs Nordholm"
+license "MIT"
 authors "vladdeSV"
