@@ -34,3 +34,5 @@ auto posix_windowSize() @property
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     return [w.ws_col, w.ws_row];
 }
+
+version (OSX) enum TIOCGWINSZ = 0x40087468;
