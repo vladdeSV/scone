@@ -9,7 +9,8 @@ import std.array : insertInPlace;
 import std.string : wrap, strip;
 import std.uni : isWhite;
 import std.traits : isArray, isSomeString;
-version(Posix) import std.stdio : write;
+import std.algorithm : max, min;
+import std.stdio;
 public import std.experimental.logger;
 
 /**
@@ -203,7 +204,7 @@ class Layer
             Slot nls = Slot('\n');
             char[] chars;
 
-            int usableWidth = w - col - m_border.length * 2;
+            int usableWidth = to!int(w - col - m_border.length * 2);
 
             int charactersSinceLastWhitespace, put;
             foreach(n, slot; slots)
@@ -304,10 +305,10 @@ class Layer
                     {
                         if(f == UNDEF)
                         {
-                            f = sx;
+                            f = to!int(sx);
                         }
 
-                        l = sx;
+                        l = to!int(sx);
 
                         m_backbuffer[sy][sx] = slot;
                     }
@@ -344,7 +345,7 @@ class Layer
         {
             foreach(qx; left .. left + height)
             {
-                write(qx, qy, slot);
+                this.write(qx, qy, slot);
             }
         }
     }
@@ -530,7 +531,7 @@ class Layer
             amount = -amount; //If we're moving backwards, then the amount is negative. And the fancy stuff below assumes the amount is positive, so we simply invert the negative.
         }
         //Get our current position in our parent's list of sub layers
-        int currentPosition = layer.z;
+        int currentPosition = to!int(layer.z);
         //In case the layer wasn't found, just staph. This should never happen.
         if(currentPosition == UNDEF)
         {

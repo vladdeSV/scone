@@ -74,7 +74,7 @@ enum bg
 }
 
 //General flag checking
-bool hasFlag(Enum)(Enum check, Enum type) if (is(Enum == enum))
+bool hasFlag(Enum)(int check, Enum type) if (is(Enum == enum))
 {
     return ((check & type) == type);
 }

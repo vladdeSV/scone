@@ -5,7 +5,7 @@ version(Posix):
 import core.sys.posix.sys.ioctl;
 import core.sys.posix.unistd : STDOUT_FILENO;
 import std.conv : text;
-import std.stdio : stdout;
+import std.stdio;
 
 auto posix_setCursor(int x, int y)
 {

@@ -6,7 +6,7 @@ import scone.layer : Slot;
 import scone.utility;
 
 version(Windows) import scone.windows.winconsole;
-//version(Posix) import scone.posixterminal;
+version(Posix)   import scone.posixterminal;
 
 auto windowInit()
 {
