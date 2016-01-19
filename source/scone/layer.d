@@ -268,7 +268,7 @@ class Layer
     {
         //Makes sure the window isn't resized to a smaller size than the game.
         //TODO: Make a test to see how performance heavy this is (probably not that much)
-        int[2] a = windowSize();
+        auto a = windowSize();
         sconeCrash(a[0] < x || a[1] < y, "The window is smaller than the layer");
     }
     body
@@ -326,7 +326,7 @@ class Layer
                 }
 
                 //Set the cursor at the firstly edited slot...
-                setCursor(f, sy);
+                setCursor(f, to!int(sy));
                 //...and then print out the string.
                 std.stdio.write(printed);
 

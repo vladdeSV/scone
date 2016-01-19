@@ -23,7 +23,7 @@ auto posix_lineWrapping(bool wrap) @property
     wrap ? write("\033[?7h") : write("\033[?7l");
 }
 
-auto posix_setTitle(string title)
+auto posix_title(string title)
 {
     write("\033]0;", title, "\007");
 }
