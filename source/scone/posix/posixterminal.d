@@ -4,7 +4,7 @@ version(Posix):
 
 import core.sys.posix.sys.ioctl;
 import core.sys.posix.unistd : STDOUT_FILENO;
-import std.conv : text;
+import std.conv : text, to;
 import std.stdio;
 
 auto posix_setCursor(int x, int y)
@@ -32,7 +32,7 @@ auto posix_windowSize() @property
 {
     winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return [w.ws_col, w.ws_row];
+    return [to!int(w.ws_col), to!int(w.ws_row)];
 }
 
 version (OSX) enum TIOCGWINSZ = 0x40087468;
