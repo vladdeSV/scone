@@ -1,6 +1,8 @@
 # scone
 Simple Console Engine.
 
+**Currently only working on Windows. Key input is not functioning on POSIX (yet)**
+
 # Example
 ```d
 import scone;
