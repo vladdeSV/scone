@@ -1,7 +1,7 @@
 # scone
 Simple Console Engine.
 
-**Currently only working on Windows. Key input is not functioning on POSIX (yet)**
+**Key input is only available on Windows. POSIX can still write out to the console!**
 
 # Example
 ```d
