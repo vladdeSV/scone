@@ -19,7 +19,7 @@ public import std.experimental.logger;
  * As it is less than 1, it is used to set dynamic width and height for windows.
  * Examples:
  * --------------------
- * auto window = new Window(UNDEF, 20);
+ * auto window = new Frame(UNDEF, 20);
  * --------------------
  * Will probable be used sometime more in the future
  */
@@ -30,43 +30,48 @@ enum UNDEF = -1;
  */
 struct Frame
 {
-    //@nogc: //In the future, make entire Window @nogc
+    //@nogc: //In the future, make entire Frame @nogc
     @disable this();
     @disable this(this);
 
     /**
-     * Main window constructor.
+     * Main frame constructor.
      * Params:
-     *   width  = Width of the main window. If less than 1, get set to the consoles width (in slots)
-     *   height = Height of the main window. If less than 1, get set to the consoles height (in slots)
-     *
-     * If the width or height exceeds the consoles width or height, the program errors.
+     *   width  = Width of the main frame. If less than 1, get set to the consoles width (in slots)
+     *   height = Height of the main frame. If less than 1, get set to the consoles height (in slots)
+     *   border = Slot array of the border, where the first index is the outmost row
      *
      * Examples:
      * --------------------
-     * //Creates a dynamically sized main window, where the size is determined by the console/terminal window width and height
-     * Window window = new Window(); //The main window
+     * //Creates a dynamically sized main frame, where the size is determined by the console/terminal window width and height
+     * auto window = new Frame(); //The main frame
      * --------------------
-     *
      * Examples:
      * --------------------
      * //The width is less than one, meaning it get dynamically set to the consoles
-     * Window window = new Window(0, 20); //Main window, with the width of the console/terminal width, and the height of 20
+     * auto window = new Frame(0, 20); //Main frame, with the width of the console/terminal width, and the height of 20
+     * --------------------
+     * Examples:
+     * --------------------
+     * //The width is less than one, meaning it get dynamically set to the consoles
+     * auto window = new Frame(UNDEF, 24, [ Slot('*'), Slot('g', fg.white, bg.red) ]); //Main frame, with the width of the console/terminal width, the height of 24, and a border of '*' and 'g'
      * --------------------
      *
      * Standards: width = 80, height = 24
+     *
+     * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(int width = 0, int height = 0, Slot[] border = null)
+    this(int width = UNDEF, int height = UNDEF, Slot[] border = null)
     in
     {
         auto size = windowSize;
-        sconeCrash(width > size[0] || height > size[1], "Window is too small. Minimum size needs to be %sx%s slots, but window size is %sx%s", width, height, size[0], size[1]);
+        sconeCrash(width > size[0] || height > size[1], "Frame is too small. Minimum size needs to be %sx%s slots, but frame size is %sx%s", width, height, size[0], size[1]);
     }
     body
     {
         auto size = windowSize;
-        if(width  < 1) width  = size[0];
-        if(height < 1) height = size[1];
+        if(width  < 1){ width  = size[0]; }
+        if(height < 1){ height = size[1]; }
 
         m_w = width;
         m_h = height;
@@ -107,7 +112,7 @@ struct Frame
     }
 
     /**
-     * Writes whatever is thrown into the parameters onto the window
+     * Writes whatever is thrown into the parameters onto the frame
      * Examples:
      * --------------------
      * window.write(10,15, fg.red, bg.green, 'D'); //Writes a 'D' colored RED with a GREEN background.
@@ -242,14 +247,14 @@ struct Frame
         }
     }
 
-    /** Prints all the windows in the correct order */
+    /** Prints*/
     auto print()
     in
     {
-        //Makes sure the window isn't resized to a smaller size than the game.
+        //Makes sure the frame isn't resized to a smaller size than the game.
         //TODO: Make a test to see how performance heavy this is (probably not that much)
         auto a = windowSize();
-        sconeCrash(a[0] < w || a[1] < h, "The window is smaller than the window");
+        sconeCrash(a[0] < w || a[1] < h, "The window is smaller than the frame");
     }
     body
     {
@@ -314,7 +319,7 @@ struct Frame
         }
     }
 
-    ///** Draws a rectangle of slots */
+    //** Draws a rectangle of slots */
     //auto drawRectangle(int left, int top, int width, int height, Slot slot)
     //{
     //    foreach(qy; top .. top + height)
@@ -326,7 +331,7 @@ struct Frame
     //    }
     //}
 
-    //Sets all drawable tiles to be blank
+    ///Sets all drawable tiles to be blank
     auto clear()
     {
         foreach(ref row; m_canavas)
@@ -352,25 +357,25 @@ struct Frame
         const
         {
 
-            /** Get the width of the window */
+            /** Get the width of the frame */
             auto w()
             {
                 return m_w;
             }
-            /** Get the height of the window */
+            /** Get the height of the frame */
             auto h()
             {
                 return m_h;
             }
         }
 
-        /** Set the width of the window */
+        /** Set the width of the frame */
         auto w(int w)
         {
             return m_w = w;
         }
 
-        /** Set the height of the window */
+        /** Set the height of the frame */
         auto h(int h)
         {
             return m_h = h;
@@ -380,7 +385,7 @@ struct Frame
     /**
      * Returns: slot at the specific x and y coordinates
      */
-    auto getSlot(int x, int y)
+    auto getSlot(int x, int y) const
     {
         return m_slots[y][x];
     }
