@@ -2,7 +2,6 @@ module scone.window;
 
 package(scone):
 
-import scone.layer : Slot;
 import scone.utility;
 
 version(Windows) import scone.windows.winconsole;

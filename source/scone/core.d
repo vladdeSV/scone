@@ -1,7 +1,7 @@
 module scone.core;
 
 import scone.utility;
-import scone.layer;
+import scone.frame;
 import scone.window;
 import scone.keyboard;
 

@@ -79,6 +79,27 @@ bool hasFlag(Enum)(int check, Enum type) if (is(Enum == enum))
     return ((check & type) == type);
 }
 
+/**
+ * Slot structure
+ *
+ * Examples:
+ * --------------------
+ * Slot slot1 = Slot('d', fg.red, bg.white); //'d' character with RED foreground color and WHITE background color
+ * Slot slot2 = Slot('g');
+ *
+ * auto window = new Window();
+ * window.write(0,0, slot1);
+ * window.write(0,1, slot2);
+ * --------------------
+ *
+ */
+struct Slot
+{
+    char character;
+    fg foreground = fg.init;
+    bg background = bg.init;
+}
+
 package(scone):
 
 auto sconeCrash(Args...)(bool check, string msg, Args args)

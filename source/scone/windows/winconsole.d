@@ -4,7 +4,6 @@ version (Windows):
 package(scone):
 
 import core.sys.windows.windows;
-import scone.layer;
 import scone.utility;
 import std.algorithm : max, min;
 import std.conv : to;
