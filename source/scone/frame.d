@@ -28,11 +28,9 @@ enum UNDEF = -1;
 /**
  * Writable area
  */
-struct Frame
+class Frame
 {
     //@nogc: //In the future, make entire Frame @nogc
-    @disable this();
-    @disable this(this);
 
     /**
      * Main frame constructor.
