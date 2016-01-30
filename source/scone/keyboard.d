@@ -1,6 +1,10 @@
 module scone.keyboard;
 
-///KeyEvent
+/**
+ * Key event structure
+ * Contains general information about a key press
+ * Note: Does not work on POSIX yet!
+ */
 struct KeyEvent
 {
     package(scone) version(Windows) this(KEY_EVENT_RECORD k)
@@ -12,28 +16,11 @@ struct KeyEvent
      * Check if the button is pressed or released.
      * Returns: bool, true if pressed, false if not
      */
-    auto keyDown() @property
+    auto pressed() @property
     {
         version(Windows)
         {
             return cast(bool) m_winKey.bKeyDown;
-        }
-        version(Posix)
-        {
-            return 0;
-        }
-    }
-
-    /**
-     * Check the amount of times an event has been repeated since last check (held down).
-     * Returns: int, the amount of repeats
-     * Note: This is a bit unstable. I suggest you don't use /vladde
-     */
-    auto repeated() @property
-    {
-        version(Windows)
-        {
-            return cast(int) m_winKey.wRepeatCount;
         }
         version(Posix)
         {
@@ -77,8 +64,28 @@ struct KeyEvent
         return hasFlag(controlKey, ck);
     }
 
-    ///Do not use
-    private auto controlKey() @property
+    /**
+     * Check the amount of times an event has been repeated since last check (held down).
+     * Returns: int, the amount of repeats
+     * Note: This is a bit unstable. I suggest you don't use /vladde
+     */
+    @disable auto repeated() @property
+    {
+        version(Windows)
+        {
+            return cast(int) m_winKey.wRepeatCount;
+        }
+        version(Posix)
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Get control all keys
+     * Returns: enum ControlKey
+     */
+    auto controlKey() @property
     {
         version(Windows)
         {
@@ -113,51 +120,6 @@ auto getInputs()
 auto clearInputs()
 {
     keyInputs = null;
-}
-
-package(scone):
-
-import scone.utility;
-
-version(Windows)
-{
-    import scone.windows.winkeyboard;
-    import core.sys.windows.windows;
-}
-//version(Posix) public import scone.posix.posixkeyboard;
-
-auto keyboardInit()
-{
-    if(!moduleKeyboard)
-    {
-        version (Windows)
-        {
-            win_initKeyboard();
-        }
-        version (Posix)
-        {
-            //posix_initKeyboard();
-        }
-
-        moduleKeyboard = true;
-    }
-}
-
-auto keyboardClose()
-{
-    if(moduleKeyboard)
-    {
-        version(Windows)
-        {
-            win_exitKeyboard();
-        }
-        version(Posix)
-        {
-            //posix_exitKeyboard();
-        }
-
-        moduleKeyboard = false;
-    }
 }
 
 ///Keys
@@ -659,4 +621,51 @@ enum ControlKey
 
     ///Left or right CTRL key is pressed
     CTRL = 64,
+}
+
+package(scone)
+{
+
+    KeyEvent[] keyInputs;
+
+    version(Windows)
+    {
+        import scone.windows.winkeyboard;
+        import core.sys.windows.windows;
+    }
+    //version(Posix) public import scone.posix.posixkeyboard;
+
+    auto keyboardInit()
+    {
+        if(!moduleKeyboard)
+        {
+            version (Windows)
+            {
+                win_initKeyboard();
+            }
+            version (Posix)
+            {
+                //posix_initKeyboard();
+            }
+
+            moduleKeyboard = true;
+        }
+    }
+
+    auto keyboardClose()
+    {
+        if(moduleKeyboard)
+        {
+            version(Windows)
+            {
+                win_exitKeyboard();
+            }
+            version(Posix)
+            {
+                //posix_exitKeyboard();
+            }
+
+            moduleKeyboard = false;
+        }
+    }
 }

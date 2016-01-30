@@ -7,6 +7,20 @@ import core.sys.posix.unistd : STDOUT_FILENO;
 import std.conv : text, to;
 import std.stdio;
 
+auto posix_initTerminal()
+{
+    posix_lineWrapping = false;
+    posix_cursorVisible = false;
+}
+
+auto posix_exitTerminal()
+{
+    posix_lineWrapping = true;
+    posix_cursorVisible = true;
+    write("\033[0m"); //Reset colors to default
+    //write("\033[c") //Clears the screen
+}
+
 auto posix_setCursor(int x, int y)
 {
     stdout.flush();

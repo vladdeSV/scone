@@ -13,7 +13,7 @@ void main()
 
     sconeInit();
 
-    auto window = new Frame(40, UNDEF, [ Slot('*', fg.red, bg.white), Slot('#', fg.white, bg.red), Slot(' ') ]);
+    auto window = new Frame(40, UNDEF);
 
     while (gameloop)
     {
@@ -27,7 +27,7 @@ void main()
             }
 
             window.clear();
-            window.write(0,0, "Key: ", input.key, "\nPressed: ", input.keyDown);
+            window.write(0,0, "Key: ", input.key, "\nPressed: ", input.pressed);
         }
         window.print();
     }

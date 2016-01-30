@@ -6,7 +6,8 @@ package(scone):
 import core.sys.windows.windows;
 import core.thread;
 import scone.keyboard;
-import scone.utility;
+import scone.utility : hasFlag;
+import scone.core;
 
 auto win_initKeyboard()
 {
@@ -53,7 +54,7 @@ auto win_getInput()
     }
 }
 
-public auto win_getWindowsVirtualKey(WORD wrd)
+auto win_getWindowsVirtualKey(WORD wrd)
 {
     import std.traits;
     auto a = EnumMembers!WindowsVirtualKey;
@@ -967,6 +968,6 @@ enum WindowsControlKey
 }
 
 private:
-    DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT, _oldMode;
-    HANDLE _hConsoleInput;
-    INPUT_RECORD _inputBuffer;
+DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT, _oldMode;
+HANDLE _hConsoleInput;
+INPUT_RECORD _inputBuffer;

@@ -26,10 +26,104 @@ public import std.experimental.logger;
 enum UNDEF = -1;
 
 /**
+ * Slot structure
+ *
+ * Examples:
+ * --------------------
+ * Slot slot1 = Slot('d', fg.red, bg.white); //'d' character with RED foreground color and WHITE background color
+ * Slot slot2 = Slot('g');
+ *
+ * auto window = new Frame();
+ * window.write(0,0, slot1);
+ * window.write(0,1, slot2);
+ * --------------------
+ *
+ */
+struct Slot
+{
+    char character;
+    fg foreground = fg.init;
+    bg background = bg.init;
+}
+
+
+/**
+ * All colors
+ * --------------------
+ * //Available colors:
+ * init
+ *
+ * black
+ * blue
+ * blue_dark
+ * cyan
+ * cyan_dark
+ * gray
+ * gray_dark
+ * green
+ * green_dark
+ * magenta
+ * magenta_dark
+ * red
+ * red_dark
+ * white
+ * yellow
+ * yellow_dark
+ * --------------------
+ */
+enum fg
+{
+    init,
+
+    black,
+    blue,
+    blue_dark,
+    cyan,
+    cyan_dark,
+    gray,
+    gray_dark,
+    green,
+    green_dark,
+    magenta,
+    magenta_dark,
+    red,
+    red_dark,
+    white,
+    yellow,
+    yellow_dark
+}
+
+///ditto
+enum bg
+{
+    init,
+
+    black,
+    blue,
+    blue_dark,
+    cyan,
+    cyan_dark,
+    gray,
+    gray_dark,
+    green,
+    green_dark,
+    magenta,
+    magenta_dark,
+    red,
+    red_dark,
+    white,
+    yellow,
+    yellow_dark
+}
+
+/**
  * Writable area
  */
 class Frame
 {
+    alias width = w;
+    alias height = h;
+
     //@nogc: //In the future, make entire Frame @nogc
 
     /**
@@ -37,7 +131,6 @@ class Frame
      * Params:
      *   width  = Width of the main frame. If less than 1, get set to the consoles width (in slots)
      *   height = Height of the main frame. If less than 1, get set to the consoles height (in slots)
-     *   border = Slot array of the border, where the first index is the outmost row
      *
      * Examples:
      * --------------------
@@ -52,30 +145,27 @@ class Frame
      * Examples:
      * --------------------
      * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(UNDEF, 24, [ Slot('*'), Slot('g', fg.white, bg.red) ]); //Main frame, with the width of the console/terminal width, the height of 24, and a border of '*' and 'g'
+     * auto window = new Frame(UNDEF, 24); //Main frame, with the width of the console/terminal width, the height of 24
      * --------------------
      *
      * Standards: width = 80, height = 24
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(int width = UNDEF, int height = UNDEF, Slot[] border = null)
+    this(in int width = UNDEF, in int height = UNDEF)
     in
     {
         auto size = windowSize;
-        sconeCrash(width > size[0] || height > size[1], "Frame is too small. Minimum size needs to be %sx%s slots, but frame size is %sx%s", width, height, size[0], size[1]);
+        sconeCrashIf(width > size[0] || height > size[1], "Frame is too small. Minimum size needs to be %sx%s slots, but frame size is %sx%s", width, height, size[0], size[1]);
     }
     body
     {
         auto size = windowSize;
-        if(width  < 1){ width  = size[0]; }
-        if(height < 1){ height = size[1]; }
+        if(width  < 1){ m_w  = size[0]; }
+        if(height < 1){ m_h = size[1]; }
 
         m_w = width;
         m_h = height;
-        m_border = border;
-        m_visible = true;
-        m_translucent = true;
 
         m_slots = new Slot[][](height, width);
         m_backbuffer = new Slot[][](height, width);
@@ -83,29 +173,6 @@ class Frame
         foreach(n, ref row; m_slots)
         {
             row = m_slots[n][] = Slot(' ');
-        }
-
-        //NOTE: Can I do this in a cleaner way?
-        m_canavas = new Slot[][](height - (2 * border.length), width - (2 * border.length));
-        foreach(n, ref row; m_canavas)
-        {
-            row = m_slots[border.length + n][border.length .. width - border.length];
-        }
-
-        //Add border
-        //FIXME: Remove `_reverse` below to see a problem. Optimize
-        foreach_reverse(n, slot; border)
-        {
-            foreach(ry; 0 .. height)
-            {
-                foreach(rx; 0 .. width)
-                {
-                    if(ry == n || ry == height - n - 1 || rx == n || rx == width - n - 1)
-                    {
-                        m_slots[ry][rx] = slot;
-                    }
-                }
-            }
         }
     }
 
@@ -123,7 +190,7 @@ class Frame
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
      * Note: Writing arrays has been explicitly been disabled.
      */
-    auto write(Args...)(int col, int row, Args args)
+    auto write(Args...)(in int col, in int row, in Args args)
     {
         //Check if writing outside border
         if(col < 0 || row < 0 || col > w || row > h)
@@ -137,7 +204,7 @@ class Frame
         bg background = bg.black;
 
         bool unsetColors;
-        foreach (arg; args)
+        foreach(arg; args)
         {
             static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
                 log("Can not write arrays (yet)... Sorry!");
@@ -176,36 +243,52 @@ class Frame
 
         if(!slots.length)
         {
-            m_canavas[row][col].foreground = foreground;
-            m_canavas[row][col].background = background;
+            m_slots[row][col].foreground = foreground;
+            m_slots[row][col].background = background;
         }
         else
         {
+            int wx;
+
+            foreach(slot; slots)
+            {
+                m_slots[row + wx / w][col + wx % w] = slot;
+                ++wx;
+            }
+
+            /+
             //This part is annoying to understand. Not even I know exactly what I've written
-            //Don't mess with this part. Don't touch it.
+            //Don't mess with this part. Don't touch it. Just don't. It doesn't work.
 
             Slot nls = Slot('\n');
             char[] chars;
 
-            int usableWidth = to!int(w - col - m_border.length * 2);
+            //TODO: Needed?
+            //>> This is the width left to use until wrapping back to where we started writing
+            int usableWidth = to!int(w - col);
+            //<<
 
+            //>> This part takes care of making sure that if you have more whitespace than usable width, wrapping is done correctly. Typically this is when a line starts or ends with too much whitespace
             int charactersSinceLastWhitespace, put;
             foreach(n, slot; slots)
             {
+                //If current slot is a whitespace, reset the counter
                 if(isWhite(slot.character))
                 {
                     charactersSinceLastWhitespace = 0;
                 }
 
+                ++charactersSinceLastWhitespace;
+
+                //If the amount of whitespace exceeds the limit, place a newline slot after usable width
                 if(charactersSinceLastWhitespace >= usableWidth - 1)
                 {
                     slots.insertInPlace(n + put, nls);
                     ++put;
                     charactersSinceLastWhitespace = 0;
                 }
-
-                ++charactersSinceLastWhitespace;
             }
+            //<<
 
             chars.length = slots.length;
             foreach(n, slot; slots)
@@ -226,7 +309,7 @@ class Frame
             int wx, wy;
             foreach(n, slot; slots)
             {
-                if(slot.character == '\n')
+                if(slot.character == '\n' || wx > w)
                 {
                     ++wy;
                     wx = 0;
@@ -239,20 +322,21 @@ class Frame
                     break;
                 }
 
-                m_canavas[row + wy][col + wx] = slot;
+                m_slots[row + wy][col + wx] = slot;
                 ++wx;
             }
+            +/
         }
     }
 
-    /** Prints*/
+    /** Prints */
     auto print()
     in
     {
-        //Makes sure the frame isn't resized to a smaller size than the game.
+        //Makes sure the frame isn't resized to a smaller size than the window.
         //TODO: Make a test to see how performance heavy this is (probably not that much)
         auto a = windowSize();
-        sconeCrash(a[0] < w || a[1] < h, "The window is smaller than the frame");
+        sconeCrashIf(a[0] < w || a[1] < h, "The window is smaller than the frame");
     }
     body
     {
@@ -274,25 +358,34 @@ class Frame
         {
             //Temporary string that will be printed out for each line.
             string printed;
+
             //Loop through all rows.
             foreach (sy, row; m_slots)
             {
+                //f = first modified slot, l = last modified slot
                 int f = UNDEF, l;
+
+                //Go through each line
                 foreach(sx, slot; m_slots[sy])
                 {
+                    //If the slot at current position differs from backbuffer
                     if(slot != m_backbuffer[sy][sx])
                     {
+                        //Set f once
                         if(f == UNDEF)
                         {
                             f = to!int(sx);
                         }
 
+                        //Update l as many times as needed
                         l = to!int(sx);
 
+                        //Backbuffer is checked, make it "un-differ"
                         m_backbuffer[sy][sx] = slot;
                     }
                 }
 
+                //If no slot on this row has been modified, continue
                 if(f == UNDEF)
                 {
                     continue;
@@ -313,26 +406,14 @@ class Frame
                 printed = null;
             }
             //Flush. Without this problems may occur.
-            stdout.flush(); //TODO: Check if I need this for POSIX. I know this caused a lot of problems on the Windows console, but you know... this part is POSIX only
+            stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
         }
     }
-
-    //** Draws a rectangle of slots */
-    //auto drawRectangle(int left, int top, int width, int height, Slot slot)
-    //{
-    //    foreach(qy; top .. top + height)
-    //    {
-    //        foreach(qx; left .. left + height)
-    //        {
-    //            this.write(qx, qy, slot);
-    //        }
-    //    }
-    //}
 
     ///Sets all drawable tiles to be blank
     auto clear()
     {
-        foreach(ref row; m_canavas)
+        foreach(ref row; m_slots)
         {
             row[] = Slot(' ');
         }
@@ -347,54 +428,31 @@ class Frame
         }
     }
 
-    @property @nogc pure nothrow
+    const
     {
-        alias width = w;
-        alias height = h;
-
-        const
+        /** Get the width of the frame */
+        auto w() @property
         {
-
-            /** Get the width of the frame */
-            auto w()
-            {
-                return m_w;
-            }
-            /** Get the height of the frame */
-            auto h()
-            {
-                return m_h;
-            }
+            return m_w;
         }
 
-        /** Set the width of the frame */
-        auto w(int w)
+        /** Get the height of the frame */
+        auto h() @property
         {
-            return m_w = w;
+            return m_h;
         }
 
-        /** Set the height of the frame */
-        auto h(int h)
+        /** Returns: slot at the specific x and y coordinates */
+        auto getSlot(in int x, in int y)
         {
-            return m_h = h;
+            return m_slots[y][x];
         }
-    }
-
-    /**
-     * Returns: slot at the specific x and y coordinates
-     */
-    auto getSlot(int x, int y) const
-    {
-        return m_slots[y][x];
     }
 
     private:
     //Forgive me for using C++ naming style
-    int m_x, m_y;
     int m_w, m_h;
-    bool m_visible, m_translucent;
-    Slot[] m_border;
-    Slot[][] m_slots, m_canavas, m_backbuffer;
+    Slot[][] m_slots, m_backbuffer;
 }
 
 //Do not delete:

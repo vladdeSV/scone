@@ -28,10 +28,24 @@
 <dd>Closes scone<br><br>
 
 </dd>
-<dt><big><a name="sconeRunning"></a>auto <u>sconeRunning</u>();
+<dt><big><a name="getModuleState"></a>auto <u>getModuleState</u>(SconeModule <i>cm</i>);
 </big></dt>
 <dd><b>Returns:</b><br>
-bool, <b>true</b> if any module is running<br><br>
+bool, <b>true</b> if all modules entered are active.
+<br><br>
+<b>Examples:</b><br>
+<pre class="d_code">sconeInit(SconeModule.WINDOW | SconeModule.KEYBOARD);
+
+<font color=blue>assert</font>( <u>getModuleState</u>(SconeModule.WINDOW));
+<font color=blue>assert</font>( <u>getModuleState</u>(SconeModule.WINDOW | SconeModule.KEYBOARD));
+<font color=blue>assert</font>(!<u>getModuleState</u>(SconeModule.NONE));
+
+sconeClose();
+<font color=blue>assert</font>( <u>getModuleState</u>(SconeModule.NONE));
+</pre>
+<br><br>
+<b>Note:</b><br>
+Does not work?<br><br>
 
 </dd>
 </dl>

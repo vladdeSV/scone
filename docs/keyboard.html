@@ -7,25 +7,18 @@
 <br><br>
 <dl><dt><big><a name="KeyEvent"></a>struct <u>KeyEvent</u>;
 </big></dt>
-<dd><u>KeyEvent</u><br><br>
-
-<dl><dt><big><a name="KeyEvent.keyDown"></a>@property auto <u>keyDown</u>();
-</big></dt>
-<dd>Check if the button is pressed or released.
-<br><br>
-<b>Returns:</b><br>
-bool, <b>true</b> if pressed, <b>false</b> if not<br><br>
-
-</dd>
-<dt><big><a name="KeyEvent.repeated"></a>@property auto <u>repeated</u>();
-</big></dt>
-<dd>Check the amount of times an event has been <u>repeated</u> since last check (held down).
-<br><br>
-<b>Returns:</b><br>
-int, the amount of repeats
+<dd>Key event structure
+ Contains general information about a key press
 <br><br>
 <b>Note:</b><br>
-This is a bit unstable. I suggest you don't use /vladde<br><br>
+Does not work on POSIX yet!<br><br>
+
+<dl><dt><big><a name="KeyEvent.pressed"></a>@property auto <u>pressed</u>();
+</big></dt>
+<dd>Check if the button is <u>pressed</u> or released.
+<br><br>
+<b>Returns:</b><br>
+bool, <b>true</b> if <u>pressed</u>, <b>false</b> if not<br><br>
 
 </dd>
 <dt><big><a name="KeyEvent.key"></a>@property auto <u>key</u>();
@@ -54,6 +47,25 @@ Key (enum) of the <u>key</u> being pressed<br><br>
 }
 </pre>
 <br><br>
+
+</dd>
+<dt><big><a name="KeyEvent.repeated"></a>@property auto <u>repeated</u>();
+</big></dt>
+<dd>Check the amount of times an event has been <u>repeated</u> since last check (held down).
+<br><br>
+<b>Returns:</b><br>
+int, the amount of repeats
+<br><br>
+<b>Note:</b><br>
+This is a bit unstable. I suggest you don't use /vladde<br><br>
+
+</dd>
+<dt><big><a name="KeyEvent.controlKey"></a>@property auto <u>controlKey</u>();
+</big></dt>
+<dd>Get control all keys
+<br><br>
+<b>Returns:</b><br>
+enum ControlKey<br><br>
 
 </dd>
 </dl>

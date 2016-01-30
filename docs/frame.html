@@ -17,11 +17,53 @@ As it is less than 1, it is used to set dynamic width and height for windows.
  Will probable be used sometime more in the future<br><br>
 
 </dd>
-<dt><big><a name="Frame"></a>struct <u>Frame</u>;
+<dt><big><a name="Slot"></a>struct <u>Slot</u>;
+</big></dt>
+<dd><u>Slot</u> structure
+<br><br>
+<b>Examples:</b><br>
+<pre class="d_code"><u>Slot</u> slot1 = <u>Slot</u>('d', fg.red, bg.white); <font color=green>//'d' character with RED foreground color and WHITE background color
+</font><u>Slot</u> slot2 = <u>Slot</u>('g');
+
+<font color=blue>auto</font> window = <font color=blue>new</font> Frame();
+window.write(0,0, slot1);
+window.write(0,1, slot2);
+</pre>
+<br><br>
+
+</dd>
+<dt><big><a name="fg"></a>enum <u>fg</u>: int;
+<br><a name="bg"></a>enum <u>bg</u>: int;
+</big></dt>
+<dd> All colors
+<pre class="d_code"><font color=green>//Available colors:
+</font>init
+
+black
+blue
+blue_dark
+cyan
+cyan_dark
+gray
+gray_dark
+green
+green_dark
+magenta
+magenta_dark
+red
+red_dark
+white
+yellow
+yellow_dark
+</pre>
+<br><br>
+
+</dd>
+<dt><big><a name="Frame"></a>class <u>Frame</u>;
 </big></dt>
 <dd>Writable area<br><br>
 
-<dl><dt><big><a name="Frame.this"></a>this(int <i>width</i> = UNDEF, int <i>height</i> = UNDEF, Slot[] <i>border</i> = null);
+<dl><dt><big><a name="Frame.this"></a>this(in int <i>width</i> = UNDEF, in int <i>height</i> = UNDEF);
 </big></dt>
 <dd>Main frame constructor.
 <br><br>
@@ -30,8 +72,6 @@ As it is less than 1, it is used to set dynamic width and height for windows.
 <td>Width of the main frame. If less than 1, get set to the consoles <i>width</i> (in slots)</td></tr>
 <tr><td>int <i>height</i></td>
 <td>Height of the main frame. If less than 1, get set to the consoles <i>height</i> (in slots)</td></tr>
-<tr><td>Slot[] <i>border</i></td>
-<td>Slot array of the <i>border</i>, where the first index is the outmost row</td></tr>
 </table><br>
 <b>Examples:</b><br>
 <pre class="d_code"><font color=green>//Creates a dynamically sized main frame, where the size is determined by the console/terminal window width and height
@@ -45,7 +85,7 @@ As it is less than 1, it is used to set dynamic width and height for windows.
 <br><br>
 <b>Examples:</b><br>
 <pre class="d_code"><font color=green>//The width is less than one, meaning it get dynamically set to the consoles
-</font><font color=blue>auto</font> window = <font color=blue>new</font> Frame(UNDEF, 24, [ Slot('*'), Slot('g', fg.white, bg.red) ]); <font color=green>//Main frame, with the width of the console/terminal width, the height of 24, and a border of '*' and 'g'
+</font><font color=blue>auto</font> window = <font color=blue>new</font> Frame(UNDEF, 24); <font color=green>//Main frame, with the width of the console/terminal width, the height of 24
 </font></pre>
 
 <br><br>
@@ -56,7 +96,7 @@ As it is less than 1, it is used to set dynamic width and height for windows.
  If the <i>width</i> or <i>height</i> exceeds the consoles <i>width</i> or <i>height</i>, the program errors.<br><br>
 
 </dd>
-<dt><big><a name="Frame.write"></a>auto <u>write</u>(Args...)(int <i>col</i>, int <i>row</i>, Args <i>args</i>);
+<dt><big><a name="Frame.write"></a>auto <u>write</u>(Args...)(in int <i>col</i>, in int <i>row</i>, in Args <i>args</i>);
 </big></dt>
 <dd>Writes whatever is thrown into the parameters onto the frame
 <br><br>
@@ -86,27 +126,17 @@ Writing arrays has been explicitly been disabled.<br><br>
 <dd>Sets all drawable tiles to be blank<br><br>
 
 </dd>
-<dt><big><a name="Frame.w"></a>const pure nothrow @nogc @property auto <u>w</u>();
+<dt><big><a name="Frame.w"></a>const @property auto <u>w</u>();
 </big></dt>
 <dd>Get the width of the frame<br><br>
 
 </dd>
-<dt><big><a name="Frame.h"></a>const pure nothrow @nogc @property auto <u>h</u>();
+<dt><big><a name="Frame.h"></a>const @property auto <u>h</u>();
 </big></dt>
 <dd>Get the height of the frame<br><br>
 
 </dd>
-<dt><big><a name="Frame.w.2"></a>pure nothrow @nogc @property auto <u>w</u>(int <u>w</u>);
-</big></dt>
-<dd>Set the width of the frame<br><br>
-
-</dd>
-<dt><big><a name="Frame.h.2"></a>pure nothrow @nogc @property auto <u>h</u>(int <u>h</u>);
-</big></dt>
-<dd>Set the height of the frame<br><br>
-
-</dd>
-<dt><big><a name="Frame.getSlot"></a>const auto <u>getSlot</u>(int <i>x</i>, int <i>y</i>);
+<dt><big><a name="Frame.getSlot"></a>const auto <u>getSlot</u>(in int <i>x</i>, in int <i>y</i>);
 </big></dt>
 <dd><b>Returns:</b><br>
 slot at the specific <i>x</i> and <i>y</i> coordinates<br><br>

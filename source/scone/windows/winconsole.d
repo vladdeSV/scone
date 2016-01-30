@@ -5,6 +5,7 @@ package(scone):
 
 import core.sys.windows.windows;
 import scone.utility;
+import scone.frame;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;
@@ -22,7 +23,6 @@ auto win_initConsole()
         assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
 
     win_cursorVisible = false;
-    //win_lineWrapping = false;
     win_setCursor(0,0);
 
     //TODO: clear the screen?
@@ -42,7 +42,6 @@ auto win_initConsole()
 auto win_exitConsole()
 {
     win_cursorVisible = true;
-    //win_lineWrapping = true;
 }
 
 auto win_writeSlot(int x, int y, ref Slot slot)
@@ -53,8 +52,6 @@ auto win_writeSlot(int x, int y, ref Slot slot)
     SMALL_RECT writeArea = {wx, wy, wx, wy};
     CHAR_INFO character;
     character.AsciiChar = slot.character;
-    //character.UnicodeChar = to!wchar(slot.character);
-    //character.Attributes = attributesFromSlot(slot);
     character.Attributes = attributesFromSlot(slot);
     WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
 }
@@ -96,7 +93,6 @@ auto win_windowSize() @property
 }
 
 private:
-
 HANDLE _hConsoleOutput, _hConsoleError;
 CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 //private SMALL_RECT _oldWindowSize;
@@ -213,6 +209,5 @@ ushort attributesFromSlot(Slot slot)
         break;
     }
 
-    //return to!ushort(attributes);
     return attributes;
 }

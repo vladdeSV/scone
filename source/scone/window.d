@@ -1,47 +1,10 @@
 module scone.window;
 
-package(scone):
-
-import scone.utility;
+import scone.core;
+import scone.frame : Slot;
 
 version(Windows) import scone.windows.winconsole;
 version(Posix)   import scone.posix.posixterminal;
-
-auto windowInit()
-{
-    if(!moduleWindow)
-    {
-        version (Windows)
-        {
-            win_initConsole();
-        }
-        version (Posix)
-        {
-            //posix_initTerminal();
-        }
-
-        moduleWindow = true;
-    }
-}
-
-auto windowClose()
-{
-    if(moduleWindow)
-    {
-        version(Windows)
-        {
-            win_exitConsole();
-        }
-        version(Posix)
-        {
-            ////Thank you dav1d, from #d
-            ////write("\033[?7h \033[0m \033[?25%change \033c"); //Set line-wrapping on, default colors, cursor visible and clear the screen.
-            //posix_exitTerminal();
-        }
-
-        moduleWindow = false;
-    }
-}
 
 /**
  * Writes out a slot at (x, y)
@@ -129,5 +92,42 @@ auto windowSize() @property
     version (Posix)
     {
         return posix_windowSize;
+    }
+}
+
+
+package(scone):
+
+auto windowInit()
+{
+    if(!moduleWindow)
+    {
+        version (Windows)
+        {
+            win_initConsole();
+        }
+        version (Posix)
+        {
+            posix_initTerminal();
+        }
+
+        moduleWindow = true;
+    }
+}
+
+auto windowClose()
+{
+    if(moduleWindow)
+    {
+        version(Windows)
+        {
+            win_exitConsole();
+        }
+        version(Posix)
+        {
+            posix_exitTerminal();
+        }
+
+        moduleWindow = false;
     }
 }

@@ -54,6 +54,16 @@ auto sconeClose()
     //audioClose();
 }
 
+/+
+/**
+ * Returns: bool, true if any module is running
+ */
+auto sconeRunning()
+{
+    return !getModuleState(SconeModule.NONE);
+}
++/
+
 /**
  * Returns: bool, true if all modules entered are active.
  * Examples:
@@ -67,8 +77,9 @@ auto sconeClose()
  * sconeClose();
  * assert( getModuleState(SconeModule.NONE));
  * --------------------
+ * Note: Does not work?
  */
-private auto getModuleState(SconeModule cm)
+@disable auto getModuleState(SconeModule cm)
 {
     bool r = true;
 
@@ -92,10 +103,9 @@ private auto getModuleState(SconeModule cm)
     return r;
 }
 
-/**
- * Returns: bool, true if any module is running
- */
-auto sconeRunning()
+package(scone)
 {
-    return !getModuleState(SconeModule.NONE);
+    auto moduleWindow   = false;
+    auto moduleKeyboard = false;
+    auto moduleAudio    = false;
 }
