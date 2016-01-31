@@ -45,6 +45,12 @@ auto sconeInit(SconeModule cm = SconeModule.ALL)
     //{
     //   audioInit();
     //}
+
+    if(!isLogFile)
+    {
+        logFile = new FileLogger("scone.log");
+        isLogFile = true;
+    }
 }
 
 ///Closes scone
@@ -109,5 +115,7 @@ package(scone)
     auto moduleWindow   = false;
     auto moduleKeyboard = false;
     auto moduleAudio    = false;
-    static auto logFile = new FileLogger("scone.log");
+
+    auto isLogFile = false;
+    static FileLogger logFile;
 }
