@@ -10,5 +10,6 @@ dub.selections.json
 docs/app.html
 docs/posixterminal.html
 docs/winconsole.html
-docs/window.html
 docs/winkeyboard.html
+docs/utility.html
+docs/package.html
