@@ -69,7 +69,6 @@ auto sconeRunning()
 {
     return !getModuleState(SconeModule.NONE);
 }
-+/
 
 /**
  * Returns: bool, true if all modules entered are active.
@@ -86,7 +85,7 @@ auto sconeRunning()
  * --------------------
  * Note: Does not work?
  */
-@disable auto getModuleState(SconeModule cm)
+auto getModuleState(SconeModule cm)
 {
     bool r = true;
 
@@ -109,6 +108,7 @@ auto sconeRunning()
 
     return r;
 }
++/
 
 package(scone)
 {
