@@ -152,7 +152,7 @@ class Frame
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(in int width = UNDEF, in int height = UNDEF)
+    this(int width = UNDEF, int height = UNDEF)
     in
     {
         auto size = windowSize;
@@ -161,8 +161,8 @@ class Frame
     body
     {
         auto size = windowSize;
-        if(width  < 1){ m_w  = size[0]; }
-        if(height < 1){ m_h = size[1]; }
+        if(width  < 1){ width  = size[0]; }
+        if(height < 1){ height = size[1]; }
 
         m_w = width;
         m_h = height;
@@ -190,7 +190,7 @@ class Frame
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
      * Note: Writing arrays has been explicitly been disabled.
      */
-    auto write(Args...)(in int col, in int row, in Args args)
+    auto write(Args...)(in int col, in int row, Args args)
     {
         //Check if writing outside border
         if(col < 0 || row < 0 || col > w || row > h)
@@ -206,11 +206,13 @@ class Frame
         bool unsetColors;
         foreach(arg; args)
         {
-            static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
+            /*static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
                 log("Can not write arrays (yet)... Sorry!");
                 continue;
             }
-            else static if(is(typeof(arg) == fg))
+            else */
+
+            static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
                 unsetColors = true;
@@ -249,11 +251,18 @@ class Frame
         else
         {
             int wx;
-
             foreach(slot; slots)
             {
-                m_slots[row + wx / w][col + wx % w] = slot;
-                ++wx;
+                //No linewrapping here
+                if(col + wx >= w)
+                {
+                    break;
+                }
+                else
+                {
+                    m_slots[row][col + wx] = slot;
+                    ++wx;
+                }
             }
         }
     }
@@ -271,9 +280,9 @@ class Frame
     {
         version(Windows)
         {
-            foreach(sy, row; m_slots)
+            foreach(sy, ref row; m_slots)
             {
-                foreach(sx, slot; row)
+                foreach(sx, ref slot; row)
                 {
                     if(slot != m_backbuffer[sy][sx])
                     {
