@@ -4,6 +4,7 @@ import scone.utility;
 import scone.frame;
 import scone.window;
 import scone.keyboard;
+import std.experimental.logger;
 
 enum SconeModule
 {
@@ -108,4 +109,5 @@ package(scone)
     auto moduleWindow   = false;
     auto moduleKeyboard = false;
     auto moduleAudio    = false;
+    static auto logFile = new FileLogger("scone.log");
 }

@@ -10,8 +10,7 @@ import std.stdio;
 import std.string : wrap, strip;
 import std.traits : isArray, isSomeString;
 import std.uni : isWhite;
-public import scone.utility;
-public import std.experimental.logger;
+import scone.utility;
 
 /**
  * Universal enum to do certain operations.
@@ -45,7 +44,6 @@ struct Slot
     fg foreground = fg.init;
     bg background = bg.init;
 }
-
 
 /**
  * All colors
@@ -195,7 +193,7 @@ class Frame
         //Check if writing outside border
         if(col < 0 || row < 0 || col > w || row > h)
         {
-            log(format("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s"), col, row, w, h);
+            logFile.log(format("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s"), col, row, w, h);
             return;
         }
 
@@ -207,7 +205,7 @@ class Frame
         foreach(arg; args)
         {
             /*static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
-                log("Can not write arrays (yet)... Sorry!");
+                logFile.log("Can not write arrays (yet)... Sorry!");
                 continue;
             }
             else */
@@ -240,7 +238,7 @@ class Frame
         //If the last argument(s) are/is a color, warn
         if(slots.length && unsetColors)
         {
-            log("Warning: The last argument(s) in ", args, " are/is a color, which will not be set!");
+            logFile.log("Warning: The last argument(s) in ", args, " are/is a color, which will not be set!");
         }
 
         if(!slots.length)
@@ -250,17 +248,18 @@ class Frame
         }
         else
         {
-            int wx;
+            int wx, wy;
             foreach(slot; slots)
             {
-                //No linewrapping here
-                if(col + wx >= w)
+                if(col + wx >= w || slot.character == '\n')
                 {
-                    break;
+                    wx = 0;
+                    ++wy;
+                    continue;
                 }
                 else
                 {
-                    m_slots[row][col + wx] = slot;
+                    m_slots[row + wy][col + wx] = slot;
                     ++wx;
                 }
             }

@@ -59,7 +59,7 @@ struct KeyEvent
      * }
      * --------------------
      */
-    auto hasControlKey(ControlKey ck)
+    auto hasControlKey(SCK ck)
     {
         return hasFlag(controlKey, ck);
     }
@@ -123,480 +123,480 @@ auto clearInputs()
 }
 
 ///Keys
-enum
+enum SK
 {
     ///Unknown key (Should never appear. If do, please report bug)
-    SK_UNKNOWN,
+    UNKNOWN,
 
     ///BACKSPACE key
-    SK_BACKSPACE,
+    BACKSPACE,
 
     ///TAB key
-    SK_TAB,
+    TAB,
 
     ///CLEAR key
-    SK_CLEAR,
+    CLEAR,
 
     ///ENTER key
-    SK_ENTER,
+    ENTER,
 
     ///SHIFT key
-    SK_SHIFT,
+    SHIFT,
 
     ///CTRL key
-    SK_CONTROL,
+    CONTROL,
 
     ///ALT key
-    SK_ALT,
+    ALT,
 
     ///PAUSE key
-    SK_PAUSE,
+    PAUSE,
 
     ///CAPS LOCK key
-    SK_CAPSLOCK,
+    CAPSLOCK,
 
     ///ESC key
-    SK_ESCAPE,
+    ESCAPE,
 
     ///SPACEBAR
-    SK_SPACE,
+    SPACE,
 
     ///PAGE UP key
-    SK_PAGE_UP,
+    PAGE_UP,
 
     ///PAGE DOWN key
-    SK_PAGE_DOWN,
+    PAGE_DOWN,
 
     ///END key
-    SK_END,
+    END,
 
     ///HOME key
-    SK_HOME,
+    HOME,
 
     ///LEFT ARROW key
-    SK_LEFT,
+    LEFT,
 
     ///UP ARROW key
-    SK_UP,
+    UP,
 
     ///RIGHT ARROW key
-    SK_RIGHT,
+    RIGHT,
 
     ///DOWN ARROW key
-    SK_DOWN,
+    DOWN,
 
     ///SELECT key
-    SK_SELECT,
+    SELECT,
 
     ///PRINT key
-    SK_PRINT,
+    PRINT,
 
     ///EXECUTE key
-    SK_EXECUTE,
+    EXECUTE,
 
     ///PRINT SCREEN key
-    SK_PRINT_SCREEN,
+    PRINT_SCREEN,
 
     ///INS key
-    SK_INSERT,
+    INSERT,
 
     ///DEL key
-    SK_DELETE,
+    DELETE,
 
     ///HELP key
-    SK_HELP,
+    HELP,
 
     ///0 key
-    SK_0,
+    K_0,
 
     ///1 key
-    SK_1,
+    K_1,
 
     ///2 key
-    SK_2,
+    K_2,
 
     ///3 key
-    SK_3,
+    K_3,
 
     ///4 key
-    SK_4,
+    K_4,
 
     ///5 key
-    SK_5,
+    K_5,
 
     ///6 key
-    SK_6,
+    K_6,
 
     ///7 key
-    SK_7,
+    K_7,
 
     ///8 key
-    SK_8,
+    K_8,
 
     ///9 key
-    SK_9,
+    K_9,
 
     ///A key
-    SK_A,
+    A,
 
     ///B key
-    SK_B,
+    B,
 
     ///C key
-    SK_C,
+    C,
 
     ///D key
-    SK_D,
+    D,
 
     ///E key
-    SK_E,
+    E,
 
     ///F key
-    SK_F,
+    F,
 
     ///G key
-    SK_G,
+    G,
 
     ///H key
-    SK_H,
+    H,
 
     ///I key
-    SK_I,
+    I,
 
     ///J key
-    SK_J,
+    J,
 
     ///K key
-    SK_K,
+    K,
 
     ///L key
-    SK_L,
+    L,
 
     ///M key
-    SK_M,
+    M,
 
     ///N key
-    SK_N,
+    N,
 
     ///O key
-    SK_O,
+    O,
 
     ///P key
-    SK_P,
+    P,
 
     ///Q key
-    SK_Q,
+    Q,
 
     ///R key
-    SK_R,
+    R,
 
     ///S key
-    SK_S,
+    S,
 
     ///T key
-    SK_T,
+    T,
 
     ///U key
-    SK_U,
+    U,
 
     ///V key
-    SK_V,
+    V,
 
     ///W key
-    SK_W,
+    W,
 
     ///X key
-    SK_X,
+    X,
 
     ///Y key
-    SK_Y,
+    Y,
 
     ///Z key
-    SK_Z,
+    Z,
 
     ///Left Windows key (Natural keyboard)
-    SK_WINDOWS_LEFT,
+    WINDOWS_LEFT,
 
     ///Right Windows key (Natural keyboard)
-    SK_WINDOWS_RIGHT,
+    WINDOWS_RIGHT,
 
     ///Applications key (Natural keyboard)
-    SK_APPS,
+    APPS,
 
     ///Computer Sleep key
-    SK_SLEEP,
+    SLEEP,
 
     ///Numeric keypad 0 key
-    SK_NUMPAD_0,
+    NUMPAD_0,
 
     ///Numeric keypad 1 key
-    SK_NUMPAD_1,
+    NUMPAD_1,
 
     ///Numeric keypad 2 key
-    SK_NUMPAD_2,
+    NUMPAD_2,
 
     ///Numeric keypad 3 key
-    SK_NUMPAD_3,
+    NUMPAD_3,
 
     ///Numeric keypad 4 key
-    SK_NUMPAD_4,
+    NUMPAD_4,
 
     ///Numeric keypad 5 key
-    SK_NUMPAD_5,
+    NUMPAD_5,
 
     ///Numeric keypad 6 key
-    SK_NUMPAD_6,
+    NUMPAD_6,
 
     ///Numeric keypad 7 key
-    SK_NUMPAD_7,
+    NUMPAD_7,
 
     ///Numeric keypad 8 key
-    SK_NUMPAD_8,
+    NUMPAD_8,
 
     ///Numeric keypad 9 key
-    SK_NUMPAD_9,
+    NUMPAD_9,
 
     ///Multiply key
-    SK_MULTIPLY,
+    MULTIPLY,
 
     ///Add key
-    SK_ADD,
+    ADD,
 
     ///Separator key
-    SK_SEPARATOR,
+    SEPARATOR,
 
     ///Subtract key
-    SK_SUBTRACT,
+    SUBTRACT,
 
     ///Decimal key
-    SK_DECIMAL,
+    DECIMAL,
 
     ///Divide key
-    SK_DIVIDE,
+    DIVIDE,
 
     ///F1 key
-    SK_F1,
+    F1,
 
     ///F2 key
-    SK_F2,
+    F2,
 
     ///F3 key
-    SK_F3,
+    F3,
 
     ///F4 key
-    SK_F4,
+    F4,
 
     ///F5 key
-    SK_F5,
+    F5,
 
     ///F6 key
-    SK_F6,
+    F6,
 
     ///F7 key
-    SK_F7,
+    F7,
 
     ///F8 key
-    SK_F8,
+    F8,
 
     ///F9 key
-    SK_F9,
+    F9,
 
     ///F10 key
-    SK_F10,
+    F10,
 
     ///F11 key
-    SK_F11,
+    F11,
 
     ///F12 key
-    SK_F12,
+    F12,
 
     ///F13 key
-    SK_F13,
+    F13,
 
     ///F14 key
-    SK_F14,
+    F14,
 
     ///F15 key
-    SK_F15,
+    F15,
 
     ///F16 key
-    SK_F16,
+    F16,
 
     ///F17 key
-    SK_F17,
+    F17,
 
     ///F18 key
-    SK_F18,
+    F18,
 
     ///F19 key
-    SK_F19,
+    F19,
 
     ///F20 key
-    SK_F20,
+    F20,
 
     ///F21 key
-    SK_F21,
+    F21,
 
     ///F22 key
-    SK_F22,
+    F22,
 
     ///F23 key
-    SK_F23,
+    F23,
 
     ///F24 key
-    SK_F24,
+    F24,
 
     ///NUM LOCK key
-    SK_NUMLOCK,
+    NUMLOCK,
 
     ///SCROLL LOCK key
-    SK_SCROLL_LOCK,
+    SCROLL_LOCK,
 
     ///Left SHIFT key
-    SK_SHIFT_LEFT,
+    SHIFT_LEFT,
 
     ///Right SHIFT key
-    SK_SHIFT_RIGHT,
+    SHIFT_RIGHT,
 
     ///Left CONTROL key
-    SK_CONTROL_LEFT,
+    CONTROL_LEFT,
 
     ///Right CONTROL key
-    SK_CONTROL_RIGHT,
+    CONTROL_RIGHT,
 
     ///Left MENU key
-    SK_MENU_LEFT,
+    MENU_LEFT,
 
     ///Right MENU key
-    SK_MENU_RIGHT,
+    MENU_RIGHT,
 
     ///Browser Back key
-    SK_BROWSER_BACK,
+    BROWSER_BACK,
 
     ///Browser Forward key
-    SK_BROWSER_FORWARD,
+    BROWSER_FORWARD,
 
     ///Browser Refresh key
-    SK_BROWSER_REFRESH,
+    BROWSER_REFRESH,
 
     ///Browser Stop key
-    SK_BROWSER_STOP,
+    BROWSER_STOP,
 
     ///Browser Search key
-    SK_BROWSER_SEARCH,
+    BROWSER_SEARCH,
 
     ///Browser Favorites key
-    SK_BROWSER_FAVORITES,
+    BROWSER_FAVORITES,
 
     ///Browser Start and Home key
-    SK_BROWSER_HOME,
+    BROWSER_HOME,
 
     ///Volume Mute key
-    SK_VOLUME_MUTE,
+    VOLUME_MUTE,
 
     ///Volume Down key
-    SK_VOLUME_DOWN,
+    VOLUME_DOWN,
 
     ///Volume Up key
-    SK_VOLUME_UP,
+    VOLUME_UP,
 
     ///Next Track key
-    SK_MEDIA_NEXT,
+    MEDIA_NEXT,
 
     ///Previous Track key
-    SK_MEDIA_PREV,
+    MEDIA_PREV,
 
     ///Stop Media key
-    SK_MEDIA_STOP,
+    MEDIA_STOP,
 
     ///Play/Pause Media key
-    SK_MEDIA_PLAY_PAUSE,
+    MEDIA_PLAY_PAUSE,
 
     ///Start Mail key
-    SK_LAUNCH_MAIL,
+    LAUNCH_MAIL,
 
     ///Select Media key
-    SK_LAUNCH_MEDIA_SELECT,
+    LAUNCH_MEDIA_SELECT,
 
     ///Start Application 1 key
-    SK_LAUNCH_APP_1,
+    LAUNCH_APP_1,
 
     ///Start Application 2 key
-    SK_LAUNCH_APP_2,
+    LAUNCH_APP_2,
 
     //Add OEM to name?
     ///For any country/region, the '+' key
-    SK_PLUS,
+    PLUS,
 
     ///For any country/region, the ',' key
-    SK_COMMA,
+    COMMA,
 
     ///For any country/region, the '-' key
-    SK_MINUS,
+    MINUS,
 
     ///For any country/region, the '.' key
-    SK_PERIOD,
+    PERIOD,
 
-    ///Used to pass Unicode characters as if they were keystrokes. The SK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
-    SK_PACKET,
+    ///Used to pass Unicode characters as if they were keystrokes. The PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
+    PACKET,
 
     ///Erase EOF key
-    SK_EREOF,
+    EREOF,
 
     ///Play key
-    SK_PLAY,
+    PLAY,
 
     ///Zoom key
-    SK_ZOOM,
+    ZOOM,
 
     ///Clear key
-    SK_OEM_CLEAR,
+    OEM_CLEAR,
 
     ///Attn key
-    SK_ATTN,
+    ATTN,
 
     ///CrSel key
-    SK_CRSEL,
+    CRSEL,
 
     ///ExSel key
-    SK_EXSEL,
+    EXSEL,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_1,
+    OEM_1,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_2,
+    OEM_2,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_3,
+    OEM_3,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_4,
+    OEM_4,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_5,
+    OEM_5,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_6,
+    OEM_6,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_7,
+    OEM_7,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    SK_OEM_8,
+    OEM_8,
 
     ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
-    SK_OEM_102,
+    OEM_102,
 
     ///Control-break processing
-    SK_CANCEL
+    CANCEL
 }
 
 /**
  * Control keys.
- * Reason to why these are in a enum is because it must not be confused with their SK_* counter part.
+ * Reason to why these are in a enum is because it must not be confused with their * counter part.
  */
-enum ControlKey
+enum SCK
 {
     ///No control key is being pressed
     NONE = 0,
