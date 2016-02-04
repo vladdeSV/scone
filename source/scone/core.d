@@ -6,6 +6,9 @@ import scone.window;
 import scone.keyboard;
 import std.experimental.logger;
 
+/**
+ * Modules that can be loaded by Scone
+ */
 enum SconeModule
 {
     NONE = 0,
@@ -21,13 +24,9 @@ enum SconeModule
  * Examples:
  * --------------------
  * sconeInit(SconeModule.WINDOW); //Initializes scone, where only drawing to the console screen will work
- * --------------------
- * Examples:
- * --------------------
+ *
  * sconeInit(SconeModule.ALL); //Initializes scone, where you can use all modules (drawing to the screen, getting key inputs)
- * --------------------
- * Examples:
- * --------------------
+ *
  * sconeInit(SconeModule.WINDOW | SconeModule.KEYBOARD); //Initializes scone, where you can draw to the screen and get key inputs.
  * --------------------
  */

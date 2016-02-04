@@ -29,8 +29,8 @@ struct KeyEvent
     }
 
     /**
-     * Get the key being pressed down.
-     * Returns: Key (enum) of the key being pressed
+     * Get the key
+     * Returns: SK (enum) of the key being pressed
      */
     auto key() @property
     {
@@ -45,7 +45,7 @@ struct KeyEvent
     }
 
     /**
-     * Check to see if the KeyEvent has a certain control key pressed.
+     * Check if the KeyEvent has a "control key" pressed.
      * Returns: true, if all control keys entered are pressed
      *
      * Example:
@@ -54,7 +54,7 @@ struct KeyEvent
      * {
      *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT | ControlKey.SHIFT))
      *     {
-     *         //do something...
+     *         //do something if CTRL, ALT and SHIFT are held down...
      *     }
      * }
      * --------------------
@@ -64,6 +64,7 @@ struct KeyEvent
         return hasFlag(controlKey, ck);
     }
 
+    /+
     /**
      * Check the amount of times an event has been repeated since last check (held down).
      * Returns: int, the amount of repeats
@@ -80,10 +81,21 @@ struct KeyEvent
             return 0;
         }
     }
+    +/
 
     /**
      * Get control all keys
-     * Returns: enum ControlKey
+     * Returns: SCK (enum)
+     * Example:
+     * ---
+     * foreach(input; getInputs())
+     * {
+     *     if(input.controlKey == ControlKey.CTRL | ControlKey.SHIFT)
+     *     {
+     *         //do something if only CTRL and SHIFT are held down...
+     *     }
+     * }
+     * ---
      */
     auto controlKey() @property
     {
@@ -103,7 +115,7 @@ struct KeyEvent
 /**
  * Get all inputs since last function call.
  * Returns: KeyEvent[], of all key presses since last call
- * (Windows) Note: Can store a maximum of 128 key presses. This should however not be a problem, since `getInputs()` should be called each game tick
+ * Note: (Windows) A maximum of 128 key presses can be stored in between each call. This should however not be a problem, since `getInputs()` should be called each game tick
  */
 auto getInputs()
 {
@@ -122,7 +134,7 @@ auto clearInputs()
     keyInputs = null;
 }
 
-///Keys
+///All keys that Scone can handle
 enum SK
 {
     ///Unknown key (Should never appear. If do, please report bug)

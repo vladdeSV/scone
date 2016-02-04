@@ -23,15 +23,15 @@ bool, <b>true</b> if <u>pressed</u>, <b>false</b> if not<br><br>
 </dd>
 <dt><big><a name="KeyEvent.key"></a>@property auto <u>key</u>();
 </big></dt>
-<dd>Get the <u>key</u> being pressed down.
+<dd>Get the <u>key</u>
 <br><br>
 <b>Returns:</b><br>
-Key (enum) of the <u>key</u> being pressed<br><br>
+SK (enum) of the <u>key</u> being pressed<br><br>
 
 </dd>
 <dt><big><a name="KeyEvent.hasControlKey"></a>auto <u>hasControlKey</u>(SCK <i>ck</i>);
 </big></dt>
-<dd>Check to see if the KeyEvent has a certain control key pressed.
+<dd>Check if the KeyEvent has a "control key" pressed.
 <br><br>
 <b>Returns:</b><br>
 <b>true</b>, if all control keys entered are pressed
@@ -42,22 +42,11 @@ Key (enum) of the <u>key</u> being pressed<br><br>
 {
     <font color=blue>if</font>(input.<u>hasControlKey</u>(ControlKey.CTRL | ControlKey.ALT | ControlKey.SHIFT))
     {
-        <font color=green>//do something...
+        <font color=green>//do something if CTRL, ALT and SHIFT are held down...
 </font>    }
 }
 </pre>
 <br><br>
-
-</dd>
-<dt><big><a name="KeyEvent.repeated"></a>@property auto <u>repeated</u>();
-</big></dt>
-<dd>Check the amount of times an event has been <u>repeated</u> since last check (held down).
-<br><br>
-<b>Returns:</b><br>
-int, the amount of repeats
-<br><br>
-<b>Note:</b><br>
-This is a bit unstable. I suggest you don't use /vladde<br><br>
 
 </dd>
 <dt><big><a name="KeyEvent.controlKey"></a>@property auto <u>controlKey</u>();
@@ -65,7 +54,18 @@ This is a bit unstable. I suggest you don't use /vladde<br><br>
 <dd>Get control all keys
 <br><br>
 <b>Returns:</b><br>
-enum ControlKey<br><br>
+SCK (enum)
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code"><font color=blue>foreach</font>(input; getInputs())
+{
+    <font color=blue>if</font>(input.<u>controlKey</u> == ControlKey.CTRL | ControlKey.SHIFT)
+    {
+        <font color=green>//do something if only CTRL and SHIFT are held down...
+</font>    }
+}
+</pre>
+<br><br>
 
 </dd>
 </dl>
@@ -76,7 +76,9 @@ enum ControlKey<br><br>
 <br><br>
 <b>Returns:</b><br>
 KeyEvent[], of all key presses since last call
- (Windows) Note: Can store a maximum of 128 key presses. This should however not be a problem, since <pre style="display:inline;" class="d_inline_code"><u>getInputs</u>()</pre> should be called each game tick<br><br>
+<br><br>
+<b>Note:</b><br>
+(Windows) A maximum of 128 key presses can be stored in between each call. This should however not be a problem, since <pre style="display:inline;" class="d_inline_code"><u>getInputs</u>()</pre> should be called each game tick<br><br>
 
 </dd>
 <dt><big><a name="clearInputs"></a>auto <u>clearInputs</u>();
@@ -87,7 +89,7 @@ KeyEvent[], of all key presses since last call
 </dd>
 <dt><big><a name="SK"></a>enum <u>SK</u>: int;
 </big></dt>
-<dd>Keys<br><br>
+<dd>All keys that Scone can handle<br><br>
 
 <dl><dt><big><a name="SK.UNKNOWN"></a><u>UNKNOWN</u></big></dt>
 <dd>Unknown key (Should never appear. If do, please report bug)<br><br>

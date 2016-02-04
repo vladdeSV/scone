@@ -14,7 +14,7 @@ As it is less than 1, it is used to set dynamic width and height for windows.
 <b>Examples:</b><br>
 <pre class="d_code"><font color=blue>auto</font> window = <font color=blue>new</font> Frame(<u>UNDEF</u>, 20);
 </pre>
- Will probable be used sometime more in the future<br><br>
+ Will probably be used sometime in the future<br><br>
 
 </dd>
 <dt><big><a name="Slot"></a>struct <u>Slot</u>;
@@ -57,6 +57,10 @@ yellow
 yellow_dark
 </pre>
 <br><br>
+<b>Examples:</b><br>
+<pre class="d_code">window.write(<u>fg</u>.white, <u>bg</u>.red, <font color=red>"scone"</font>); <font color=green>//Writes "scone" in white with red background
+</font></pre>
+<br><br>
 
 </dd>
 <dt><big><a name="Frame"></a>class <u>Frame</u>;
@@ -76,15 +80,11 @@ yellow_dark
 <b>Examples:</b><br>
 <pre class="d_code"><font color=green>//Creates a dynamically sized main frame, where the size is determined by the console/terminal window width and height
 </font><font color=blue>auto</font> window = <font color=blue>new</font> Frame(); <font color=green>//The main frame
-</font></pre>
-<br><br>
-<b>Examples:</b><br>
-<pre class="d_code"><font color=green>//The width is less than one, meaning it get dynamically set to the consoles
+</font>
+<font color=green>//The width is less than one, meaning it get dynamically set to the consoles
 </font><font color=blue>auto</font> window = <font color=blue>new</font> Frame(0, 20); <font color=green>//Main frame, with the width of the console/terminal width, and the height of 20
-</font></pre>
-<br><br>
-<b>Examples:</b><br>
-<pre class="d_code"><font color=green>//The width is less than one, meaning it get dynamically set to the consoles
+</font>
+<font color=green>//The width is less than one, meaning it get dynamically set to the consoles
 </font><font color=blue>auto</font> window = <font color=blue>new</font> Frame(UNDEF, 24); <font color=green>//Main frame, with the width of the console/terminal width, the height of 24
 </font></pre>
 
@@ -110,20 +110,22 @@ window.<u>write</u>(10,18, 'D', bg.red); <font color=green>//Watch out: This wil
 </font></pre>
 <br><br>
 <b>Note:</b><br>
-Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
-<br><br>
-<b>Note:</b><br>
-Writing arrays has been explicitly been disabled.<br><br>
+Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.<br><br>
 
 </dd>
 <dt><big><a name="Frame.print"></a>auto <u>print</u>();
 </big></dt>
-<dd>Prints<br><br>
+<dd>Prints the frame to the console<br><br>
 
 </dd>
 <dt><big><a name="Frame.clear"></a>auto <u>clear</u>();
 </big></dt>
-<dd>Sets all drawable tiles to be blank<br><br>
+<dd>Sets all tiles to blank<br><br>
+
+</dd>
+<dt><big><a name="Frame.flush"></a>auto <u>flush</u>();
+</big></dt>
+<dd>Causes next <pre style="display:inline;" class="d_inline_code">print()</pre> to write out all tiles.<br><br>
 
 </dd>
 <dt><big><a name="Frame.w"></a>const @property auto <u>w</u>();
@@ -139,7 +141,7 @@ Writing arrays has been explicitly been disabled.<br><br>
 <dt><big><a name="Frame.getSlot"></a>const auto <u>getSlot</u>(in int <i>x</i>, in int <i>y</i>);
 </big></dt>
 <dd><b>Returns:</b><br>
-slot at the specific <i>x</i> and <i>y</i> coordinates<br><br>
+Slot at the specific <i>x</i> and <i>y</i> coordinates<br><br>
 
 </dd>
 </dl>

@@ -20,7 +20,7 @@ import scone.utility;
  * --------------------
  * auto window = new Frame(UNDEF, 20);
  * --------------------
- * Will probable be used sometime more in the future
+ * Will probably be used sometime in the future
  */
 enum UNDEF = -1;
 
@@ -68,6 +68,10 @@ struct Slot
  * yellow
  * yellow_dark
  * --------------------
+ * Examples:
+ * ---
+ * window.write(fg.white, bg.red, "scone"); //Writes "scone" in white with red background
+ * ---
  */
 enum fg
 {
@@ -134,14 +138,10 @@ class Frame
      * --------------------
      * //Creates a dynamically sized main frame, where the size is determined by the console/terminal window width and height
      * auto window = new Frame(); //The main frame
-     * --------------------
-     * Examples:
-     * --------------------
+     *
      * //The width is less than one, meaning it get dynamically set to the consoles
      * auto window = new Frame(0, 20); //Main frame, with the width of the console/terminal width, and the height of 20
-     * --------------------
-     * Examples:
-     * --------------------
+     *
      * //The width is less than one, meaning it get dynamically set to the consoles
      * auto window = new Frame(UNDEF, 24); //Main frame, with the width of the console/terminal width, the height of 24
      * --------------------
@@ -186,7 +186,6 @@ class Frame
      * window.write(10,18, 'D', bg.red); //Watch out: This will print "D" with the default color and the default background-color.
      * --------------------
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
-     * Note: Writing arrays has been explicitly been disabled.
      */
     auto write(Args...)(in int col, in int row, Args args)
     {
@@ -266,7 +265,7 @@ class Frame
         }
     }
 
-    /** Prints */
+    /** Prints the frame to the console */
     auto print()
     in
     {
@@ -347,7 +346,7 @@ class Frame
         }
     }
 
-    ///Sets all drawable tiles to be blank
+    ///Sets all tiles to blank
     auto clear()
     {
         foreach(ref row; m_slots)
@@ -356,7 +355,7 @@ class Frame
         }
     }
 
-    //Prints out all tiles.
+    ///Causes next `print()` to write out all tiles.
     auto flush()
     {
         foreach(ref row; m_backbuffer)
@@ -379,7 +378,7 @@ class Frame
             return m_h;
         }
 
-        /** Returns: slot at the specific x and y coordinates */
+        /** Returns: Slot at the specific x and y coordinates */
         auto getSlot(in int x, in int y)
         {
             return m_slots[y][x];
