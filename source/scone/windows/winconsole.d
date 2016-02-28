@@ -119,10 +119,10 @@ ushort attributesFromSlot(Slot slot)
         attributes |= FOREGROUND_GREEN | FOREGROUND_BLUE;
         break;
     case fg.gray:
-        attributes |= FOREGROUND_INTENSITY;
+        attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
         break;
     case fg.gray_dark:
-        attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        attributes |= FOREGROUND_INTENSITY;
         break;
     case fg.green:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN;
