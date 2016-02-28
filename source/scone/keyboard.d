@@ -1,5 +1,8 @@
 module scone.keyboard;
 
+import scone.core;
+import scone.utility;
+
 /**
  * Key event structure
  * Contains general information about a key press
@@ -637,7 +640,6 @@ enum SCK
 
 package(scone)
 {
-
     KeyEvent[] keyInputs;
 
     version(Windows)
@@ -645,7 +647,6 @@ package(scone)
         import scone.windows.winkeyboard;
         import core.sys.windows.windows;
     }
-    //version(Posix) public import scone.posix.posixkeyboard;
 
     auto keyboardInit()
     {
