@@ -73,50 +73,10 @@ struct Slot
  * window.write(fg.white, bg.red, "scone"); //Writes "scone" in white with red background
  * ---
  */
-enum fg
-{
-    init,
-
-    black,
-    blue,
-    blue_dark,
-    cyan,
-    cyan_dark,
-    gray,
-    gray_dark,
-    green,
-    green_dark,
-    magenta,
-    magenta_dark,
-    red,
-    red_dark,
-    white,
-    yellow,
-    yellow_dark
-}
-
+alias fg = colorType!(ColorType.Foreground).Color;
 ///ditto
-enum bg
-{
-    init,
+alias bg = colorType!(ColorType.Background).Color;
 
-    black,
-    blue,
-    blue_dark,
-    cyan,
-    cyan_dark,
-    gray,
-    gray_dark,
-    green,
-    green_dark,
-    magenta,
-    magenta_dark,
-    red,
-    red_dark,
-    white,
-    yellow,
-    yellow_dark
-}
 
 /**
  * Writable area
@@ -203,12 +163,6 @@ class Frame
         bool unsetColors;
         foreach(arg; args)
         {
-            /*static if(!isSomeString!(typeof(arg)) && isArray!(typeof(arg))){
-                logFile.log("Can not write arrays (yet)... Sorry!");
-                continue;
-            }
-            else */
-
             static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
@@ -234,10 +188,10 @@ class Frame
             }
         }
 
-        //If the last argument(s) are/is a color, warn
+        //If the last argument is a color, warn
         if(slots.length && unsetColors)
         {
-            logFile.log("Warning: The last argument(s) in ", args, " are/is a color, which will not be set!");
+            logFile.log("Warning: The last argument in ", args, " is a color, which will not be set!");
         }
 
         if(!slots.length)

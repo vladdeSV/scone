@@ -25,3 +25,33 @@ auto sconeCrashIf(Args...)(bool check, string msg, Args args)
     }
 }
 
+enum ColorType
+{
+    Foreground,
+    Background,
+}
+
+template colorType(ColorType type)
+{
+    enum Color
+    {
+        init,
+
+        black,
+        blue,
+        blue_dark,
+        cyan,
+        cyan_dark,
+        gray,
+        gray_dark,
+        green,
+        green_dark,
+        magenta,
+        magenta_dark,
+        red,
+        red_dark,
+        white,
+        yellow,
+        yellow_dark
+    }
+}
