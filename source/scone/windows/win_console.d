@@ -1,4 +1,4 @@
-module scone.windows.winconsole;
+module scone.windows.win_console;
 
 version (Windows):
 package(scone):

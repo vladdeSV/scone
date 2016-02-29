@@ -644,7 +644,7 @@ package(scone)
 
     version(Windows)
     {
-        import scone.windows.winkeyboard;
+        import scone.windows.win_keyboard;
         import core.sys.windows.windows;
     }
 

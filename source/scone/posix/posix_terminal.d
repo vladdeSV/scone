@@ -1,4 +1,4 @@
-module scone.posix.posixterminal;
+module scone.posix.posix_terminal;
 
 version(Posix):
 

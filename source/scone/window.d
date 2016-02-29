@@ -11,8 +11,8 @@ module scone.window;
 import scone.core;
 import scone.frame : Slot;
 
-version(Windows) import scone.windows.winconsole;
-version(Posix)   import scone.posix.posixterminal;
+version(Windows) import scone.windows.win_console;
+version(Posix)   import scone.posix.posix_terminal;
 
 /**
  * Writes out a slot at (x, y)

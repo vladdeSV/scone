@@ -1,4 +1,4 @@
-module scone.windows.winkeyboard;
+module scone.windows.win_keyboard;
 
 version(Windows):
 package(scone):
