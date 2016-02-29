@@ -6,6 +6,8 @@ __dummy.html
 dub.selections.json
 *.exe
 *.lib
+scone.log
+source/scone/main.d
 
 docs/app.html
 docs/posixterminal.html
@@ -13,3 +15,4 @@ docs/winconsole.html
 docs/winkeyboard.html
 docs/utility.html
 docs/package.html
+docs/main.html
