@@ -1,7 +1,13 @@
 # scone
-Simple Console Engine.
+**scone** (**S**imple **Con**sole **E**ngine) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games), cross-platform.
 
-**Key input is only available on Windows. POSIX can still write out to the console!**
+*(Please note that it is not fully cross-platform yet, currently only working properly on Windows).*
+
+### Features:
+* Efficient writing to the console/terminal
+* Keyboard input (currently only Windows)
+
+For anyone on a Windows machine, you can test a few examples that gives the basic idea of what scone can do here: https://github.com/vladdeSV/scone/tree/master/examples
 
 # Examples
 
@@ -107,3 +113,5 @@ void main()
 }
 ```
 
+# Resources
+* [Trello board](https://trello.com/b/EFTaQJZa/scone)
