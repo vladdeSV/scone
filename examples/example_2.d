@@ -3,7 +3,7 @@ import std.stdio : writeln;
 
 void main()
 {
-    sconeInit(SconeModule.KEYBOARD); //Init, only access to the keyboard
+    sconeInit(sconeModule.Keyboard); //Init, only access to the keyboard
 
     bool run = true;
 
@@ -14,7 +14,7 @@ void main()
             //NOTE: Without a ^C handler you cannot quit the program (unless you taskmanager or SIGKILL it)
 
             //^C (Ctrl + C) or Escape
-            if(input.key == SK.C && input.hasControlKey(SCK.CTRL) || input.key == SK.ESCAPE)
+            if(input.key == SK.C && input.hasControlKey(SCK.Ctrl) || input.key == SK.Escape)
             {
                 run = false;
                 break;

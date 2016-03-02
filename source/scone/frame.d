@@ -122,15 +122,15 @@ class Frame
         if(width  < 1){ width  = size[0]; }
         if(height < 1){ height = size[1]; }
 
-        m_w = width;
-        m_h = height;
+        _w = width;
+        _h = height;
 
-        m_slots = new Slot[][](height, width);
-        m_backbuffer = new Slot[][](height, width);
+        _slots = new Slot[][](height, width);
+        _backbuffer = new Slot[][](height, width);
 
-        foreach(n, ref row; m_slots)
+        foreach(n, ref row; _slots)
         {
-            row = m_slots[n][] = Slot(' ');
+            row = _slots[n][] = Slot(' ');
         }
     }
 
@@ -196,8 +196,8 @@ class Frame
 
         if(!slots.length)
         {
-            m_slots[row][col].foreground = foreground;
-            m_slots[row][col].background = background;
+            _slots[row][col].foreground = foreground;
+            _slots[row][col].background = background;
         }
         else
         {
@@ -212,7 +212,7 @@ class Frame
                 }
                 else
                 {
-                    m_slots[row + wy][col + wx] = slot;
+                    _slots[row + wy][col + wx] = slot;
                     ++wx;
                 }
             }
@@ -232,14 +232,14 @@ class Frame
     {
         version(Windows)
         {
-            foreach(sy, ref row; m_slots)
+            foreach(sy, ref row; _slots)
             {
                 foreach(sx, ref slot; row)
                 {
-                    if(slot != m_backbuffer[sy][sx])
+                    if(slot != _backbuffer[sy][sx])
                     {
                         writeSlot(sx,sy, slot);
-                        m_backbuffer[sy][sx] = slot;
+                        _backbuffer[sy][sx] = slot;
                     }
                 }
             }
@@ -250,16 +250,16 @@ class Frame
             string printed;
 
             //Loop through all rows.
-            foreach (sy, row; m_slots)
+            foreach (sy, row; _slots)
             {
                 //f = first modified slot, l = last modified slot
                 int f = UNDEF, l;
 
                 //Go through each line
-                foreach(sx, slot; m_slots[sy])
+                foreach(sx, slot; _slots[sy])
                 {
                     //If the slot at current position differs from backbuffer
-                    if(slot != m_backbuffer[sy][sx])
+                    if(slot != _backbuffer[sy][sx])
                     {
                         //Set f once
                         if(f == UNDEF)
@@ -271,7 +271,7 @@ class Frame
                         l = to!int(sx);
 
                         //Backbuffer is checked, make it "un-differ"
-                        m_backbuffer[sy][sx] = slot;
+                        _backbuffer[sy][sx] = slot;
                     }
                 }
 
@@ -284,7 +284,7 @@ class Frame
                 //Loop from the first changed slot to the last edited slot.
                 foreach (px; f .. l + 1)
                 {
-                    printed ~= text("\033[", 0, ";", cast(int)m_slots[sy][px].foreground, ";", cast(int)m_slots[sy][px].background, "m", m_slots[sy][px].character, "\033[0m");
+                    printed ~= text("\033[", 0, ";", cast(int)_slots[sy][px].foreground, ";", cast(int)_slots[sy][px].background, "m", _slots[sy][px].character, "\033[0m");
                 }
 
                 //Set the cursor at the firstly edited slot...
@@ -303,7 +303,7 @@ class Frame
     ///Sets all tiles to blank
     auto clear()
     {
-        foreach(ref row; m_slots)
+        foreach(ref row; _slots)
         {
             row[] = Slot(' ');
         }
@@ -312,7 +312,7 @@ class Frame
     ///Causes next `print()` to write out all tiles.
     auto flush()
     {
-        foreach(ref row; m_backbuffer)
+        foreach(ref row; _backbuffer)
         {
             row[] = Slot(' ');
         }
@@ -323,26 +323,26 @@ class Frame
         /** Get the width of the frame */
         auto w() @property
         {
-            return m_w;
+            return _w;
         }
 
         /** Get the height of the frame */
         auto h() @property
         {
-            return m_h;
+            return _h;
         }
 
         /** Returns: Slot at the specific x and y coordinates */
         auto getSlot(in int x, in int y)
         {
-            return m_slots[y][x];
+            return _slots[y][x];
         }
     }
 
     private:
     //Forgive me for using C++ naming style
-    int m_w, m_h;
-    Slot[][] m_slots, m_backbuffer;
+    int _w, _h;
+    Slot[][] _slots, _backbuffer;
 }
 
 //Do not delete:

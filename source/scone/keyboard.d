@@ -12,7 +12,7 @@ struct KeyEvent
 {
     package(scone) version(Windows) this(KEY_EVENT_RECORD k)
     {
-        m_winKey = k;
+        _winKey = k;
     }
 
     /**
@@ -23,7 +23,7 @@ struct KeyEvent
     {
         version(Windows)
         {
-            return cast(bool) m_winKey.bKeyDown;
+            return cast(bool) _winKey.bKeyDown;
         }
         version(Posix)
         {
@@ -39,7 +39,7 @@ struct KeyEvent
     {
         version(Windows)
         {
-            return win_getKeyFromKeyEventRecord(m_winKey);
+            return win_getKeyFromKeyEventRecord(_winKey);
         }
         version(Posix)
         {
@@ -77,7 +77,7 @@ struct KeyEvent
     {
         version(Windows)
         {
-            return cast(int) m_winKey.wRepeatCount;
+            return cast(int) _winKey.wRepeatCount;
         }
         version(Posix)
         {
@@ -104,7 +104,7 @@ struct KeyEvent
     {
         version(Windows)
         {
-            return win_getControlKeyFromKeyEventRecord(m_winKey);
+            return win_getControlKeyFromKeyEventRecord(_winKey);
         }
         version(Posix)
         {
@@ -112,7 +112,7 @@ struct KeyEvent
         }
     }
 
-    version(Windows) private KEY_EVENT_RECORD m_winKey;
+    version(Windows) private KEY_EVENT_RECORD _winKey;
 }
 
 /**

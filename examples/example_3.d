@@ -4,7 +4,7 @@ void main()
 {
     sconeInit();
 
-    auto window = new Frame(40, UNDEF);
+    auto frame = new Frame(40, UNDEF);
 
     bool loop = true;
 
@@ -12,7 +12,7 @@ void main()
     {
         foreach(input; getInputs())
         {
-            if(input.key == SK.ESCAPE || input.key == SK.C && input.hasControlKey(SCK.CTRL))
+            if(input.key == SK.Escape || input.key == SK.C && input.hasControlKey(SCK.Ctrl))
             {
                 loop = false;
                 break;
