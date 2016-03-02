@@ -1,9 +1,9 @@
 /**
  * All functions here give some sort of direct access to the console/terminal.
- * However, I suggest you use the `class Frame`(-work, haha). If you decide that you must use these functions separately, they must be initialized with `sconeInit(SconeModule.WINDOW);` (which runs windowInit())
+ * However, I suggest you use the `class Frame`(-work, haha). If you decide that you must use these functions separately, they must be initialized with `windowInit()`
  *
  * For those who want to steal code, each function in here calls a win_* or posix_* counterpart.
- * (Eg. setCursor(x,y) calles win_setCursor(x,y) on windows, posix_setCursor(x,y) on POSIX)
+ * (Eg. setCursor(x,y) calles win_setCursor(x,y) on Windows, posix_setCursor(x,y) on POSIX)
  */
 
 module scone.window;

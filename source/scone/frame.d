@@ -73,9 +73,9 @@ struct Slot
  * window.write(fg.white, bg.red, "scone"); //Writes "scone" in white with red background
  * ---
  */
-alias fg = colorType!(ColorType.Foreground).Color;
+alias fg = colorTemplate!(colorType.foreground).color;
 ///ditto
-alias bg = colorType!(ColorType.Background).Color;
+alias bg = colorTemplate!(colorType.background).color;
 
 
 /**
@@ -152,7 +152,7 @@ class Frame
         //Check if writing outside border
         if(col < 0 || row < 0 || col > w || row > h)
         {
-            logFile.log(format("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s"), col, row, w, h);
+            log.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", col, row, w, h);
             return;
         }
 
@@ -191,7 +191,7 @@ class Frame
         //If the last argument is a color, warn
         if(slots.length && unsetColors)
         {
-            logFile.log("Warning: The last argument in ", args, " is a color, which will not be set!");
+            log.logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
         if(!slots.length)
