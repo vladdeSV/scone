@@ -75,471 +75,471 @@ auto win_getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
     switch(k.wVirtualKeyCode)
     {
     case WindowsVirtualKey.K_0:
-        return SK.Key_0;
+        return SK.key_0;
 
     case WindowsVirtualKey.K_1:
-        return SK.Key_1;
+        return SK.key_1;
 
     case WindowsVirtualKey.K_2:
-        return SK.Key_2;
+        return SK.key_2;
 
     case WindowsVirtualKey.K_3:
-        return SK.Key_3;
+        return SK.key_3;
 
     case WindowsVirtualKey.K_4:
-        return SK.Key_4;
+        return SK.key_4;
 
     case WindowsVirtualKey.K_5:
-        return SK.Key_5;
+        return SK.key_5;
 
     case WindowsVirtualKey.K_6:
-        return SK.Key_6;
+        return SK.key_6;
 
     case WindowsVirtualKey.K_7:
-        return SK.Key_7;
+        return SK.key_7;
 
     case WindowsVirtualKey.K_8:
-        return SK.Key_8;
+        return SK.key_8;
 
     case WindowsVirtualKey.K_9:
-        return SK.Key_9;
+        return SK.key_9;
 
     case WindowsVirtualKey.K_A:
-        return SK.A;
+        return SK.a;
 
     case WindowsVirtualKey.K_B:
-        return SK.B;
+        return SK.b;
 
     case WindowsVirtualKey.K_C:
-        return SK.C;
+        return SK.c;
 
     case WindowsVirtualKey.K_D:
-        return SK.D;
+        return SK.d;
 
     case WindowsVirtualKey.K_E:
-        return SK.E;
+        return SK.e;
 
     case WindowsVirtualKey.K_F:
-        return SK.F;
+        return SK.f;
 
     case WindowsVirtualKey.K_G:
-        return SK.G;
+        return SK.g;
 
     case WindowsVirtualKey.K_H:
-        return SK.H;
+        return SK.h;
 
     case WindowsVirtualKey.K_I:
-        return SK.I;
+        return SK.i;
 
     case WindowsVirtualKey.K_J:
-        return SK.J;
+        return SK.j;
 
     case WindowsVirtualKey.K_K:
-        return SK.K;
+        return SK.k;
 
     case WindowsVirtualKey.K_L:
-        return SK.L;
+        return SK.l;
 
     case WindowsVirtualKey.K_M:
-        return SK.M;
+        return SK.m;
 
     case WindowsVirtualKey.K_N:
-        return SK.N;
+        return SK.n;
 
     case WindowsVirtualKey.K_O:
-        return SK.O;
+        return SK.o;
 
     case WindowsVirtualKey.K_P:
-        return SK.P;
+        return SK.p;
 
     case WindowsVirtualKey.K_Q:
-        return SK.Q;
+        return SK.q;
 
     case WindowsVirtualKey.K_R:
-        return SK.R;
+        return SK.r;
 
     case WindowsVirtualKey.K_S:
-        return SK.S;
+        return SK.s;
 
     case WindowsVirtualKey.K_T:
-        return SK.T;
+        return SK.t;
 
     case WindowsVirtualKey.K_U:
-        return SK.U;
+        return SK.u;
 
     case WindowsVirtualKey.K_V:
-        return SK.V;
+        return SK.v;
 
     case WindowsVirtualKey.K_W:
-        return SK.W;
+        return SK.w;
 
     case WindowsVirtualKey.K_X:
-        return SK.X;
+        return SK.x;
 
     case WindowsVirtualKey.K_Y:
-        return SK.Y;
+        return SK.y;
 
     case WindowsVirtualKey.K_Z:
-        return SK.Z;
+        return SK.z;
 
     case WindowsVirtualKey.VK_F1:
-        return SK.F1;
+        return SK.f1;
 
     case WindowsVirtualKey.VK_F2:
-        return SK.F2;
+        return SK.f2;
 
     case WindowsVirtualKey.VK_F3:
-        return SK.F3;
+        return SK.f3;
 
     case WindowsVirtualKey.VK_F4:
-        return SK.F4;
+        return SK.f4;
 
     case WindowsVirtualKey.VK_F5:
-        return SK.F5;
+        return SK.f5;
 
     case WindowsVirtualKey.VK_F6:
-        return SK.F6;
+        return SK.f6;
 
     case WindowsVirtualKey.VK_F7:
-        return SK.F7;
+        return SK.f7;
 
     case WindowsVirtualKey.VK_F8:
-        return SK.F8;
+        return SK.f8;
 
     case WindowsVirtualKey.VK_F9:
-        return SK.F9;
+        return SK.f9;
 
     case WindowsVirtualKey.VK_F10:
-        return SK.F10;
+        return SK.f10;
 
     case WindowsVirtualKey.VK_F11:
-        return SK.F11;
+        return SK.f11;
 
     case WindowsVirtualKey.VK_F12:
-        return SK.F12;
+        return SK.f12;
 
     case WindowsVirtualKey.VK_F13:
-        return SK.F13;
+        return SK.f13;
 
     case WindowsVirtualKey.VK_F14:
-        return SK.F14;
+        return SK.f14;
 
     case WindowsVirtualKey.VK_F15:
-        return SK.F15;
+        return SK.f15;
 
     case WindowsVirtualKey.VK_F16:
-        return SK.F16;
+        return SK.f16;
 
     case WindowsVirtualKey.VK_F17:
-        return SK.F17;
+        return SK.f17;
 
     case WindowsVirtualKey.VK_F18:
-        return SK.F18;
+        return SK.f18;
 
     case WindowsVirtualKey.VK_F19:
-        return SK.F19;
+        return SK.f19;
 
     case WindowsVirtualKey.VK_F20:
-        return SK.F20;
+        return SK.f20;
 
     case WindowsVirtualKey.VK_F21:
-        return SK.F21;
+        return SK.f21;
 
     case WindowsVirtualKey.VK_F22:
-        return SK.F22;
+        return SK.f22;
 
     case WindowsVirtualKey.VK_F23:
-        return SK.F23;
+        return SK.f23;
 
     case WindowsVirtualKey.VK_F24:
-        return SK.F24;
+        return SK.f24;
 
     case WindowsVirtualKey.VK_NUMPAD0:
-        return SK.Numpad_0;
+        return SK.numpad_0;
 
     case WindowsVirtualKey.VK_NUMPAD1:
-        return SK.Numpad_1;
+        return SK.numpad_1;
 
     case WindowsVirtualKey.VK_NUMPAD2:
-        return SK.Numpad_2;
+        return SK.numpad_2;
 
     case WindowsVirtualKey.VK_NUMPAD3:
-        return SK.Numpad_3;
+        return SK.numpad_3;
 
     case WindowsVirtualKey.VK_NUMPAD4:
-        return SK.Numpad_4;
+        return SK.numpad_4;
 
     case WindowsVirtualKey.VK_NUMPAD5:
-        return SK.Numpad_5;
+        return SK.numpad_5;
 
     case WindowsVirtualKey.VK_NUMPAD6:
-        return SK.Numpad_6;
+        return SK.numpad_6;
 
     case WindowsVirtualKey.VK_NUMPAD7:
-        return SK.Numpad_7;
+        return SK.numpad_7;
 
     case WindowsVirtualKey.VK_NUMPAD8:
-        return SK.Numpad_8;
+        return SK.numpad_8;
 
     case WindowsVirtualKey.VK_NUMPAD9:
-        return SK.Numpad_9;
+        return SK.numpad_9;
 
     case WindowsVirtualKey.VK_BACK:
-        return SK.Backspace;
+        return SK.backspace;
 
     case WindowsVirtualKey.VK_TAB:
-        return SK.Tab;
+        return SK.tab;
 
     case WindowsVirtualKey.VK_CLEAR:
-        return SK.Clear;
+        return SK.clear;
 
     case WindowsVirtualKey.VK_RETURN:
-        return SK.Enter;
+        return SK.enter;
 
     case WindowsVirtualKey.VK_SHIFT:
-        return SK.Shift;
+        return SK.shift;
 
     case WindowsVirtualKey.VK_CONTROL:
-        return SK.Control;
+        return SK.control;
 
     case WindowsVirtualKey.VK_MENU:
-        return SK.Alt;
+        return SK.alt;
 
     case WindowsVirtualKey.VK_CAPITAL:
-        return SK.Capslock;
+        return SK.capslock;
 
     case WindowsVirtualKey.VK_ESCAPE:
-        return SK.Escape;
+        return SK.escape;
 
     case WindowsVirtualKey.VK_SPACE:
-        return SK.Space;
+        return SK.space;
 
     case WindowsVirtualKey.VK_PRIOR:
-        return SK.Page_up;
+        return SK.page_up;
 
     case WindowsVirtualKey.VK_NEXT:
-        return SK.Page_down;
+        return SK.page_down;
 
     case WindowsVirtualKey.VK_END:
-        return SK.End;
+        return SK.end;
 
     case WindowsVirtualKey.VK_HOME:
-        return SK.Home;
+        return SK.home;
 
     case WindowsVirtualKey.VK_LEFT:
-        return SK.Left;
+        return SK.left;
 
     case WindowsVirtualKey.VK_RIGHT:
-        return SK.Right;
+        return SK.right;
 
     case WindowsVirtualKey.VK_UP:
-        return SK.Up;
+        return SK.up;
 
     case WindowsVirtualKey.VK_DOWN:
-        return SK.Down;
+        return SK.down;
 
     case WindowsVirtualKey.VK_SELECT:
-        return SK.Select;
+        return SK.select;
 
     case WindowsVirtualKey.VK_PRINT:
-        return SK.Print;
+        return SK.print;
 
     case WindowsVirtualKey.VK_EXECUTE:
-        return SK.Execute;
+        return SK.execute;
 
     case WindowsVirtualKey.VK_SNAPSHOT:
-        return SK.Print_screen;
+        return SK.print_screen;
 
     case WindowsVirtualKey.VK_INSERT:
-        return SK.Insert;
+        return SK.insert;
 
     case WindowsVirtualKey.VK_DELETE:
-        return SK.Delete;
+        return SK.del;
 
     case WindowsVirtualKey.VK_HELP:
-        return SK.Help;
+        return SK.help;
 
     case WindowsVirtualKey.VK_LWIN:
-        return SK.Windows_left;
+        return SK.windows_left;
 
     case WindowsVirtualKey.VK_RWIN:
-        return SK.Windows_right;
+        return SK.windows_right;
 
     case WindowsVirtualKey.VK_APPS:
-        return SK.Apps;
+        return SK.apps;
 
     case WindowsVirtualKey.VK_SLEEP:
-        return SK.Sleep;
+        return SK.sleep;
 
     case WindowsVirtualKey.VK_MULTIPLY:
-        return SK.Multiply;
+        return SK.multiply;
 
     case WindowsVirtualKey.VK_ADD:
-        return SK.Add;
+        return SK.add;
 
     case WindowsVirtualKey.VK_SEPARATOR:
-        return SK.Separator;
+        return SK.separator;
 
     case WindowsVirtualKey.VK_SUBTRACT:
-        return SK.Subtract;
+        return SK.subtract;
 
     case WindowsVirtualKey.VK_DECIMAL:
-        return SK.Decimal;
+        return SK.decimal;
 
     case WindowsVirtualKey.VK_DIVIDE:
-        return SK.Divide;
+        return SK.divide;
 
     case WindowsVirtualKey.VK_NUMLOCK:
-        return SK.Numlock;
+        return SK.numlock;
 
     case WindowsVirtualKey.VK_SCROLL:
-        return SK.Scroll_lock;
+        return SK.scroll_lock;
 
     case WindowsVirtualKey.VK_LSHIFT:
-        return SK.Shift_left;
+        return SK.shift_left;
 
     case WindowsVirtualKey.VK_RSHIFT:
-        return SK.Shift_right;
+        return SK.shift_right;
 
     case WindowsVirtualKey.VK_LCONTROL:
-        return SK.Control_left;
+        return SK.control_left;
 
     case WindowsVirtualKey.VK_RCONTROL:
-        return SK.Control_right;
+        return SK.control_right;
 
     case WindowsVirtualKey.VK_LMENU:
-        return SK.Menu_left;
+        return SK.menu_left;
 
     case WindowsVirtualKey.VK_RMENU:
-        return SK.Menu_right;
+        return SK.menu_right;
 
     case WindowsVirtualKey.VK_BROWSER_BACK:
-        return SK.Browser_back;
+        return SK.browser_back;
 
     case WindowsVirtualKey.VK_BROWSER_FORWARD:
-        return SK.Browser_forward;
+        return SK.browser_forward;
 
     case WindowsVirtualKey.VK_BROWSER_REFRESH:
-        return SK.Browser_refresh;
+        return SK.browser_refresh;
 
     case WindowsVirtualKey.VK_BROWSER_STOP:
-        return SK.Browser_stop;
+        return SK.browser_stop;
 
     case WindowsVirtualKey.VK_BROWSER_SEARCH:
-        return SK.Browser_search;
+        return SK.browser_search;
 
     case WindowsVirtualKey.VK_BROWSER_FAVORITES:
-        return SK.Browser_favorites;
+        return SK.browser_favorites;
 
     case WindowsVirtualKey.VK_BROWSER_HOME:
-        return SK.Browser_home;
+        return SK.browser_home;
 
     case WindowsVirtualKey.VK_VOLUME_MUTE:
-        return SK.Volume_mute;
+        return SK.volume_mute;
 
     case WindowsVirtualKey.VK_VOLUME_DOWN:
-        return SK.Volume_down;
+        return SK.volume_down;
 
     case WindowsVirtualKey.VK_VOLUME_UP:
-        return SK.Volume_up;
+        return SK.volume_up;
 
     case WindowsVirtualKey.VK_MEDIA_NEXT_TRACK:
-        return SK.Media_next;
+        return SK.media_next;
 
     case WindowsVirtualKey.VK_MEDIA_PREV_TRACK:
-        return SK.Media_prev;
+        return SK.media_prev;
 
     case WindowsVirtualKey.VK_MEDIA_STOP:
-        return SK.Media_stop;
+        return SK.media_stop;
 
     case WindowsVirtualKey.VK_MEDIA_PLAY_PAUSE:
-        return SK.Media_play_pause;
+        return SK.media_play_pause;
 
     case WindowsVirtualKey.VK_LAUNCH_MAIL:
-        return SK.Launch_mail;
+        return SK.launch_mail;
 
     case WindowsVirtualKey.VK_LAUNCH_MEDIA_SELECT:
-        return SK.Launch_media_select;
+        return SK.launch_media_select;
 
     case WindowsVirtualKey.VK_LAUNCH_APP1:
-        return SK.Launch_app_1;
+        return SK.launch_app_1;
 
     case WindowsVirtualKey.VK_LAUNCH_APP2:
-        return SK.Launch_app_2;
+        return SK.launch_app_2;
 
     case WindowsVirtualKey.VK_OEM_PLUS:
-        return SK.Plus;
+        return SK.plus;
 
     case WindowsVirtualKey.VK_OEM_COMMA:
-        return SK.Comma;
+        return SK.comma;
 
     case WindowsVirtualKey.VK_OEM_MINUS:
-        return SK.Minus;
+        return SK.minus;
 
     case WindowsVirtualKey.VK_OEM_PERIOD:
-        return SK.Period;
+        return SK.period;
 
 
 
     case WindowsVirtualKey.VK_PACKET:
-        return SK.Packet;
+        return SK.packet;
 
     case WindowsVirtualKey.VK_ATTN:
-        return SK.Attn;
+        return SK.attn;
 
     case WindowsVirtualKey.VK_CRSEL:
-        return SK.Crsel;
+        return SK.crsel;
 
     case WindowsVirtualKey.VK_EXSEL:
-        return SK.Exsel;
+        return SK.exsel;
 
     case WindowsVirtualKey.VK_EREOF:
-        return SK.Ereof;
+        return SK.ereof;
 
     case WindowsVirtualKey.VK_PLAY:
-        return SK.Play;
+        return SK.play;
 
     case WindowsVirtualKey.VK_ZOOM:
-        return SK.Zoom;
+        return SK.zoom;
 
     case WindowsVirtualKey.VK_OEM_1:
-        return SK.Oem_1;
+        return SK.oem_1;
 
     case WindowsVirtualKey.VK_OEM_2:
-        return SK.Oem_2;
+        return SK.oem_2;
 
     case WindowsVirtualKey.VK_OEM_3:
-        return SK.Oem_3;
+        return SK.oem_3;
 
     case WindowsVirtualKey.VK_OEM_4:
-        return SK.Oem_4;
+        return SK.oem_4;
 
     case WindowsVirtualKey.VK_OEM_5:
-        return SK.Oem_5;
+        return SK.oem_5;
 
     case WindowsVirtualKey.VK_OEM_6:
-        return SK.Oem_6;
+        return SK.oem_6;
 
     case WindowsVirtualKey.VK_OEM_7:
-        return SK.Oem_7;
+        return SK.oem_7;
 
     case WindowsVirtualKey.VK_OEM_8:
-        return SK.Oem_8;
+        return SK.oem_8;
 
     case WindowsVirtualKey.VK_OEM_102:
-        return SK.Oem_102;
+        return SK.oem_102;
 
     case WindowsVirtualKey.VK_OEM_CLEAR:
-        return SK.Oem_clear;
+        return SK.oem_clear;
 
     case WindowsVirtualKey.VK_PAUSE:
-        return SK.Pause;
+        return SK.pause;
 
     case WindowsVirtualKey.VK_CANCEL:
-        return SK.Cancel;
+        return SK.cancel;
 
         default:
-        return SK.Unknown;
+        return SK.unknown;
     }
 }
 
