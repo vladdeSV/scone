@@ -25,15 +25,15 @@ auto sconeCrashIf(Args...)(bool check, string msg, Args args)
     }
 }
 
-enum colorType
+enum ColorType
 {
     foreground,
     background,
 }
 
-template colorTemplate(colorType type)
+template colorTemplate(ColorType type)
 {
-    enum color
+    enum Color
     {
         init,
 

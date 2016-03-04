@@ -3,7 +3,7 @@ import std.random : uniform;
 
 void main()
 {
-    sconeInit(sconeModule.Window); //Init, only access to the window
+    sconeInit(SconeModule.window); //Init, only access to the window
 
     auto frame = new Frame(); //Create a new "frame" with dynamic width and height
 

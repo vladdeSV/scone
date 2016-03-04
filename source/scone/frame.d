@@ -18,11 +18,11 @@ import scone.utility;
  * As it is less than 1, it is used to set dynamic width and height for windows.
  * Examples:
  * --------------------
- * auto window = new Frame(UNDEF, 20);
+ * auto window = new Frame(undef, 20);
  * --------------------
  * Will probably be used sometime in the future
  */
-enum UNDEF = -1;
+enum undef = -1;
 
 /**
  * Slot structure
@@ -73,9 +73,9 @@ struct Slot
  * window.write(fg.white, bg.red, "scone"); //Writes "scone" in white with red background
  * ---
  */
-alias fg = colorTemplate!(colorType.foreground).color;
+alias fg = colorTemplate!(ColorType.foreground).Color;
 ///ditto
-alias bg = colorTemplate!(colorType.background).color;
+alias bg = colorTemplate!(ColorType.background).Color;
 
 
 /**
@@ -103,14 +103,14 @@ class Frame
      * auto window = new Frame(0, 20); //Main frame, with the width of the console/terminal width, and the height of 20
      *
      * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(UNDEF, 24); //Main frame, with the width of the console/terminal width, the height of 24
+     * auto window = new Frame(undef, 24); //Main frame, with the width of the console/terminal width, the height of 24
      * --------------------
      *
      * Standards: width = 80, height = 24
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(int width = UNDEF, int height = UNDEF)
+    this(int width = undef, int height = undef)
     in
     {
         auto size = windowSize;
@@ -253,7 +253,7 @@ class Frame
             foreach (sy, row; _slots)
             {
                 //f = first modified slot, l = last modified slot
-                int f = UNDEF, l;
+                int f = undef, l;
 
                 //Go through each line
                 foreach(sx, slot; _slots[sy])
@@ -262,7 +262,7 @@ class Frame
                     if(slot != _backbuffer[sy][sx])
                     {
                         //Set f once
-                        if(f == UNDEF)
+                        if(f == undef)
                         {
                             f = to!int(sx);
                         }
@@ -276,7 +276,7 @@ class Frame
                 }
 
                 //If no slot on this row has been modified, continue
-                if(f == UNDEF)
+                if(f == undef)
                 {
                     continue;
                 }

@@ -9,13 +9,13 @@ import std.experimental.logger;
 /**
  * Modules that can be loaded by Scone
  */
-enum sconeModule
+enum SconeModule
 {
-    None = 0,
-    Window = 1,
-    Keyboard = 2,
-    Audio = 4 /* audio is unused/unimplemented */,
-    All = Window | Keyboard | Audio
+    none = 0,
+    window = 1,
+    keyboard = 2,
+    audio = 4 /* audio is unused/unimplemented */,
+    all = window | keyboard | audio,
 }
 
 /**
@@ -23,24 +23,24 @@ enum sconeModule
  *
  * Examples:
  * --------------------
- * sconeInit(sconeModule.Window); //Initializes scone, where only drawing to the console screen will work
+ * sconeInit(SconeModule.window); //Initializes scone, where only drawing to the console screen will work
  *
- * sconeInit(sconeModule.All); //Initializes scone, where you can use all modules (drawing to the screen, getting key inputs)
+ * sconeInit(SconeModule.all); //Initializes scone, where you can use all modules (drawing to the screen, getting key inputs)
  *
- * sconeInit(sconeModule.Window | sconeModule.Keyboard); //Initializes scone, where you can draw to the screen and get key inputs.
+ * sconeInit(SconeModule.window | SconeModule.keyboard); //Initializes scone, where you can draw to the screen and get key inputs.
  * --------------------
  */
-auto sconeInit(sconeModule cm = sconeModule.All)
+auto sconeInit(SconeModule cm = SconeModule.all)
 {
-    if(hasFlag(cm, sconeModule.Window))
+    if(hasFlag(cm, SconeModule.window))
     {
         windowInit();
     }
-    if(hasFlag(cm, sconeModule.Keyboard))
+    if(hasFlag(cm, SconeModule.keyboard))
     {
        keyboardInit();
     }
-    //if(hasFlag(cm, sconeModule.Audio))
+    //if(hasFlag(cm, SconeModule.audio))
     //{
     //   audioInit();
     //}
@@ -66,41 +66,41 @@ auto sconeClose()
  */
 auto sconeRunning()
 {
-    return !getModuleState(sconeModule.None);
+    return !getModuleState(SconeModule.none);
 }
 
 /**
  * Returns: bool, true if all modules entered are active.
  * Examples:
  * --------------------
- * sconeInit(sconeModule.Window | sconeModule.Keyboard);
+ * sconeInit(SconeModule.window | SconeModule.keyboard);
  *
- * assert( getModuleState(sconeModule.Window));
- * assert( getModuleState(sconeModule.Window | sconeModule.Keyboard));
- * assert(!getModuleState(sconeModule.None));
+ * assert( getModuleState(SconeModule.window));
+ * assert( getModuleState(SconeModule.window | SconeModule.keyboard));
+ * assert(!getModuleState(SconeModule.none));
  *
  * sconeClose();
- * assert( getModuleState(sconeModule.None));
+ * assert( getModuleState(SconeModule.none));
  * --------------------
  * Note: Does not work?
  */
-auto getModuleState(sconeModule cm)
+auto getModuleState(SconeModule cm)
 {
     bool r = true;
 
-    if(hasFlag(cm, sconeModule.None))
+    if(hasFlag(cm, SconeModule.none))
     {
         return !(moduleWindow || moduleKeyboard || moduleAudio);
     }
-    if(hasFlag(cm, sconeModule.Window))
+    if(hasFlag(cm, SconeModule.window))
     {
         r &= moduleWindow;
     }
-    if(hasFlag(cm, sconeModule.Keyboard))
+    if(hasFlag(cm, SconeModule.keyboard))
     {
         r &= moduleKeyboard;
     }
-    //if(hasFlag(cm, sconeModule.Audio))
+    //if(hasFlag(cm, SconeModule.audio))
     //{
     //    r &= moduleAudio;
     //}

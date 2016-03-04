@@ -141,470 +141,470 @@ auto clearInputs()
 enum SK
 {
     ///Unknown key (Should never appear. If do, please report bug)
-    Unknown,
+    unknown,
 
     ///BACKSPACE key
-    Backspace,
+    backspace,
 
     ///TAB key
-    Tab,
+    tab,
 
     ///CLEAR key
-    Clear,
+    clear,
 
     ///ENTER key
-    Enter,
+    enter,
 
     ///SHIFT key
-    Shift,
+    shift,
 
     ///CTRL key
-    Control,
+    control,
 
     ///ALT key
-    Alt,
+    alt,
 
     ///PAUSE key
-    Pause,
+    pause,
 
     ///CAPS LOCK key
-    Capslock,
+    capslock,
 
     ///ESC key
-    Escape,
+    escape,
 
     ///SPACEBAR
-    Space,
+    space,
 
     ///PAGE UP key
-    Page_up,
+    page_up,
 
     ///PAGE DOWN key
-    Page_down,
+    page_down,
 
     ///END key
-    End,
+    end,
 
     ///HOME key
-    Home,
+    home,
 
     ///LEFT ARROW key
-    Left,
+    left,
 
     ///UP ARROW key
-    Up,
+    up,
 
     ///RIGHT ARROW key
-    Right,
+    right,
 
     ///DOWN ARROW key
-    Down,
+    down,
 
     ///SELECT key
-    Select,
+    select,
 
     ///PRINT key
-    Print,
+    print,
 
     ///EXECUTE key
-    Execute,
+    execute,
 
     ///PRINT SCREEN key
-    Print_screen,
+    print_screen,
 
     ///INS key
-    Insert,
+    insert,
 
     ///DEL key
-    Delete,
+    del,
 
     ///HELP key
-    Help,
+    help,
 
     ///0 key
-    Key_0,
+    key_0,
 
     ///1 key
-    Key_1,
+    key_1,
 
     ///2 key
-    Key_2,
+    key_2,
 
     ///3 key
-    Key_3,
+    key_3,
 
     ///4 key
-    Key_4,
+    key_4,
 
     ///5 key
-    Key_5,
+    key_5,
 
     ///6 key
-    Key_6,
+    key_6,
 
     ///7 key
-    Key_7,
+    key_7,
 
     ///8 key
-    Key_8,
+    key_8,
 
     ///9 key
-    Key_9,
+    key_9,
 
     ///A key
-    A,
+    a,
 
     ///B key
-    B,
+    b,
 
     ///C key
-    C,
+    c,
 
     ///D key
-    D,
+    d,
 
     ///E key
-    E,
+    e,
 
     ///F key
-    F,
+    f,
 
     ///G key
-    G,
+    g,
 
     ///H key
-    H,
+    h,
 
     ///I key
-    I,
+    i,
 
     ///J key
-    J,
+    j,
 
     ///K key
-    K,
+    k,
 
     ///L key
-    L,
+    l,
 
     ///M key
-    M,
+    m,
 
     ///N key
-    N,
+    n,
 
     ///O key
-    O,
+    o,
 
     ///P key
-    P,
+    p,
 
     ///Q key
-    Q,
+    q,
 
     ///R key
-    R,
+    r,
 
     ///S key
-    S,
+    s,
 
     ///T key
-    T,
+    t,
 
     ///U key
-    U,
+    u,
 
     ///V key
-    V,
+    v,
 
     ///W key
-    W,
+    w,
 
     ///X key
-    X,
+    x,
 
     ///Y key
-    Y,
+    y,
 
     ///Z key
-    Z,
+    z,
 
     ///Left Windows key (Natural keyboard)
-    Windows_left,
+    windows_left,
 
     ///Right Windows key (Natural keyboard)
-    Windows_right,
+    windows_right,
 
     ///Applications key (Natural keyboard)
-    Apps,
+    apps,
 
     ///Computer Sleep key
-    Sleep,
+    sleep,
 
     ///Numeric keypad 0 key
-    Numpad_0,
+    numpad_0,
 
     ///Numeric keypad 1 key
-    Numpad_1,
+    numpad_1,
 
     ///Numeric keypad 2 key
-    Numpad_2,
+    numpad_2,
 
     ///Numeric keypad 3 key
-    Numpad_3,
+    numpad_3,
 
     ///Numeric keypad 4 key
-    Numpad_4,
+    numpad_4,
 
     ///Numeric keypad 5 key
-    Numpad_5,
+    numpad_5,
 
     ///Numeric keypad 6 key
-    Numpad_6,
+    numpad_6,
 
     ///Numeric keypad 7 key
-    Numpad_7,
+    numpad_7,
 
     ///Numeric keypad 8 key
-    Numpad_8,
+    numpad_8,
 
     ///Numeric keypad 9 key
-    Numpad_9,
+    numpad_9,
 
     ///Multiply key
-    Multiply,
+    multiply,
 
     ///Add key
-    Add,
+    add,
 
     ///Separator key
-    Separator,
+    separator,
 
     ///Subtract key
-    Subtract,
+    subtract,
 
     ///Decimal key
-    Decimal,
+    decimal,
 
     ///Divide key
-    Divide,
+    divide,
 
     ///F1 key
-    F1,
+    f1,
 
     ///F2 key
-    F2,
+    f2,
 
     ///F3 key
-    F3,
+    f3,
 
     ///F4 key
-    F4,
+    f4,
 
     ///F5 key
-    F5,
+    f5,
 
     ///F6 key
-    F6,
+    f6,
 
     ///F7 key
-    F7,
+    f7,
 
     ///F8 key
-    F8,
+    f8,
 
     ///F9 key
-    F9,
+    f9,
 
     ///F10 key
-    F10,
+    f10,
 
     ///F11 key
-    F11,
+    f11,
 
     ///F12 key
-    F12,
+    f12,
 
     ///F13 key
-    F13,
+    f13,
 
     ///F14 key
-    F14,
+    f14,
 
     ///F15 key
-    F15,
+    f15,
 
     ///F16 key
-    F16,
+    f16,
 
     ///F17 key
-    F17,
+    f17,
 
     ///F18 key
-    F18,
+    f18,
 
     ///F19 key
-    F19,
+    f19,
 
     ///F20 key
-    F20,
+    f20,
 
     ///F21 key
-    F21,
+    f21,
 
     ///F22 key
-    F22,
+    f22,
 
     ///F23 key
-    F23,
+    f23,
 
     ///F24 key
-    F24,
+    f24,
 
     ///NUM LOCK key
-    Numlock,
+    numlock,
 
     ///SCROLL LOCK key
-    Scroll_lock,
+    scroll_lock,
 
     ///Left SHIFT key
-    Shift_left,
+    shift_left,
 
     ///Right SHIFT key
-    Shift_right,
+    shift_right,
 
     ///Left CONTROL key
-    Control_left,
+    control_left,
 
     ///Right CONTROL key
-    Control_right,
+    control_right,
 
     ///Left MENU key
-    Menu_left,
+    menu_left,
 
     ///Right MENU key
-    Menu_right,
+    menu_right,
 
     ///Browser Back key
-    Browser_back,
+    browser_back,
 
     ///Browser Forward key
-    Browser_forward,
+    browser_forward,
 
     ///Browser Refresh key
-    Browser_refresh,
+    browser_refresh,
 
     ///Browser Stop key
-    Browser_stop,
+    browser_stop,
 
     ///Browser Search key
-    Browser_search,
+    browser_search,
 
     ///Browser Favorites key
-    Browser_favorites,
+    browser_favorites,
 
     ///Browser Start and Home key
-    Browser_home,
+    browser_home,
 
     ///Volume Mute key
-    Volume_mute,
+    volume_mute,
 
     ///Volume Down key
-    Volume_down,
+    volume_down,
 
     ///Volume Up key
-    Volume_up,
+    volume_up,
 
     ///Next Track key
-    Media_next,
+    media_next,
 
     ///Previous Track key
-    Media_prev,
+    media_prev,
 
     ///Stop Media key
-    Media_stop,
+    media_stop,
 
     ///Play/Pause Media key
-    Media_play_pause,
+    media_play_pause,
 
     ///Start Mail key
-    Launch_mail,
+    launch_mail,
 
     ///Select Media key
-    Launch_media_select,
+    launch_media_select,
 
     ///Start Application 1 key
-    Launch_app_1,
+    launch_app_1,
 
     ///Start Application 2 key
-    Launch_app_2,
+    launch_app_2,
 
     //Add OEM to name?
     ///For any country/region, the '+' key
-    Plus,
+    plus,
 
     ///For any country/region, the ',' key
-    Comma,
+    comma,
 
     ///For any country/region, the '-' key
-    Minus,
+    minus,
 
     ///For any country/region, the '.' key
-    Period,
+    period,
 
     ///Used to pass Unicode characters as if they were keystrokes. The PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
-    Packet,
+    packet,
 
     ///Erase EOF key
-    Ereof,
+    ereof,
 
     ///Play key
-    Play,
+    play,
 
     ///Zoom key
-    Zoom,
+    zoom,
 
     ///Clear key
-    Oem_clear,
+    oem_clear,
 
     ///Attn key
-    Attn,
+    attn,
 
     ///CrSel key
-    Crsel,
+    crsel,
 
     ///ExSel key
-    Exsel,
+    exsel,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_1,
+    oem_1,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_2,
+    oem_2,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_3,
+    oem_3,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_4,
+    oem_4,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_5,
+    oem_5,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_6,
+    oem_6,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_7,
+    oem_7,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
-    Oem_8,
+    oem_8,
 
     ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
-    Oem_102,
+    oem_102,
 
     ///Control-break processing
-    Cancel,
+    cancel,
 }
 
 /**
@@ -614,28 +614,28 @@ enum SK
 enum SCK
 {
     ///No control key is being pressed
-    None = 0,
+    none = 0,
 
     ///CAPS LOCK light is activated
-    Capslock = 1,
+    capslock = 1,
 
     ///NUM LOCK is activated
-    Numlock = 2,
+    numlock = 2,
 
     ///SCROLL LOCK is activated
-    Scrolllock = 4,
+    scrolllock = 4,
 
     ///SHIFT key is pressed
-    Shift = 8,
+    shift = 8,
 
     ///The key is enhanced (?)
-    Enhanced = 16,
+    enhanced = 16,
 
     ///Left or right ALT key is pressed
-    Alt = 32,
+    alt = 32,
 
     ///Left or right CTRL key is pressed
-    Ctrl = 64,
+    ctrl = 64,
 }
 
 package(scone)
