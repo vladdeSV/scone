@@ -551,39 +551,39 @@ SCK win_getControlKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
 
     if(hasFlag(cm, WindowsControlKey.CAPSLOCK_ON))
     {
-        fin |= SCK.Capslock;
+        fin |= SCK.capslock;
     }
     if(hasFlag(cm, WindowsControlKey.SCROLLLOCK_ON))
     {
-        fin |= SCK.Scrolllock;
+        fin |= SCK.scrolllock;
     }
     if(hasFlag(cm, WindowsControlKey.SHIFT_PRESSED))
     {
-        fin |= SCK.Shift;
+        fin |= SCK.shift;
     }
     if(hasFlag(cm, WindowsControlKey.ENHANCED_KEY))
     {
-        fin |= SCK.Enhanced;
+        fin |= SCK.enhanced;
     }
     if(hasFlag(cm, WindowsControlKey.LEFT_ALT_PRESSED))
     {
-        fin |= SCK.Alt;
+        fin |= SCK.alt;
     }
     if(hasFlag(cm, WindowsControlKey.RIGHT_ALT_PRESSED))
     {
-        fin |= SCK.Alt;
+        fin |= SCK.alt;
     }
     if(hasFlag(cm, WindowsControlKey.LEFT_CTRL_PRESSED))
     {
-        fin |= SCK.Ctrl;
+        fin |= SCK.ctrl;
     }
     if(hasFlag(cm, WindowsControlKey.RIGHT_CTRL_PRESSED))
     {
-        fin |= SCK.Ctrl;
+        fin |= SCK.ctrl;
     }
     if(hasFlag(cm, WindowsControlKey.NUMLOCK_ON))
     {
-        fin |= SCK.Numlock;
+        fin |= SCK.numlock;
     }
 
     return fin;
