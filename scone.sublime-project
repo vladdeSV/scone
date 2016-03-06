@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "source/scone",
+            "name": "scone",
+		},
+        {
+            "path": "docs",
+            "file_include_patterns": ["core.html", "frame.html", "keyboard.html", "window.html"],
+        },
+        {
+            "path": "examples",
+        }
+	]
+}

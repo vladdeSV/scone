@@ -123,11 +123,14 @@ struct KeyEvent
 auto getInputs()
 {
     version(Windows) win_getInput();
-    auto temp = keyInputs;
-    clearInputs();
-    return temp;
-}
+    scope(exit)
+    {
+        clearInputs();
+    }
 
+    return keyInputs;
+
+}
 /**
  * Clears all buffered inputs.
  * Useful if you have a loading screen of some sort, and need to clear key presses once loaded.
