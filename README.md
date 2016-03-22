@@ -12,7 +12,7 @@ For anyone on a Windows machine, you can test a few examples that gives the basi
 # Examples
 ![example_1](http://i.imgur.com/nrIuilv.gif)
 ![example_2](http://i.imgur.com/1CnEG31.gif)
-![example_3](http://i.imgur.com/1CnEG31.gif)
+![example_3](http://i.imgur.com/Uhhipkh.gif)
 
 # Resources
 * [Trello board](https://trello.com/b/EFTaQJZa/scone)
