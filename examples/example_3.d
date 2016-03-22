@@ -4,7 +4,7 @@ void main()
 {
     sconeInit();
 
-    auto frame = new Frame(40, UNDEF);
+    auto frame = new Frame(80, undef);
 
     bool loop = true;
 
@@ -12,14 +12,14 @@ void main()
     {
         foreach(input; getInputs())
         {
-            if(input.key == SK.Escape || input.key == SK.C && input.hasControlKey(SCK.Ctrl))
+            if(input.key == SK.escape || input.key == SK.c && input.hasControlKey(SCK.ctrl))
             {
                 loop = false;
                 break;
             }
 
-            window.clear();
-            window.write
+            frame.clear();
+            frame.write
             (
                 0,0,
                 "Key: ", input.key, "\n",
@@ -27,7 +27,7 @@ void main()
                 "Pressed: ", input.pressed
             );
         }
-        window.print();
+        frame.print();
     }
 
     sconeClose();
