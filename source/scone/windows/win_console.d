@@ -173,10 +173,10 @@ ushort attributesFromSlot(Slot slot)
         attributes |= BACKGROUND_GREEN | BACKGROUND_BLUE;
         break;
     case bg.gray:
-        attributes |= BACKGROUND_INTENSITY;
+        attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
         break;
     case bg.gray_dark:
-        attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+        attributes |= BACKGROUND_INTENSITY;
         break;
     case bg.green:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN;
