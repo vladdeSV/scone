@@ -11,7 +11,7 @@ For anyone on a Windows machine, you can test a few examples that gives the basi
 
 # Examples
 
-#### TODO: add gifs that show what all `examples/example_*.d` does.
+#### TODO: add gifs that show what all `examples/example_*.d` do
 
 # Resources
 * [Trello board](https://trello.com/b/EFTaQJZa/scone)
