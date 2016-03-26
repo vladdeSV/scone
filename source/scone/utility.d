@@ -27,31 +27,31 @@ auto sconeCrashIf(Args...)(bool check, string msg, Args args)
 
 enum ColorType
 {
-    foreground,
-    background,
+    foreground = 0,
+    background = 10,
 }
 
 template colorTemplate(ColorType type)
 {
+    int e = cast(int) type;
     enum Color
     {
-        init,
+        black   = 30 + e,
+        red     = 31 + e,
+        green   = 32 + e,
+        yellow  = 33 + e,
+        blue    = 34 + e,
+        magenta = 35 + e,
+        cyan    = 36 + e,
+        white   = 37 + e,
 
-        black,
-        blue,
-        blue_dark,
-        cyan,
-        cyan_dark,
-        gray,
-        gray_dark,
-        green,
-        green_dark,
-        magenta,
-        magenta_dark,
-        red,
-        red_dark,
-        white,
-        yellow,
-        yellow_dark
+        black_dark   = 90 + e,
+        red_dark     = 91 + e,
+        green_dark   = 92 + e,
+        yellow_dark  = 93 + e,
+        blue_dark    = 94 + e,
+        magenta_dark = 95 + e,
+        cyan_dark    = 96 + e,
+        white_dark   = 97 + e
     }
 }
