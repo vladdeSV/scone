@@ -3,12 +3,14 @@ module scone.posix.posix_keyboard;
 version(Posix):
 package(scone):
 
-    import std.c.stdio;
-    import std.c.linux.termios;
+    import core.stdc.stdio;
+    import core.sys.posix.termios;
 
 import scone.keyboard;
 import scone.utility : hasFlag;
 import scone.core;
+
+extern(C) void cfmakeraw(termios *termios_p);
 
 auto posix_initKeyboard()
 {
