@@ -5,7 +5,33 @@
         </head><body>
         <h1>scone.color</h1>
 <br><br>
-<dl><dt><big><a name="fg"></a>struct <u>fg</u>;
+<dl><dt><big><a name="Color"></a>enum <u>Color</u>: int;
+</big></dt>
+<dd>All colors
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code"><font color=green>//Available colors:
+</font>black
+black_dark
+blue
+blue_dark
+cyan
+cyan_dark
+green
+green_dark
+magenta
+magenta_dark
+red
+red_dark
+white
+white_dark
+yellow
+yellow_dark
+</pre>
+<br><br>
+
+</dd>
+<dt><big><a name="fg"></a>struct <u>fg</u>;
 </big></dt>
 <dd>Foreground type
 <br><br>
@@ -43,32 +69,6 @@
 <dt><big><a name="idce"></a>enum int <u>idce</u>;
 </big></dt>
 <dd>Index Dark Color Start<br><br>
-
-</dd>
-<dt><big><a name="Color"></a>enum <u>Color</u>: int;
-</big></dt>
-<dd>All colors
-<br><br>
-<b>Example:</b><br>
-<pre class="d_code"><font color=green>//Available colors:
-</font>black
-black_dark
-blue
-blue_dark
-cyan
-cyan_dark
-green
-green_dark
-magenta
-magenta_dark
-red
-red_dark
-white
-white_dark
-yellow
-yellow_dark
-</pre>
-<br><br>
 
 </dd>
 <dt><big><a name="darkColorFromColor"></a>auto <u>darkColorFromColor</u>(Color <i>c</i>);

@@ -1,49 +1,6 @@
 module scone.color;
 
 /**
- * Foreground type
- * Example:
- * --------
- * frame.write(0,0, fg(Color.red), "scone"); //Writes "scone" in red
- * --------
- */
-struct fg
-{
-    this(Color c)
-    {
-        color = c;
-    }
-    Color color;
-    alias color this;
-}
-
-/**
- * Background type
- * Example:
- * --------
- * frame.write(0,0, bg(Color.red), "scone"); //Writes "scone" white with a red background
- * --------
- */
-struct bg
-{
-    this(Color c)
-    {
-        color = c;
-    }
-    Color color;
-    alias color this;
-}
-
-///Index Light Color Start
-enum ilcs = 30;
-///Index Light Color End
-enum ilce = 37;
-///Index Dark Color Start
-enum idcs = 90;
-///Index Dark Color Start
-enum idce = 97;
-
-/**
  * All colors
  *
  * Example:
@@ -87,6 +44,49 @@ enum Color
     cyan_dark    = 96,
     white_dark   = 97,
 }
+
+/**
+ * Foreground type
+ * Example:
+ * --------
+ * frame.write(0,0, fg(Color.red), "scone"); //Writes "scone" in red
+ * --------
+ */
+struct fg
+{
+    this(Color c)
+    {
+        color = c;
+    }
+    Color color;
+    alias color this;
+}
+
+/**
+ * Background type
+ * Example:
+ * --------
+ * frame.write(0,0, bg(Color.red), "scone"); //Writes "scone" white with a red background
+ * --------
+ */
+struct bg
+{
+    this(Color c)
+    {
+        color = c;
+    }
+    Color color;
+    alias color this;
+}
+
+///Index Light Color Start
+enum ilcs = 30;
+///Index Light Color End
+enum ilce = 37;
+///Index Dark Color Start
+enum idcs = 90;
+///Index Dark Color Start
+enum idce = 97;
 
 /**
  * Get dark color variant from color

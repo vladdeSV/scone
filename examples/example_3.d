@@ -22,9 +22,9 @@ void main()
             frame.write
             (
                 0,0,
-                "Key: ", input.key, "\n",
-                "Control Key: ", input.controlKey, "\n",
-                "Pressed: ", input.pressed
+                fg(Color.white_dark), "Key: ", fg(Color.red), input.key, "\n",
+                fg(Color.white_dark), "Control Key: ", fg(Color.blue), input.controlKey, "\n",
+                fg(Color.white_dark), "Pressed: ", fg(Color.green), input.pressed
             );
         }
         frame.print();
