@@ -26,24 +26,33 @@ module scone.color;
  */
 enum Color
 {
-    black   = 30,
-    red     = 31,
-    green   = 32,
-    yellow  = 33,
-    blue    = 34,
-    magenta = 35,
-    cyan    = 36,
-    white   = 37,
+    black   = ilcs,
+    red     = ilcs + 1,
+    green   = ilcs + 2,
+    yellow  = ilcs + 3,
+    blue    = ilcs + 4,
+    magenta = ilcs + 5,
+    cyan    = ilcs + 6,
+    white   = ilce,
 
-    black_dark   = 90,
-    red_dark     = 91,
-    green_dark   = 92,
-    yellow_dark  = 93,
-    blue_dark    = 94,
-    magenta_dark = 95,
-    cyan_dark    = 96,
-    white_dark   = 97,
+    black_dark   = idcs,
+    red_dark     = idcs + 1,
+    green_dark   = idcs + 2,
+    yellow_dark  = idcs + 3,
+    blue_dark    = idcs + 4,
+    magenta_dark = idcs + 5,
+    cyan_dark    = idcs + 6,
+    white_dark   = idce,
 }
+
+///Index Light Color Start
+enum ilcs = 30;
+///Index Light Color End
+enum ilce = ilcs + 7;
+///Index Dark Color Start
+enum idcs = 90;
+///Index Dark Color Start
+enum idce = idcs + 7;
 
 /**
  * Foreground type
@@ -79,58 +88,19 @@ struct bg
     alias color this;
 }
 
-///Index Light Color Start
-enum ilcs = 30;
-///Index Light Color End
-enum ilce = 37;
-///Index Dark Color Start
-enum idcs = 90;
-///Index Dark Color Start
-enum idce = 97;
-
 /**
  * Get dark color variant from color
  * Returns: Dark variant of `Color`. If not a light color, return input
  */
 auto darkColorFromColor(Color c)
 {
-    if(colorIsLight(c))
-    {
-        if(c == Color.red)
-        {
-            return Color.red_dark;
-        }
-        else if(c == Color.green)
-        {
-            return Color.green_dark;
-        }
-        else if(c == Color.yellow)
-        {
-            return Color.yellow_dark;
-        }
-        else if(c == Color.blue)
-        {
-            return Color.blue_dark;
-        }
-        else if(c == Color.magenta)
-        {
-            return Color.magenta_dark;
-        }
-        else if(c == Color.cyan)
-        {
-            return Color.cyan_dark;
-        }
-        else if(c == Color.white)
-        {
-            return Color.white_dark;
-        }
-        else if(c == Color.black)
-        {
-            return Color.black_dark;
-        }
-    }
-
-    return c;
+    return colorIsLight(c) ? cast(Color)(c + 60) : c;
+}
+unittest
+{
+    assert(darkColorFromColor(Color.red) == Color.red_dark);
+    assert(darkColorFromColor(Color.red_dark) == Color.red_dark);
+    assert(darkColorFromColor(cast(Color) 1) == cast(Color) 1);
 }
 
 /**
@@ -139,43 +109,13 @@ auto darkColorFromColor(Color c)
  */
 auto lightColorFromColor(Color c)
 {
-    if(colorIsDark(c))
-    {
-        if(c == Color.red_dark)
-        {
-            return Color.red;
-        }
-        else if(c == Color.green_dark)
-        {
-            return Color.green;
-        }
-        else if(c == Color.yellow_dark)
-        {
-            return Color.yellow;
-        }
-        else if(c == Color.blue_dark)
-        {
-            return Color.blue;
-        }
-        else if(c == Color.magenta_dark)
-        {
-            return Color.magenta;
-        }
-        else if(c == Color.cyan_dark)
-        {
-            return Color.cyan;
-        }
-        else if(c == Color.white_dark)
-        {
-            return Color.white;
-        }
-        else if(c == Color.black_dark)
-        {
-            return Color.black;
-        }
-    }
-
-    return c;
+    return colorIsDark(c) ? cast(Color)(c - 60) : c;
+}
+unittest
+{
+    assert(lightColorFromColor(Color.green_dark) == Color.green);
+    assert(lightColorFromColor(Color.green) == Color.green);
+    assert(lightColorFromColor(cast(Color) 1) == cast(Color) 1);
 }
 
 /**
@@ -186,6 +126,12 @@ auto colorIsDark(Color c)
 {
     return c >= idcs && c <= idce;
 }
+unittest
+{
+    assert(colorIsDark(Color.blue_dark) == true);
+    assert(colorIsDark(Color.blue) == false);
+    assert(colorIsDark(cast(Color) 1) == false);
+}
 
 /**
  * Check if a color is light
@@ -195,4 +141,9 @@ auto colorIsLight(Color c)
 {
     return c >= ilcs && c <= ilce;
 }
-
+unittest
+{
+    assert(colorIsLight(Color.yellow) == true);
+    assert(colorIsLight(Color.yellow_dark) == false);
+    assert(colorIsLight(cast(Color) 1) == false);
+}
