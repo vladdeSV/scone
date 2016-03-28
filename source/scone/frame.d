@@ -2,6 +2,8 @@ module scone.frame;
 
 import scone.core;
 import scone.window;
+import scone.utility;
+import scone.color;
 import std.algorithm : max, min;
 import std.array : insertInPlace;
 import std.conv : to, text;
@@ -10,7 +12,6 @@ import std.stdio;
 import std.string : wrap, strip;
 import std.traits : isArray, isSomeString;
 import std.uni : isWhite;
-import scone.utility;
 
 /**
  * Universal enum to do certain operations.
@@ -20,7 +21,7 @@ import scone.utility;
  * --------------------
  * auto window = new Frame(undef, 20);
  * --------------------
- * Will probably be used sometime in the future
+ * Will probably be used for something else sometime in the future
  */
 enum undef = -1;
 
@@ -29,7 +30,7 @@ enum undef = -1;
  *
  * Examples:
  * --------------------
- * Slot slot1 = Slot('d', fg.red, bg.white); //'d' character with RED foreground color and WHITE background color
+ * Slot slot1 = Slot('d', fg(Color.red), bg(Color.white)); //'d' character with RED foreground color and WHITE background color
  * Slot slot2 = Slot('g');
  *
  * auto window = new Frame();
@@ -41,41 +42,9 @@ enum undef = -1;
 struct Slot
 {
     char character;
-    fg foreground = fg.init;
-    bg background = bg.init;
+    fg foreground = fg(Color.white_dark);
+    bg background = bg(Color.black_dark);
 }
-
-/**
- * All colors
- * --------------------
- * //Available colors:
- * init
- *
- * black
- * blue
- * blue_dark
- * cyan
- * cyan_dark
- * gray
- * gray_dark
- * green
- * green_dark
- * magenta
- * magenta_dark
- * red
- * red_dark
- * white
- * yellow
- * yellow_dark
- * --------------------
- * Examples:
- * ---
- * window.write(fg.white, bg.red, "scone"); //Writes "scone" in white with red background
- * ---
- */
-alias fg = colorTemplate!(ColorType.foreground).Color;
-///ditto
-alias bg = colorTemplate!(ColorType.background).Color;
 
 
 /**
@@ -83,7 +52,7 @@ alias bg = colorTemplate!(ColorType.background).Color;
  */
 class Frame
 {
-    alias width = w;
+    alias width  = w;
     alias height = h;
 
     //@nogc: //In the future, make entire Frame @nogc
@@ -138,12 +107,12 @@ class Frame
      * Writes whatever is thrown into the parameters onto the frame
      * Examples:
      * --------------------
-     * window.write(10,15, fg.red, bg.green, 'D'); //Writes a 'D' colored RED with a GREEN background.
-     * window.write(10,16, fg.red, bg.white, "scon", fg.blue, 'e'); //Writes "scone" where "scon" is YELLOW with WHITE background and "e" is RED with WHITE background.
-     * window.write(10,17, bg.red, fg.blue);
-     * window.write(10,17, bg.white, fg.green); //Changes the slots' color to RED and the background to WHITE.
+     * window.write(10,15, fg(Color.red), bg(Color.green), 'D'); //Writes a 'D' colored RED with a GREEN background.
+     * window.write(10,16, fg(Color.red), bg(Color.white), "scon", fg(Color.blue), 'e'); //Writes "scone" where "scon" is YELLOW with WHITE background and "e" is RED with WHITE background.
+     * window.write(10,17, bg(Color.red), fg(Color.blue));
+     * window.write(10,17, bg(Color.white), fg(Color.green)); //Changes the slots' color to RED and the background to WHITE.
      *
-     * window.write(10,18, 'D', bg.red); //Watch out: This will print "D" with the default color and the default background-color.
+     * window.write(10,18, 'D', bg(Color.red)); //Watch out: This will print "D" with the default color and the default background-color.
      * --------------------
      * Note: Using Unicode character may not work as expected, due to different operating systems may not handle Unicode correctly.
      */
@@ -157,8 +126,8 @@ class Frame
         }
 
         Slot[] slots;
-        fg foreground = fg.white;
-        bg background = bg.black;
+        fg foreground = fg.white_dark;
+        bg background = bg.black_dark;
 
         bool unsetColors;
         foreach(arg; args)
@@ -168,7 +137,7 @@ class Frame
                 foreground = arg;
                 unsetColors = true;
             }
-            else static if(is(typeof(arg) == bg))
+            else static if( typeid(typeof(arg)) is typeid(bg) )
             {
                 background = arg;
                 unsetColors = true;
@@ -284,7 +253,7 @@ class Frame
                 //Loop from the first changed slot to the last edited slot.
                 foreach (px; f .. l + 1)
                 {
-                    printed ~= text("\033[", 0, ";", cast(int)_slots[sy][px].foreground, ";", cast(int)_slots[sy][px].background, "m", _slots[sy][px].character, "\033[0m");
+                    printed ~= text("\033[", 0, ";", cast(int)(_slots[sy][px].foreground), ";", cast(int)(_slots[sy][px].background + 10), "m", _slots[sy][px].character, "\033[0m");
                 }
 
                 //Set the cursor at the firstly edited slot...

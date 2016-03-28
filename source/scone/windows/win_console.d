@@ -6,6 +6,7 @@ package(scone):
 import core.sys.windows.windows;
 import scone.utility;
 import scone.frame;
+import scone.color;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;
@@ -103,52 +104,52 @@ ushort attributesFromSlot(Slot slot)
 
     switch(slot.foreground)
     {
-    case fg.init:
-        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-        break;
-    case fg.blue:
+    case Color.blue:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
         break;
-    case fg.blue_dark:
+    case Color.blue_dark:
         attributes |= FOREGROUND_BLUE;
         break;
-    case fg.cyan:
+    case Color.cyan:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE;
         break;
-    case fg.cyan_dark:
+    case Color.cyan_dark:
         attributes |= FOREGROUND_GREEN | FOREGROUND_BLUE;
         break;
-    case fg.gray:
-        attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-        break;
-    case fg.gray_dark:
-        attributes |= FOREGROUND_INTENSITY;
-        break;
-    case fg.green:
-        attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN;
-        break;
-    case fg.green_dark:
-        attributes |= FOREGROUND_GREEN;
-        break;
-    case fg.magenta:
-        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;
-        break;
-    case fg.magenta_dark:
-        attributes |= FOREGROUND_RED | FOREGROUND_BLUE;
-        break;
-    case fg.red:
-        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED;
-        break;
-    case fg.red_dark:
-        attributes |= FOREGROUND_RED;
-        break;
-    case fg.white:
+    case Color.white:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
         break;
-    case fg.yellow:
+    case Color.white_dark:
+        attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case Color.black:
+        attributes |= FOREGROUND_INTENSITY;
+        break;
+    case Color.black_dark:
+        attributes |= 0;
+        break;
+    case Color.green:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_GREEN;
+        break;
+    case Color.green_dark:
+        attributes |= FOREGROUND_GREEN;
+        break;
+    case Color.magenta:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;
+        break;
+    case Color.magenta_dark:
+        attributes |= FOREGROUND_RED | FOREGROUND_BLUE;
+        break;
+    case Color.red:
+        attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED;
+        break;
+    case Color.red_dark:
+        attributes |= FOREGROUND_RED;
+        break;
+    case Color.yellow:
         attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN;
         break;
-    case fg.yellow_dark:
+    case Color.yellow_dark:
         attributes |= FOREGROUND_RED | FOREGROUND_GREEN;
         break;
     default:
@@ -157,52 +158,52 @@ ushort attributesFromSlot(Slot slot)
 
     switch(slot.background)
     {
-    case bg.init:
-        attributes |= 0;
-        break;
-    case bg.blue:
+    case Color.blue:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
         break;
-    case bg.blue_dark:
+    case Color.blue_dark:
         attributes |= BACKGROUND_BLUE;
         break;
-    case bg.cyan:
+    case Color.cyan:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_BLUE;
         break;
-    case bg.cyan_dark:
+    case Color.cyan_dark:
         attributes |= BACKGROUND_GREEN | BACKGROUND_BLUE;
         break;
-    case bg.gray:
-        attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
-        break;
-    case bg.gray_dark:
-        attributes |= BACKGROUND_INTENSITY;
-        break;
-    case bg.green:
-        attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN;
-        break;
-    case bg.green_dark:
-        attributes |= BACKGROUND_GREEN;
-        break;
-    case bg.magenta:
-        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE;
-        break;
-    case bg.magenta_dark:
-        attributes |= BACKGROUND_RED | BACKGROUND_BLUE;
-        break;
-    case bg.red:
-        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED;
-        break;
-    case bg.red_dark:
-        attributes |= BACKGROUND_RED;
-        break;
-    case bg.white:
+    case Color.white:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
         break;
-    case bg.yellow:
+    case Color.white_dark:
+        attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+        break;
+    case Color.black:
+        attributes |= BACKGROUND_INTENSITY;
+        break;
+    case Color.black_dark:
+        attributes |= 0;
+        break;
+    case Color.green:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_GREEN;
+        break;
+    case Color.green_dark:
+        attributes |= BACKGROUND_GREEN;
+        break;
+    case Color.magenta:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE;
+        break;
+    case Color.magenta_dark:
+        attributes |= BACKGROUND_RED | BACKGROUND_BLUE;
+        break;
+    case Color.red:
+        attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED;
+        break;
+    case Color.red_dark:
+        attributes |= BACKGROUND_RED;
+        break;
+    case Color.yellow:
         attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN;
         break;
-    case bg.yellow_dark:
+    case Color.yellow_dark:
         attributes |= BACKGROUND_RED | BACKGROUND_GREEN;
         break;
     default:
