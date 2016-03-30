@@ -46,11 +46,12 @@ enum Color
 }
 
 ///Index Light Color Start
-enum ilcs = 30;
+enum ilcs = version(OSX) {90} else {30};
+///Index Dark Color Start
+enum idcs = version(OSX) {30} else {90};
+
 ///Index Light Color End
 enum ilce = ilcs + 7;
-///Index Dark Color Start
-enum idcs = 90;
 ///Index Dark Color Start
 enum idce = idcs + 7;
 
