@@ -57,11 +57,11 @@ else
 ///Index Dark Color Start
 version(OSX)
 {
-    enum idcs = 90;
+    enum idcs = 30;
 }
 else
 {
-    enum idcs = 30;
+    enum idcs = 90;
 }
 ///Index Light Color End
 enum ilce = ilcs + 7;
