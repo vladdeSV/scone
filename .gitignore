@@ -8,6 +8,7 @@ dub.selections.json
 *.lib
 *.sublime-workspace
 scone.log
+scone
 source/scone/main.d
 
 docs/app.html
@@ -17,3 +18,4 @@ docs/win_keyboard.html
 docs/utility.html
 docs/package.html
 docs/main.html
+*.DS_Store
