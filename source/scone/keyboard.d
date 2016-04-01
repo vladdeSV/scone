@@ -6,13 +6,14 @@ import scone.utility;
 /**
  * Key event structure
  * Contains general information about a key press
- * Note: Does not work on POSIX yet!
  */
 struct KeyEvent
 {
-    package(scone) version(Windows) this(KEY_EVENT_RECORD k)
+    this(SK key, SCK controlKey, bool pressed)
     {
-        _winKey = k;
+        _key = key;
+        _controlKey = controlKey;
+        _pressed = pressed;
     }
 
     /**
@@ -21,14 +22,7 @@ struct KeyEvent
      */
     auto pressed() @property
     {
-        version(Windows)
-        {
-            return cast(bool) _winKey.bKeyDown;
-        }
-        version(Posix)
-        {
-            return 0;
-        }
+        return _pressed;
     }
 
     /**
@@ -37,14 +31,7 @@ struct KeyEvent
      */
     auto key() @property
     {
-        version(Windows)
-        {
-            return win_getKeyFromKeyEventRecord(_winKey);
-        }
-        version(Posix)
-        {
-            return 0;
-        }
+        return _key;
     }
 
     /**
@@ -67,25 +54,6 @@ struct KeyEvent
         return hasFlag(controlKey, ck);
     }
 
-    /+
-    /**
-     * Check the amount of times an event has been repeated since last check (held down).
-     * Returns: int, the amount of repeats
-     * Note: This is a bit unstable. I suggest you don't use /vladde
-     */
-    @disable auto repeated() @property
-    {
-        version(Windows)
-        {
-            return cast(int) _winKey.wRepeatCount;
-        }
-        version(Posix)
-        {
-            return 0;
-        }
-    }
-    +/
-
     /**
      * Get control all keys
      * Returns: SCK (enum)
@@ -102,17 +70,15 @@ struct KeyEvent
      */
     auto controlKey() @property
     {
-        version(Windows)
-        {
-            return win_getControlKeyFromKeyEventRecord(_winKey);
-        }
-        version(Posix)
-        {
-            return 0;
-        }
+        return _controlKey;
     }
 
-    version(Windows) private KEY_EVENT_RECORD _winKey;
+    private
+    {
+        SK _key;
+        SCK _controlKey;
+        bool _pressed;
+    }
 }
 
 /**
@@ -122,14 +88,21 @@ struct KeyEvent
  */
 auto getInputs()
 {
-    version(Windows) win_getInput();
+    version(Windows)
+    {
+        win_getInput();
+    }
+    else
+    {
+        posix_getInput();
+    }
+
     scope(exit)
     {
         clearInputs();
     }
 
     return keyInputs;
-
 }
 /**
  * Clears all buffered inputs.
