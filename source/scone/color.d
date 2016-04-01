@@ -45,6 +45,8 @@ enum Color
     white_dark   = idce,
 }
 
+//OSX checks are for possible POSIX support later on
+
 ///Index Light Color Start
 version(OSX)
 {
@@ -55,11 +57,7 @@ else
     enum ilcs = 30;
 }
 ///Index Dark Color Start
-version(OSX)
-{
-    enum idcs = 30;
-}
-else
+
 {
     enum idcs = 90;
 }

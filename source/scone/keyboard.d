@@ -84,17 +84,13 @@ struct KeyEvent
 /**
  * Get all inputs since last function call.
  * Returns: KeyEvent[], of all key presses since last call
- * Note: (Windows) A maximum of 128 key presses can be stored in between each call. This should however not be a problem, since `getInputs()` should be called each game tick
+ * Note: (Windows) A maximum of 128 key presses can be stored in between each call.
  */
 auto getInputs()
 {
     version(Windows)
     {
         win_getInput();
-    }
-    else
-    {
-        posix_getInput();
     }
 
     scope(exit)
@@ -628,13 +624,9 @@ package(scone)
     {
         if(!moduleKeyboard)
         {
-            version (Windows)
+            version(Windows)
             {
                 win_initKeyboard();
-            }
-            version (Posix)
-            {
-                //posix_initKeyboard();
             }
 
             moduleKeyboard = true;
@@ -648,10 +640,6 @@ package(scone)
             version(Windows)
             {
                 win_exitKeyboard();
-            }
-            version(Posix)
-            {
-                //posix_exitKeyboard();
             }
 
             moduleKeyboard = false;

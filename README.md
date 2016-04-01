@@ -1,11 +1,9 @@
 # scone
-**scone** (**S**imple **Con**sole **E**ngine) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games), cross-platform.
-
-*(Please note that it is not fully cross-platform yet, currently only working properly on Windows).*
+**scone** (**S**imple **Con**sole **E**ngine) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games) for Windows.
 
 ### Features:
-* Efficient writing to the console/terminal
-* Keyboard input (currently only Windows)
+* Efficient writing to the console
+* Keyboard input
 
 For anyone on a Windows machine, you can test a few examples that gives the basic idea of what scone can do here: https://github.com/vladdeSV/scone/tree/master/examples
 

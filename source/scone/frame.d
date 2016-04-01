@@ -65,14 +65,14 @@ class Frame
      *
      * Examples:
      * --------------------
-     * //Creates a dynamically sized main frame, where the size is determined by the console/terminal window width and height
+     * //Creates a dynamically sized main frame, where the size is determined by the  window width and height
      * auto window = new Frame(); //The main frame
      *
      * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(0, 20); //Main frame, with the width of the console/terminal width, and the height of 20
+     * auto window = new Frame(0, 20); //Main frame, with the width of the  width, and the height of 20
      *
      * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(undef, 24); //Main frame, with the width of the console/terminal width, the height of 24
+     * auto window = new Frame(undef, 24); //Main frame, with the width of the  width, the height of 24
      * --------------------
      *
      * Standards: width = 80, height = 24
@@ -212,60 +212,6 @@ class Frame
                     }
                 }
             }
-        }
-        else version(Posix)
-        {
-            //Temporary string that will be printed out for each line.
-            string printed;
-
-            //Loop through all rows.
-            foreach (sy, row; _slots)
-            {
-                //f = first modified slot, l = last modified slot
-                int f = undef, l;
-
-                //Go through each line
-                foreach(sx, slot; _slots[sy])
-                {
-                    //If the slot at current position differs from backbuffer
-                    if(slot != _backbuffer[sy][sx])
-                    {
-                        //Set f once
-                        if(f == undef)
-                        {
-                            f = to!int(sx);
-                        }
-
-                        //Update l as many times as needed
-                        l = to!int(sx);
-
-                        //Backbuffer is checked, make it "un-differ"
-                        _backbuffer[sy][sx] = slot;
-                    }
-                }
-
-                //If no slot on this row has been modified, continue
-                if(f == undef)
-                {
-                    continue;
-                }
-
-                //Loop from the first changed slot to the last edited slot.
-                foreach (px; f .. l + 1)
-                {
-                    printed ~= text("\033[", 0, ";", cast(int)(_slots[sy][px].foreground), ";", cast(int)(_slots[sy][px].background + 10), "m", _slots[sy][px].character, "\033[0m");
-                }
-
-                //Set the cursor at the firstly edited slot...
-                setCursor(f, to!int(sy));
-                //...and then print out the string.
-                std.stdio.write(printed);
-
-                //Reset 'printed'.
-                printed = null;
-            }
-            //Flush. Without this problems may occur.
-            stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
         }
     }
 

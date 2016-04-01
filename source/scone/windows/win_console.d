@@ -1,6 +1,6 @@
 module scone.windows.win_console;
 
-version (Windows):
+version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
