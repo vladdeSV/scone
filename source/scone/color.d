@@ -57,7 +57,11 @@ else
     enum ilcs = 30;
 }
 ///Index Dark Color Start
-
+version(OSX)
+{
+    enum ilcs = 30;
+}
+else
 {
     enum idcs = 90;
 }

@@ -48,9 +48,9 @@ auto win_getInput()
         //FIXME: performance slowdown
         keyInputs ~= KeyEvent
         (
-            win_getKeyFromKeyEventRecord(_inputBuffer.EventType),
-            win_getControlKeyFromKeyEventRecord(_inputBuffer.EventType),
-            cast(bool) _inputBuffer.bKeyDown
+            win_getKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
+            win_getControlKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
+            cast(bool) _inputBuffer.KeyEvent.bKeyDown
         );
         break;
 
