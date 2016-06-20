@@ -4,7 +4,7 @@ void main()
 {
     sconeInit();
 
-    auto frame = new Frame(80, undef);
+    auto frame = new Frame(80, 0);
 
     bool loop = true;
 
