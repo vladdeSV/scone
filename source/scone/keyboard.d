@@ -17,21 +17,21 @@ struct KeyEvent
     }
 
     /**
-     * Check if the button is pressed or released.
-     * Returns: bool, true if pressed, false if not
-     */
-    auto pressed() @property
-    {
-        return _pressed;
-    }
-
-    /**
      * Get the key
      * Returns: SK (enum) of the key being pressed
      */
     auto key() @property
     {
         return _key;
+    }
+
+    /**
+     * Check if the button is pressed or released.
+     * Returns: bool, true if pressed, false if not
+     */
+    auto pressed() @property
+    {
+        return _pressed;
     }
 
     /**
@@ -55,7 +55,7 @@ struct KeyEvent
     }
 
     /**
-     * Get control all keys
+     * Get control all keys, used to check if ONLY certain control keys are down
      * Returns: SCK (enum)
      * Example:
      * ---
