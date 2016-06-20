@@ -109,7 +109,7 @@ auto clearInputs()
     keyInputs = null;
 }
 
-///All keys that Scone can handle
+///All keys which scone can handle
 enum SK
 {
     ///Unknown key (Should never appear. If do, please report bug)

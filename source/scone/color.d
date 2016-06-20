@@ -45,28 +45,12 @@ enum Color
     white_dark   = idce,
 }
 
-//OSX checks are for possible POSIX support later on
-
 ///Index Light Color Start
-version(OSX)
-{
-    enum ilcs = 90;
-}
-else
-{
-    enum ilcs = 30;
-}
-///Index Dark Color Start
-version(OSX)
-{
-    enum ilcs = 30;
-}
-else
-{
-    enum idcs = 90;
-}
+enum ilcs = 0;
 ///Index Light Color End
 enum ilce = ilcs + 7;
+///Index Dark Color Start
+enum idcs = ilce + 1;
 ///Index Dark Color Start
 enum idce = idcs + 7;
 
@@ -108,58 +92,66 @@ struct bg
  * Get dark color variant from color
  * Returns: Dark variant of `Color`. If not a light color, return input
  */
-auto darkColorFromColor(Color c)
+auto darkColor(Color c)
 {
-    return colorIsLight(c) ? cast(Color)(c + 60) : c;
+    return isLightColor(c) ? cast(Color)(c + idcs) : c;
 }
 unittest
 {
-    assert(darkColorFromColor(Color.red) == Color.red_dark);
-    assert(darkColorFromColor(Color.red_dark) == Color.red_dark);
-    assert(darkColorFromColor(cast(Color) 1) == cast(Color) 1);
+    assert(darkColor(Color.red)      == Color.red_dark);
+    assert(darkColor(Color.red_dark) == Color.red_dark);
+
+    auto undefColor = cast(Color) 4242;
+    assert(darkColor(undefColor) == undefColor);
 }
 
 /**
  * Get light color variant from color
  * Returns: Light variant of `Color`. If not a dark color, return input
  */
-auto lightColorFromColor(Color c)
+auto lightColor(Color c)
 {
-    return colorIsDark(c) ? cast(Color)(c - 60) : c;
+    return isDarkColor(c) ? cast(Color)(c - idcs) : c;
 }
 unittest
 {
-    assert(lightColorFromColor(Color.green_dark) == Color.green);
-    assert(lightColorFromColor(Color.green) == Color.green);
-    assert(lightColorFromColor(cast(Color) 1) == cast(Color) 1);
+    assert(lightColor(Color.green_dark) == Color.green);
+    assert(lightColor(Color.green)      == Color.green);
+
+    auto undefColor = cast(Color) 4242;
+    assert(lightColor(undefColor) == undefColor);
 }
 
 /**
  * Check if a color is dark
  * Returns: true if color is a dark variant
  */
-auto colorIsDark(Color c)
+auto isDarkColor(Color c)
 {
     return c >= idcs && c <= idce;
 }
 unittest
 {
-    assert(colorIsDark(Color.blue_dark) == true);
-    assert(colorIsDark(Color.blue) == false);
-    assert(colorIsDark(cast(Color) 1) == false);
+    assert(isDarkColor(Color.blue_dark) == true);
+    assert(isDarkColor(Color.blue)      == false);
+
+    auto undefColor = cast(Color) 4242;
+    assert(isDarkColor(undefColor) == false);
 }
 
 /**
  * Check if a color is light
  * Returns: true if color is a light variant
  */
-auto colorIsLight(Color c)
+auto isLightColor(Color c)
 {
     return c >= ilcs && c <= ilce;
 }
 unittest
 {
-    assert(colorIsLight(Color.yellow) == true);
-    assert(colorIsLight(Color.yellow_dark) == false);
-    assert(colorIsLight(cast(Color) 1) == false);
+    assert(isLightColor(Color.yellow)      == true);
+    assert(isLightColor(Color.yellow_dark) == false);
+
+    auto undefColor = cast(Color) 4242;
+    assert(isLightColor(undefColor) == false);
 }

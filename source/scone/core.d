@@ -7,7 +7,12 @@ import scone.keyboard;
 import std.experimental.logger;
 
 /**
- * Modules that can be loaded by Scone
+ * Modules which can be loaded by scone:
+ * none: Does not init anything
+ * window: Gives access to the window console
+ * keyboard: Gives access to the keyboard
+ * audio: (Audio is unused/unimplemented)
+ * all: All modules above
  */
 enum SconeModule
 {
@@ -52,7 +57,10 @@ auto sconeInit(SconeModule cm = SconeModule.all)
     }
 }
 
-///Closes scone
+/**
+ * Closes scone.
+ * Must be run at end of program
+ */
 auto sconeClose()
 {
     windowClose();
