@@ -14,40 +14,6 @@ import std.traits : isArray, isSomeString;
 import std.uni : isWhite;
 
 /**
- * Universal enum to do certain operations.
- *
- * As it is less than 1, it is used to set dynamic width and height for windows.
- * Examples:
- * --------------------
- * auto window = new Frame(undef, 20);
- * --------------------
- * Will probably be used for something else sometime in the future
- */
-enum undef = -1;
-
-/**
- * Slot structure
- *
- * Examples:
- * --------------------
- * Slot slot1 = Slot('d', fg(Color.red), bg(Color.white)); //'d' character with RED foreground color and WHITE background color
- * Slot slot2 = Slot('g');
- *
- * auto window = new Frame();
- * window.write(0,0, slot1);
- * window.write(0,1, slot2);
- * --------------------
- *
- */
-struct Slot
-{
-    char character;
-    fg foreground = fg(Color.white_dark);
-    bg background = bg(Color.black_dark);
-}
-
-
-/**
  * Writable area
  */
 class Frame
@@ -70,16 +36,13 @@ class Frame
      *
      * //The width is less than one, meaning it get dynamically set to the consoles
      * auto window = new Frame(0, 20); //Main frame, with the width of the  width, and the height of 20
-     *
-     * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(undef, 24); //Main frame, with the width of the  width, the height of 24
      * --------------------
      *
      * Standards: width = 80, height = 24
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(int width = undef, int height = undef)
+    this(int width = 0, int height = 0)
     in
     {
         auto size = windowSize;
@@ -130,14 +93,14 @@ class Frame
         bg background = bg.black_dark;
 
         bool unsetColors;
-        foreach(arg; args)
+        foreach(ref arg; args)
         {
-            static if(is(typeof(arg) == fg))
+            static if(typeid(typeof(arg)) is typeid(fg))
             {
                 foreground = arg;
                 unsetColors = true;
             }
-            else static if( typeid(typeof(arg)) is typeid(bg) )
+            else static if(typeid(typeof(arg)) is typeid(bg))
             {
                 background = arg;
                 unsetColors = true;
@@ -171,7 +134,7 @@ class Frame
         else
         {
             int wx, wy;
-            foreach(slot; slots)
+            foreach(ref slot; slots)
             {
                 if(col + wx >= w || slot.character == '\n')
                 {
@@ -188,15 +151,15 @@ class Frame
         }
     }
 
-    /** Prints the frame to the console */
+    /** Prints the current frame to the console */
     auto print()
-    in
+    /+in
     {
         //Makes sure the frame isn't resized to a smaller size than the window.
         //TODO: Make a test to see how performance heavy this is (probably not that much)
         auto a = windowSize();
         sconeCrashIf(a[0] < w || a[1] < h, "The window is smaller than the frame");
-    }
+    }+/
     body
     {
         version(Windows)
@@ -259,6 +222,28 @@ class Frame
     int _w, _h;
     Slot[][] _slots, _backbuffer;
 }
+
+/**
+ * Slot structure
+ *
+ * Examples:
+ * --------------------
+ * Slot slot1 = Slot('d', fg(Color.red), bg(Color.white)); //'d' character with RED foreground color and WHITE background color
+ * Slot slot2 = Slot('g');
+ *
+ * auto window = new Frame();
+ * window.write(0,0, slot1);
+ * window.write(0,1, slot2);
+ * --------------------
+ *
+ */
+struct Slot
+{
+    char character;
+    fg foreground = fg(Color.white_dark);
+    bg background = bg(Color.black_dark);
+}
+
 
 //Do not delete:
 //hello there kott and blubeeries, wat are yoy doing this beautyiur beuirituyr nightrevening?? i am stiitngi ghere hanad dtyryugin to progrmamam this game enrgniergn that is for the solnosle
