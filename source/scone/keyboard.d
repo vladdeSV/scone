@@ -88,10 +88,7 @@ struct KeyEvent
  */
 auto getInputs()
 {
-    version(Windows)
-    {
-        win_getInput();
-    }
+    win_getInput();
 
     scope(exit)
     {
@@ -612,23 +609,16 @@ enum SCK
 
 package(scone)
 {
-    KeyEvent[] keyInputs;
+    import scone.windows.win_keyboard;
+    import core.sys.windows.windows;
 
-    version(Windows)
-    {
-        import scone.windows.win_keyboard;
-        import core.sys.windows.windows;
-    }
+    KeyEvent[] keyInputs;
 
     auto keyboardInit()
     {
         if(!moduleKeyboard)
         {
-            version(Windows)
-            {
-                win_initKeyboard();
-            }
-
+            win_initKeyboard();
             moduleKeyboard = true;
         }
     }
@@ -637,11 +627,7 @@ package(scone)
     {
         if(moduleKeyboard)
         {
-            version(Windows)
-            {
-                win_exitKeyboard();
-            }
-
+            win_exitKeyboard();
             moduleKeyboard = false;
         }
     }

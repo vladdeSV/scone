@@ -11,7 +11,7 @@ module scone.window;
 import scone.core;
 import scone.frame : Slot;
 
-version(Windows) import scone.windows.win_console;
+import scone.windows.win_console;
 
 /**
  * Writes out a slot at (x, y)
@@ -22,48 +22,32 @@ version(Windows) import scone.windows.win_console;
  */
 auto writeSlot(int x, int y, ref Slot slot)
 {
-     version(Windows)
-    {
-        win_writeSlot(x, y, slot);
-    }
+    win_writeSlot(x, y, slot);
 }
 
 /** Set the cursor position */
 auto setCursor(int x, int y)
 {
-    version(Windows)
-    {
-        win_setCursor(x,y);
-    }
-
+    win_setCursor(x,y);
 }
 
 /** Set the title */
-public auto title(string title) @property
+auto title(string title) @property
 {
-    version(Windows)
-    {
-        win_title = title;
-    }
+    win_title = title;
 }
 
 /** Set cursor visible. */
 auto cursorVisible(bool visible) @property
 {
-    version(Windows)
-    {
-        win_cursorVisible = visible;
-    }
+    win_cursorVisible = visible;
 
 }
 
 /** Set line wrapping. */
 auto lineWrapping(bool lw) @property
 {
-    version(Windows)
-    {
-        win_lineWrapping = lw;
-    }
+    win_lineWrapping = lw;
 }
 
 /**
@@ -72,10 +56,7 @@ auto lineWrapping(bool lw) @property
  */
 auto windowSize() @property
 {
-    version(Windows)
-    {
-        return win_windowSize;
-    }
+    return win_windowSize;
 }
 
 package(scone)
@@ -84,11 +65,7 @@ package(scone)
     {
         if(!moduleWindow)
         {
-            version(Windows)
-            {
-                win_initConsole();
-            }
-
+            win_initConsole();
             moduleWindow = true;
         }
     }
@@ -97,10 +74,7 @@ package(scone)
     {
         if(moduleWindow)
         {
-            version(Windows)
-            {
-                win_exitConsole();
-            }
+            win_exitConsole();
             moduleWindow = false;
         }
     }

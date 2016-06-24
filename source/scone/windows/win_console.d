@@ -1,6 +1,5 @@
 module scone.windows.win_console;
 
-version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
@@ -93,12 +92,10 @@ auto win_windowSize() @property
     return [_consoleScreenBufferInfo.srWindow.Right  - _consoleScreenBufferInfo.srWindow.Left + 1, _consoleScreenBufferInfo.srWindow.Bottom - _consoleScreenBufferInfo.srWindow.Top  + 1];
 }
 
-private:
-HANDLE _hConsoleOutput, _hConsoleError;
-CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
-//private SMALL_RECT _oldWindowSize;
+private cHANDLE _hConsoleOutput, _hConsoleError;
+private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
-ushort attributesFromSlot(Slot slot)
+private ushort attributesFromSlot(Slot slot)
 {
     ushort attributes;
 
