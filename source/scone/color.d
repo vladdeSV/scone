@@ -54,6 +54,16 @@ enum idcs = ilce + 1;
 ///Index Dark Color Start
 enum idce = idcs + 7;
 
+private template ColorTemplate()
+{
+    this(Color c)
+    {
+        color = c;
+    }
+    Color color;
+    alias color this;
+}
+
 /**
  * Foreground type
  * Example:
@@ -63,12 +73,7 @@ enum idce = idcs + 7;
  */
 struct fg
 {
-    this(Color c)
-    {
-        color = c;
-    }
-    Color color;
-    alias color this;
+    mixin ColorTemplate;
 }
 
 /**
@@ -80,12 +85,7 @@ struct fg
  */
 struct bg
 {
-    this(Color c)
-    {
-        color = c;
-    }
-    Color color;
-    alias color this;
+    mixin ColorTemplate;
 }
 
 /**
