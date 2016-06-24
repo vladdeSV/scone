@@ -4,14 +4,14 @@ import scone.core;
 import scone.window;
 import scone.utility;
 import scone.color;
-import std.algorithm : max, min;
-import std.array : insertInPlace;
-import std.conv : to, text;
-import std.format : format;
+import std.algorithm;
+import std.array;
+import std.conv;
+import std.format;
 import std.stdio;
-import std.string : wrap, strip;
-import std.traits : isArray, isSomeString;
-import std.uni : isWhite;
+import std.string;
+import std.traits;
+import std.uni;
 
 /**
  * Writable area
@@ -150,27 +150,14 @@ class Frame
 
     /** Prints the current frame to the console */
     auto print()
-    /+in
+    foreach(sy, ref row; _slots)
     {
-        //Makes sure the frame isn't resized to a smaller size than the window.
-        //TODO: Make a test to see how performance heavy this is (probably not that much)
-        auto a = windowSize();
-        sconeCrashIf(a[0] < w || a[1] < h, "The window is smaller than the frame");
-    }+/
-    body
-    {
-        version(Windows)
+        foreach(sx, ref slot; row)
         {
-            foreach(sy, ref row; _slots)
+            if(slot != _backbuffer[sy][sx])
             {
-                foreach(sx, ref slot; row)
-                {
-                    if(slot != _backbuffer[sy][sx])
-                    {
-                        writeSlot(sx,sy, slot);
-                        _backbuffer[sy][sx] = slot;
-                    }
-                }
+                writeSlot(sx,sy, slot);
+                _backbuffer[sy][sx] = slot;
             }
         }
     }
