@@ -42,23 +42,20 @@ class Frame
      *
      * If the width or height exceeds the consoles width or height, the program errors.
      */
-    this(int width = 0, int height = 0)
+    this(in int width = 0, in int height = 0)
     in
     {
         auto size = windowSize;
-        sconeCrashIf(width > size[0] || height > size[1], "Frame is too small. Minimum size needs to be %sx%s slots, but frame size is %sx%s", width, height, size[0], size[1]);
+        sconeAssert(width <= size[0] && height <= size[1], "Frame is too small. Minimum size needs to be %sx%s slots, but frame size is %sx%s", width, height, size[0], size[1]);
     }
     body
     {
         auto size = windowSize;
-        if(width  < 1){ width  = size[0]; }
-        if(height < 1){ height = size[1]; }
+        if(width  < 1){ _w = size[0]; } else { _w = width; }
+        if(height < 1){ _h = size[1]; } else { _h = height;}
 
-        _w = width;
-        _h = height;
-
-        _slots = new Slot[][](height, width);
-        _backbuffer = new Slot[][](height, width);
+        _slots = new Slot[][](_h, _w);
+        _backbuffer = new Slot[][](_h, _w);
 
         foreach(n, ref row; _slots)
         {
@@ -95,12 +92,12 @@ class Frame
         bool unsetColors;
         foreach(ref arg; args)
         {
-            static if(typeid(typeof(arg)) is typeid(fg))
+            static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
                 unsetColors = true;
             }
-            else static if(typeid(typeof(arg)) is typeid(bg))
+            else static if(is(typeof(arg) == bg))
             {
                 background = arg;
                 unsetColors = true;

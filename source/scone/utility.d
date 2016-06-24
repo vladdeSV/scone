@@ -11,16 +11,12 @@ bool hasFlag(Type)(Type check, Type type)
 {
     return ((check & type) == type);
 }
-auto sconeCrash(Args...)(string msg, Args args)
-{
-    sconeClose();
-    assert(0, format("\n\n" ~ msg ~ '\n', args));
-}
 
-auto sconeCrashIf(Args...)(bool check, string msg, Args args)
+auto sconeAssert(FormatArgs...)(bool check, string msg, FormatArgs formatArgs)
 {
-    if(check)
+    if(!check)
     {
-        sconeCrash(msg, args);
+        sconeClose();
+        assert(0, format("\n\n" ~ msg ~ '\n', formatArgs));
     }
 }
