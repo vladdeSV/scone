@@ -150,14 +150,16 @@ class Frame
 
     /** Prints the current frame to the console */
     auto print()
-    foreach(sy, ref row; _slots)
     {
-        foreach(sx, ref slot; row)
+        foreach(sy, ref row; _slots)
         {
-            if(slot != _backbuffer[sy][sx])
+            foreach(sx, ref slot; row)
             {
-                writeSlot(sx,sy, slot);
-                _backbuffer[sy][sx] = slot;
+                if(slot != _backbuffer[sy][sx])
+                {
+                    writeSlot(sx,sy, slot);
+                    _backbuffer[sy][sx] = slot;
+                }
             }
         }
     }
