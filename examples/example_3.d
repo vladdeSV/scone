@@ -2,7 +2,7 @@ import scone;
 
 void main()
 {
-    sconeInit();
+    sconeOpen();
 
     auto frame = new Frame(80, 0);
 

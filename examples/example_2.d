@@ -3,7 +3,7 @@ import std.stdio : writeln;
 
 void main()
 {
-    sconeInit(SconeModule.keyboard); //Init, only access to the keyboard
+    sconeOpen(); //Init, only access to the keyboard
 
     bool run = true;
 
