@@ -92,7 +92,7 @@ auto win_windowSize() @property
     return [_consoleScreenBufferInfo.srWindow.Right  - _consoleScreenBufferInfo.srWindow.Left + 1, _consoleScreenBufferInfo.srWindow.Bottom - _consoleScreenBufferInfo.srWindow.Top  + 1];
 }
 
-private cHANDLE _hConsoleOutput, _hConsoleError;
+private HANDLE _hConsoleOutput, _hConsoleError;
 private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
 private ushort attributesFromSlot(Slot slot)
