@@ -24,19 +24,6 @@ auto win_openConsole()
 
     win_cursorVisible = false;
     win_setCursor(0,0);
-
-    //TODO: clear the screen?
-
-    //SetConsoleOutputCP(65001);
-
-    ////Set up the required window size:
-    //SMALL_RECT windowSize = {0, 0, to!ushort(w), to!ushort(h)};
-    ////Change the console window size:
-    //SetConsoleWindowInfo(_hConsoleOutput, TRUE, &windowSize);
-
-    //_hConsoleOutput = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, null, CONSOLE_TEXTMODE_BUFFER, null);
-    //SetConsoleActiveScreenBuffer(_hConsoleOutput);
-
 }
 
 auto win_closeConsole()
