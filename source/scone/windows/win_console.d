@@ -11,7 +11,7 @@ import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
 
-auto win_initConsole()
+auto win_openConsole()
 {
 
     _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -39,7 +39,7 @@ auto win_initConsole()
 
 }
 
-auto win_exitConsole()
+auto win_closeConsole()
 {
     win_cursorVisible = true;
 }

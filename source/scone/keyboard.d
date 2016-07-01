@@ -614,21 +614,13 @@ package(scone)
 
     KeyEvent[] keyInputs;
 
-    auto keyboardInit()
+    auto openKeyboard()
     {
-        if(!moduleKeyboard)
-        {
-            win_initKeyboard();
-            moduleKeyboard = true;
-        }
+        win_openKeyboard();
     }
 
-    auto keyboardClose()
+    auto closeKeyboard()
     {
-        if(moduleKeyboard)
-        {
-            win_exitKeyboard();
-            moduleKeyboard = false;
-        }
+        win_closeKeyboard();
     }
 }

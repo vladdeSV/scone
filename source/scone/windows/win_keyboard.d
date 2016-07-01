@@ -8,10 +8,8 @@ import scone.keyboard;
 import scone.utility : hasFlag;
 import scone.core;
 
-auto win_initKeyboard()
+auto win_openKeyboard()
 {
-    moduleKeyboard = true;
-
     _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
 
     if(_hConsoleInput == INVALID_HANDLE_VALUE)
@@ -24,7 +22,7 @@ auto win_initKeyboard()
         assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
 }
 
-auto win_exitKeyboard()
+auto win_closeKeyboard()
 {
     if(!SetConsoleMode(_hConsoleInput, _oldMode))
         assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");

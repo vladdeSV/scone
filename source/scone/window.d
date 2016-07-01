@@ -1,6 +1,6 @@
 /**
  * All functions here give some sort of direct access to the .
- * However, I suggest you use the `class Frame`(-work, haha). If you decide that you must use these functions separately, they must be initialized with `windowInit()`
+ * However, I suggest you use the `class Frame`(-work, haha). If you decide that you must use these functions separately, they must be initialized with `openWindow()`
  *
  * For those who want to steal code, each function in here calls a win_*.
  * (Eg. setCursor(x,y) calles win_setCursor(x,y) on Windows)
@@ -9,7 +9,7 @@
 module scone.window;
 
 import scone.core;
-import scone.frame : Slot;
+import scone.frame;
 
 import scone.windows.win_console;
 
@@ -61,21 +61,13 @@ auto windowSize() @property
 
 package(scone)
 {
-    auto windowInit()
+    auto openWindow()
     {
-        if(!moduleWindow)
-        {
-            win_initConsole();
-            moduleWindow = true;
-        }
+        win_openConsole();
     }
 
-    auto windowClose()
+    auto closeWindow()
     {
-        if(moduleWindow)
-        {
-            win_exitConsole();
-            moduleWindow = false;
-        }
+        win_closeConsole();
     }
 }

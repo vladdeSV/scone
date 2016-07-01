@@ -81,7 +81,7 @@ class Frame
         //Check if writing outside border
         if(col < 0 || row < 0 || col > w || row > h)
         {
-            log.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", col, row, w, h);
+            sconeLog.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", col, row, w, h);
             return;
         }
 
@@ -120,7 +120,7 @@ class Frame
         //If the last argument is a color, warn
         if(slots.length && unsetColors)
         {
-            log.logf("Warning: The last argument in %s is a color, which will not be set!", args);
+            sconeLog.logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
         if(!slots.length)
