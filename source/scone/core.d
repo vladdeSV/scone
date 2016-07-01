@@ -4,6 +4,7 @@ import scone.utility;
 import scone.frame;
 import scone.window;
 import scone.keyboard;
+import scone.locale;
 import std.experimental.logger;
 
 /**
@@ -15,6 +16,8 @@ auto sconeOpen()
     openWindow();
     openKeyboard();
     //openAudio();
+
+    setLocale("en_US");
 }
 
 /**

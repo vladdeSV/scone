@@ -6,3 +6,4 @@ public import scone.frame;
 public import scone.keyboard;
 public import scone.utility;
 public import scone.window;
+public import scone.locale;

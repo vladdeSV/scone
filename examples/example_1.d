@@ -3,7 +3,7 @@ import std.random : uniform;
 
 void main()
 {
-    sconeInit(SconeModule.window); //Init, only access to the window
+    sconeOpen(); //Init, only access to the window
 
     auto frame = new Frame(); //Create a new "frame" with dynamic width and height
 
@@ -17,7 +17,7 @@ void main()
             fg(cast(Color) uniform(ilcs, ilce)), /* foreground */
             bg(cast(Color) uniform(ilcs, ilce)), /* background */
 
-            cast(char) uniform(0, 256)           /* character  */
+            char(uniform(0, 256));               /* character  */
         );
 
         frame.print(); /* print out everything on the screen */
