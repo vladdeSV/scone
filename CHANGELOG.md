@@ -17,4 +17,3 @@ _1 July 2016_
 _20 June 2016_
 
  * Initial release.
-

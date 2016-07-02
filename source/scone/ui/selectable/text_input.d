@@ -1,10 +1,10 @@
-module ui.selectable.text_input;
+module scone.ui.selectable.text_input;
 
 import std.conv;
 import std.uni;
 import std.format;
 import std.algorithm;
-import ui.selectable;
+import scone.ui.selectable;
 import scone.locale;
 import scone.keyboard;
 
@@ -33,9 +33,11 @@ enum InputType
  * Examples:
  * ---
  * auto idInput = new UITextInput("idInput", 1,1, "[id]", InputType.numeric);
- * auto nameInput = new UITextInput("nameInput", 1,1, "[name]", InputType.alphabetical | InputType.numeric);
- * auto passInput = new UITextInput("passInput", 1,1, "[pass]", InputType.alphabetical | InputType.numeric | InputType.password);
+ * auto nameInput = new UITextInput("nameInput", 1,2, "[name]", InputType.alphabetical | InputType.numeric);
+ * auto passInput = new UITextInput("passInput", 1,3, "[pass]", InputType.alphabetical | InputType.numeric | InputType.password);
  * ---
+ *
+ * Note: Spaces are always allowed. Make sure to use something like std.string.strip() for actual storage, and sanitize it while you're at it.
  */
 class UITextInput : UISelectable
 {
@@ -94,7 +96,7 @@ class UITextInput : UISelectable
     /**
      * Returns: string, of what should be displayed.
      */
-    private string displayable(bool withCursor = false)
+    string displayable(bool withCursor = false)
     {
         auto ret = _text.dup;
 
@@ -205,7 +207,7 @@ bool inputTypeMatchesKeyEvent(InputType type, KeyEvent ke)
     char c = charFromKeyEvent(ke);
     foreach(ref check; checks)
     {
-        if(c >= check[0] && c <= check[1] && c == ' ')
+        if(c >= check[0] && c <= check[1] || c == ' ')
         {
             return true;
         }

@@ -9,6 +9,9 @@ import scone.keyboard;
 
 private char[2][SK] _locale;
 
+/**
+ * Set the current locale.
+ */
 void setLocale(string locale)
 {
     _locale = null;
@@ -25,11 +28,19 @@ void setLocale(string locale)
     _locale.rehash();
 }
 
+/**
+ * Check if SK is registered in locale.
+ */
 bool keyIsValid(SK key)
 {
     return (key in _locale) !is null;
 }
 
+/**
+ * Returns: char, from locale.
+ * Note: Always do the following: `if(keyIsValid(input.key)) { char c = charFromKeyEvent(input); }`
+ * Throws: RangeViolation if input key is not in locale.
+ */
 char charFromKeyEvent(KeyEvent ke)
 {
     bool switched = ke.hasControlKey(SCK.shift) && !ke.hasControlKey(SCK.capslock) || ke.hasControlKey(SCK.capslock) && !ke.hasControlKey(SCK.shift);

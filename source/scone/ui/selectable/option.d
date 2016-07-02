@@ -1,7 +1,19 @@
-module ui.selectable.option;
+module scone.ui.selectable.option;
 
-import ui.selectable;
+import scone.ui.selectable;
 
+/**
+ * Selectable option.
+ * Example:
+ * ---
+ * auto termOption = new UIOption
+ * ("termOption", 1,1, "Terminate application",
+ *     {
+ *         assert(0, "Application terminated.");
+ *     }
+ * );
+ * ---
+ */
 class UIOption : UISelectable
 {
     this(string id, int x, int y, string text, void delegate() action, bool active = true)

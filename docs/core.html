@@ -5,44 +5,16 @@
         </head><body>
         <h1>scone.core</h1>
 <br><br>
-<dl><dt><big><a name="SconeModule"></a>enum <u>SconeModule</u>: int;
+<dl><dt><big><a name="sconeOpen"></a>auto <u>sconeOpen</u>();
 </big></dt>
-<dd>Modules which can be loaded by scone:
-<br><br>
-<b>none:</b><br>
-Does not init anything
-<br><br>
-<b>window:</b><br>
-Gives access to the window console
-<br><br>
-<b>keyboard:</b><br>
-Gives access to the keyboard
-<br><br>
-<b>audio:</b><br>
-(Audio is unused/unimplemented)
-<br><br>
-<b>all:</b><br>
-All modules above<br><br>
-
-</dd>
-<dt><big><a name="sconeInit"></a>auto <u>sconeInit</u>(SconeModule <i>cm</i> = SconeModule.all);
-</big></dt>
-<dd>Initializes in SDL style
-<br><br>
-<b>Examples:</b><br>
-<pre class="d_code"><u>sconeInit</u>(SconeModule.window); <font color=green>//Initializes scone, where only drawing to the console screen will work
-</font>
-<u>sconeInit</u>(SconeModule.all); <font color=green>//Initializes scone, where you can use all modules (drawing to the screen, getting key inputs)
-</font>
-<u>sconeInit</u>(SconeModule.window | SconeModule.keyboard); <font color=green>//Initializes scone, where you can draw to the screen and get key inputs.
-</font></pre>
-<br><br>
+<dd>Initializes scone.
+ Must be run only once in order to use scone's features.<br><br>
 
 </dd>
 <dt><big><a name="sconeClose"></a>auto <u>sconeClose</u>();
 </big></dt>
 <dd>Closes scone.
- Must be run at end of program<br><br>
+ Recommended to be run at end of program.<br><br>
 
 </dd>
 </dl>
