@@ -8,10 +8,19 @@ import ui.selectable;
 import scone.locale;
 import scone.keyboard;
 
+/**
+ * Different input types for UITextInput:
+ *
+ * ascii = Allow all ascii characters.
+ * numeric = Allow 0-9.
+ * alphabetical = Allow a-z and A-Z
+ * password = Displays text with *. "foo" would be displayed as "***".
+ *
+ * Can be combined: `InputType.numeric | InputType.password`.
+ * Note: Only using the password flag will not work.
+ */
 enum InputType
 {
-    // 2^n
-    none         = 0,  //00000
     ascii        = 1,  //00001
     numeric      = 2,  //00010
     alphabetical = 4,  //00100
@@ -19,16 +28,23 @@ enum InputType
     //hidden       = 16, //10000
 }
 
+/**
+ * Text input.
+ * Examples:
+ * ---
+ * auto idInput = new UITextInput("idInput", 1,1, "[id]", InputType.numeric);
+ * auto nameInput = new UITextInput("nameInput", 1,1, "[name]", InputType.alphabetical | InputType.numeric);
+ * auto passInput = new UITextInput("passInput", 1,1, "[pass]", InputType.alphabetical | InputType.numeric | InputType.password);
+ * ---
+ */
 class UITextInput : UISelectable
 {
-    private uint _cursorPosition;
-
     this(string id, int x, int y, string placeholder, InputType type = InputType.ascii, bool active = true)
     {
         //FIXME: placeholder should not be the label
-        super(id, x, y, placeholder, active);
+        super(id, x, y, null, active);
         _inputType = type;
-        _cursorPosition = _stored.length;
+        _placeholder = placeholder;
     }
 
 
@@ -48,37 +64,39 @@ class UITextInput : UISelectable
         }
         else if(input.key == SK.right)
         {
-            if(_cursorPosition < _stored.length)
+            if(_cursorPosition < _text.length)
             {
                 ++_cursorPosition;
             }
         }
         else if(input.key == SK.backspace)
         {
-            if(_stored.length && _cursorPosition > 0)
+            if(_text.length && _cursorPosition > 0)
             {
-                _stored = _stored[0 .. _cursorPosition - 1] ~ _stored[_cursorPosition .. $];
+                _text = _text[0 .. _cursorPosition - 1] ~ _text[_cursorPosition .. $];
                 --_cursorPosition;
             }
         }
         else
         {
-            if(keyIsValid(input.key) && inputTypeMatchesKeyEvent(_inputType, input))
+            if(text.length < maxLength && keyIsValid(input.key) && inputTypeMatchesKeyEvent(_inputType, input))
             {
-                _stored =
-                    _stored[0 .. _cursorPosition]
+                _text =
+                    _text[0 .. _cursorPosition]
                     ~ charFromKeyEvent(input)
-                    ~_stored[_cursorPosition .. $];
+                    ~_text[_cursorPosition .. $];
 
                 ++_cursorPosition;
             }
         }
     }
 
-    //TODO: Isn't there a better way to get the content with and without the cursor?
-    string content(bool withCursor = false)
+    /**
+     * Returns: string, of what should be displayed.
+     */
+    private string displayable(bool withCursor = false)
     {
-        auto ret = _stored;
+        auto ret = _text.dup;
 
         //If it's a password, replace all characters with *
         if(hasFlag(_inputType, InputType.password))
@@ -86,13 +104,83 @@ class UITextInput : UISelectable
             ret[] = '*';
         }
 
-        return withCursor ? to!string(ret[0 .. _cursorPosition] ~ caret ~ ret[_cursorPosition .. $])
+        //If withCursor, add the _caret at the cursor position, else just return the displayable string
+        return withCursor ? to!string(ret[0 .. _cursorPosition] ~ _caret ~ ret[_cursorPosition .. $])
                           : to!string(ret);
     }
 
+    /**
+     * Returns: InputType.
+     */
+    auto inputType() @property
+    {
+        return _inputType;
+    }
+
+    /**
+     * Set the input type.
+     */
+    auto inputType(InputType inputType) @property
+    {
+        return _inputType = inputType;
+    }
+
+    /**
+     * Returns: string.
+     */
+    auto placeholder() @property
+    {
+        return _placeholder;
+    }
+
+    /**
+     * Set the placeholder.
+     */
+    auto placeholder(string placeholder) @property
+    {
+        return _placeholder = placeholder;
+    }
+
+    /**
+     * Returns: char.
+     */
+    auto caret() @property
+    {
+        return _caret;
+    }
+
+    /**
+     * Set the caret.
+     */
+    auto caret(char caret) @property
+    {
+        return _caret = caret;
+    }
+
+    /**
+     * Returns: uint.
+     */
+    auto maxLength() @property
+    {
+        return _maxLength;
+    }
+
+    /**
+     * Set the max length.
+     */
+    auto maxLength(uint maxLength) @property
+    {
+        if(text.length > maxLength)
+        {
+            text = text[0 .. maxLength];
+        }
+        return _maxLength = maxLength;
+    }
+
     private InputType _inputType;
-    private char[] _stored;
-    public char caret = '_';
+    private string _placeholder;
+    private char _caret = '_';
+    private uint _cursorPosition, _maxLength = 20;
 }
 
 bool inputTypeMatchesKeyEvent(InputType type, KeyEvent ke)
@@ -117,7 +205,7 @@ bool inputTypeMatchesKeyEvent(InputType type, KeyEvent ke)
     char c = charFromKeyEvent(ke);
     foreach(ref check; checks)
     {
-        if(c >= check[0] && c <= check[1])
+        if(c >= check[0] && c <= check[1] && c == ' ')
         {
             return true;
         }

@@ -7,10 +7,32 @@ public import ui.selectable;
 import scone;
 import std.conv;
 
+/**
+ * UI, holds all UI elements.
+ */
 struct UI
 {
-    bool inputting;
-
+    /**
+     * Construct a UI
+     * Example:
+     * ---
+     * auto nameLabel = new UILabel("nameLabel", 1,1, "THIS IS A LABEL");
+     * nameLabel.color = Color.yellow;
+     *
+     * auto ui = UI(parent,
+     *     [
+     *         nameLabel,
+     *         new UIOption("exitOption", 1,3, "Exit",
+     *             {
+     *                 mainLoop = false;
+     *             }
+     *         )
+     *     ]
+     * );
+     *
+     * ui.elementById("exitOption").color = Color.red;
+     * ---
+     */
     this(Frame frame, UIElement[] elements)
     in
     {
@@ -36,9 +58,6 @@ struct UI
 
         foreach(n, element; elements)
         {
-            //psudo code
-            //elemnt is a selectable
-
             if(typeid(element).base == typeid(UISelectable))
             {
                 _selectedElement = n;
@@ -47,11 +66,31 @@ struct UI
         }
     }
 
-    //bool inputting;
-
+    /**
+     * Call with current keypress to update the UI
+     *
+     * Example:
+     * ---
+     * foreach(input; getInputs())
+     * {
+     *     //Optional check to see if input is pressed
+     *     if(!input.pressed)
+     *     {
+     *         continue;
+     *     }
+     *
+     *     //Manul check to terminate program
+     *     if(input.key == SK.c && input.hasControlKey(SCK.ctrl))
+     *     {
+     *         run = false;
+     *     }
+     *
+     *     ui.update(input);
+     * }
+     * ---
+     */
     auto update(ref KeyEvent input)
     {
-
         if(input.key == SK.up)
         {
             prevSelected();
@@ -59,11 +98,6 @@ struct UI
         else if(input.key == SK.down)
         {
             nextSelected();
-        }
-        else if(input.key == SK.escape)
-        {
-            //break mainloop
-            //run = false;
         }
         else if(input.key == SK.enter)
         {
@@ -75,32 +109,21 @@ struct UI
         }
     }
 
-    //FIXME: Remove or change this one later on...
-    auto execute()
-    {
-        auto element = _elements[_selectedElement];
-        if(typeid(element) == typeid(UIOption))
-        {
-            (cast(UIOption) element).action();
-        }
-        else if(typeid(element) == typeid(UITextInput))
-        {
-            nextSelected();
-        }
-    }
-
     /**
      * Puts all elements onto the frame assigned.
-     * Note: It is needed to call the frame's print() method.
+     * Note: It is also needed to call the frame's print() method.
+     *
+     * Example:
+     * ---
+     * ui.display();
+     * frame.print();
+     * ---
      */
     auto display()
     {
         foreach(n, ref element; _elements)
         {
             bool selected = n == _selectedElement;
-
-            //auto text = typeid(element) == typeid(UIOption) ? (selected ? selOpt ~ element.text : unselOpt ~ element.text) : element.text;
-
             string text;
 
             if(typeid(element) == typeid(UIOption))
@@ -134,9 +157,13 @@ struct UI
             {
                 UITextInput e = cast(UITextInput) element;
 
-                if(e.content() != [] || _selectedElement == n)
+                if(e.displayable() != [] || _selectedElement == n)
                 {
-                    text = e.content(_selectedElement == n);
+                    text = e.displayable(_selectedElement == n);
+                }
+                else
+                {
+                    text = e.placeholder();
                 }
             }
 
@@ -144,6 +171,9 @@ struct UI
         }
     }
 
+    /**
+     * Returns: UIElement with specified id. If not found, returns null.
+     */
     auto elementById(string id)
     {
         //Loop through all elements, and if the element's id matches, return it
@@ -159,7 +189,11 @@ struct UI
         return null;
     }
 
-    private void nextSelected()
+    /**
+     * Goes to the next selectable element.
+     * Note: Only use this if you really need to manually change the selected element. Otherwise use `update(KeyEvent input)`.
+     */
+    void nextSelected()
     {
         //Get our current position in the list of elements
         uint currentPos = _selectedElement;
@@ -182,7 +216,11 @@ struct UI
         _selectedElement = currentPos;
     }
 
-    private auto prevSelected()
+    /**
+     * Goes to the previous selectable element.
+     * Note: Only use this if you really need to manually change the selected element. Otherwise use `update(KeyEvent input)`.
+     */
+    auto prevSelected()
     {
         //Get our current position in the list of elements
         uint currentPos = _selectedElement;
@@ -203,6 +241,30 @@ struct UI
 
         //Once we reach a selectable element, set our current element to this newly found one
         _selectedElement = currentPos;
+    }
+
+    /**
+     * When `executeKey` is sent in via update, this function gets called.
+     */
+    auto execute()
+    {
+        //Should never evaluate to true, but just in case the current selected element is not a child of UISelectable
+        if(typeid(_elements[this._selectedElement]).base != typeid(UISelectable))
+        {
+            return;
+        }
+
+        //Cast current element to a UISelectable
+        auto element = cast(UISelectable)(_elements[_selectedElement]);
+
+        //Execute by default. (Note: UITextInput has it's default action to `{}`, meaning nothing will happen)
+        element.execute();
+
+        //If we're a text input, move to the next element.
+        if(typeid(element) == typeid(UITextInput))
+        {
+            nextSelected();
+        }
     }
 
     private bool isElementSelectable(uint currentPos)
@@ -260,9 +322,40 @@ struct UI
         return _highlightOption = highlightOption;
     }
 
+    auto nextKey() @property
+    {
+        return _nextKey;
+    }
+
+    auto nextKey(SK nextKey) @property
+    {
+        return _nextKey = nextKey;
+    }
+
+    auto prevKey() @property
+    {
+        return _prevKey;
+    }
+
+    auto prevKey(SK prevKey) @property
+    {
+        return _prevKey = prevKey;
+    }
+
+    auto executeKey() @property
+    {
+        return _executeKey;
+    }
+
+    auto executeKey(SK executeKey) @property
+    {
+        return _executeKey = executeKey;
+    }
+
     private Frame _frame;
     private UIElement[] _elements;
 
+    private SK _nextKey = SK.right, _prevKey = SK.left, _executeKey = SK.enter;
     private string _selectedOptionPrefix = "> ", _unselectedOptionPrefix = " ";
     private Color _selectedOptionColor = Color.green, _inactiveOptionColor = Color.black;
     private bool _highlightOption = true;

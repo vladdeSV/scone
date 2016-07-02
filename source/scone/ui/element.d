@@ -2,6 +2,9 @@ module ui.element;
 
 import scone.color;
 
+/**
+ * Parent of all elements. Comes with a variety of
+ */
 abstract class UIElement
 {
     this(string id, int x, int y, string text)
@@ -73,7 +76,9 @@ abstract class UIElement
     }
 
     private int _x, _y;
-    private string _text, _id;
+    private string _id;
     private fg _color = Color.white_dark;
+
+    protected string _text;
     protected bg _backgroundColor = Color.black_dark;
 }

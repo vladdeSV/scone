@@ -20,6 +20,8 @@ void setLocale(string locale)
         _locale[key] = [char(record[1]), char(record[2])];
     }
 
+    _locale[SK.space] = [' ', ' '];
+
     _locale.rehash();
 }
 

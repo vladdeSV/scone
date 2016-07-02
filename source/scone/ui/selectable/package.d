@@ -11,6 +11,7 @@ abstract class UISelectable : UIElement
     {
         super(id, x, y, text);
         _active = active;
+        _action = {};
     }
 
     auto active() @property
@@ -23,5 +24,16 @@ abstract class UISelectable : UIElement
         return _active = active;
     }
 
+    auto execute() @property
+    {
+        return _action();
+    }
+
+    auto onExecute(void delegate() action) @property
+    {
+        return _action = action;
+    }
+
     private bool _active;
+    protected void delegate() _action;
 }
