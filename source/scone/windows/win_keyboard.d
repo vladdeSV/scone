@@ -1,5 +1,6 @@
 module scone.windows.win_keyboard;
 
+version(Windows):
 package(scone):
 
 import core.sys.windows.windows;

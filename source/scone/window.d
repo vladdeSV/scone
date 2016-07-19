@@ -20,34 +20,34 @@ import scone.windows.win_console;
  *   y    = The y position to write to
  *   slot = The slot which will be written
  */
-auto writeSlot(int x, int y, ref Slot slot)
+auto writeSlot(size_t x, size_t y, ref Slot slot)
 {
-    win_writeSlot(x, y, slot);
+    version(Windows) win_writeSlot(x, y, slot);
 }
 
 /** Set the cursor position */
-auto setCursor(int x, int y)
+auto setCursor(size_t x, size_t y)
 {
-    win_setCursor(x,y);
+    version(Windows) win_setCursor(x,y);
 }
 
 /** Set the title */
 auto title(string title) @property
 {
-    win_title = title;
+    version(Windows) win_title = title;
 }
 
 /** Set cursor visible. */
 auto cursorVisible(bool visible) @property
 {
-    win_cursorVisible = visible;
+    version(Windows) win_cursorVisible = visible;
 
 }
 
 /** Set line wrapping. */
 auto lineWrapping(bool lw) @property
 {
-    win_lineWrapping = lw;
+    version(Windows) win_lineWrapping = lw;
 }
 
 /**
@@ -56,18 +56,20 @@ auto lineWrapping(bool lw) @property
  */
 auto windowSize() @property
 {
-    return win_windowSize;
+    int[2] ret;
+    version(Windows) ret = win_windowSize;
+    return ret;
 }
 
 package(scone)
 {
     auto openWindow()
     {
-        win_openConsole();
+        version(Windows) win_openConsole();
     }
 
     auto closeWindow()
     {
-        win_closeConsole();
+        version(Windows) win_closeConsole();
     }
 }

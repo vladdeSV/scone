@@ -1,5 +1,6 @@
 module scone.windows.win_console;
 
+version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
@@ -31,7 +32,7 @@ auto win_closeConsole()
     win_cursorVisible = true;
 }
 
-auto win_writeSlot(int x, int y, ref Slot slot)
+auto win_writeSlot(size_t x, size_t y, ref Slot slot)
 {
     ushort wx = to!ushort(x), wy = to!ushort(y);
     COORD charBufSize = {1,1};

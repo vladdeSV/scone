@@ -192,7 +192,7 @@ struct UI
     void nextSelected()
     {
         //Get our current position in the list of elements
-        uint currentPos = _selectedElement;
+        auto currentPos = _selectedElement;
 
         do
         {
@@ -219,7 +219,7 @@ struct UI
     auto prevSelected()
     {
         //Get our current position in the list of elements
-        uint currentPos = _selectedElement;
+        auto currentPos = _selectedElement;
 
         do
         {
@@ -263,7 +263,7 @@ struct UI
         }
     }
 
-    private bool isElementSelectable(uint currentPos)
+    private bool isElementSelectable(size_t currentPos)
     {
         return typeid(_elements[currentPos]).base != typeid(UISelectable) || (typeid(_elements[currentPos]).base == typeid(UISelectable) && (cast(UISelectable) _elements[currentPos]).active == false);
     }
@@ -356,5 +356,5 @@ struct UI
     private Color _selectedOptionColor = Color.green, _inactiveOptionColor = Color.black;
     private bool _highlightOption = true;
 
-    private uint _selectedElement = 0;
+    private size_t _selectedElement = 0;
 }

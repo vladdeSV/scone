@@ -9,7 +9,7 @@ import scone.utility;
  */
 struct KeyEvent
 {
-    this(SK key, SCK controlKey, bool pressed)
+    version(Windows) this(SK key, SCK controlKey, bool pressed)
     {
         _key = key;
         _controlKey = controlKey;
@@ -88,7 +88,7 @@ struct KeyEvent
  */
 auto getInputs()
 {
-    win_getInput();
+    version(Windows) win_getInput();
 
     scope(exit)
     {
@@ -616,11 +616,11 @@ package(scone)
 
     auto openKeyboard()
     {
-        win_openKeyboard();
+        version(Windows) win_openKeyboard();
     }
 
     auto closeKeyboard()
     {
-        win_closeKeyboard();
+        version(Windows) win_closeKeyboard();
     }
 }
