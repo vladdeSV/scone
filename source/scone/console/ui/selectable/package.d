@@ -1,6 +1,9 @@
-module scone.ui.selectable_class;
+module scone.console.ui.selectable;
 
-import scone.ui.element;
+public import scone.console.ui.selectable.option;
+public import scone.console.ui.selectable.text_input;
+
+import scone.console.ui.element;
 
 /**
  * Parent of all selectable elements

@@ -1,6 +1,6 @@
-module scone.ui.selectable.option;
+module scone.console.ui.selectable.option;
 
-import scone.ui.selectable;
+import scone.console.ui.selectable;
 
 /**
  * Selectable option.

@@ -1,6 +1,6 @@
-module scone.ui.element;
+module scone.console.ui.element;
 
-import scone.color;
+import scone.console.color;
 
 /**
  * Parent of all elements. Comes with a variety of options.

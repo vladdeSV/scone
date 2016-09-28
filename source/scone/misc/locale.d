@@ -1,11 +1,11 @@
-module scone.locale;
+module scone.misc.locale;
 
-import std.csv;
 import std.conv;
-import std.typecons;
+import std.csv;
 import std.file;
+import std.typecons;
 
-import scone.keyboard;
+import scone.input.keyboard;
 
 private char[2][SK] _locale;
 

@@ -1,13 +1,13 @@
-module scone.windows.win_keyboard;
+module scone.input.win_keyboard;
 
 version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
 import core.thread;
-import scone.keyboard;
-import scone.utility : hasFlag;
-import scone.core;
+import scone.misc.utility : hasFlag;
+import scone.input.keyboard;
+import scone.misc.core;
 
 auto win_openKeyboard()
 {

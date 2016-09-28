@@ -1,7 +1,7 @@
-module scone.keyboard;
+module scone.input.keyboard;
 
-import scone.core;
-import scone.utility;
+import scone.misc.utility;
+import scone.misc.core;
 
 /**
  * Key event structure
@@ -609,8 +609,8 @@ enum SCK
 
 package(scone)
 {
-    import scone.windows.win_keyboard;
     import core.sys.windows.windows;
+    import scone.input.win_keyboard;
 
     KeyEvent[] keyInputs;
 

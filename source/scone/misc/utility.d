@@ -1,7 +1,7 @@
-module scone.utility;
+module scone.misc.utility;
 
-import scone.keyboard;
-import scone.core : sconeClose;
+import scone.input.keyboard;
+import scone.misc.core : sconeClose;
 import std.format : format;
 
 package(scone):

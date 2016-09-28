@@ -1,12 +1,12 @@
-module scone.ui.selectable.text_input;
+module scone.console.ui.selectable.text_input;
 
-import std.conv;
-import std.uni;
-import std.format;
+import scone.console.ui.selectable;
+import scone.input.keyboard;
+import scone.misc.locale;
 import std.algorithm;
-import scone.ui.selectable;
-import scone.locale;
-import scone.keyboard;
+import std.conv;
+import std.format;
+import std.uni;
 
 /**
  * Different input types for UITextInput:

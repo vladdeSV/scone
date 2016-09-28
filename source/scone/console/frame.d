@@ -1,9 +1,9 @@
-module scone.frame;
+module scone.console.frame;
 
-import scone.core;
-import scone.window;
-import scone.utility;
-import scone.color;
+import scone.console.color;
+import scone.console.window;
+import scone.misc.core;
+import scone.misc.utility;
 import std.algorithm;
 import std.array;
 import std.conv;

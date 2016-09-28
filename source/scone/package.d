@@ -1,10 +1,10 @@
 module scone;
 
-public import scone.color;
-public import scone.core;
-public import scone.frame;
-public import scone.keyboard;
-public import scone.utility;
-public import scone.window;
-public import scone.locale;
-public import scone.ui;
+public import scone.console.color;
+public import scone.console.frame;
+public import scone.console.ui;
+public import scone.console.window;
+public import scone.input.keyboard;
+public import scone.misc.core;
+public import scone.misc.locale;
+public import scone.misc.utility;

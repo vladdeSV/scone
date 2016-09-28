@@ -1,6 +1,6 @@
-module scone.ui.label;
+module scone.console.ui.label;
 
-import scone.ui.element;
+import scone.console.ui.element;
 
 /**
  * A label.

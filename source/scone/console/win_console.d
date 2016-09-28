@@ -1,12 +1,12 @@
-module scone.windows.win_console;
+module scone.console.win_console;
 
 version(Windows):
 package(scone):
 
 import core.sys.windows.windows;
-import scone.utility;
-import scone.frame;
-import scone.color;
+import scone.console.frame;
+import scone.misc.utility;
+import scone.console.color;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;

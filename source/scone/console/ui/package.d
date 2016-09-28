@@ -1,4 +1,8 @@
-module scone.ui.ui_struct;
+module scone.console.ui;
+
+public import scone.console.ui.element;
+public import scone.console.ui.label;
+public import scone.console.ui.selectable;
 
 import scone;
 import std.conv;

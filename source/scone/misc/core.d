@@ -1,10 +1,10 @@
-module scone.core;
+module scone.misc.core;
 
-import scone.utility;
-import scone.frame;
-import scone.window;
-import scone.keyboard;
-import scone.locale;
+import scone.console.frame;
+import scone.misc.utility;
+import scone.console.window;
+import scone.input.keyboard;
+import scone.misc.locale;
 import std.experimental.logger;
 
 /**

@@ -6,12 +6,11 @@
  * (Eg. setCursor(x,y) calles win_setCursor(x,y) on Windows)
  */
 
-module scone.window;
+module scone.console.window;
 
-import scone.core;
-import scone.frame;
-
-import scone.windows.win_console;
+import scone.misc.core;
+import scone.console.frame;
+import scone.console.win_console;
 
 /**
  * Writes out a slot at (x, y)
