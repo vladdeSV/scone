@@ -1,6 +1,8 @@
 /**
  * All functions here give some sort of direct access to the .
- * However, I suggest you use the `class Frame`(-work, haha). If you decide that you must use these functions separately, they must be initialized with `openWindow()`
+ * However, I suggest you use the `class Frame`(-work, haha). If you decide that
+ * you must use these functions separately, they must be initialized with
+ * `openWindow()`
  *
  * For those who want to steal code, each function in here calls a win_*.
  * (Eg. setCursor(x,y) calles win_setCursor(x,y) on Windows)

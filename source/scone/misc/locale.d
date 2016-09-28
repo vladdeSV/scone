@@ -1,11 +1,11 @@
 module scone.misc.locale;
 
-import std.conv;
-import std.csv;
-import std.file;
-import std.typecons;
-
 import scone.input.keyboard;
+import std.conv : to;
+import std.csv;
+import std.file : readText;
+import std.format : format;
+import std.typecons : Tuple;
 
 private char[2][SK] _locale;
 
@@ -16,8 +16,8 @@ void setLocale(string locale)
 {
     _locale = null;
 
-    string s = readText("locale/" ~ locale ~ ".locale");
-    foreach(record; csvReader!(Tuple!(string, ubyte, ubyte))(s, '\t', char.init))
+    string s = readText("locale/%s.locale".format(locale));
+    foreach(record; csvReader!(Tuple!(string, ubyte, ubyte))(s,'\t',char.init))
     {
         SK key = to!SK(record[0]);
         _locale[key] = [char(record[1]), char(record[2])];
@@ -38,12 +38,16 @@ bool keyIsValid(SK key)
 
 /**
  * Returns: char, from locale.
- * Note: Always do the following: `if(keyIsValid(input.key)) { char c = charFromKeyEvent(input); }`
+ * Note: Always do the following: `if(keyIsValid(input.key))
+ * { char c = charFromKeyEvent(input); }`
  * Throws: RangeViolation if input key is not in locale.
  */
 char charFromKeyEvent(KeyEvent ke)
 {
-    bool switched = ke.hasControlKey(SCK.shift) && !ke.hasControlKey(SCK.capslock) || ke.hasControlKey(SCK.capslock) && !ke.hasControlKey(SCK.shift);
+    bool switched =  ke.hasControlKey(SCK.shift) &&
+                    !ke.hasControlKey(SCK.capslock) ||
+                     ke.hasControlKey(SCK.capslock) &&
+                    !ke.hasControlKey(SCK.shift);
     return !switched ? _locale[ke.key][0]
                      : _locale[ke.key][1];
 }

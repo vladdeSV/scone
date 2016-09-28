@@ -42,7 +42,8 @@ struct KeyEvent
      * --------------------
      * foreach(input; getInputs())
      * {
-     *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT | ControlKey.SHIFT))
+     *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT |
+     *        ControlKey.SHIFT))
      *     {
      *         //do something if CTRL, ALT and SHIFT are held down...
      *     }
@@ -55,7 +56,8 @@ struct KeyEvent
     }
 
     /**
-     * Get control all keys, used to check if ONLY certain control keys are down
+     * Get control all keys. Used to check if ONLY specific control keys are
+     * activated.
      * Returns: SCK (enum)
      * Example:
      * ---
@@ -84,7 +86,8 @@ struct KeyEvent
 /**
  * Get all inputs since last function call.
  * Returns: KeyEvent[], of all key presses since last call
- * Note: (Windows) A maximum of 128 key presses can be stored in between each call.
+ * Note: (Windows) A maximum of 128 key presses can be stored in between each
+ * call.
  */
 auto getInputs()
 {
@@ -99,7 +102,8 @@ auto getInputs()
 }
 /**
  * Clears all buffered inputs.
- * Useful if you have a loading screen of some sort, and need to clear key presses once loaded.
+ * Useful if you have a loading screen of some sort, and need to clear key
+ * presses once loaded.
  */
 auto clearInputs()
 {
@@ -109,7 +113,7 @@ auto clearInputs()
 ///All keys which scone can handle
 enum SK
 {
-    ///Unknown key (Should never appear. If do, please report bug)
+    ///Unknown key (Should never appear. If it does, please report bug)
     unknown,
 
     ///BACKSPACE key
@@ -569,7 +573,8 @@ enum SK
     ///Used for miscellaneous characters; it can vary by keyboard.
     oem_8,
 
-    ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
+    ///Either the angle bracket key or the backslash key on the RT 102-key
+    ///keyboard
     oem_102,
 
     ///Control-break processing
@@ -578,7 +583,8 @@ enum SK
 
 /**
  * Control keys.
- * Reason to why these are in a separate enum is because it must not be confused with their SK.* counter part.
+ * Reason to why these are in a separate enum is because it must not be confused
+ * with their SK.* counter part.
  */
 enum SCK
 {

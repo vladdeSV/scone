@@ -41,14 +41,21 @@ auto win_writeSlot(size_t x, size_t y, ref Slot slot)
     CHAR_INFO character;
     character.AsciiChar = slot.character;
     character.Attributes = attributesFromSlot(slot);
-    WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
+    WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos,
+                        &writeArea);
 }
 
 /** Set cursor position. */
 auto win_setCursor(int x, int y)
 {
     GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
-    COORD change = { cast(short) min(_consoleScreenBufferInfo.srWindow.Right - _consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short) max(0, y) };
+    COORD change =
+    {
+        cast(short) min(_consoleScreenBufferInfo.srWindow.Right -
+        _consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short)
+        max(0, y)
+    };
+
     stdout.flush();
     SetConsoleCursorPosition(_hConsoleOutput, change);
 }
@@ -71,13 +78,21 @@ auto win_cursorVisible(bool visible) @property
 /** Set line wrapping. */
 auto win_lineWrapping(bool lw) @property
 {
-    lw ? SetConsoleMode(_hConsoleOutput, 0x0002) : SetConsoleMode(_hConsoleOutput, 0x0);
+    lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
+       : SetConsoleMode(_hConsoleOutput, 0x0);
 }
 
 auto win_windowSize() @property
 {
     GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
-    return [_consoleScreenBufferInfo.srWindow.Right  - _consoleScreenBufferInfo.srWindow.Left + 1, _consoleScreenBufferInfo.srWindow.Bottom - _consoleScreenBufferInfo.srWindow.Top  + 1];
+
+    return
+    [
+        _consoleScreenBufferInfo.srWindow.Right -
+        _consoleScreenBufferInfo.srWindow.Left + 1,
+        _consoleScreenBufferInfo.srWindow.Bottom -
+        _consoleScreenBufferInfo.srWindow.Top  + 1
+    ];
 }
 
 private HANDLE _hConsoleOutput, _hConsoleError;

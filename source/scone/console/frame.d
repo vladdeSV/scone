@@ -26,21 +26,25 @@ class Frame
     /**
      * Main frame constructor.
      * Params:
-     *   width  = Width of the main frame. If less than 1, get set to the consoles width (in slots)
-     *   height = Height of the main frame. If less than 1, get set to the consoles height (in slots)
+     *   width  = Width of the main frame. If less than 1, get set to the
+     *            console's width (in slots)
+     *   height = Height of the main frame. If less than 1, get set to the
+     *            console's height (in slots)
      *
      * Examples:
      * --------------------
-     * //Creates a dynamically sized main frame, where the size is determined by the  window width and height
+     * //Creates a dynamically sized main frame, where the size is determined by the window width and height
      * auto window = new Frame(); //The main frame
      *
-     * //The width is less than one, meaning it get dynamically set to the consoles
-     * auto window = new Frame(0, 20); //Main frame, with the width of the  width, and the height of 20
+     * //The width is less than one, meaning it get dynamically set to the console's
+     * auto window = new Frame(0, 20); //Main frame, with the width of the
+     * width, and the height of 20
      * --------------------
      *
      * Standards: width = 80, height = 24
      *
-     * If the width or height exceeds the consoles width or height, the program errors.
+     * NOTE: If the width or height exceeds the console's width or height, the
+     * program errors.
      */
     this(in int width = 0, in int height = 0)
     in

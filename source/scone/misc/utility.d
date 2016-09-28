@@ -17,6 +17,6 @@ auto sconeAssert(FormatArgs...)(bool check, string msg, FormatArgs formatArgs)
     if(!check)
     {
         sconeClose();
-        assert(0, format("\n\n" ~ msg ~ '\n', formatArgs));
+        assert(0, "\n\n%s\n".format(msg.format(formatArgs)));
     }
 }
