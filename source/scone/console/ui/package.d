@@ -258,7 +258,7 @@ struct UI
         auto element = cast(UISelectable)(_elements[_selectedElement]);
 
         //Execute by default. (Note: UITextInput has it's default action to `{}`, meaning nothing will happen)
-        element.execute();
+        element.action();
 
         //If we're a text input, move to the next element.
         if(typeid(element) == typeid(UITextInput))

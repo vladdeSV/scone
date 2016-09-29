@@ -36,7 +36,7 @@ abstract class UISelectable : UIElement
     /**
      * Returns: void delegate()
      */
-    auto execute() @property
+    auto action() @property
     {
         return _action();
     }
@@ -44,7 +44,7 @@ abstract class UISelectable : UIElement
     /**
      * Set action upon executing element.
      */
-    auto onExecute(void delegate() action) @property
+    auto setAction(void delegate() action) @property
     {
         return _action = action;
     }
