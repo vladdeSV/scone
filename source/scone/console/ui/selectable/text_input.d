@@ -7,6 +7,7 @@ import std.algorithm;
 import std.conv;
 import std.format;
 import std.uni;
+import std.algorithm : min;
 
 /**
  * Different input types for UITextInput:
@@ -81,7 +82,7 @@ class UITextInput : UISelectable
         }
         else
         {
-            if(text.length < maxLength && keyIsValid(input.key) && inputTypeMatchesKeyEvent(_inputType, input))
+            if(super.text.length < maxLength && keyIsValid(input.key) && inputTypeMatchesKeyEvent(_inputType, input))
             {
                 _text =
                     _text[0 .. _cursorPosition]
@@ -91,6 +92,15 @@ class UITextInput : UISelectable
                 ++_cursorPosition;
             }
         }
+    }
+
+    /**
+     * Set the text.
+     */
+    override void text(string text) @property
+    {
+        _text = text;
+        _cursorPosition = min(text.length, _cursorPosition);
     }
 
     /**
@@ -172,9 +182,9 @@ class UITextInput : UISelectable
      */
     auto maxLength(uint maxLength) @property
     {
-        if(text.length > maxLength)
+        if(super.text.length > maxLength)
         {
-            text = text[0 .. maxLength];
+            text = super.text[0 .. maxLength];
         }
         return _maxLength = maxLength;
     }
