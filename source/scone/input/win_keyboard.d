@@ -14,19 +14,27 @@ auto win_openKeyboard()
     _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
 
     if(_hConsoleInput == INVALID_HANDLE_VALUE)
+    {
         assert(0, "_hConsoleInput == INVALID_HANDLE_VALUE");
+    }
 
     if(!GetConsoleMode(_hConsoleInput, &_oldMode))
+    {
         assert(0, "GetConsoleMode(_hConsoleInput, &_oldMode)");
+    }
 
     if(!SetConsoleMode(_hConsoleInput, _mode))
+    {
         assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
+    }
 }
 
 auto win_closeKeyboard()
 {
     if(!SetConsoleMode(_hConsoleInput, _oldMode))
+    {
         assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
+    }
 }
 
 auto win_getInput()
@@ -52,7 +60,7 @@ auto win_getInput()
         );
         break;
 
-        default:
+    default:
         break;
     }
 }
@@ -62,7 +70,7 @@ auto win_getWindowsVirtualKey(WORD wrd)
     import std.traits;
     auto a = EnumMembers!WindowsVirtualKey;
 
-    foreach(m; a)
+    foreach(ref m; a)
     {
         if(m == wrd)
         {

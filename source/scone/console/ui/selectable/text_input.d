@@ -94,6 +94,11 @@ class UITextInput : UISelectable
         }
     }
 
+    override string text() @property
+    {
+        return super.text;
+    }
+
     /**
      * Set the text.
      */

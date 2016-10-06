@@ -66,7 +66,7 @@ abstract class UIElement
     /**
      * Returns: string.
      */
-    auto text() @property
+    string text() @property
     {
         return _text;
     }
