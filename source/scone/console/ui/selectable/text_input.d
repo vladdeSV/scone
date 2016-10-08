@@ -7,7 +7,7 @@ import std.algorithm;
 import std.conv;
 import std.format;
 import std.uni;
-import std.algorithm : min;
+import std.algorithm : max, min;
 
 /**
  * Different input types for UITextInput:
@@ -94,10 +94,8 @@ class UITextInput : UISelectable
         }
     }
 
-    override string text() @property
-    {
-        return super.text;
-    }
+    //Make text returnable by calling parent text() method.
+    alias text = super.text;
 
     /**
      * Set the text.
@@ -180,6 +178,22 @@ class UITextInput : UISelectable
     auto maxLength() @property
     {
         return _maxLength;
+    }
+
+    /**
+     * Returns: uint
+     */
+    auto cursorPosition() @property
+    {
+        return _cursorPosition;
+    }
+
+    /**
+     * Set the cursor position.
+     */
+    auto cursorPosition(uint cursorPosition) @property
+    {
+        return _cursorPosition = max(0, min(text.length, cursorPosition));
     }
 
     /**
