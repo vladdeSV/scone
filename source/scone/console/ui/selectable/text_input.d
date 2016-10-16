@@ -3,6 +3,7 @@ module scone.console.ui.selectable.text_input;
 import scone.console.ui.selectable;
 import scone.input.keyboard;
 import scone.misc.locale;
+import scone.misc.utility : hasFlag;
 import std.algorithm;
 import std.conv;
 import std.format;
@@ -44,7 +45,6 @@ class UITextInput : UISelectable
 {
     this(string id, int x, int y, string placeholder, InputType type = InputType.ascii, bool active = true)
     {
-        //FIXME: placeholder should not be the label
         super(id, x, y, null, active);
         _inputType = type;
         _placeholder = placeholder;
@@ -243,9 +243,4 @@ bool inputTypeMatchesKeyEvent(InputType type, KeyEvent ke)
     }
 
     return false;
-}
-
-private bool hasFlag(Type)(Type check, Type type)
-{
-    return ((check & type) == type);
-}
+ }

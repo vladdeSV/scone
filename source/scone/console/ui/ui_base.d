@@ -99,6 +99,14 @@ struct UI
         {
             execute();
         }
+        else if(input.key == SK.tab && input.hasControlKey(SCK.shift))
+        {
+            prevSelected();
+        }
+        else if(input.key == SK.tab)
+        {
+            nextSelected();
+        }
         else if(typeid(_elements[this._selectedElement]) == typeid(UITextInput))
         {
             (cast(UITextInput) _elements[_selectedElement]).input(input);
@@ -266,6 +274,11 @@ struct UI
     private bool isElementSelectable(size_t currentPos)
     {
         return typeid(_elements[currentPos]).base != typeid(UISelectable) || (typeid(_elements[currentPos]).base == typeid(UISelectable) && (cast(UISelectable) _elements[currentPos]).active == false);
+    }
+
+    auto addElement(UIElement element)
+    {
+        _elements ~= element;
     }
 
     auto selectedOptionPrefix() @property

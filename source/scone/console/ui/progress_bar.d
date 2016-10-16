@@ -1,6 +1,6 @@
 module scone.console.ui.progress_bar;
 
-import std.conv : to;
+import std.conv;
 import std.format : format;
 import scone.console.ui.element;
 
@@ -12,18 +12,25 @@ class UIProgressBar : UIElement
         this.max = max;
         this.showValue = showValue;
 
+        _lengthChanged = true;
+
         super(id, x, y, null);
     }
 
-    //@disable override void text(string text) @property;
-
+    private char[] _bar;
+    private bool _lengthChanged;
     /**
      * Gives back a string of the bar
      * Returns: char[]
      */
     override string text() @property
     {
-        char[] _bar = new char[](length); //Allocates a char[] for every iteration
+        if(_lengthChanged)
+        {
+            _lengthChanged = false;
+            _bar.length = _length;
+        }
+
         _bar[] = emptySlot;
 
         foreach(n, ref slot; _bar)
@@ -52,7 +59,8 @@ class UIProgressBar : UIElement
                 _bar[x1 .. x2] = str;
             }
         }
-        return _bar.idup;
+
+        return std.conv.text(_openBar, _bar, _closeBar);
     }
 
     auto value() @property
@@ -155,6 +163,26 @@ class UIProgressBar : UIElement
         _closeValue = closeValue;
     }
 
+    auto openBar() @property
+    {
+        return _openBar;
+    }
+
+    auto openBar(typeof(_openBar) openBar) @property
+    {
+        return _openBar = openBar;
+    }
+
+    auto closeBar() @property
+    {
+        return _closeBar;
+    }
+
+    auto closeBar(typeof(_closeBar) closeBar) @property
+    {
+        return _closeBar = closeBar;
+    }
+
     auto spacing() @property
     {
         return _spacing;
@@ -164,6 +192,34 @@ class UIProgressBar : UIElement
     {
         _spacing = spacing;
     }
+
+    auto opUnary(string s)()
+    if(s == "++")
+    {
+        return _value += 1;
+    }
+
+    auto opUnary(string s)()
+    if(s == "--")
+    {
+        return _value -= 1;
+    }
+
+    void opOpAssign(string op)(float value)
+    {
+        mixin("_value" ~ op ~ "=value;");
+    }
+
+    /+
+    import std.math : approxEqual;
+    import std.traits : isImplicitlyConvertible;
+
+    override bool opEquals(Object)(Object o)
+    if(isImplicitlyConvertible!(Object, float))
+    {
+        return approxEqual(_value, t);
+    }
+    +/
 
     /**
      * The value of the status bar
@@ -192,13 +248,13 @@ class UIProgressBar : UIElement
     private char _emptySlot = ' ';
 
     /**
-     * If the value of the should be visible on top of the bar
+     * Ifthe value of the should be visible on top of the bar
      */
     private bool _showValue = false;
 
     /**
-     * If the maximum value of the should be visible ontop of the bar
-     * Should be on by default, set to false only if maximum value should be hidden
+     * Ifthe maximum value of the should be visible ontop of the bar.
+     * Should be on by default, set to false only ifmaximum value should be hidden
      */
     private bool _showMaxValue = true;
 
@@ -218,9 +274,21 @@ class UIProgressBar : UIElement
     private string _closeValue = "]";
 
     /**
+     * Character(s) that appears before the bar.
+     * NOTE: Adds to the total length of the bar.
+     */
+    private string _openBar = "[";
+
+    /**
+     * Character(s) that appears after the bar.
+     * NOTE: Adds to the total length of the bar.
+     */
+    private string _closeBar = "]";
+
+    /**
      * Spacing is the minimum space needed around the shown value
      * Eg. "[10/20]" with spacing of 2 = "  [10/20]  " (Two spaces to the left and right)
-     * This is to make sure it's possible to show some of the bar. Set to 0 if you don't like it >:(
+     * This is to make sure it's possible to show some of the bar. Set to 0 ifyou don't like it >:(
      */
     private int _spacing = 1;
 }
