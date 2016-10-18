@@ -178,6 +178,7 @@ struct UI
     /**
      * Returns: UIElement with specified id. If not found, returns null.
      */
+    deprecated("elementById(string id), use elementById!<type>(string id) instead.")
     auto elementById(string id)
     {
         //Loop through all elements, and if the element's id matches, return it
@@ -194,8 +195,33 @@ struct UI
     }
 
     /**
+     * Returns: T with specified id. If not found or type does not match,
+     * returns null.
+     * Example:
+     * ---
+     * ui.elementById!UIOption("startOption").setAction({ /+ ... +/ });
+     * ---
+     * Returns: T
+     */
+    T elementById(T : UIElement)(string id)
+    {
+        //Loop through all elements, and if the element's id matches, return it
+        foreach(ref element; _elements)
+        {
+            if(element.id == id)
+            {
+                return to!T(element);
+            }
+        }
+
+        //If not found, return null
+        return null;
+    }
+
+    /**
      * Goes to the next selectable element.
-     * Note: Only use this if you really need to manually change the selected element. Otherwise use `update(KeyEvent input)`.
+     * Note: Only use this if you really need to manually change the selected
+     * element. Otherwise use `update(KeyEvent input)`.
      */
     void nextSelected()
     {
