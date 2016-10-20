@@ -87,11 +87,11 @@ struct UI
      */
     auto update(ref KeyEvent input)
     {
-        if(input.key == SK.up)
+        if(input.key == SK.up || (input.key == SK.tab && input.hasControlKey(SCK.shift)))
         {
             prevSelected();
         }
-        else if(input.key == SK.down)
+        else if(input.key == SK.down || (input.key == SK.tab && !input.hasControlKey(SCK.shift)))
         {
             nextSelected();
         }
@@ -99,17 +99,9 @@ struct UI
         {
             execute();
         }
-        else if(input.key == SK.tab && input.hasControlKey(SCK.shift))
-        {
-            prevSelected();
-        }
-        else if(input.key == SK.tab)
-        {
-            nextSelected();
-        }
         else if(typeid(_elements[this._selectedElement]) == typeid(UITextInput))
         {
-            (cast(UITextInput) _elements[_selectedElement]).input(input);
+            to!UITextInput(_elements[_selectedElement]).input(input);
         }
     }
 
@@ -148,7 +140,7 @@ struct UI
 
             fg color = element.color;
 
-            if(typeid(element) == typeid(UIOption) && (cast(UIOption) element).active == false)
+            if(typeid(element) == typeid(UIOption) && (to!UIOption(element)).active == false)
             {
                 color = _inactiveOptionColor;
             }
@@ -159,7 +151,7 @@ struct UI
 
             if(typeid(element) == typeid(UITextInput))
             {
-                UITextInput e = cast(UITextInput) element;
+                UITextInput e = to!UITextInput(element);
 
                 if(e.displayable() != [] || _selectedElement == n)
                 {
@@ -285,7 +277,7 @@ struct UI
         }
 
         //Cast current element to a UISelectable
-        auto element = cast(UISelectable)(_elements[_selectedElement]);
+        auto element = to!UISelectable(_elements[_selectedElement]);
 
         //Execute by default. (Note: UITextInput has it's default action to `{}`, meaning nothing will happen)
         element.action();
@@ -299,7 +291,7 @@ struct UI
 
     private bool isElementSelectable(size_t currentPos)
     {
-        return typeid(_elements[currentPos]).base != typeid(UISelectable) || (typeid(_elements[currentPos]).base == typeid(UISelectable) && (cast(UISelectable) _elements[currentPos]).active == false);
+        return typeid(_elements[currentPos]).base != typeid(UISelectable) || (typeid(_elements[currentPos]).base == typeid(UISelectable) && (to!UISelectable(_elements[currentPos])).active == false);
     }
 
     auto addElement(UIElement element)
