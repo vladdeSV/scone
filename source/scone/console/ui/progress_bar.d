@@ -193,6 +193,11 @@ class UIProgressBar : UIElement
         _spacing = spacing;
     }
 
+    auto opAssign(float value)
+    {
+        _value = value;
+    }
+
     auto opUnary(string s)()
     if(s == "++")
     {
@@ -248,13 +253,13 @@ class UIProgressBar : UIElement
     private char _emptySlot = ' ';
 
     /**
-     * Ifthe value of the should be visible on top of the bar
+     * If the value of the should be visible on top of the bar
      */
     private bool _showValue = false;
 
     /**
-     * Ifthe maximum value of the should be visible ontop of the bar.
-     * Should be on by default, set to false only ifmaximum value should be hidden
+     * If the maximum value of the should be visible ontop of the bar.
+     * Should be on by default, set to false only if maximum value should be hidden
      */
     private bool _showMaxValue = true;
 
@@ -288,7 +293,7 @@ class UIProgressBar : UIElement
     /**
      * Spacing is the minimum space needed around the shown value
      * Eg. "[10/20]" with spacing of 2 = "  [10/20]  " (Two spaces to the left and right)
-     * This is to make sure it's possible to show some of the bar. Set to 0 ifyou don't like it >:(
+     * This is to make sure it's possible to show some of the bar. Set to 0 if you don't like it >:(
      */
     private int _spacing = 1;
 }
