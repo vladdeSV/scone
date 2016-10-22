@@ -14,6 +14,3 @@ For anyone on a Windows machine, you can test a few examples that gives the basi
 ![example_2](http://i.imgur.com/1CnEG31.gif)
 ![example_3](http://i.imgur.com/Uhhipkh.gif)
 ![example_4](http://i.imgur.com/CO39TVk.gif)
-
-# Resources
-* [Drawable character](https://docs.google.com/spreadsheets/d/1QXt1DoBq3E71KHUQjyn-aL48qZxYKzAnopPfGztCvpo/edit?usp=sharing) _use `char(ID)` to get appropriate char_
