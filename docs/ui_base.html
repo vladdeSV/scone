@@ -73,10 +73,24 @@ frame.print();
 <br><br>
 
 </dd>
-<dt><big><a name="UI.elementById"></a>auto <u>elementById</u>(string <i>id</i>);
+<dt><big><a name="UI.elementById"></a>deprecated auto <u>elementById</u>(string <i>id</i>);
 </big></dt>
 <dd><b>Returns:</b><br>
 UIElement with specified <i>id</i>. If not found, returns <b>null</b>.<br><br>
+
+</dd>
+<dt><big><a name="UI.elementById.2"></a>T <u>elementById</u>(T : UIElement)(string <i>id</i>);
+</big></dt>
+<dd><b>Returns:</b><br>
+T with specified <i>id</i>. If not found or type does not match,
+ returns <b>null</b>.
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code">ui.<u>elementById</u>!UIOption(<font color=red>"startOption"</font>).setAction({ <font color=green>/+ ... +/</font> });
+</pre>
+<br><br>
+<b>Returns:</b><br>
+T<br><br>
 
 </dd>
 <dt><big><a name="UI.nextSelected"></a>void <u>nextSelected</u>();
@@ -84,7 +98,8 @@ UIElement with specified <i>id</i>. If not found, returns <b>null</b>.<br><br>
 <dd>Goes to the next selectable element.
 <br><br>
 <b>Note:</b><br>
-Only use this if you really need to manually change the selected element. Otherwise use <pre style="display:inline;" class="d_inline_code">update(KeyEvent input)</pre>.<br><br>
+Only use this if you really need to manually change the selected
+ element. Otherwise use <pre style="display:inline;" class="d_inline_code">update(KeyEvent input)</pre>.<br><br>
 
 </dd>
 <dt><big><a name="UI.prevSelected"></a>auto <u>prevSelected</u>();

@@ -35,7 +35,12 @@ Only using the password flag will not work.<br><br>
 <b>Note:</b><br>
 Spaces are always allowed. Make sure to use something like std.string.strip() for actual storage, and sanitize it while you're at it.<br><br>
 
-<dl><dt><big><a name="UITextInput.displayable"></a>string <u>displayable</u>(bool <i>withCursor</i> = false);
+<dl><dt><big><a name="UITextInput.text"></a>@property void <u>text</u>(string <u>text</u>);
+</big></dt>
+<dd>Set the <u>text</u>.<br><br>
+
+</dd>
+<dt><big><a name="UITextInput.displayable"></a>string <u>displayable</u>(bool <i>withCursor</i> = false);
 </big></dt>
 <dd><b>Returns:</b><br>
 string, of what should be displayed.<br><br>
@@ -78,6 +83,17 @@ char.<br><br>
 </big></dt>
 <dd><b>Returns:</b><br>
 uint.<br><br>
+
+</dd>
+<dt><big><a name="UITextInput.cursorPosition"></a>@property auto <u>cursorPosition</u>();
+</big></dt>
+<dd><b>Returns:</b><br>
+uint<br><br>
+
+</dd>
+<dt><big><a name="UITextInput.cursorPosition.2"></a>@property auto <u>cursorPosition</u>(uint <u>cursorPosition</u>);
+</big></dt>
+<dd>Set the cursor position.<br><br>
 
 </dd>
 <dt><big><a name="UITextInput.maxLength.2"></a>@property auto <u>maxLength</u>(uint <u>maxLength</u>);
