@@ -45,14 +45,15 @@ enum Color
     white_dark   = idce,
 }
 
+//this is for future POSIX support. just don't think about it
 ///Index Light Color Start
-enum ilcs = 0;
+private enum ilcs = 0;
 ///Index Light Color End
-enum ilce = ilcs + 7;
+private enum ilce = ilcs + 7;
 ///Index Dark Color Start
-enum idcs = ilce + 1;
+private enum idcs = ilce + 1;
 ///Index Dark Color Start
-enum idce = idcs + 7;
+private enum idce = idcs + 7;
 
 private template ColorTemplate()
 {
@@ -90,12 +91,13 @@ struct bg
 
 /**
  * Get dark color variant from color
- * Returns: Dark variant of `Color`. If not a light color, return input
+ * Returns: Color
  */
 auto darkColor(Color c)
 {
     return isLightColor(c) ? cast(Color)(c + idcs) : c;
 }
+///
 unittest
 {
     assert(darkColor(Color.red)      == Color.red_dark);
@@ -107,12 +109,13 @@ unittest
 
 /**
  * Get light color variant from color
- * Returns: Light variant of `Color`. If not a dark color, return input
+ * Returns: Color
  */
 auto lightColor(Color c)
 {
     return isDarkColor(c) ? cast(Color)(c - idcs) : c;
 }
+///
 unittest
 {
     assert(lightColor(Color.green_dark) == Color.green);
@@ -124,12 +127,13 @@ unittest
 
 /**
  * Check if a color is dark
- * Returns: true if color is a dark variant
+ * Returns: bool
  */
 auto isDarkColor(Color c)
 {
     return c >= idcs && c <= idce;
 }
+///
 unittest
 {
     assert(isDarkColor(Color.blue_dark) == true);
@@ -141,12 +145,13 @@ unittest
 
 /**
  * Check if a color is light
- * Returns: true if color is a light variant
+ * Returns: bool
  */
 auto isLightColor(Color c)
 {
     return c >= ilcs && c <= ilce;
 }
+///
 unittest
 {
     assert(isLightColor(Color.yellow)      == true);

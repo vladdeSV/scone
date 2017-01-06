@@ -38,10 +38,10 @@ struct Ticker
 
         _lasttime = newtime;
         _msecs += durationmsec;
-        int ticks = to!int(_msecs / _interval);
-        _msecs -= to!int(ticks * _interval);
+        int ticksOccured = cast(int)(_msecs / _interval);
+        _msecs -= cast(int)(ticksOccured * _interval);
 
-        return ticks;
+        return ticksOccured;
     }
 
     /**

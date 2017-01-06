@@ -16,21 +16,20 @@ auto win_openConsole()
 {
 
     _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-    _hConsoleError  = GetStdHandle(STD_ERROR_HANDLE);
 
     if(_hConsoleOutput == INVALID_HANDLE_VALUE)
+    {
         assert(0, "_hConsoleOutput == INVALID_HANDLE_VALUE");
-    if(_hConsoleError == INVALID_HANDLE_VALUE)
-        assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
+    }
 
     win_cursorVisible = false;
     win_setCursor(0,0);
 }
 
-auto win_closeConsole()
-{
-    win_cursorVisible = true;
-}
+//auto win_closeConsole()
+//{
+//    win_cursorVisible = true;
+//}
 
 auto win_writeSlot(size_t x, size_t y, ref Slot slot)
 {
@@ -75,12 +74,12 @@ auto win_cursorVisible(bool visible) @property
     SetConsoleCursorInfo(_hConsoleOutput, &cci);
 }
 
-/** Set line wrapping. */
-auto win_lineWrapping(bool lw) @property
-{
-    lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
-       : SetConsoleMode(_hConsoleOutput, 0x0);
-}
+///** Set line wrapping. */
+//auto win_lineWrapping(bool lw) @property
+//{
+//    lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
+//       : SetConsoleMode(_hConsoleOutput, 0x0);
+//}
 
 auto win_windowSize() @property
 {
@@ -95,7 +94,7 @@ auto win_windowSize() @property
     ];
 }
 
-private HANDLE _hConsoleOutput, _hConsoleError;
+private HANDLE _hConsoleOutput;
 private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
 private ushort attributesFromSlot(Slot slot)

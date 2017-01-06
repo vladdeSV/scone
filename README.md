@@ -1,7 +1,7 @@
 # scone ![travis-ci](https://travis-ci.org/vladdeSV/scone.svg?branch=master)
 
 
-**scone** (**S**imple **Con**sole **E**ngine) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games) for Windows.
+**scone** (**S**imple **Con**sol**E**) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games) for **Windows**.
 
 ### Features:
 * Efficient output to the console
