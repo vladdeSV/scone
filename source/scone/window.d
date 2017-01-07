@@ -46,8 +46,8 @@ struct Window
 
         cursorVisible = false;
 
-        _cells = new Cell[][](width, height);
-        _backbuffer = new Cell[][](width, height);
+        _cells = new Cell[][](height, width);
+        _backbuffer = new Cell[][](height, width);
         foreach(n; 0 .. height)
         {
             _cells[n][] = Cell(' ');
@@ -226,10 +226,10 @@ struct Window
 
             return
             [
-                _consoleScreenBufferInfo.srWindow.Right -
-                _consoleScreenBufferInfo.srWindow.Left + 1,
                 _consoleScreenBufferInfo.srWindow.Bottom -
-                _consoleScreenBufferInfo.srWindow.Top  + 1
+                _consoleScreenBufferInfo.srWindow.Top  + 1,
+                _consoleScreenBufferInfo.srWindow.Right -
+                _consoleScreenBufferInfo.srWindow.Left + 1
             ];
         }
 
