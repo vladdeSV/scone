@@ -1,48 +1,15 @@
 module scone.window;
 
 import color;
+import os_independent;
+import win_console : win_writeCell;
 import std.stdio : write, writef, writeln, writefln;
-
-///needs to be specifically set, otherwise ioctl crashes ;(
-version (OSX) enum TIOCGWINSZ = 0x40087468;
-
-version(Windows)
-{
-    import core.sys.windows.windows;
-    import utility;
-    import color;
-    import win_console;
-    import std.algorithm : max, min;
-    import std.conv : to;
-    import std.string : toStringz;
-}
-version(Posix)
-{
-    import core.sys.posix.sys.ioctl;
-    import core.sys.posix.unistd : STDOUT_FILENO;
-    import std.conv : to, text;
-}
 
 struct Window
 {
     this(uint width, uint height)
     {
-        version(Windows)
-        {
-            _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-            _hConsoleError  = GetStdHandle(STD_ERROR_HANDLE);
-
-            if(_hConsoleOutput == INVALID_HANDLE_VALUE)
-                assert(0, "_hConsoleOutput == INVALID_HANDLE_VALUE");
-            if(_hConsoleError == INVALID_HANDLE_VALUE)
-                assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
-        }
-
-        version(Posix)
-        {
-            //turn off linewrapping
-            std.stdio.write("\033[?7l");
-        }
+        OSIndependent.init();
 
         cursorVisible = false;
 
@@ -58,14 +25,9 @@ struct Window
 
     ~this()
     {
-        version(Posix)
-        {
-            //turn on linewrapping
-            std.stdio.write("\033[?7h");
-        }
-
-        cursorVisible = true;
-        //TODO: setCursor(0,0);
+        OSIndependent.deinit();
+        OSIndependent.cursorVisible = true;
+        OSIndependent.setCursor(0,0);
     }
 
     //TODO
@@ -79,15 +41,7 @@ struct Window
                 {
                     if(cell != _backbuffer[cy][cx])
                     {
-                        //handle writing to the console
-                        ushort wx = to!ushort(cx), wy = to!ushort(cy);
-                        COORD charBufSize = {1,1};
-                        COORD characterPos = {0,0};
-                        SMALL_RECT writeArea = {wx, wy, wx, wy};
-                        CHAR_INFO character;
-                        character.AsciiChar = cell.character;
-                        character.Attributes = attributesFromSlot(cell);
-                        WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
+                        win_writeCell(cx, cy, cell);
 
                         //update backbuffer
                         _backbuffer[cy][cx] = cell;
@@ -179,72 +133,22 @@ struct Window
     ///Set the title of the window
     void title(string title) @property
     {
-        version(Windows)
-        {
-            SetConsoleTitleA(title.toStringz);
-        }
-
-        version(Posix)
-        {
-            std.stdio.write("\033]0;", title, "\007");
-        }
+        OSIndependent.title(title);
     }
 
     auto cursorVisible(bool visible) @property
     {
-        version(Windows)
-        {
-            CONSOLE_CURSOR_INFO cci;
-            GetConsoleCursorInfo(_hConsoleOutput, &cci);
-            cci.bVisible = visible;
-            SetConsoleCursorInfo(_hConsoleOutput, &cci);
-        }
-        else
-        {
-            vis ? std.stdio.write("\033[?25h") : write("\033[?25l");
-        }
+        OSIndependent.cursorVisible(visible);
     }
 
     void windowSize(uint width, uint height)
     {
-        version(Windows)
-        {
-            //TODO
-        }
-
-        version(Posix)
-        {
-            //TODO
-        }
+        
     }
 
     auto windowSize()
     {
-        version(Windows)
-        {
-            GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
-
-            return
-            [
-                _consoleScreenBufferInfo.srWindow.Bottom -
-                _consoleScreenBufferInfo.srWindow.Top  + 1,
-                _consoleScreenBufferInfo.srWindow.Right -
-                _consoleScreenBufferInfo.srWindow.Left + 1
-            ];
-        }
-
-        version(Posix)
-        {
-            winsize w;
-            ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!uint(w.ws_col), to!uint(w.ws_row)];
-        }
-    }
-
-    version(Windows)
-    {
-        private HANDLE _hConsoleOutput, _hConsoleError;
-        private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
+        return OSIndependent.windowSize();
     }
 
     private Cell[][] _cells, _backbuffer;
