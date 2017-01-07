@@ -1,0 +1,1 @@
+module scone.os.win_console;
