@@ -7,23 +7,23 @@ version (OSX) enum TIOCGWINSZ = 0x40087468;
 import core.sys.posix.sys.ioctl;
 import core.sys.posix.unistd : STDOUT_FILENO;
 import std.conv : to, text;
-import std.stdio : write;
+import std.stdio : write, writef;
 
 auto posix_init()
 {
     //turn off linewrapping
-    std.stdio.write("\033[?7l");
+    write("\033[?7l");
 }
 
 auto posix_deinit()
 {
     //turn on linewrapping
-    std.stdio.write("\033[?7h");
+    write("\033[?7h");
 }
 
 auto posix_setCursor(uint x, uint y)
 {
-    stdout.flush();
+    //stdout.flush();
     writef("\033[%d;%dH", y, x);
 }
 

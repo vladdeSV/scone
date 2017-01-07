@@ -3,7 +3,7 @@ module scone.window;
 import scone.color;
 import scone.os.independent;
 
-import std.conv : to;
+import std.conv : to, text;
 import std.stdio : write, writef, writeln, writefln;
 
 ///
@@ -184,7 +184,7 @@ struct Window
                 posix_setCursor(f, sy);
 
                 //...and then print out the string via the terminals write function.
-                std.stdio.write(printed);
+                stdio.write(printed);
 
                 //Reset 'printed'.
                 printed = null;
