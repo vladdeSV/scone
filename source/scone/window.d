@@ -181,10 +181,10 @@ struct Window
                 }
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                posix_setCursor(f, sy);
+                posix_setCursor(f, to!uint(sy));
 
                 //...and then print out the string via the terminals write function.
-                stdio.write(printed);
+                write(printed);
 
                 //Reset 'printed'.
                 printed = null;
