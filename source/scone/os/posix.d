@@ -1,3 +1,4 @@
+module scone.os.posix;
 version(Posix):
 
 ///needs to be specifically set, otherwise ioctl crashes ;(

@@ -1,7 +1,7 @@
 module scone;
 
 public import scone.window;
-public import color;
+public import scone.color;
 
 ref Window window() @property
 {

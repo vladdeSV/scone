@@ -1,11 +1,11 @@
+module scone.os.windows;
 version(Windows):
 
 import scone.window : Cell;
 
 import core.sys.windows.windows;
-import utility;
-import color;
-import win_console;
+import scone.misc.utility;
+import scone.color;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.string : toStringz;

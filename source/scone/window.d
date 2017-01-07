@@ -1,7 +1,7 @@
 module scone.window;
 
-import color;
-import os_independent;
+import scone.color;
+import scone.os.independent;
 
 import std.conv : to;
 import std.stdio : write, writef, writeln, writefln;
@@ -11,7 +11,7 @@ struct Window
 {
     this(uint width, uint height)
     {
-        OSIndependent.init();
+        OS.init();
 
         cursorVisible = false;
 
@@ -114,7 +114,7 @@ struct Window
     {
         version(Windows)
         {
-            import win_console : win_writeCell;
+            import scone.os.windows : win_writeCell;
 
             foreach(cy, ref y; _cells)
             {
@@ -216,12 +216,12 @@ struct Window
     ///Set the title of the window
     void title(string title) @property
     {
-        OSIndependent.title(title);
+        OS.title(title);
     }
 
     auto cursorVisible(bool visible) @property
     {
-        OSIndependent.cursorVisible(visible);
+        OS.cursorVisible(visible);
     }
 
     void windowSize(uint width, uint height)
@@ -231,7 +231,7 @@ struct Window
 
     auto windowSize()
     {
-        return OSIndependent.windowSize();
+        return OS.windowSize();
     }
 
     private Cell[][] _cells, _backbuffer;

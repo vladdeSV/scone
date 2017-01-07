@@ -1,3 +1,5 @@
+module scone.misc.utility;
+
 import std.traits : isImplicitlyConvertible;
 
 ///General flag checking

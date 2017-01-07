@@ -1,7 +1,9 @@
-import win_console;
-import posix_terminal;
+module scone.os.independent;
 
-struct OSIndependent
+import scone.os.windows;
+import scone.os.posix;
+
+struct OS
 {
     static:
 

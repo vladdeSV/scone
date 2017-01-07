@@ -1,3 +1,5 @@
+module scone.misc.ticker;
+
 import std.conv : to;
 import core.time : MonoTime, Duration;
 

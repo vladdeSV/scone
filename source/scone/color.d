@@ -1,3 +1,5 @@
+module scone.color;
+
 /**
  * All colors
  *
