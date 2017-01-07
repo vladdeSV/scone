@@ -133,7 +133,7 @@ struct Window
 
         version(Posix)
         {
-            import posix_terminal : posix_setCursor;
+            import scone.os.posix : posix_setCursor;
 
             enum rowUnchanged = -1;
 
