@@ -2,9 +2,10 @@ module scone.window;
 
 import color;
 import os_independent;
-import win_console : win_writeCell;
+
 import std.stdio : write, writef, writeln, writefln;
 
+///
 struct Window
 {
     this(uint width, uint height)
@@ -35,6 +36,8 @@ struct Window
     {
         version(Windows)
         {
+            import win_console : win_writeCell;
+
             foreach(cy, ref row; _cells)
             {
                 foreach(cx, ref cell; row)
@@ -52,6 +55,8 @@ struct Window
 
         version(Posix)
         {
+            import posix_terminal : posix_setCursor;
+
             enum rowUnchanged = -1;
 
             //Temporary string that will be printed out for each line.
@@ -98,7 +103,7 @@ struct Window
                 }
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                writef("\033[%d;%dH", f, sy);
+                posix_setCursor(f, sy);
 
                 //...and then print out the string via the terminals write function.
                 std.stdio.write(printed);

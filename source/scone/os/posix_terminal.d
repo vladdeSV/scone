@@ -19,7 +19,7 @@ auto posix_deinit()
     std.stdio.write("\033[?7h");
 }
 
-auto posix_setCursor(int x, int y)
+auto posix_setCursor(uint x, uint y)
 {
     stdout.flush();
     writef("\033[%d;%dH", y, x);
