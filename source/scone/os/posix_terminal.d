@@ -1,1 +1,0 @@
-module scone.os.posix_terminal;
