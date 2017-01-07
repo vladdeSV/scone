@@ -1,6 +1,7 @@
 module scone;
 
 public import scone.window;
+public import color;
 
 ref Window window() @property
 {
@@ -20,4 +21,4 @@ shared static this()
     }
 }
 
-public Window _window;
+private Window _window;

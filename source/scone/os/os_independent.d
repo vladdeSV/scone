@@ -20,6 +20,9 @@ struct OSIndependent
 
     auto deinit()
     {
+        cursorVisible = true;
+        setCursor(0,0);
+
         version(Windows)
         {
 

@@ -3,6 +3,7 @@ module scone.window;
 import color;
 import os_independent;
 
+import std.conv : to;
 import std.stdio : write, writef, writeln, writefln;
 
 ///
@@ -21,14 +22,91 @@ struct Window
             _cells[n][] = Cell(' ');
         }
 
+        _w = width;
+        _h = height;
+
         clear();
     }
 
-    ~this()
+    auto write(Args...)(in uint x, in uint y, Args args)
     {
-        OSIndependent.deinit();
-        OSIndependent.cursorVisible = true;
-        OSIndependent.setCursor(0,0);
+        //Check if writing outside border
+        if(x < 0 || y < 0 || x > _w || y > _h)
+        {
+            //sconeLog.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, _w, _h);
+            return;
+        }
+
+        Cell[] cells;
+        fg foreground = fg.white_dark;
+        bg background = bg.black_dark;
+
+        bool unsetColors;
+        foreach(ref arg; args)
+        {
+            static if(is(typeof(arg) == fg))
+            {
+                foreground = arg;
+                unsetColors = true;
+            }
+            else static if(is(typeof(arg) == bg))
+            {
+                background = arg;
+                unsetColors = true;
+            }
+            else static if(is(typeof(arg) == Cell))
+            {
+                cells ~= arg;
+                unsetColors = false;
+            }
+            else static if(is(typeof(arg) == Cell[]))
+            {
+                foreach(cell; arg)
+                {
+                    cells ~= cell;
+                    unsetColors = false;
+                }
+            }
+            else
+            {
+                foreach(c; to!string(arg))
+                {
+                    cells ~= Cell(c, foreground, background);
+                }
+
+                unsetColors = false;
+            }
+        }
+
+        //If the last argument is a color, warn
+        if(cells.length && unsetColors)
+        {
+            //sconeLog.logf("Warning: The last argument in %s is a color, which will not be set!", args);
+        }
+
+        if(!cells.length)
+        {
+            _cells[y][x].foreground = foreground;
+            _cells[y][x].background = background;
+        }
+        else
+        {
+            int wx, wy;
+            foreach(ref cell; cells)
+            {
+                if(x + wx >= _w || cell.character == '\n')
+                {
+                    wx = 0;
+                    ++wy;
+                    continue;
+                }
+                else
+                {
+                    _cells[y + wy][x + wx] = cell;
+                    ++wx;
+                }
+            }
+        }
     }
 
     //TODO
@@ -38,9 +116,9 @@ struct Window
         {
             import win_console : win_writeCell;
 
-            foreach(cy, ref row; _cells)
+            foreach(cy, ref y; _cells)
             {
-                foreach(cx, ref cell; row)
+                foreach(cx, ref cell; y)
                 {
                     if(cell != _backbuffer[cy][cx])
                     {
@@ -63,7 +141,7 @@ struct Window
             string printed;
 
             //Loop through all rows.
-            foreach (sy, row; _cells)
+            foreach (sy, y; _cells)
             {
                 //f = first modified cell, l = last modified cell
                 uint f = rowUnchanged, l;
@@ -89,7 +167,7 @@ struct Window
                     }
                 }
 
-                //If no cell on this row has been modified, continue
+                //If no cell on this y has been modified, continue
                 if(f == rowUnchanged)
                 {
                     continue;
@@ -119,9 +197,9 @@ struct Window
 
     auto clear()
     {
-        foreach(ref row; _cells)
+        foreach(ref y; _cells)
         {
-            row[] = Cell(' ');
+            y[] = Cell(' ');
         }
     }
 
@@ -129,9 +207,9 @@ struct Window
     ///NOTE: Only use this if some sort of visual bug occurs.
     auto flush()
     {
-        foreach(ref row; _backbuffer)
+        foreach(ref y; _backbuffer)
         {
-            row[] = Cell(' ');
+            y[] = Cell(' ');
         }
     }
 
@@ -157,6 +235,7 @@ struct Window
     }
 
     private Cell[][] _cells, _backbuffer;
+    private uint _w, _h;
 }
 
 ///
@@ -168,4 +247,17 @@ struct Cell
     fg foreground= fg(Color.white_dark);
     ///background color
     bg background= bg(Color.black_dark);
+}
+
+Cell[] cellString(string str, Color color, Color background)
+{
+    Cell[] ret;
+    ret.length = str.length;
+
+    foreach(n, ref c; str)
+    {
+        ret[n] = Cell(c, fg(color), bg(background));
+    }
+
+    return ret;
 }
