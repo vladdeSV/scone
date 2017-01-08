@@ -8,17 +8,22 @@ import core.sys.posix.sys.ioctl;
 import core.sys.posix.unistd : STDOUT_FILENO;
 import std.conv : to, text;
 import std.stdio : write, writef;
+import std.process : execute;
+
+//TODO: linewrapping is set via tput, and I'm not sure it works for non-OSX systems
 
 auto posix_init()
 {
     //turn off linewrapping
-    write("\033[?7l");
+    //write("\033[?7l");
+    execute(["tput", "rmam"]);
 }
 
 auto posix_deinit()
 {
     //turn on linewrapping
-    write("\033[?7h");
+    //write("\033[?7h");
+    execute(["tput", "smam"]);
 }
 
 auto posix_setCursor(uint x, uint y)

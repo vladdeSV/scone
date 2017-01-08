@@ -4,7 +4,7 @@ import scone.color;
 import scone.os.independent;
 
 import std.conv : to, text;
-import std.stdio : write, writef, writeln, writefln;
+import std.stdio;// : write, writef, writeln, writefln;
 
 ///
 struct Window
@@ -183,8 +183,8 @@ struct Window
                 //Set the cursor at the firstly edited cell... (POSIX magic)
                 posix_setCursor(f, to!uint(sy));
 
-                //...and then print out the string via the terminals write function.
-                write(printed);
+                //...and then print out the string via the regue write function.
+                std.stdio.write(printed);
 
                 //Reset 'printed'.
                 printed = null;
