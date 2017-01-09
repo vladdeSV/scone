@@ -1,5 +1,6 @@
 # scone ![travis-ci](https://travis-ci.org/vladdeSV/scone.svg?branch=master)
 
+# Currently undergoing rewrite
 
 **scone** (**S**imple **Con**sol**E**) is a small library to make it easier for developers to make CLI applications efficiently (intentionally/originally for console games) for **Windows**.
 
