@@ -11,8 +11,6 @@ struct Window
 {
     this(uint width, uint height)
     {
-        OS.init();
-
         cursorVisible = false;
 
         _cells = new Cell[][](height, width);
@@ -224,12 +222,12 @@ struct Window
         OS.cursorVisible(visible);
     }
 
-    void windowSize(uint width, uint height)
+    void size(uint width, uint height)
     {
-        
+        //TODO: set window size
     }
 
-    auto windowSize()
+    auto size()
     {
         return OS.windowSize();
     }

@@ -90,7 +90,7 @@ auto win_lineWrapping(bool lw) @property
        : SetConsoleMode(_hConsoleOutput, 0x0);
 }
 
-auto win_windowSize() @property
+uint[2] win_windowSize() @property
 {
     GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
