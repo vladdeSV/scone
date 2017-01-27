@@ -1,7 +1,7 @@
 module scone.window;
 
 import scone.color;
-import scone.os.independent;
+import scone.os;
 
 import std.conv : to, text;
 import std.stdio;// : write, writef, writeln, writefln;
@@ -112,15 +112,13 @@ struct Window
     {
         version(Windows)
         {
-            import scone.os.windows : win_writeCell;
-
             foreach(cy, ref y; _cells)
             {
                 foreach(cx, ref cell; y)
                 {
                     if(cell != _backbuffer[cy][cx])
                     {
-                        win_writeCell(cx, cy, cell);
+                        OS.Windows.writeCell(cx, cy, cell);
 
                         //update backbuffer
                         _backbuffer[cy][cx] = cell;
@@ -131,7 +129,7 @@ struct Window
 
         version(Posix)
         {
-            import scone.os.posix : posix_setCursor;
+            import scone.operating_system.posix : posix_setCursor;
 
             enum rowUnchanged = -1;
 
@@ -175,13 +173,18 @@ struct Window
                 foreach (px; f .. l + 1)
                 {
                     //TODO: colors are not supported yet on POSIX
-                    printed ~= text("\033[", 0, ";", cast(uint)(_cells[sy][px].foreground), ";", cast(uint)(_cells[sy][px].background + 10), "m", _cells[sy][px].character, "\033[0m");
+                    printed ~= text
+                    (
+                        "\033[", 0, ";", cast(uint)(_cells[sy][px].foreground),
+                                    ";", cast(uint)(_cells[sy][px].background),
+                                    "m", _cells[sy][px].character, "\033[0m"
+                    );
                 }
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                posix_setCursor(f, to!uint(sy));
+                OS.Posix.setCursor(f, to!uint(sy));
 
-                //...and then print out the string via the regue write function.
+                //...and then print out the string via the regular write function.
                 std.stdio.write(printed);
 
                 //Reset 'printed'.
@@ -229,7 +232,7 @@ struct Window
 
     auto size()
     {
-        return OS.windowSize();
+        //return OS.windowSize();
     }
 
     private Cell[][] _cells, _backbuffer;
@@ -242,9 +245,9 @@ struct Cell
     ///character
     char character;
     ///foreground color
-    fg foreground= fg(Color.white_dark);
+    fg foreground = fg(Color.white_dark);
     ///background color
-    bg background= bg(Color.black_dark);
+    bg background = bg(Color.black_dark);
 }
 
 Cell[] cellString(string str, Color color, Color background)

@@ -8,11 +8,12 @@ ref Window window() @property
     return _window;
 }
 
-import scone.os.independent;
+import scone.os;
 shared static this()
 {
     OS.init();
 
+    //TEMP,
     version(Windows)
     {
         _window = Window(80,24);
