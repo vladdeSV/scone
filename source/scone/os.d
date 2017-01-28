@@ -46,6 +46,19 @@ struct OS
         }
     }
 
+    void size(uint width, uint height)
+    {
+        version(Windows)
+        {
+            Windows.size(width, height);
+        }
+
+        version(Posix)
+        {
+
+        }
+    }
+
     auto cursorVisible(bool visible) @property
     {
         version(Windows)
@@ -102,25 +115,20 @@ struct OS
         auto init()
         {
             _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-            _hConsoleError  = GetStdHandle(STD_ERROR_HANDLE);
 
             if(_hConsoleOutput == INVALID_HANDLE_VALUE)
             {
                 assert(0, "_hConsoleOutput == INVALID_HANDLE_VALUE");
             }
 
-            if(_hConsoleError == INVALID_HANDLE_VALUE)
-            {
-                assert(0, "_hConsoleError == INVALID_HANDLE_VALUE");
-            }
-
-            Windows.cursorVisible(false);
+            Windows.cursorVisible = false;
             
         }
 
         auto deinit()
         {
             Windows.cursorVisible(true);
+            Windows.setCursor(0,0);
         }
 
         auto writeCell(size_t x, size_t y, ref Cell cell)
@@ -172,7 +180,46 @@ struct OS
             : SetConsoleMode(_hConsoleOutput, 0x0);
         }
 
-        uint[2] size() @property
+        void size(uint width, uint height)
+        {
+            CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+            if (!GetConsoleScreenBufferInfo(_hConsoleOutput, &bufferInfo))
+                assert(0, "Unable to retrieve screen buffer info.");
+
+            SMALL_RECT winInfo = bufferInfo.srWindow;
+            COORD windowSize = { to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
+
+            if (windowSize.X > width || windowSize.Y > height)
+            {
+                // window size needs to be adjusted before the buffer size can be reduced.
+                SMALL_RECT info = 
+                { 
+                    0, 
+                    0, 
+                    width <  windowSize.X ? to!short(width-1)  : to!short(windowSize.X-1), 
+                    height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
+                };
+
+                if (!SetConsoleWindowInfo(_hConsoleOutput, 1, &info))
+                {
+                    assert(0, "Unable to resize window before resizing buffer.");
+                }
+            }
+
+            COORD size = { to!short(width), to!short(height) };
+            if (!SetConsoleScreenBufferSize(_hConsoleOutput, size))
+            {
+                assert(0, "Unable to resize screen buffer.");
+            }
+
+            SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
+            if (!SetConsoleWindowInfo(_hConsoleOutput, 1, &info))
+            {
+                assert(0, "Unable to resize window after resizing buffer.");
+            }
+        }
+
+        uint[2] size()
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
@@ -185,7 +232,7 @@ struct OS
             ];
         }
 
-        private HANDLE _hConsoleOutput, _hConsoleError;
+        private HANDLE _hConsoleOutput;
         private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
         ushort attributesFromCell(Cell cell)
@@ -356,7 +403,7 @@ struct OS
             write("\033]0;", title, "\007");
         }
 
-        auto size() @property
+        auto size()
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

@@ -20,8 +20,7 @@ struct Window
             _cells[n][] = Cell(' ');
         }
 
-        _w = width;
-        _h = height;
+        size(width, height);
 
         clear();
     }
@@ -29,7 +28,7 @@ struct Window
     auto write(Args...)(in uint x, in uint y, Args args)
     {
         //Check if writing outside border
-        if(x < 0 || y < 0 || x > _w || y > _h)
+        if(x < 0 || y < 0 || x > w || y > h)
         {
             //sconeLog.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, _w, _h);
             return;
@@ -92,7 +91,7 @@ struct Window
             int wx, wy;
             foreach(ref cell; cells)
             {
-                if(x + wx >= _w || cell.character == '\n')
+                if(x + wx >= w || cell.character == '\n')
                 {
                     wx = 0;
                     ++wy;
@@ -225,18 +224,22 @@ struct Window
         OS.cursorVisible(visible);
     }
 
-    void size(uint width, uint height)
+    alias size = OS.size;
+
+    uint width()
     {
-        //TODO: set window size
+        return size[0];
     }
 
-    auto size()
+    uint height()
     {
-        //return OS.windowSize();
+        return size[1];
     }
+
+    alias w = width;
+    alias h = height;
 
     private Cell[][] _cells, _backbuffer;
-    private uint _w, _h;
 }
 
 ///
