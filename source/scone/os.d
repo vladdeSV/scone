@@ -358,8 +358,8 @@ struct OS
         ///needs to be specifically set, otherwise ioctl crashes ;(
         version (OSX) enum TIOCGWINSZ = 0x40087468;
 
-        import core.sys.Posix.sys.ioctl;
-        import core.sys.Posix.unistd : STDOUT_FILENO;
+        import core.sys.posix.sys.ioctl;
+        import core.sys.posix.unistd : STDOUT_FILENO;
         import std.conv : to, text;
         import std.stdio : write, writef;
         import std.process : execute;
