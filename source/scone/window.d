@@ -128,8 +128,6 @@ struct Window
 
         version(Posix)
         {
-            import scone.operating_system.posix : posix_setCursor;
-
             enum rowUnchanged = -1;
 
             //Temporary string that will be printed out for each line.
