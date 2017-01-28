@@ -1,11 +1,8 @@
+/*
 import scone;
 
 void main()
 {
-    sconeOpen();
-
-    auto frame = new Frame(80, 0);
-
     bool loop = true;
 
     while (loop)
@@ -18,8 +15,8 @@ void main()
                 break;
             }
 
-            frame.clear();
-            frame.write
+            window.clear();
+            window.write
             (
                 0,0,
                 fg(Color.white_dark), "Key: ", fg(Color.red), input.key, "\n",
@@ -27,8 +24,8 @@ void main()
                 fg(Color.white_dark), "Pressed: ", fg(Color.green), input.pressed
             );
         }
-        frame.print();
-    }
 
-    sconeClose();
+        window.print();
+    }
 }
+*/

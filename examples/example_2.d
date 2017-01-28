@@ -3,8 +3,6 @@ import std.stdio : writeln;
 
 void main()
 {
-    sconeOpen(); //Init, only access to the keyboard
-
     bool run = true;
 
     while(run)
@@ -27,6 +25,4 @@ void main()
             );
         }
     }
-
-    sconeClose(); //close
 }
