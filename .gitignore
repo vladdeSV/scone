@@ -7,6 +7,7 @@ dub.selections.json
 *.exe
 *.lib
 *.sublime-workspace
+scone
 scone.log
 source/scone/main.d
 
