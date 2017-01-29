@@ -243,6 +243,10 @@ struct Window
         OS.cursorVisible(visible);
     }
 
+    //TODO: rework size
+    //i currently think it's odd that width and size return different values
+    //setting size does not update the screen buffer
+
     alias size = OS.size;
 
     ///get the width of the window
