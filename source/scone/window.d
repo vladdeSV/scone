@@ -4,6 +4,8 @@ import scone.color;
 import scone.os;
 import scone.input;
 
+import scone.logger;
+
 import std.conv : to, text;
 import std.stdio;// : write, writef, writeln, writefln;
 
@@ -25,7 +27,7 @@ struct Window
         //Check if writing outside border
         if(x < 0 || y < 0 || x > w || y > h)
         {
-            //sconeLog.logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, _w, _h);
+            logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, w, h);
             return;
         }
 
@@ -76,7 +78,7 @@ struct Window
         //If the last argument is a color, warn
         if(cells.length && unsetColors)
         {
-            //sconeLog.logf("Warning: The last argument in %s is a color, which will not be set!", args);
+            logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
         if(!cells.length)
