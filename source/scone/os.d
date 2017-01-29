@@ -50,7 +50,7 @@ struct OS
     {
         version(Windows)
         {
-            Windows.size(width, height);
+            Windows.resize(width, height);
         }
 
         version(Posix)
@@ -147,7 +147,7 @@ struct OS
                 assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
             }
 
-            Windows.cursorVisible = false;
+            cursorVisible = false;
             
         }
 
@@ -158,8 +158,8 @@ struct OS
                 assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
             }
 
-            Windows.cursorVisible(true);
-            Windows.setCursor(0,0);
+            cursorVisible(true);
+            setCursor(0,0);
         }
 
         auto writeCell(size_t x, size_t y, ref Cell cell)
@@ -211,7 +211,7 @@ struct OS
             : SetConsoleMode(_hConsoleOutput, 0x0);
         }
 
-        void size(uint width, uint height)
+        void resize(uint width, uint height)
         {
             CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
             if (!GetConsoleScreenBufferInfo(_hConsoleOutput, &bufferInfo))
@@ -399,8 +399,8 @@ struct OS
             case KEY_EVENT:
                 window._inputs ~= InputEvent
                 (
-                    Windows.getKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
-                    Windows.getControlKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
+                    getKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
+                    getControlKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
                     cast(bool) _inputBuffer.KeyEvent.bKeyDown
                 );
                 break;

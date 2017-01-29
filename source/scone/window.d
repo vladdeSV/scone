@@ -14,21 +14,8 @@ struct Window
     ///NOTE: should only be used once. use `size(w,h);` to resize
     this(uint width, uint height)
     {
-        cursorVisible = false;
-
-        _cells = new Cell[][](height, width);
-        _backbuffer = new bool[][](height, width);
-
-        foreach(n; 0 .. height)
-        {
-            _cells[n][] = Cell(' ');
-            _backbuffer[n][] = true;
-        }
-
         //properly set the size of the console
-        size(width, height);
-
-        clear();
+        resize(width, height);
     }
 
     ///write practically anything to the window
@@ -243,11 +230,21 @@ struct Window
         OS.cursorVisible(visible);
     }
 
-    //TODO: rework size
-    //i currently think it's odd that width and size return different values
-    //setting size does not update the screen buffer
+    ///changes the size of the window
+    ///NOTE: this function clears the window
+    void resize(uint width, uint height)
+    {
+        OS.size(width, height);
+        
+        _cells = new Cell[][](height, width);
+        _backbuffer = new bool[][](height, width);
 
-    alias size = OS.size;
+        foreach(n; 0 .. height)
+        {
+            _cells[n][] = Cell(' ');
+            _backbuffer[n][] = true;
+        }
+    }
 
     ///get the width of the window
     uint width()
@@ -285,18 +282,16 @@ struct Window
     
     /**
      * Clears all buffered inputs.
-     * Useful if you have a loading screen of some sort, and need to clear key
-     * presses once loaded.
      */
     void clearInputs()
     {
         _inputs = null;
     }
 
+    //all cells which can be written to
+    private Cell[][] _cells;
     //stores input events until `getInputs();` is called
     package(scone) InputEvent[] _inputs;
-
-    private Cell[][] _cells;
     ///to know what to update. 'true' means something changed
     bool[][] _backbuffer;
 }
