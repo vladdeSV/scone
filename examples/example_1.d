@@ -3,25 +3,27 @@ import std.random : uniform;
 
 void main()
 {
-    sconeOpen(); //Init, only access to the window
+    window.size(80,24);
+    window.title = "Example 1";
 
-    auto frame = new Frame(); //Create a new "frame" with dynamic width and height
-
-    foreach(n; 0 .. frame.w * frame.h * 10) //loop through n amount of times
+    foreach(n; 0 .. 80 * 24 * 10) //loop through n amount of times
     {
-        frame.write(
-            uniform(0, frame.width),             /* x */
-            uniform(0, frame.height),            /* y */
+        window.write
+        (
+            uniform(0, 80),                        /* x */
+            uniform(0, 24),                        /* y */
 
-            //Keep in mind: This is an example; you should use for example `fg(Color.red)` and `bg(Color.white)`
-            fg(cast(Color) uniform(ilcs, ilce)), /* foreground */
-            bg(cast(Color) uniform(ilcs, ilce)), /* background */
+            //Keep in mind: This is an example.
+            //You should use, for example:
+            //`fg(Color.red)` or `bg(Color.white)`
+            fg(cast(Color) uniform(0,16)),         /* foreground */
+            bg(cast(Color) uniform(0,16)),         /* background */
 
-            char(uniform(0, 256));               /* character  */
+            cast(char)(uniform(0, 256))            /* character  */
         );
 
-        frame.print(); /* print out everything on the screen */
+        window.print();                            /* print out everything on the screen */
     }
 
-    sconeClose(); //close
+    OS.deinit(); //make this run automatically
 }

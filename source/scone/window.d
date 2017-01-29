@@ -2,6 +2,7 @@ module scone.window;
 
 import scone.color;
 import scone.os;
+import scone.input;
 
 import std.conv : to, text;
 import std.stdio;// : write, writef, writeln, writefln;
@@ -162,7 +163,7 @@ struct Window
                 foreach(sx, cell; _cells[sy])
                 {
                     //If the cell at current position differs from backbuffer
-                    if(cell != _backbuffer[sy][sx])
+                    if(_backbuffer[sy][sx])
                     {
                         //Set f once
                         if(f == rowUnchanged)
@@ -174,7 +175,7 @@ struct Window
                         l = to!uint(sx);
 
                         //Backbuffer is checked, make it "un-differ"
-                        _backbuffer[sy][sx] = cell;
+                        _backbuffer[sy][sx] = false;
                     }
                 }
 
@@ -258,6 +259,38 @@ struct Window
 
     alias w = width;
     alias h = height;
+
+    /**
+     * Get all inputs since last function call.
+     * Returns: InputEvent[], of all key presses since last call
+     * Note: (Windows) A maximum of 128 key presses can be stored in between each
+     * call.
+     */
+    auto getInputs()
+    {
+        version(Windows){ OS.Windows.retreiveInputs(); }
+        version(Posix){  }
+
+        scope(exit)
+        {
+            clearInputs();
+        }
+
+        return _inputs;
+    }
+    
+    /**
+     * Clears all buffered inputs.
+     * Useful if you have a loading screen of some sort, and need to clear key
+     * presses once loaded.
+     */
+    void clearInputs()
+    {
+        _inputs = null;
+    }
+
+    //stores input events until `getInputs();` is called
+    package(scone) InputEvent[] _inputs;
 
     private Cell[][] _cells;
     ///to know what to update. 'true' means something changed
