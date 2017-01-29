@@ -180,9 +180,15 @@ struct Window
                     //TODO: colors are not supported yet on POSIX
                     printed ~= text
                     (
-                        "\033[", 0, ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
-                                    ";", OS.Posix.ansiColor(_cells[sy][px].background),
-                                    "m", _cells[sy][px].character, "\033[0m"
+                        "\033[", 
+                        0,
+                        ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
+                        ";", OS.Posix.ansiColor(_cells[sy][px].background) + 10,
+                        "m",
+                          
+                        _cells[sy][px].character,
+                          
+                        "\033[0m"
                     );
                 }
 
