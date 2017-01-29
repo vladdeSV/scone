@@ -2,9 +2,16 @@ module scone.core;
 
 import scone.window;
 import scone.os;
+import scone.logger;
+import std.stdio : File, writefln;
+import std.datetime;
 
 shared static this()
 {
+    //init the logfile
+    logfile = File("scone.log", "w+");
+    logfile.writefln("scone: %s", Clock.currTime().toISOExtString());
+    
     //init the console/terminal
     OS.init();
 
@@ -15,14 +22,6 @@ shared static this()
     //init window
     window = Window(w,h);
 }
-
-/*
-///get a reference to the window (aka console/terminal)
-ref Window window() @property
-{
-    return _window;
-}
-*/
 
 ///global window (aka console/terminal)
 static Window window;
