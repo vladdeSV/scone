@@ -1,4 +1,4 @@
-# scone ![travis-ci](https://travis-ci.org/vladdeSV/scone.svg?branch=master)
+# scone ![travis-ci](https://travis-ci.org/vladdeSV/scone.svg?branch=master) [![GitHub version](https://badge.fury.io/gh/vladdeSV%2Fscone.svg)](https://badge.fury.io/gh/vladdeSV%2Fscone) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/vladdeSV/scone/master/LICENSE) [![GitHub issues](https://img.shields.io/github/issues/vladdeSV/scone.svg)](https://github.com/vladdeSV/scone/issues)
 
 # Currently undergoing rewrite
 
