@@ -7,7 +7,7 @@ void main()
 
     while(run)
     {
-        foreach(input; getInputs())
+        foreach(input; window.getInputs())
         {
             //NOTE: Without a ^C handler you cannot quit the program (unless you taskmanager or SIGKILL it)
 

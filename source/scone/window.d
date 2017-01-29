@@ -248,13 +248,13 @@ struct Window
     ///get the width of the window
     uint width()
     {
-        return size[0];
+        return to!uint(_cells[0].length);
     }
 
     ///get the height of the window
     uint height()
     {
-        return size[1];
+        return to!uint(_cells.length);
     }
 
     alias w = width;
