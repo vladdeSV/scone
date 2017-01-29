@@ -1,0 +1,58 @@
+//soon to be audio system
+
+private struct Sound
+{
+    //location of audio file
+    string source;
+
+    //will sound repeat
+    bool loop;
+
+    //volume of sound
+    //1f = max, 0f = silent
+    float volume = 1f;
+
+    //pitch
+    //1f = default pitch, less than 1 = lower pitch, more than 1 = higher pitch
+    float pitch = 1f;
+}
+
+struct Audio
+{
+    void register(size_t id, string source, bool loop = false, float volume = 1f, float pitch = 1f)
+    {
+        if((id in sounds) is null)
+        {
+            sound[id] = Sound(source, loop, volume, pitch);
+        }
+        else
+        {
+            logf("ERROR: %s is already registered to %s!", id, sounds[id].source);
+        }
+    }
+
+    void play(size_t id) {}
+
+    void loop(size_t id, bool looping) {}
+
+    void volume(size_t id, float volume) {}
+
+    void pitch(size_t id, float pitch) {}
+
+    void stop(size_t id) {}
+
+    private Sound[size_t /* id */] sounds;
+}
+
+//main.d
+enum Sound
+{
+    menu,
+}
+
+window.audio.register(Sound.menu, "mus/menu.ogg", true);
+window.audio.play(Sound.menu);
+window.audio.loop(Sound.menu, false);
+window.audio.volume(Sound.menu, 0.7f);
+window.audio.pitch(Sound.menu, 1.1f);
+window.audio.stop(Sound.menu);
