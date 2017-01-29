@@ -6,7 +6,7 @@ import scone.logger;
 import std.stdio : File, writefln;
 import std.datetime;
 
-shared static this()
+static this()
 {
     //init the logfile
     logfile = File("scone.log", "w+");
@@ -23,7 +23,7 @@ shared static this()
     window = Window(w,h);
 }
 
-shared static ~this()
+static ~this()
 {
     OS.deinit();
 }
