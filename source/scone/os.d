@@ -363,6 +363,7 @@ struct OS
         import std.conv : to, text;
         import std.stdio : write, writef;
         import std.process : execute;
+        import scone.color : Color;
 
         static:
 
@@ -408,6 +409,34 @@ struct OS
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
             return [to!int(w.ws_col), to!int(w.ws_row)];
+        }
+
+        ///get ansi color from Color
+        uint ansiColor(Color c)
+        {
+            version(OSX)
+            {
+                //color start
+                enum cs = 90;
+                //dark color start
+                enum dcs = 30;
+            }
+            else
+            {
+                //color start
+                enum cs = 30;
+                //dark color start
+                enum dcs = 90;
+            }
+
+            if(c < 8)
+            {
+                return cs + c;
+            }
+            else
+            {
+                return dcs + c;
+            }
         }
     }
 }

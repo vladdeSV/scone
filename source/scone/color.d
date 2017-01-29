@@ -26,7 +26,7 @@ module scone.color;
  */
 enum Color
 {
-    black = colorStartIndex,
+    black,
     red,
     green,
     yellow,
@@ -35,7 +35,7 @@ enum Color
     cyan,
     white,
 
-    black_dark = darkColorStartIndex,
+    black_dark,
     red_dark,
     green_dark,
     yellow_dark,
@@ -57,16 +57,9 @@ struct bg
 
 //For POSIX support, these values need to start at 30 and 90 respectively.
 //However, OSX reversed the numbers for bright and dark colors.
-version(OSX)
-{
-    private enum colorStartIndex = 90;
-    private enum darkColorStartIndex = 30;
-}
-else
-{
-    private enum colorStartIndex = 30;
-    private enum darkColorStartIndex = 90;
-}
+//version(OSX)
+    //private enum colorStartIndex = 90;
+    //private enum darkColorStartIndex = 30;
 
 private template ColorTemplate()
 {

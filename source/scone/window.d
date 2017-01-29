@@ -9,23 +9,30 @@ import std.stdio;// : write, writef, writeln, writefln;
 ///
 struct Window
 {
+    ///initializes the window.
+    ///NOTE: should only be used once. use `size(w,h);` to resize
     this(uint width, uint height)
     {
         cursorVisible = false;
 
         _cells = new Cell[][](height, width);
-        _backbuffer = new Cell[][](height, width);
+        _backbuffer = new bool[][](height, width);
+
         foreach(n; 0 .. height)
         {
             _cells[n][] = Cell(' ');
+            _backbuffer[n][] = true;
         }
 
+        //properly set the size of the console
         size(width, height);
 
         clear();
     }
 
-    auto write(Args...)(in uint x, in uint y, Args args)
+    ///write practically anything to the window
+    ///NOTE: does not directly write to the window, changes will only be visible after `print();`
+    void write(Args...)(in uint x, in uint y, Args args)
     {
         //Check if writing outside border
         if(x < 0 || y < 0 || x > w || y > h)
@@ -34,10 +41,13 @@ struct Window
             return;
         }
 
+        //everything which will be written to the window's internal memory
         Cell[] cells;
+
         fg foreground = fg.white_dark;
         bg background = bg.black_dark;
 
+        //flag to warn if color arguments will not be written
         bool unsetColors;
         foreach(ref arg; args)
         {
@@ -54,15 +64,15 @@ struct Window
             else static if(is(typeof(arg) == Cell))
             {
                 cells ~= arg;
-                unsetColors = false;
+                
             }
             else static if(is(typeof(arg) == Cell[]))
             {
                 foreach(cell; arg)
                 {
                     cells ~= cell;
-                    unsetColors = false;
                 }
+                unsetColors = false;
             }
             else
             {
@@ -88,6 +98,7 @@ struct Window
         }
         else
         {
+            //some hokus pokus to store stuff into memory
             int wx, wy;
             foreach(ref cell; cells)
             {
@@ -99,35 +110,42 @@ struct Window
                 }
                 else
                 {
-                    _cells[y + wy][x + wx] = cell;
+                    if(_cells[y + wy][x + wx] != cell)
+                    {
+                        _backbuffer[y + wy][x + wx] = true;
+                        _cells[y + wy][x + wx] = cell;
+                    }
                     ++wx;
                 }
             }
         }
     }
 
-    //TODO
-    auto print()
+    ///displays all which has been written
+    void print()
     {
+        //windows version, using winapi
         version(Windows)
         {
             foreach(cy, ref y; _cells)
             {
                 foreach(cx, ref cell; y)
                 {
-                    if(cell != _backbuffer[cy][cx])
+                    if(_backbuffer[cy][cx])
                     {
                         OS.Windows.writeCell(cx, cy, cell);
 
                         //update backbuffer
-                        _backbuffer[cy][cx] = cell;
+                        _backbuffer[cy][cx] = false;
                     }
                 }
             }
         }
 
+        //for posix, a different method printing is used
         version(Posix)
         {
+            //simple flag if row is unaffected
             enum rowUnchanged = -1;
 
             //Temporary string that will be printed out for each line.
@@ -172,8 +190,8 @@ struct Window
                     //TODO: colors are not supported yet on POSIX
                     printed ~= text
                     (
-                        "\033[", 0, ";", cast(uint)(_cells[sy][px].foreground),
-                                    ";", cast(uint)(_cells[sy][px].background),
+                        "\033[", 0, ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
+                                    ";", OS.Posix.ansiColor(_cells[sy][px].background),
                                     "m", _cells[sy][px].character, "\033[0m"
                     );
                 }
@@ -193,7 +211,8 @@ struct Window
         }
     }
 
-    auto clear()
+    ///Clear the screen, making it ready for the next `print();`
+    void clear()
     {
         foreach(ref y; _cells)
         {
@@ -203,11 +222,11 @@ struct Window
 
     ///Causes next `print()` to write out all cells.
     ///NOTE: Only use this if some sort of visual bug occurs.
-    auto flush()
+    void flush()
     {
-        foreach(ref y; _backbuffer)
+        foreach(ref row; _backbuffer)
         {
-            y[] = Cell(' ');
+            row[] = true;
         }
     }
 
@@ -217,18 +236,21 @@ struct Window
         OS.title(title);
     }
 
-    auto cursorVisible(bool visible) @property
+    ///set if the cursor should be visible
+    void cursorVisible(bool visible) @property
     {
         OS.cursorVisible(visible);
     }
 
     alias size = OS.size;
 
+    ///get the width of the window
     uint width()
     {
         return size[0];
     }
 
+    ///get the height of the window
     uint height()
     {
         return size[1];
@@ -237,7 +259,9 @@ struct Window
     alias w = width;
     alias h = height;
 
-    private Cell[][] _cells, _backbuffer;
+    private Cell[][] _cells;
+    ///to know what to update. 'true' means something changed
+    bool[][] _backbuffer;
 }
 
 ///
