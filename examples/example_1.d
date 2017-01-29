@@ -3,7 +3,7 @@ import std.random : uniform;
 
 void main()
 {
-    window.size(80,24);
+    window.resize(80,24);
     window.title = "Example 1";
 
     foreach(n; 0 .. 80 * 24 * 10) //loop through n amount of times
@@ -24,6 +24,4 @@ void main()
 
         window.print();                            /* print out everything on the screen */
     }
-
-    OS.deinit(); //make this run automatically
 }

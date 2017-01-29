@@ -3,6 +3,8 @@ import std.stdio : writeln;
 
 void main()
 {
+    window.title = "Example 2";
+
     bool run = true;
 
     while(run)
