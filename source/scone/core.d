@@ -23,5 +23,10 @@ shared static this()
     window = Window(w,h);
 }
 
+shared static ~this()
+{
+    OS.deinit();
+}
+
 ///global window (aka console/terminal)
 static Window window;
