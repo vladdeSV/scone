@@ -1092,7 +1092,7 @@ struct OS
             }
             else
             {
-                return dcs + c;
+                return dcs + c - 8;
             }
         }
     }
