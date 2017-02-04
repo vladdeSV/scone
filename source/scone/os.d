@@ -55,7 +55,7 @@ struct OS
 
         version(Posix)
         {
-
+            Posix.resize(width, height);
         }
     }
 
@@ -1066,6 +1066,12 @@ struct OS
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
             return [to!int(w.ws_col), to!int(w.ws_row)];
+        }
+
+        auto resize(uint width, uint height)
+        {
+            //experimental
+            writef("\033[8;%s;%st", height, width);
         }
 
         ///get ansi color from Color
