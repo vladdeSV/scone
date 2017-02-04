@@ -1029,20 +1029,20 @@ struct OS
         auto init()
         {
             //turn off linewrapping
-            //write("\033[?7l");
-            execute(["tput", "rmam"]);
+            //execute(["tput", "rmam"]);
+            lineWrapping = false;
         }
 
         auto deinit()
         {
             //turn on linewrapping
-            //write("\033[?7h");
-            execute(["tput", "smam"]);
+            //execute(["tput", "smam"]);
+            lineWrapping = true;
         }
 
         auto setCursor(uint x, uint y)
         {
-            writef("\033[%d;%dH", y, x);
+            writef("\033[%d;%dH", y + 1, x);
         }
 
         auto cursorVisible(bool vis) @property
