@@ -11,9 +11,6 @@ static this()
     //init the logfile
     logfile = File("scone.log", "w+");
     logfile.writefln("scone: %s", Clock.currTime().toISOExtString());
-    
-    //init the console/terminal
-    OS.init();
 
     //get current width and height
     auto w = OS.size[0];
@@ -21,11 +18,6 @@ static this()
 
     //init window
     window = Window(w,h);
-}
-
-static ~this()
-{
-    OS.deinit();
 }
 
 ///global window (aka console/terminal)

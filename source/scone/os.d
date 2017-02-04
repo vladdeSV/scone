@@ -4,7 +4,7 @@ struct OS
 {
     static:
     
-    auto init()
+    static this()
     {
         version(Windows)
         {
@@ -17,11 +17,11 @@ struct OS
         }
     }
 
-    auto deinit()
+    static ~this()
     {
         cursorVisible = true;
         setCursor(0,0);
-
+        
         version(Windows)
         {
             Windows.deinit();
@@ -1042,7 +1042,6 @@ struct OS
 
         auto setCursor(uint x, uint y)
         {
-            //stdout.flush();
             writef("\033[%d;%dH", y, x);
         }
 
@@ -1070,7 +1069,6 @@ struct OS
 
         auto resize(uint width, uint height)
         {
-            //experimental
             writef("\033[8;%s;%st", height, width);
         }
 
