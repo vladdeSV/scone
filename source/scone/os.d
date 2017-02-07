@@ -1017,20 +1017,23 @@ struct OS
 
         import core.sys.posix.sys.ioctl;
         import core.sys.posix.unistd : STDOUT_FILENO;
+        import core.thread;
         import std.conv : to, text;
         import std.stdio : write, writef;
-        import std.process : execute;
         import scone.color : Color;
 
-        static:
+        import scone.logger;
 
-        //TODO: linewrapping is set via tput, and I'm not sure it works for non-OSX systems
+        static:
 
         auto init()
         {
             //turn off linewrapping
             //execute(["tput", "rmam"]);
             lineWrapping = false;
+
+            eventThread = new Thread(&pollEvent).start();
+            eventThread.isDaemon(true);
         }
 
         auto deinit()
@@ -1099,5 +1102,13 @@ struct OS
                 return dcs + c - 8;
             }
         }
+
+        //blocking function ran from new thread
+        private void pollEvent()
+        {
+            //make it do something
+        }
+
+        private Thread eventThread;
     }
 }
