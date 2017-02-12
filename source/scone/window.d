@@ -100,11 +100,7 @@ struct Window
                 }
                 else
                 {
-                    if(_cells[y + wy][x + wx] != cell)
-                    {
-                        _backbuffer[y + wy][x + wx] = true;
-                        _cells[y + wy][x + wx] = cell;
-                    }
+                    _cells[y + wy][x + wx] = cell;   
                     ++wx;
                 }
             }
@@ -121,12 +117,12 @@ struct Window
             {
                 foreach(cx, ref cell; y)
                 {
-                    if(_backbuffer[cy][cx])
+                    if(cell != _backbuffer[cy][cx])
                     {
                         OS.Windows.writeCell(cx, cy, cell);
 
                         //update backbuffer
-                        _backbuffer[cy][cx] = false;
+                        _backbuffer[cy][cx] = cell;
                     }
                 }
             }
@@ -147,12 +143,14 @@ struct Window
                 //f = first modified cell, l = last modified cell
                 uint f = rowUnchanged, l;
 
-                //TOOD: add a foreach_reverse to maybe speed up time
+                //TOOD: add a foreach_reverse to maybe speed up time,
+                //      meaning once first changed cell is found, do
+                //      another foreach_reverse loop.
                 //Go through each line
                 foreach(sx, cell; _cells[sy])
                 {
-                    //If the cell at current position differs from backbuffer
-                    if(_backbuffer[sy][sx])
+                    //If backbuffer says something has changed
+                    if(_backbuffer[sy][sx] != cell)
                     {
                         //Set f once
                         if(f == rowUnchanged)
@@ -164,7 +162,7 @@ struct Window
                         l = to!uint(sx);
 
                         //Backbuffer is checked, make it "un-differ"
-                        _backbuffer[sy][sx] = false;
+                        _backbuffer[sy][sx] = cell;
                     }
                 }
 
@@ -180,14 +178,14 @@ struct Window
                     //TODO: colors are not supported yet on POSIX
                     printed ~= text
                     (
-                        "\033[", 
+                        "\033[",
                         0,
                         ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
                         ";", OS.Posix.ansiColor(_cells[sy][px].background) + 10,
                         "m",
-                          
+                        
                         _cells[sy][px].character,
-                          
+                        
                         "\033[0m"
                     );
                 }
@@ -222,7 +220,7 @@ struct Window
     {
         foreach(ref row; _backbuffer)
         {
-            row[] = true;
+            row[] = Cell(' ');
         }
     }
 
@@ -245,12 +243,11 @@ struct Window
         OS.size(width, height);
         
         _cells = new Cell[][](height, width);
-        _backbuffer = new bool[][](height, width);
+        _backbuffer = new Cell[][](height, width);
 
         foreach(n; 0 .. height)
         {
             _cells[n][] = Cell(' ');
-            _backbuffer[n][] = true;
         }
     }
 
@@ -272,36 +269,15 @@ struct Window
     /**
      * Get all inputs since last function call.
      * Returns: InputEvent[], of all key presses since last call
-     * Note: (Windows) A maximum of 128 key presses can be stored in between each
-     * call.
      */
     auto getInputs()
     {
-        version(Windows){ OS.Windows.retreiveInputs(); }
-        version(Posix){  }
-
-        scope(exit)
-        {
-            clearInputs();
-        }
-
-        return _inputs;
-    }
-    
-    /**
-     * Clears all buffered inputs.
-     */
-    void clearInputs()
-    {
-        _inputs = null;
+        version(Windows){ return OS.Windows.retreiveInputs(); }
+        version(Posix){ return OS.Posix.retreiveInputs(); }
     }
 
-    //all cells which can be written to
-    private Cell[][] _cells;
-    //stores input events until `getInputs();` is called
-    package(scone) InputEvent[] _inputs;
-    ///to know what to update. 'true' means something changed
-    bool[][] _backbuffer;
+    //all cells which can be written to, and backbuffer
+    private Cell[][] _cells, _backbuffer;
 }
 
 ///

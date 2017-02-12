@@ -1,5 +1,9 @@
 module scone.os;
 
+import scone.input;
+import core.thread;
+import std.random;
+
 struct OS
 {
     static:
@@ -390,14 +394,16 @@ struct OS
 
             if(!read)
             {
-                return;
+                return null;
             }
+
+            InputEvent[] _inputEvents;
 
             ReadConsoleInputA(_hConsoleInput, &_inputBuffer, 1, &_inputsRead);
             switch(_inputBuffer.EventType)
             {
             case KEY_EVENT:
-                window._inputs ~= InputEvent
+                _inputEvents ~= InputEvent
                 (
                     getKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
                     getControlKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
@@ -408,6 +414,8 @@ struct OS
             default:
                 break;
             }
+
+            return _inputEvents;
         }
 
         ///todo: add mouse input
@@ -1033,7 +1041,7 @@ struct OS
             lineWrapping = false;
 
             eventThread = new Thread(&pollEvent).start();
-            eventThread.isDaemon(true);
+            //eventThread.isDaemon(true);
         }
 
         auto deinit()
@@ -1103,12 +1111,20 @@ struct OS
             }
         }
 
+        InputEvent[] retreiveInputs()
+        {
+            InputEvent[] ie = _inputEvents;
+            _inputEvents.length = 0;
+            return ie;
+        }
+
         //blocking function ran from new thread
         private void pollEvent()
         {
-            //make it do something
+            OS.Posix._inputEvents ~= InputEvent(cast(SK)uniform(20, 30), SCK.none, true);
         }
 
         private Thread eventThread;
+        private __gshared InputEvent[] _inputEvents;
     }
 }
