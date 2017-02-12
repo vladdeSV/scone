@@ -1040,7 +1040,7 @@ struct OS
             //execute(["tput", "rmam"]);
             lineWrapping = false;
 
-            eventThread = new Thread(&pollEvent).start();
+            //eventThread = new Thread(&pollEvent).start();
             //eventThread.isDaemon(true);
         }
 
@@ -1121,7 +1121,7 @@ struct OS
         //blocking function ran from new thread
         private void pollEvent()
         {
-            OS.Posix._inputEvents ~= InputEvent(cast(SK)uniform(20, 30), SCK.none, true);
+            //OS.Posix._inputEvents ~= InputEvent(cast(SK)uniform(20, 30), SCK.none, true);
         }
 
         private Thread eventThread;
