@@ -10,6 +10,8 @@ struct OS
     
     static this()
     {
+        cursorVisible = false;
+        
         version(Windows)
         {
             Windows.init();
@@ -150,9 +152,6 @@ struct OS
             {
                 assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
             }
-
-            cursorVisible = false;
-            
         }
 
         auto deinit()
