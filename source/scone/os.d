@@ -3,6 +3,30 @@ module scone.os;
 import scone.input;
 import core.thread;
 import std.random;
+import scone.color : Color;
+import scone.input;
+
+version(Windows)
+{
+    import core.sys.windows.windows;
+    import scone.misc.utility : hasFlag;
+    import scone.window : Cell;
+    import scone.core;
+    import std.algorithm : max, min;
+    import std.conv : to;
+    import std.stdio : stdout;
+    import std.string : toStringz;
+}
+
+version(Posix)
+{
+    import core.sys.posix.sys.ioctl;
+    import core.sys.posix.unistd : STDOUT_FILENO;
+    import scone.logger;
+    import std.concurrency;
+    import std.conv : to, text;
+    import std.stdio : write, writef;
+}
 
 struct OS
 {
@@ -107,18 +131,6 @@ struct OS
     version(Windows)
     static struct Windows
     {
-        import core.sys.windows.windows;
-        import core.thread;
-        import scone.color : Color;
-        import scone.misc.utility : hasFlag;
-        import scone.window : Cell;
-        import scone.input;
-        import scone.core;
-        import std.algorithm : max, min;
-        import std.conv : to;
-        import std.stdio : stdout;
-        import std.string : toStringz;
-
         static:
 
         auto init()
@@ -1022,15 +1034,6 @@ struct OS
         ///needs to be specifically set, otherwise ioctl crashes ;(
         version (OSX) enum TIOCGWINSZ = 0x40087468;
 
-        import core.sys.posix.sys.ioctl;
-        import core.sys.posix.unistd : STDOUT_FILENO;
-        import core.thread;
-        import std.conv : to, text;
-        import std.stdio : write, writef;
-        import scone.color : Color;
-
-        import scone.logger;
-
         static:
 
         auto init()
@@ -1039,8 +1042,7 @@ struct OS
             //execute(["tput", "rmam"]);
             lineWrapping = false;
 
-            //eventThread = new Thread(&pollEvent).start();
-            //eventThread.isDaemon(true);
+            //auto childTid = spawn(&pollInputEvent, thisTid);
         }
 
         auto deinit()
@@ -1110,20 +1112,19 @@ struct OS
             }
         }
 
-        InputEvent[] retreiveInputs()
+        void pollInputEvent(Tid parentThreadID)
         {
-            InputEvent[] ie = _inputEvents;
-            _inputEvents.length = 0;
-            return ie;
-        }
+            import std.datetime;
+            MonoTime currTime = MonoTime.currTime();
 
-        //blocking function ran from new thread
-        private void pollEvent()
-        {
-            //OS.Posix._inputEvents ~= InputEvent(cast(SK)uniform(20, 30), SCK.none, true);
+            while(true)
+            {
+                if(MonoTime.currTime() > currTime + 1.seconds)
+                {
+                    currTime = MonoTime.currTime();
+                    send(parentThreadID, InputEvent(cast(SK) uniform(SK.a, SK.z), SCK.none, true));
+                }
+            }
         }
-
-        private Thread eventThread;
-        private __gshared InputEvent[] _inputEvents;
     }
 }

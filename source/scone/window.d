@@ -3,7 +3,7 @@ module scone.window;
 import scone.color;
 import scone.os;
 import scone.input;
-
+import std.concurrency;
 import scone.logger;
 
 import std.conv : to, text;
@@ -175,23 +175,35 @@ struct Window
                 //Loop from the first changed cell to the last edited cell.
                 foreach (px; f .. l + 1)
                 {
-                    //TODO: colors are not supported yet on POSIX
-                    printed ~= text
+                    //To save excecution time, check if the prevoisly printed
+                    //chracter has the same attributes as the current one being
+                    //printed. If so, simply write the new character instead of
+                    //executing ANSI commands.
+
+                    if
                     (
-                        "\033[",
-                        0,
-                        ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
-                        ";", OS.Posix.ansiColor(_cells[sy][px].background) + 10,
-                        "m",
-                        
-                        _cells[sy][px].character,
-                        
-                        "\033[0m"
-                    );
+                        px == f ||
+                        _cells[sy][px - 1].foreground != _cells[sy][px].foreground ||
+                        _cells[sy][px - 1].background != _cells[sy][px].background
+                    )
+                    {
+                        printed ~= text
+                        (
+                            "\033[",
+                            0,
+                            ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
+                            ";", OS.Posix.ansiColor(_cells[sy][px].background) + 10,
+                            "m",
+                        );
+                    }
+
+                    printed ~= _cells[sy][px].character;
                 }
 
+                printed ~= "\033[0m";
+
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                OS.Posix.setCursor(f, to!uint(sy));
+                OS.Posix.setCursor(f + 1, to!uint(sy));
 
                 //...and then print out the string via the regular write function.
                 std.stdio.write(printed);
@@ -201,7 +213,7 @@ struct Window
             }
 
             //Flush. Without this problems may occur.
-            //stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
+            stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
         }
     }
 
@@ -267,13 +279,30 @@ struct Window
     alias h = height;
 
     /**
-     * Get all inputs since last function call.
-     * Returns: InputEvent[], of all key presses since last call
+     * Returns: InputEvent, last call
      */
-    auto getInputs()
+    InputEvent[] getInputs()
     {
         version(Windows){ return OS.Windows.retreiveInputs(); }
-        version(Posix){ return OS.Posix.retreiveInputs(); }
+        version(Posix)
+        {
+            /+
+            import std.datetime : msecs;
+
+            InputEvent e;
+
+            receiveTimeout(
+                100.msecs,
+                (InputEvent ie) { e = ie; }
+            );
+
+            if(e.key != SK.unknown)
+            {
+                return [e];
+            }
+            +/
+            return null;
+        }
     }
 
     //all cells which can be written to, and backbuffer
