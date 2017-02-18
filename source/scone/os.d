@@ -29,10 +29,10 @@ version(Posix)
 }
 
 struct OS
-{
+{    
     static:
-    
-    static this()
+ 
+    auto init()
     {
         cursorVisible = false;
         
@@ -47,7 +47,7 @@ struct OS
         }
     }
 
-    static ~this()
+    auto deinit()
     {
         cursorVisible = true;
         setCursor(0,0);
@@ -1112,6 +1112,7 @@ struct OS
             }
         }
 
+        /+
         void pollInputEvent(Tid parentThreadID)
         {
             import std.datetime;
@@ -1126,5 +1127,6 @@ struct OS
                 }
             }
         }
+        +/
     }
 }

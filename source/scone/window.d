@@ -278,30 +278,34 @@ struct Window
     alias w = width;
     alias h = height;
 
-    /**
-     * Returns: InputEvent, last call
-     */
-    InputEvent[] getInputs()
+    //Temporarily disable input for non-Windows
+    version(Windows)
     {
-        version(Windows){ return OS.Windows.retreiveInputs(); }
-        version(Posix)
+        /**
+        * Returns: InputEvent, last call
+        */
+        InputEvent[] getInputs()
         {
-            /+
-            import std.datetime : msecs;
-
-            InputEvent e;
-
-            receiveTimeout(
-                100.msecs,
-                (InputEvent ie) { e = ie; }
-            );
-
-            if(e.key != SK.unknown)
+            version(Windows){ return OS.Windows.retreiveInputs(); }
+            version(Posix)
             {
-                return [e];
+                /+
+                import std.datetime : msecs;
+
+                InputEvent e;
+
+                receiveTimeout(
+                    100.msecs,
+                    (InputEvent ie) { e = ie; }
+                );
+
+                if(e.key != SK.unknown)
+                {
+                    return [e];
+                }
+                +/
+                return null;
             }
-            +/
-            return null;
         }
     }
 
