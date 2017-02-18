@@ -280,7 +280,7 @@ struct OS
 
         private HANDLE _hConsoleOutput, _hConsoleInput;
         private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_WINDOW_INPUT, _oldMode;
-        private INPUT_RECORD _inputBuffer;
+        private INPUT_RECORD[128] _inputBuffer;
         private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
         ushort attributesFromCell(Cell cell)
@@ -410,20 +410,23 @@ struct OS
 
             InputEvent[] _inputEvents;
 
-            ReadConsoleInputA(_hConsoleInput, &_inputBuffer, 1, &_inputsRead);
-            switch(_inputBuffer.EventType)
+            ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
+            for(size_t e = 0; e < read; ++e)
             {
-            case KEY_EVENT:
-                _inputEvents ~= InputEvent
-                (
-                    getKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
-                    getControlKeyFromKeyEventRecord(_inputBuffer.KeyEvent),
-                    cast(bool) _inputBuffer.KeyEvent.bKeyDown
-                );
-                break;
+                switch(_inputBuffer[e].EventType)
+                {
+                case KEY_EVENT:
+                    _inputEvents ~= InputEvent
+                    (
+                        getKeyFromKeyEventRecord(_inputBuffer[e].KeyEvent),
+                        getControlKeyFromKeyEventRecord(_inputBuffer[e].KeyEvent),
+                        cast(bool) _inputBuffer[e].KeyEvent.bKeyDown
+                    );
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+                }
             }
 
             return _inputEvents;

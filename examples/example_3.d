@@ -1,21 +1,21 @@
-/*
 import scone;
 
 void main()
 {
     bool loop = true;
 
-    while (loop)
-    {
-        foreach(input; getInputs())
+    while(loop)
+    {        
+        foreach(input; window.getInputs())
         {
-            if(input.key == SK.escape || input.key == SK.c && input.hasControlKey(SCK.ctrl))
+            if((input.key == SK.c && input.hasControlKey(SCK.ctrl)) || input.key == SK.escape)
             {
                 loop = false;
                 break;
             }
 
             window.clear();
+
             window.write
             (
                 0,0,
@@ -28,4 +28,3 @@ void main()
         window.print();
     }
 }
-*/
