@@ -3,6 +3,8 @@ import scone;
 void main()
 {
     bool loop = true;
+    window.title = "Example 3";
+    window.resize(40,10);
 
     while(loop)
     {        

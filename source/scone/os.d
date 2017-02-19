@@ -279,7 +279,7 @@ struct OS
         }
 
         private HANDLE _hConsoleOutput, _hConsoleInput;
-        private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_WINDOW_INPUT, _oldMode;
+        private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
         private INPUT_RECORD[128] _inputBuffer;
         private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
 
