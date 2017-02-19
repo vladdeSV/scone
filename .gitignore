@@ -11,11 +11,6 @@ scone
 scone.log
 source/scone/main.d
 
-docs/app.html
-docs/posix_terminal.html
-docs/win_console.html
-docs/win_keyboard.html
-docs/utility.html
 docs/package.html
 docs/main.html
 *.DS_Store

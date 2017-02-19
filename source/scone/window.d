@@ -288,7 +288,7 @@ struct Window
     version(Windows)
     {
         /**
-        * Returns: InputEvent, last call
+        * Returns: InputEvent, max 128 last calls
         */
         InputEvent[] getInputs()
         {
