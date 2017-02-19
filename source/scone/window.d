@@ -20,8 +20,12 @@ struct Window
         resize(width, height);
     }
 
-    ///write practically anything to the window
-    ///NOTE: does not directly write to the window, changes will only be visible after `print();`
+    ///Write practically anything to the window
+    ///Example:
+    ///---
+    ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
+    ///---
+    ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
     void write(Args...)(in uint x, in uint y, Args args)
     {
         //Check if writing outside border
@@ -107,7 +111,7 @@ struct Window
         }
     }
 
-    ///displays all which has been written
+    ///Displays what has been written
     void print()
     {
         //windows version, using winapi
@@ -236,23 +240,23 @@ struct Window
         }
     }
 
-    ///Set the title of the window
+    ///Set the size of the window
     void title(string title) @property
     {
         OS.title(title);
     }
 
-    ///set if the cursor should be visible
+    ///Set if the cursor should be visible
     void cursorVisible(bool visible) @property
     {
         OS.cursorVisible(visible);
     }
 
-    ///changes the size of the window
-    ///NOTE: this function clears the window
+    ///Changes the size of the window
+    ///Note: Clears the window
     void resize(uint width, uint height)
     {
-        OS.size(width, height);
+        OS.resize(width, height);
         
         _cells = new Cell[][](height, width);
         _backbuffer = new Cell[][](height, width);
@@ -263,19 +267,21 @@ struct Window
         }
     }
 
-    ///get the width of the window
+    ///Get the width of the window
     uint width()
     {
         return to!uint(_cells[0].length);
     }
 
-    ///get the height of the window
+    ///Get the height of the window
     uint height()
     {
         return to!uint(_cells.length);
     }
 
+    ///
     alias w = width;
+    ///
     alias h = height;
 
     //Temporarily disable input for non-Windows
@@ -324,6 +330,8 @@ struct Cell
     bg background = bg(Color.black_dark);
 }
 
+///Create an array of cells with foreground- and background color
+///Returns: Cell[]
 Cell[] cellString(string str, Color color, Color background)
 {
     Cell[] ret;

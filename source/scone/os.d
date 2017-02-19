@@ -28,11 +28,13 @@ version(Posix)
     import std.stdio : write, writef;
 }
 
+///Wrapper for OS specific functions
 struct OS
 {    
     static:
- 
-    auto init()
+    
+    ///Initializes console/terminal to best settings when using scone
+    package(scone) auto init()
     {
         cursorVisible = false;
         
@@ -47,7 +49,8 @@ struct OS
         }
     }
 
-    auto deinit()
+    ///De-initializes console/terminal
+    package(scone) auto deinit()
     {
         cursorVisible = true;
         setCursor(0,0);
@@ -63,6 +66,8 @@ struct OS
         }
     }
 
+    ///Get the size of the window
+    ///Returns: uint[2], where [0] is width, and [1] is height
     auto size()
     {
         version(Windows)
@@ -76,7 +81,8 @@ struct OS
         }
     }
 
-    void size(uint width, uint height)
+    ///Set the size of the window
+    void resize(uint width, uint height)
     {
         version(Windows)
         {
@@ -89,6 +95,7 @@ struct OS
         }
     }
 
+    ///Set if the cursor should be visible
     auto cursorVisible(bool visible) @property
     {
         version(Windows)
@@ -102,6 +109,8 @@ struct OS
         }
     }
 
+    ///Set the cursor at position
+    ///Note: This function should only be called by scone itself
     auto setCursor(uint x, uint y)
     {
         version(Windows)
@@ -115,6 +124,7 @@ struct OS
         }
     }
 
+    ///Set the title of the window
     void title(string title) @property
     {
         version(Windows)
@@ -1079,7 +1089,7 @@ struct OS
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!int(w.ws_col), to!int(w.ws_row)];
+            return [to!uint(w.ws_col), to!uint(w.ws_row)];
         }
 
         auto resize(uint width, uint height)

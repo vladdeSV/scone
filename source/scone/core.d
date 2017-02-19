@@ -26,5 +26,21 @@ static ~this()
     OS.deinit();
 }
 
-///global window (aka console/terminal)
+/**
+ * Gateway to the console/terminal
+ * All methods are called from here
+ * Example:
+ * ---
+ * void main()
+ * {
+ *     window.title = "i am happy";
+ *     while(true)
+ *     {
+ *         window.clear();
+ *         window.write(0,0, "hello world", fg(red), '!', bg(white), 42);
+ *         window.print();
+ *     }
+ * }
+ * ---
+ */
 static Window window;

@@ -2,7 +2,7 @@ module scone.logger;
 
 import std.stdio : writefln, File;
 
-///log to logfile
+///scone logging function
 static void logf(Args...)(string str, Args args)
 {
     logfile.writefln(str, args);
