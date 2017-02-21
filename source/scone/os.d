@@ -1147,14 +1147,21 @@ struct OS
         {
             while(active)
             {
-                immutable key = fgetc(stdin); //TODO: some sort of int -> SK converter
-                if(key == 27)
+                immutable input = fgetc(stdin); //TODO: some sort of int -> SK converter
+                SK key = SK.unknown;
+                SCK ckey = SCK.none;
+
+                if(input >= 97 && input <= 122)
                 {
-                    send(parentThreadID, 1);
-                    return;
+                    key = cast(SK)(SK.a + input - 97);
+                }
+                else if(input >= 65 && input <= 90)
+                {
+                    key = cast(SK)(SK.a + input - 97);
+                    ckey |= SCK.shift;
                 }
 
-                send(parentThreadID, InputEvent(cast(SK) key, SCK.none, true));
+                send(parentThreadID, InputEvent(key, ckey, true));
             }
         }
 
