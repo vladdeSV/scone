@@ -236,7 +236,7 @@ struct Window
     {
         foreach(ref row; _backbuffer)
         {
-            row[] = Cell(' ');
+            row[] = Cell(char(0));
         }
     }
 
@@ -285,8 +285,8 @@ struct Window
     alias h = height;
 
     //Temporarily disable input for non-Windows
-    version(Windows)
-    {
+    //version(Windows)
+    
         /**
         * Returns: InputEvent, max 128 last calls
         */
@@ -295,24 +295,34 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
-                /+
-                import std.datetime : msecs;
+                import std.datetime : msecs, Duration;
+                import std.stdio : writeln;
 
                 InputEvent e;
 
-                receiveTimeout(
-                    100.msecs,
-                    (InputEvent ie) { e = ie; }
+                receiveTimeout
+                (
+                    Duration.zero,
+                    (InputEvent ie) { e = ie; },
+
+                    //debug
+                    (int code)
+                    {
+                        if(code == 1)
+                        {
+                            assert(0, "got a one");
+                        }
+                    }
                 );
 
                 if(e.key != SK.unknown)
                 {
                     return [e];
                 }
-                +/
+                
                 return null;
             }
-        }
+        
     }
 
     //all cells which can be written to, and backbuffer

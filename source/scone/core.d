@@ -6,7 +6,23 @@ import scone.logger;
 import std.stdio : File, writefln;
 import std.datetime;
 
-static this()
+version(Windows)
+{
+    static this()
+    {
+        initialize();
+    }
+}
+else
+{
+    shared static this()
+    {
+        initialize();
+    }
+}
+
+//init funciton, called by either `static this()` on Windows, or `shared static this()` on POSIX
+static private void initialize()
 {
     //init the logfile
     logfile = File("scone.log", "w+");

@@ -26,6 +26,13 @@ version(Posix)
     import std.concurrency;
     import std.conv : to, text;
     import std.stdio : write, writef;
+
+    import core.stdc.stdio;
+    extern(C)
+    {
+        import core.sys.posix.termios;
+        void cfmakeraw(termios *termios_p);
+    }
 }
 
 ///Wrapper for OS specific functions
@@ -1051,18 +1058,29 @@ struct OS
 
         auto init()
         {
+            active = true;
             //turn off linewrapping
             //execute(["tput", "rmam"]);
-            lineWrapping = false;
+            //lineWrapping = false;
 
-            //auto childTid = spawn(&pollInputEvent, thisTid);
+            newState = oldState;
+            cfmakeraw(&newState);
+            tcsetattr(1, TCSADRAIN, &newState);
+
+            childTid = spawn(&pollInputEvent, thisTid);
         }
 
         auto deinit()
         {
+            tcsetattr(1, TCSADRAIN, &oldState);
             //turn on linewrapping
             //execute(["tput", "smam"]);
-            lineWrapping = true;
+            //lineWrapping = true;
+            active = false;
+
+            import std.stdio : writeln;
+            setCursor(0,0);
+            writeln("Application exited. Press any key to continue...");
         }
 
         auto setCursor(uint x, uint y)
@@ -1125,21 +1143,25 @@ struct OS
             }
         }
 
-        /+
-        void pollInputEvent(Tid parentThreadID)
+        private void pollInputEvent(Tid parentThreadID)
         {
-            import std.datetime;
-            MonoTime currTime = MonoTime.currTime();
-
-            while(true)
+            while(active)
             {
-                if(MonoTime.currTime() > currTime + 1.seconds)
+                immutable key = fgetc(stdin); //TODO: some sort of int -> SK converter
+                if(key == 27)
                 {
-                    currTime = MonoTime.currTime();
-                    send(parentThreadID, InputEvent(cast(SK) uniform(SK.a, SK.z), SCK.none, true));
+                    send(parentThreadID, 1);
+                    return;
                 }
+
+                send(parentThreadID, InputEvent(cast(SK) key, SCK.none, true));
             }
         }
-        +/
+
+        package(scone) shared bool active = false;
+        private Tid childTid;
+        private termios oldState = {8966, 7, 2816, 536_871_375, [4, 0, 0, 127, 23, 21, 18, 0, 3, 28, 26, 0, 17, 19, 22,
+                                    15, 0, 0, 0, 0], 0, 0},
+                        newState = {1, 0, 2816, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 0, 0};
     }
 }
