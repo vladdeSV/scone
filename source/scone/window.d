@@ -4,6 +4,7 @@ import scone.color;
 import scone.os;
 import scone.input;
 import std.concurrency;
+import std.datetime : Duration;
 import scone.logger;
 
 import std.conv : to, text;
@@ -295,27 +296,32 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
+                //if the input poller isn't active, activate it
                 if(!OS.Posix.isActive)
                 {
                     OS.Posix.startPollingInput();
                 }
 
-                import std.datetime : msecs, Duration;
+                InputEvent[] events;
+                bool receivedInput = true;
 
-                InputEvent e;
-
-                receiveTimeout
-                (
-                    Duration.zero,
-                    (InputEvent ie) { e = ie; },
-                );
-
-                if(e.key != SK.unknown)
+                while(receivedInput)
                 {
-                    return [e];
+                    bool gotSomething = false;
+                    
+                    receiveTimeout
+                    (
+                        Duration.zero,
+                        (InputEvent ie) { events ~= ie; gotSomething = true; },
+                    );
+
+                    if(!gotSomething)
+                    {
+                        receivedInput = false;
+                    }
                 }
-                
-                return null;
+
+                return events;
             }
         
     }
