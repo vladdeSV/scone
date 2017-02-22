@@ -4,7 +4,7 @@
 
 ### Features:
 * Easy to use
-* Efficient output to the console
+* Efficient output to the console/terminal
 * Cross-platform
 * Keyboard input (limited for POSIX family)
 
