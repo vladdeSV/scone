@@ -1166,29 +1166,11 @@ struct OS
                 }
                 else if(ufds.revents & POLLIN)
                 {
+                    //read from keyboard
                     read(STDOUT_FILENO, &input, 1);
 
-                    SK key = SK.unknown;
-                    SCK ckey = SCK.none;
-
-                    //+
-
-                    //char -> SK
-                    if(input >= 97 && input <= 122)
-                    {
-                        key = cast(SK)(SK.a + input - 97);
-                    }
-                    else if(input >= 65 && input <= 90)
-                    {
-                        key = cast(SK)(SK.a + input - 65);
-                        ckey |= SCK.shift;
-                    }
-
-                    //debug
-                    write(input, "->");
-                    //+/
-
-                    send(parentThreadID, InputEvent(key, ckey, true));
+                    //send ansi to main thread, where it will be handled.
+                    send(parentThreadID, input);
                 }
             }
         }

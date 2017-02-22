@@ -59,7 +59,7 @@ struct Window
             else static if(is(typeof(arg) == Cell))
             {
                 cells ~= arg;
-                
+
             }
             else static if(is(typeof(arg) == Cell[]))
             {
@@ -105,7 +105,7 @@ struct Window
                 }
                 else
                 {
-                    _cells[y + wy][x + wx] = cell;   
+                    _cells[y + wy][x + wx] = cell;
                     ++wx;
                 }
             }
@@ -258,7 +258,7 @@ struct Window
     void resize(uint width, uint height)
     {
         OS.resize(width, height);
-        
+
         _cells = new Cell[][](height, width);
         _backbuffer = new Cell[][](height, width);
 
@@ -287,7 +287,7 @@ struct Window
 
     //Temporarily disable input for non-Windows
     //version(Windows)
-    
+
         /**
         * Returns: InputEvent, max 128 last calls
         */
@@ -296,7 +296,7 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
-                InputEvent[] events;
+                uint[] codes;
                 bool receivedInput = true;
 
                 while(receivedInput)
@@ -306,7 +306,7 @@ struct Window
                     receiveTimeout
                     (
                         Duration.zero,
-                        (InputEvent ie) { events ~= ie; gotSomething = true; },
+                        (uint code) { codes ~= code; gotSomething = true; },
                     );
 
                     if(!gotSomething)
@@ -315,9 +315,24 @@ struct Window
                     }
                 }
 
+                InputEvent[] events;
+
+                //char -> SK
+                foreach(code; codes)
+                {
+                    if(code >= 97 && code <= 122)
+                    {
+                        events ~= InputEvent(cast(SK)(SK.a + code - 97), SCK.none, true);
+                    }
+                    else if(code >= 65 && code <= 90)
+                    {
+                        events ~= InputEvent(cast(SK)(SK.a + code - 97), SCK.shift, true);
+                    }
+                }
+
                 return events;
             }
-        
+
     }
 
     //all cells which can be written to, and backbuffer
