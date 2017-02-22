@@ -296,19 +296,13 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
-                //if the input poller isn't active, activate it
-                if(!OS.Posix.isActive)
-                {
-                    OS.Posix.startPollingInput();
-                }
-
                 InputEvent[] events;
                 bool receivedInput = true;
 
                 while(receivedInput)
                 {
                     bool gotSomething = false;
-                    
+
                     receiveTimeout
                     (
                         Duration.zero,

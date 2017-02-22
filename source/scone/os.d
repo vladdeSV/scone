@@ -7,6 +7,7 @@ import core.thread;
 import std.random;
 import scone.color : Color;
 import scone.input;
+import scone.core : inited;
 
 version(Windows)
 {
@@ -22,14 +23,19 @@ version(Windows)
 
 version(Posix)
 {
+    ///needs to be specifically set, otherwise ioctl crashes ;(
+    version (OSX) enum TIOCGWINSZ = 0x40087468;
+
     import core.sys.posix.sys.ioctl;
+    import core.sys.posix.fcntl;
     import core.sys.posix.unistd : STDOUT_FILENO;
     import scone.logger;
     import std.concurrency;
     import std.conv : to, text;
     import std.stdio : write, writef;
-
+    import core.sys.posix.unistd : read;
     import core.stdc.stdio;
+    import core.sys.posix.poll;
     extern(C)
     {
         import core.sys.posix.termios;
@@ -39,14 +45,14 @@ version(Posix)
 
 ///Wrapper for OS specific functions
 struct OS
-{    
+{
     static:
-    
+
     ///Initializes console/terminal to best settings when using scone
     package(scone) auto init()
     {
         cursorVisible = false;
-        
+
         version(Windows)
         {
             Windows.init();
@@ -63,7 +69,7 @@ struct OS
     {
         cursorVisible = true;
         setCursor(0,0);
-        
+
         version(Windows)
         {
             Windows.deinit();
@@ -257,11 +263,11 @@ struct OS
             if (windowSize.X > width || windowSize.Y > height)
             {
                 // window size needs to be adjusted before the buffer size can be reduced.
-                SMALL_RECT info = 
-                { 
-                    0, 
-                    0, 
-                    width <  windowSize.X ? to!short(width-1)  : to!short(windowSize.X-1), 
+                SMALL_RECT info =
+                {
+                    0,
+                    0,
+                    width <  windowSize.X ? to!short(width-1)  : to!short(windowSize.X-1),
                     height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
                 };
 
@@ -1053,30 +1059,24 @@ struct OS
     version(Posix)
     static struct Posix
     {
-        ///needs to be specifically set, otherwise ioctl crashes ;(
-        version (OSX) enum TIOCGWINSZ = 0x40087468;
-
         static:
 
         auto init()
         {
             tcgetattr(1, &oldState);
             newState = oldState;
-
             cfmakeraw(&newState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
+
+            spawn(&pollInputEvent, thisTid);
         }
 
         //TODO:
         //this gets run twice because two threads uses `static ~this()`
         auto deinit()
         {
-            _active = false;
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
-
-            import std.stdio : writeln;
             setCursor(0,0);
-            writeln("Application exited. Press [Enter] key to continue...");
         }
 
         auto setCursor(uint x, uint y)
@@ -1141,50 +1141,59 @@ struct OS
 
         private void pollInputEvent(Tid parentThreadID)
         {
-            while(_active)
+            while(inited)
             {
-                immutable input = getchar(); //TODO: some sort of int -> SK converter
-                SK key = SK.unknown;
-                SCK ckey = SCK.none;
+                //TODO: make this non-blocking. maybe with timeout
+                //immutable input = getchar(); //TODO: some sort of int -> SK converter
 
-                if(input >= 97 && input <= 122)
-                {
-                    key = cast(SK)(SK.a + input - 97);
-                }
-                else if(input >= 65 && input <= 90)
-                {
-                    key = cast(SK)(SK.a + input - 65);
-                    ckey |= SCK.shift;
-                }
+                pollfd ufds;
+                ufds.fd = STDOUT_FILENO;
+                ufds.events = POLLIN;
 
-                send(parentThreadID, InputEvent(key, ckey, true));
+                uint input;
+                enum timeout = 1000;
+                immutable bytesRead = poll(&ufds, 1, timeout);
+
+                if(bytesRead == -1)
+                {
+                    logf("(POSIX) ERROR: polling input returned -1");
+                }
+                else if(bytesRead == 0)
+                {
+                    //timeout!
+                    //if no key was pressed within `timeout`,
+                    //this happens. which is good!
+                }
+                else if(ufds.revents & POLLIN)
+                {
+                    read(STDOUT_FILENO, &input, 1);
+
+                    SK key = SK.unknown;
+                    SCK ckey = SCK.none;
+
+                    //+
+
+                    //char -> SK
+                    if(input >= 97 && input <= 122)
+                    {
+                        key = cast(SK)(SK.a + input - 97);
+                    }
+                    else if(input >= 65 && input <= 90)
+                    {
+                        key = cast(SK)(SK.a + input - 65);
+                        ckey |= SCK.shift;
+                    }
+
+                    //debug
+                    write(input, "->");
+                    //+/
+
+                    send(parentThreadID, InputEvent(key, ckey, true));
+                }
             }
         }
-
-        //my ugliest fix in history. this must be run once in order to
-        //start input polling
-        package(scone) void startPollingInput()
-        {
-            if(!_active)
-            {
-                _active = true;
-                childTid = spawn(&pollInputEvent, thisTid);
-            }
-        }
-        
-        //even more ugly fixes
-        ///See if program is scanning inputs
-        ///Returns: bool
-        auto isActive()
-        {
-            return _active;
-        }
-
-        private Tid childTid;
 
         //globally shared
-        private static __gshared bool _active = false;
         private static __gshared termios oldState, newState;
-        
     }
 }

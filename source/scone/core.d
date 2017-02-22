@@ -32,7 +32,7 @@ static ~this()
     OS.deinit();
 }
 
-private __gshared static bool inited = false;
+package(scone) __gshared static bool inited = false;
 
 /**
  * Gateway to the console/terminal
