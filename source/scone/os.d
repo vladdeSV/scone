@@ -1157,7 +1157,7 @@ struct OS
                 }
                 else if(input >= 65 && input <= 90)
                 {
-                    key = cast(SK)(SK.a + input - 97);
+                    key = cast(SK)(SK.a + input - 65);
                     ckey |= SCK.shift;
                 }
 
