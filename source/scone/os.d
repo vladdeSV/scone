@@ -1,5 +1,7 @@
 module scone.os;
 
+import std.stdio : writeln, readln;
+
 import scone.input;
 import core.thread;
 import std.random;
@@ -1059,27 +1061,22 @@ struct OS
         auto init()
         {
             tcgetattr(1, &oldState);
-            tcgetattr(1, &oldState);
+            newState = oldState;
+
             cfmakeraw(&newState);
-            tcsetattr(1, TCSADRAIN, &newState);
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
         }
 
-        //my ugliest fix in history
-        package(scone) void startPollingInput()
-        {
-            active = true;
-            childTid = spawn(&pollInputEvent, thisTid);
-        }
-
+        //TODO:
+        //this gets run twice because two threads uses `static ~this()`
         auto deinit()
         {
-            tcsetattr(1, TCSADRAIN, &oldState);
-
-            active = false;
+            _active = false;
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
 
             import std.stdio : writeln;
             setCursor(0,0);
-            writeln("Application exited. Press any key to continue...");
+            writeln("Application exited. Press [Enter] key to continue...");
         }
 
         auto setCursor(uint x, uint y)
@@ -1144,9 +1141,9 @@ struct OS
 
         private void pollInputEvent(Tid parentThreadID)
         {
-            while(active)
+            while(_active)
             {
-                immutable input = fgetc(stdin); //TODO: some sort of int -> SK converter
+                immutable input = getchar(); //TODO: some sort of int -> SK converter
                 SK key = SK.unknown;
                 SCK ckey = SCK.none;
 
@@ -1164,9 +1161,30 @@ struct OS
             }
         }
 
-        package(scone) shared bool active = false;
+        //my ugliest fix in history. this must be run once in order to
+        //start input polling
+        package(scone) void startPollingInput()
+        {
+            if(!_active)
+            {
+                _active = true;
+                childTid = spawn(&pollInputEvent, thisTid);
+            }
+        }
+        
+        //even more ugly fixes
+        ///See if program is scanning inputs
+        ///Returns: bool
+        auto isActive()
+        {
+            return _active;
+        }
+
         private Tid childTid;
-        private termios oldState, newState;
+
+        //globally shared
+        private static __gshared bool _active = false;
+        private static __gshared termios oldState, newState;
         
     }
 }

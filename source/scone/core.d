@@ -6,24 +6,11 @@ import scone.logger;
 import std.stdio : File, writefln;
 import std.datetime;
 
-version(Windows)
+static this()
 {
-    static this()
-    {
-        initialize();
-    }
-}
-else
-{
-    shared static this()
-    {
-        initialize();
-    }
-}
+    if(inited) { return; }
+    inited = true;
 
-//init funciton, called by either `static this()` on Windows, or `shared static this()` on POSIX
-static private void initialize()
-{
     //init the logfile
     logfile = File("scone.log", "w+");
     logfile.writefln("scone: %s", Clock.currTime().toISOExtString());
@@ -39,8 +26,13 @@ static private void initialize()
 
 static ~this()
 {
+    if(!inited) { return; }
+    inited = false;
+
     OS.deinit();
 }
+
+private __gshared static bool inited = false;
 
 /**
  * Gateway to the console/terminal

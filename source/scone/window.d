@@ -295,13 +295,12 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
-                if(!OS.Posix.active)
+                if(!OS.Posix.isActive)
                 {
                     OS.Posix.startPollingInput();
                 }
 
                 import std.datetime : msecs, Duration;
-                import std.stdio : writeln;
 
                 InputEvent e;
 
@@ -309,15 +308,6 @@ struct Window
                 (
                     Duration.zero,
                     (InputEvent ie) { e = ie; },
-
-                    //debug
-                    (int code)
-                    {
-                        if(code == 1)
-                        {
-                            assert(0, "got a one");
-                        }
-                    }
                 );
 
                 if(e.key != SK.unknown)
