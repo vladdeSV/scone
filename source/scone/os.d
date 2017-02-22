@@ -1059,12 +1059,10 @@ struct OS
         auto init()
         {
             active = true;
-            //turn off linewrapping
-            //execute(["tput", "rmam"]);
-            //lineWrapping = false;
 
-            //newState = oldState;
-            //cfmakeraw(&newState);
+            tcgetattr(1, &oldState);
+            tcgetattr(1, &newState);
+            cfmakeraw(&newState);
             tcsetattr(1, TCSADRAIN, &newState);
 
             childTid = spawn(&pollInputEvent, thisTid);
@@ -1073,9 +1071,7 @@ struct OS
         auto deinit()
         {
             tcsetattr(1, TCSADRAIN, &oldState);
-            //turn on linewrapping
-            //execute(["tput", "smam"]);
-            //lineWrapping = true;
+
             active = false;
 
             import std.stdio : writeln;
@@ -1167,8 +1163,7 @@ struct OS
 
         package(scone) shared bool active = false;
         private Tid childTid;
-        private termios oldState = termios(8966, 7, 2816, 536_871_375, [4, 0, 0, 127, 23, 21, 18, 0, 3, 28, 26, 0, 17, 19, 22,
-                                    15, 0, 0, 0, 0], 0, 0),
-                        newState = termios(1, 0, 2816, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 0, 0);
+        private termios oldState, newState;
+        
     }
 }
