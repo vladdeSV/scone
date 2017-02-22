@@ -1058,13 +1058,16 @@ struct OS
 
         auto init()
         {
-            active = true;
-
             tcgetattr(1, &oldState);
-            tcgetattr(1, &newState);
+            tcgetattr(1, &oldState);
             cfmakeraw(&newState);
             tcsetattr(1, TCSADRAIN, &newState);
+        }
 
+        //my ugliest fix in history
+        package(scone) void startPollingInput()
+        {
+            active = true;
             childTid = spawn(&pollInputEvent, thisTid);
         }
 

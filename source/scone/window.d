@@ -295,6 +295,11 @@ struct Window
             version(Windows){ return OS.Windows.retreiveInputs(); }
             version(Posix)
             {
+                if(!OS.Posix.active)
+                {
+                    OS.Posix.startPollingInput();
+                }
+
                 import std.datetime : msecs, Duration;
                 import std.stdio : writeln;
 
