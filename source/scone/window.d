@@ -285,54 +285,44 @@ struct Window
     ///
     alias h = height;
 
-    //Temporarily disable input for non-Windows
-    //version(Windows)
-
-        /**
-        * Returns: InputEvent, max 128 last calls
-        */
-        InputEvent[] getInputs()
+    /**
+    * Returns: InputEvent
+    */
+    InputEvent[] getInputs()
+    {
+        version(Windows){ return OS.Windows.retreiveInputs(); }
+        version(Posix)
         {
-            version(Windows){ return OS.Windows.retreiveInputs(); }
-            version(Posix)
+            uint[] codes;
+            bool receivedInput = true;
+
+            while(receivedInput)
             {
-                uint[] codes;
-                bool receivedInput = true;
+                bool gotSomething = false;
 
-                while(receivedInput)
+                receiveTimeout
+                (
+                    Duration.zero,
+                    (uint code) { codes ~= code; gotSomething = true; },
+                );
+
+                if(!gotSomething)
                 {
-                    bool gotSomething = false;
-
-                    receiveTimeout
-                    (
-                        Duration.zero,
-                        (uint code) { codes ~= code; gotSomething = true; },
-                    );
-
-                    if(!gotSomething)
-                    {
-                        receivedInput = false;
-                    }
+                    receivedInput = false;
                 }
-
-                InputEvent[] events;
-
-                //char -> SK
-                foreach(code; codes)
-                {
-                    if(code >= 97 && code <= 122)
-                    {
-                        events ~= InputEvent(cast(SK)(SK.a + code - 97), SCK.none, true);
-                    }
-                    else if(code >= 65 && code <= 90)
-                    {
-                        events ~= InputEvent(cast(SK)(SK.a + code - 97), SCK.shift, true);
-                    }
-                }
-
-                return events;
             }
 
+            /+ if(codes.length) logf("%s", codes); +/
+
+            InputEvent[] events;
+            auto ev = OS.Posix.inputEventFromAscii(codes);
+            if(ev.key != SK.unknown)
+            {
+                events ~= ev;
+            }
+
+            return events;
+        }
     }
 
     //all cells which can be written to, and backbuffer
