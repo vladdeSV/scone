@@ -1063,8 +1063,8 @@ struct OS
             //execute(["tput", "rmam"]);
             //lineWrapping = false;
 
-            newState = oldState;
-            cfmakeraw(&newState);
+            //newState = oldState;
+            //cfmakeraw(&newState);
             tcsetattr(1, TCSADRAIN, &newState);
 
             childTid = spawn(&pollInputEvent, thisTid);
@@ -1167,8 +1167,8 @@ struct OS
 
         package(scone) shared bool active = false;
         private Tid childTid;
-        private termios oldState = {8966, 7, 2816, 536_871_375, [4, 0, 0, 127, 23, 21, 18, 0, 3, 28, 26, 0, 17, 19, 22,
-                                    15, 0, 0, 0, 0], 0, 0},
-                        newState = {1, 0, 2816, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 0, 0};
+        private termios oldState = termios(8966, 7, 2816, 536_871_375, [4, 0, 0, 127, 23, 21, 18, 0, 3, 28, 26, 0, 17, 19, 22,
+                                    15, 0, 0, 0, 0], 0, 0),
+                        newState = termios(1, 0, 2816, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 0, 0);
     }
 }
