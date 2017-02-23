@@ -1,9 +1,9 @@
 # Change Log
 
 ## v2.0.1-pre.1
-_23 February 2016_
+_23 February 2017_
 
- * POSIX: Limited keyboard input (tested on macOS)
+ * POSIX: Limited keyboard input (tested on macOS. starts polling inputs at first `getInputs()` call).
  * Defualt documentation generated in `docs/`
  * Updated README.md to suit v2.0.0
  * Minor bug-fixes
