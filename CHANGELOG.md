@@ -3,6 +3,9 @@
 ## v2.0.1-pre.1
 _23 February 2016_
  * POSIX: Basic keyboard input (tested on macOS)
+ * Defualt documentation generated in `docs/`
+ * Updated README.md to suit v2.0.0
+ * Minor bug-fixes
 
 ## v2.0.0-pre.0
 _19 February 2017_
