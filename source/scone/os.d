@@ -30,12 +30,13 @@ version(Posix)
     import core.sys.posix.fcntl;
     import core.sys.posix.unistd : STDOUT_FILENO;
     import scone.logger;
-    import std.concurrency;
+    import std.concurrency : spawn, Tid, thisTid, send;
     import std.conv : to, text;
     import std.stdio : write, writef;
     import core.sys.posix.unistd : read;
     import core.stdc.stdio;
     import core.sys.posix.poll;
+    import std.process : execute;
     extern(C)
     {
         import core.sys.posix.termios;
