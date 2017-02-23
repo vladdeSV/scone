@@ -1272,7 +1272,7 @@ struct OS
             }
 
             //to see if it stops polling input
-            writeln(" "); //adding this caused travis to pass...
+            writeln("."); //adding this caused travis to pass...
         }
 
         //globally shared
