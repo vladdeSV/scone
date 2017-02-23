@@ -23,7 +23,7 @@ version(Windows)
 
 version(Posix)
 {
-    ///needs to be specifically set, otherwise ioctl crashes ;(
+    ///needs to be specifically set, otherwise ioctl crashes D:
     version (OSX) enum TIOCGWINSZ = 0x40087468;
 
     import core.sys.posix.sys.ioctl;
