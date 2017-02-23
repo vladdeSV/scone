@@ -2,6 +2,7 @@
 
 ## v2.0.1-pre.1
 _23 February 2016_
+
  * POSIX: Basic keyboard input (tested on macOS)
  * Defualt documentation generated in `docs/`
  * Updated README.md to suit v2.0.0
@@ -9,6 +10,7 @@ _23 February 2016_
 
 ## v2.0.0-pre.0
 _19 February 2017_
+
  * `sconeOpen();`/`sconeClose();` is now run by default.
  * No more `class Frame();`. Replaced by `struct Window`, accessed by `static Window window;`
  * `window` acts as a gateway to the console/terminal.
