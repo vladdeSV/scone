@@ -293,6 +293,11 @@ struct Window
         version(Windows){ return OS.Windows.retreiveInputs(); }
         version(Posix)
         {
+            if(!OS.Posix.isPollingInput)
+            {
+                OS.Posix.beginPolling();
+            }
+
             uint[] codes;
             bool receivedInput = true;
 

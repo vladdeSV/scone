@@ -1068,8 +1068,6 @@ struct OS
             newState = oldState;
             cfmakeraw(&newState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
-
-            spawn(&pollInputEvent, thisTid);
         }
 
         auto deinit()
@@ -1236,6 +1234,21 @@ struct OS
             return InputEvent();
         }
 
+        ///Returns: bool, true if currently polling inputs.
+        auto isPollingInput() @property
+        {
+            return currentlyPolling;
+        }
+
+        package(scone) void beginPolling()
+        {
+            if(!currentlyPolling)
+            {
+                currentlyPolling = true;
+                spawn(&pollInputEvent, thisTid);
+            }
+        }
+
         private void pollInputEvent(Tid parentThreadID)
         {
             while(inited)
@@ -1277,5 +1290,6 @@ struct OS
 
         //globally shared
         private static __gshared termios oldState, newState;
+        private static __gshared bool currentlyPolling = false;
     }
 }
