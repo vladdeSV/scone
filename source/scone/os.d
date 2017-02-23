@@ -1071,8 +1071,6 @@ struct OS
             spawn(&pollInputEvent, thisTid);
         }
 
-        //TODO:
-        //this gets run twice because two threads uses `static ~this()`
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
@@ -1271,6 +1269,9 @@ struct OS
                     send(parentThreadID, input);
                 }
             }
+
+            //to see if it stops polling input
+            writeln("stopped polling input");
         }
 
         //globally shared
