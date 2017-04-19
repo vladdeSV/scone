@@ -11,10 +11,6 @@ static this()
     if(inited) { return; }
     inited = true;
 
-    //init the logfile
-    logfile = File("scone.log", "w+");
-    logfile.writefln("scone: %s", Clock.currTime().toISOExtString());
-
     //get current width and height
     OS.init();
     auto w = OS.size[0];
