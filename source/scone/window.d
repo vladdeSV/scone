@@ -293,6 +293,8 @@ struct Window
         version(Windows){ return OS.Windows.retreiveInputs(); }
         version(Posix)
         {
+            import tip;
+
             if(!OS.Posix.isPollingInput)
             {
                 OS.Posix.beginPolling();
@@ -320,7 +322,7 @@ struct Window
             /+ if(codes.length) logf("%s", codes); +/
 
             InputEvent[] events;
-            auto ev = OS.Posix.inputEventFromAscii(codes);
+            auto ev = eventFromSequence(InputSequence(codes));
             if(ev.key != SK.unknown)
             {
                 events ~= ev;

@@ -32,7 +32,7 @@ void loadInputSequneces()
         {
             s = s.chomp;
             //if line begins with #
-            if(s[0] == '#') continue;
+            if(s == "" || s[0] == '#') continue;
 
             string[] arguments = split(s, '\t');
             if(arguments.length != 5) continue; //something isn't right
@@ -62,7 +62,7 @@ void loadInputSequneces()
                 auto ie = InputEvent(parse!(SK)(arguments[0]), ck, true);
                 auto iseq = InputSequence(sequenceFromString(seq));
 
-                it[iseq] = ie;                
+                it[iseq] = ie;
             }
         }
     }

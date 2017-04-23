@@ -1060,6 +1060,7 @@ struct OS
     version(Posix)
     static struct Posix
     {
+        import tip;
         static:
 
         auto init()
@@ -1068,6 +1069,7 @@ struct OS
             newState = oldState;
             cfmakeraw(&newState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
+            loadInputSequneces();
         }
 
         auto deinit()
@@ -1136,6 +1138,7 @@ struct OS
             }
         }
 
+        /+
         ///Get InputEvent from ascii codes
         ///Returns: InputEvent
         InputEvent inputEventFromAscii(uint[] ascii)
@@ -1233,6 +1236,7 @@ struct OS
 
             return InputEvent();
         }
+        +/
 
         ///Returns: bool, true if currently polling inputs.
         auto isPollingInput() @property
