@@ -9,7 +9,6 @@ import std.datetime;
 static this()
 {
     if(inited) { return; }
-    inited = true;
 
     //get current width and height
     OS.init();
@@ -18,6 +17,8 @@ static this()
 
     //init window
     window = Window(w,h);
+
+    inited = true;
 }
 
 static ~this()

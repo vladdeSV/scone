@@ -37,6 +37,8 @@ void loadInputSequneces()
             string[] arguments = split(s, '\t');
             if(arguments.length != 5) continue; //something isn't right
 
+            auto key = parse!(SK)(arguments[0]);
+
             foreach(n, seq; arguments[1..$])
             {
                 //if sequence is not defined, skip
@@ -45,13 +47,13 @@ void loadInputSequneces()
                 SCK ck;
                 switch(n)
                 {
-                case 2:
+                case 1:
                     ck = SCK.shift;
                     break;
-                case 3:
+                case 2:
                     ck = SCK.ctrl;
                     break;
-                case 4:
+                case 3:
                     ck = SCK.alt;
                     break;
                 default:
@@ -59,7 +61,7 @@ void loadInputSequneces()
                     break;
                 }
 
-                auto ie = InputEvent(parse!(SK)(arguments[0]), ck, true);
+                auto ie = InputEvent(key, ck, true);
                 auto iseq = InputSequence(sequenceFromString(seq));
 
                 it[iseq] = ie;

@@ -319,8 +319,6 @@ struct Window
                 }
             }
 
-            /+ if(codes.length) logf("%s", codes); +/
-
             InputEvent[] events;
             auto ev = eventFromSequence(InputSequence(codes));
             if(ev.key != SK.unknown)
