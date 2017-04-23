@@ -75,12 +75,9 @@ struct InputEvent
         return _controlKey;
     }
 
-    private
-    {
-        SK _key;
-        SCK _controlKey;
-        bool _pressed;
-    }
+    private SK _key;
+    private SCK _controlKey;
+    private bool _pressed;
 }
 
 ///All keys which scone can handle

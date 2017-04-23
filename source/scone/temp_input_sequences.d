@@ -1,7 +1,11 @@
 module tip;
 
-
 import scone.input;
+
+import std.array : split;
+import std.conv : to, parse;
+import std.file : exists, readText;
+import std.string : chomp;
 
 ///
 struct InputSequence
@@ -17,36 +21,75 @@ struct InputSequence
 ///use input_sequences as default keymap
 void loadInputSequneces()
 {
-    import std.file : exists, readText;
-    import std.array : split;
-    import std.conv : to, parse;
+    enum file_name = "input_sequences";
 
-    import std.stdio;
-
-    if(exists("input_sequences"))
+    //if file `input_sequence` exists, load keymap
+    if(exists(file_name))
     {
-        string[] ies = split(readText("input_sequences"), '\n');
+        string[] ies = split(readText(file_name), '\n');
 
         foreach(s; ies)
         {
-            string[] aaa = split(s,'\t');
-            if(!(aaa.length > 2)) continue; //something isn't right
-            
-            InputEvent ie = InputEvent(parse!(SK)(aaa[0]), parse!(SCK)(aaa[1]), true);
+            s = s.chomp;
+            //if line begins with #
+            if(s[0] == '#') continue;
 
-            uint[] seq;
-            foreach(number_as_string; aaa[2 .. $])
+            string[] arguments = split(s, '\t');
+            if(arguments.length != 5) continue; //something isn't right
+
+            foreach(n, seq; arguments[1..$])
             {
-                seq ~= parse!uint(number_as_string);
+                //if sequence is not defined, skip
+                if(seq == "-") continue;
+
+                SCK ck;
+                switch(n)
+                {
+                case 2:
+                    ck = SCK.shift;
+                    break;
+                case 3:
+                    ck = SCK.ctrl;
+                    break;
+                case 4:
+                    ck = SCK.alt;
+                    break;
+                default:
+                    ck = SCK.none;
+                    break;
+                }
+
+                auto ie = InputEvent(parse!(SK)(arguments[0]), ck, true);
+                auto iseq = InputSequence(sequenceFromString(seq));
+
+                it[iseq] = ie;                
             }
-
-            InputSequence iseq = InputSequence(seq);
-
-            it[iseq] = ie;
         }
-
     }
-    
+    else
+    {
+        version(OSX)
+        {
+            //set default keymap for OSX
+        }
+        else
+        {
+            //set default keymap for Linux
+        }
+    }
+}
+
+///get uint[] from string in the format of "num1,num2,...,numX"
+uint[] sequenceFromString(string input)
+{
+    string[] numbers = split(input, ',');
+    uint[] sequence;
+    foreach(number_as_string; numbers)
+    {
+        sequence ~= parse!uint(number_as_string);
+    }
+
+    return sequence;
 }
 
 ///table holding all input sequences and their respective input
