@@ -63,7 +63,7 @@ Only use this if some sort of visual bug occurs.<br><br>
 </big></dt>
 <dd>Changes the size of the window
 <br><br>
-<b>Note:</b><br>
+<b>NOTE:</b><br>
 Clears the window<br><br>
 
 </dd>
@@ -119,6 +119,52 @@ InputEvent<br><br>
 <br><br>
 <b>Returns:</b><br>
 Cell[]<br><br>
+
+</dd>
+<dt><big><a name="Color"></a>enum <u>Color</u>: int;
+</big></dt>
+<dd>All colors
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code"><font color=green>//Available colors:
+</font>black
+black_dark
+blue
+blue_dark
+cyan
+cyan_dark
+green
+green_dark
+magenta
+magenta_dark
+red
+red_dark
+white
+white_dark
+yellow
+yellow_dark
+</pre>
+<br><br>
+
+</dd>
+<dt><big><a name="fg"></a>struct <u>fg</u>;
+</big></dt>
+<dd>Definition of a foreground color.
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code">window.write(0,0, <u>fg</u>(Color.red), <font color=red>"item"</font>);
+</pre>
+<br><br>
+
+</dd>
+<dt><big><a name="bg"></a>struct <u>bg</u>;
+</big></dt>
+<dd>Definition of a background color.
+<br><br>
+<b>Example:</b><br>
+<pre class="d_code">window.write(0,0, <u>bg</u>(Color.whites), <font color=red>"item"</font>);
+</pre>
+<br><br>
 
 </dd>
 </dl>

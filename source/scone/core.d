@@ -4,32 +4,6 @@ import scone.window;
 import scone.os;
 import std.stdio : File, writefln;
 
-static this()
-{
-    if(inited) { return; }
-
-    //get current width and height
-    OS.init();
-    auto w = OS.size[0];
-    auto h = OS.size[1];
-
-    //init window
-    window = Window(w,h);
-
-    inited = true;
-}
-
-static ~this()
-{
-    if(!inited) { return; }
-    inited = false;
-
-    OS.deinit();
-}
-
-//ugh, i need this for checking if program has exited in other thread
-package(scone) __gshared static bool inited = false;
-
 /**
  * Gateway to the console/terminal
  * All methods are called from here
@@ -48,3 +22,30 @@ package(scone) __gshared static bool inited = false;
  * ---
  */
 static Window window;
+
+static this()
+{
+    if(inited) { return; }
+
+    //get current width and height
+    OS.init();
+    auto w = OS.size[0];
+    auto h = OS.size[1];
+
+    //init window
+    window = Window(w,h);
+
+    inited = true;
+}
+
+static ~this()
+{
+    if(!inited) { return; }
+
+    OS.deinit();
+
+    inited = false;
+}
+
+//ugh, i need this for checking if program has exited in other thread
+package(scone) __gshared static bool inited = false;

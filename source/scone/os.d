@@ -5,7 +5,7 @@ import std.stdio : writeln, readln;
 import scone.input;
 import core.thread;
 import std.random;
-import scone.color : Color;
+import scone.window : Color;
 import scone.input;
 import scone.core : inited;
 

@@ -83,116 +83,6 @@ struct InputEvent
     private bool _pressed;
 }
 
-///when on posix, a list of keypresses is loaded and used
-version(Posix)
-{
-    import std.array : split;
-    import std.conv : to, parse;
-    import std.file : exists, readText;
-    import std.string : chomp;
-
-    ///
-    struct InputSequence
-    {
-        this(uint[] t)
-        {
-            value = t;
-        }
-
-        uint[] value;
-    }
-
-    ///get InputEvent from sequence
-    InputEvent eventFromSequence(InputSequence iseq)
-    {
-        if((iseq in inputSequences) !is null)
-        {
-            return inputSequences[iseq];
-        }
-
-        return InputEvent(SK.unknown, SCK.none, false);
-    }
-
-    ///use input_sequences as default keymap
-    void loadInputSequneces()
-    {
-        enum file_name = "input_sequences";
-
-        //if file `input_sequence` exists, load keymap
-        if(exists(file_name))
-        {
-            string[] ies = split(readText(file_name), '\n');
-
-            foreach(s; ies)
-            {
-                s = s.chomp;
-                //if line begins with #
-                if(s == "" || s[0] == '#') continue;
-
-                string[] arguments = split(s, '\t');
-                if(arguments.length != 5) continue; //something isn't right
-
-                auto key = parse!(SK)(arguments[0]);
-
-                foreach(n, seq; arguments[1..$])
-                {
-                    //if sequence is not defined, skip
-                    if(seq == "-") continue;
-
-                    SCK ck;
-                    switch(n)
-                    {
-                    case 1:
-                        ck = SCK.shift;
-                        break;
-                    case 2:
-                        ck = SCK.ctrl;
-                        break;
-                    case 3:
-                        ck = SCK.alt;
-                        break;
-                    default:
-                        ck = SCK.none;
-                        break;
-                    }
-
-                    auto ie = InputEvent(key, ck, true);
-                    auto iseq = InputSequence(sequenceFromString(seq));
-
-                    inputSequences[iseq] = ie;
-                }
-            }
-        }
-        else
-        {
-            version(OSX)
-            {
-                //set default keymap for OSX
-            }
-            else
-            {
-                //set default keymap for Linux
-            }
-        }
-    }
-
-    ///table holding all input sequences and their respective input
-    private InputEvent[InputSequence] inputSequences;
-
-    ///get uint[] from string in the format of "num1,num2,...,numX"
-    private uint[] sequenceFromString(string input) pure
-    {
-        string[] numbers = split(input, ',');
-        uint[] sequence;
-        foreach(number_as_string; numbers)
-        {
-            sequence ~= parse!uint(number_as_string);
-        }
-
-        return sequence;
-    }
-}
-
 ///All keys which scone can handle
 enum SK
 {
@@ -694,4 +584,114 @@ enum SCK
 
     ///Left or right CTRL key is pressed
     ctrl = 64,
+}
+
+///when on posix, a list of keypresses is loaded and used
+version(Posix)
+{
+    import std.array : split;
+    import std.conv : to, parse;
+    import std.file : exists, readText;
+    import std.string : chomp;
+
+    ///
+    struct InputSequence
+    {
+        this(uint[] t)
+        {
+            value = t;
+        }
+
+        uint[] value;
+    }
+
+    ///get InputEvent from sequence
+    InputEvent eventFromSequence(InputSequence iseq)
+    {
+        if((iseq in inputSequences) !is null)
+        {
+            return inputSequences[iseq];
+        }
+
+        return InputEvent(SK.unknown, SCK.none, false);
+    }
+
+    ///use input_sequences as default keymap
+    void loadInputSequneces()
+    {
+        enum file_name = "input_sequences";
+
+        //if file `input_sequence` exists, load keymap
+        if(exists(file_name))
+        {
+            string[] ies = split(readText(file_name), '\n');
+
+            foreach(s; ies)
+            {
+                s = s.chomp;
+                //if line begins with #
+                if(s == "" || s[0] == '#') continue;
+
+                string[] arguments = split(s, '\t');
+                if(arguments.length != 5) continue; //something isn't right
+
+                auto key = parse!(SK)(arguments[0]);
+
+                foreach(n, seq; arguments[1..$])
+                {
+                    //if sequence is not defined, skip
+                    if(seq == "-") continue;
+
+                    SCK ck;
+                    switch(n)
+                    {
+                    case 1:
+                        ck = SCK.shift;
+                        break;
+                    case 2:
+                        ck = SCK.ctrl;
+                        break;
+                    case 3:
+                        ck = SCK.alt;
+                        break;
+                    default:
+                        ck = SCK.none;
+                        break;
+                    }
+
+                    auto ie = InputEvent(key, ck, true);
+                    auto iseq = InputSequence(sequenceFromString(seq));
+
+                    inputSequences[iseq] = ie;
+                }
+            }
+        }
+        else
+        {
+            version(OSX)
+            {
+                //set default keymap for OSX
+            }
+            else
+            {
+                //set default keymap for Linux
+            }
+        }
+    }
+
+    ///table holding all input sequences and their respective input
+    private InputEvent[InputSequence] inputSequences;
+
+    ///get uint[] from string in the format of "num1,num2,...,numX"
+    private uint[] sequenceFromString(string input) pure
+    {
+        string[] numbers = split(input, ',');
+        uint[] sequence;
+        foreach(number_as_string; numbers)
+        {
+            sequence ~= parse!uint(number_as_string);
+        }
+
+        return sequence;
+    }
 }

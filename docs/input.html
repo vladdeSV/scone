@@ -10,7 +10,12 @@
 <dd>Key event structure
  Contains general information about a key press<br><br>
 
-<dl><dt><big><a name="InputEvent.key"></a>@property auto <u>key</u>();
+<dl><dt><big><a name="InputEvent.this"></a>this(SK <i>key</i>, SCK <i>controlKey</i>, bool <i>pressed</i>);
+</big></dt>
+<dd>Initialize an InputEvent<br><br>
+
+</dd>
+<dt><big><a name="InputEvent.key"></a>@property auto <u>key</u>();
 </big></dt>
 <dd>Get the <u>key</u>
 <br><br>
@@ -736,6 +741,25 @@ keyboard<br><br>
 
 </dd>
 </dl>
+</dd>
+<dt><big><a name="InputSequence"></a>struct <u>InputSequence</u>;
+</big></dt>
+<dd>when on posix, a list of keypresses is loaded and used<br><br>
+
+</dd>
+<dt><big><a name="eventFromSequence"></a>InputEvent <u>eventFromSequence</u>(InputSequence <i>iseq</i>);
+</big></dt>
+<dd>get InputEvent from sequence
+<br><br>
+when on posix, a list of keypresses is loaded and used<br><br>
+
+</dd>
+<dt><big><a name="loadInputSequneces"></a>void <u>loadInputSequneces</u>();
+</big></dt>
+<dd>use input_sequences as default keymap
+<br><br>
+when on posix, a list of keypresses is loaded and used<br><br>
+
 </dd>
 </dl>
 
