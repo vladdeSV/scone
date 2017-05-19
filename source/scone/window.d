@@ -318,10 +318,7 @@ struct Window
                 }
             }
 
-            if(codes !is null)
-            {
-                writeln(codes, "       ");
-            }
+            //if(codes !is null) writeln(codes, "       ");
 
             InputEvent[] events;
             auto ev = eventFromSequence(InputSequence(codes));
