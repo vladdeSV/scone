@@ -1060,7 +1060,6 @@ struct OS
     version(Posix)
     static struct Posix
     {
-        import tip;
         static:
 
         auto init()

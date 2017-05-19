@@ -91,6 +91,28 @@ version(Posix)
     import std.file : exists, readText;
     import std.string : chomp;
 
+    ///
+    struct InputSequence
+    {
+        this(uint[] t)
+        {
+            value = t;
+        }
+
+        uint[] value;
+    }
+
+    ///get InputEvent from sequence
+    InputEvent eventFromSequence(InputSequence iseq)
+    {
+        if((iseq in inputSequences) !is null)
+        {
+            return inputSequences[iseq];
+        }
+
+        return InputEvent(SK.unknown, SCK.none, false);
+    }
+
     ///use input_sequences as default keymap
     void loadInputSequneces()
     {
@@ -157,17 +179,6 @@ version(Posix)
     ///table holding all input sequences and their respective input
     private InputEvent[InputSequence] inputSequences;
 
-    ///
-    private struct InputSequence
-    {
-        this(uint[] t)
-        {
-            value = t;
-        }
-
-        uint[] value;
-    }
-
     ///get uint[] from string in the format of "num1,num2,...,numX"
     private uint[] sequenceFromString(string input) pure
     {
@@ -180,18 +191,6 @@ version(Posix)
 
         return sequence;
     }
-
-    ///get InputEvent from sequence
-    private InputEvent eventFromSequence(InputSequence iseq)
-    {
-        if((iseq in inputSequences) !is null)
-        {
-            return inputSequences[iseq];
-        }
-
-        return InputEvent(SK.unknown, SCK.none, false);
-    }
-
 }
 
 ///All keys which scone can handle

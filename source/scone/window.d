@@ -4,7 +4,7 @@ import scone.color;
 import scone.os;
 import scone.input;
 import std.concurrency;
-import std.datetime : Duration;
+import std.datetime : Duration, msecs;
 import scone.logger;
 
 import std.conv : to, text;
@@ -293,8 +293,6 @@ struct Window
         version(Windows){ return OS.Windows.retreiveInputs(); }
         version(Posix)
         {
-            import tip;
-
             if(!OS.Posix.isPollingInput)
             {
                 OS.Posix.beginPolling();
@@ -309,7 +307,7 @@ struct Window
 
                 receiveTimeout
                 (
-                    Duration.zero,
+                    1.msecs,
                     (uint code) { codes ~= code; gotSomething = true; },
                 );
 
