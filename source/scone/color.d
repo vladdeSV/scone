@@ -45,21 +45,29 @@ enum Color
     white_dark,
 }
 
+/**
+ * Definition of a foreground color.
+ * Example:
+ * ---
+ * window.write(0,0, fg(Color.red), "item");
+ * ---
+ */
 struct fg
 {
     mixin ColorTemplate;
 }
 
+/**
+ * Definition of a background color.
+ * Example:
+ * ---
+ * window.write(0,0, bg(Color.whites), "item");
+ * ---
+ */
 struct bg
 {
     mixin ColorTemplate;
 }
-
-//For POSIX support, these values need to start at 30 and 90 respectively.
-//However, OSX reversed the numbers for bright and dark colors.
-//version(OSX)
-    //private enum colorStartIndex = 90;
-    //private enum darkColorStartIndex = 30;
 
 private template ColorTemplate()
 {
@@ -67,7 +75,7 @@ private template ColorTemplate()
     {
         color = c;
     }
-    
+
     Color color;
     alias color this;
 }

@@ -5,7 +5,6 @@ import scone.os;
 import scone.input;
 import std.concurrency;
 import std.datetime : Duration, msecs;
-import scone.logger;
 
 import std.conv : to, text;
 import std.stdio;// : write, writef, writeln, writefln;
@@ -30,9 +29,9 @@ struct Window
     void write(Args...)(in uint x, in uint y, Args args)
     {
         //Check if writing outside border
-        if(x < 0 || y < 0 || x > w || y > h)
+        if(/+x < 0 || y < 0 ||+/ x >= w || y >= h)
         {
-            logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, w, h);
+            //logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, w, h);
             return;
         }
 
@@ -83,7 +82,7 @@ struct Window
         //If the last argument is a color, warn
         if(cells.length && unsetColors)
         {
-            logf("Warning: The last argument in %s is a color, which will not be set!", args);
+            //logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
         if(!cells.length)
@@ -254,7 +253,7 @@ struct Window
     }
 
     ///Changes the size of the window
-    ///Note: Clears the window
+    ///NOTE: Clears the window
     void resize(uint width, uint height)
     {
         OS.resize(width, height);
@@ -290,7 +289,10 @@ struct Window
     */
     InputEvent[] getInputs()
     {
-        version(Windows){ return OS.Windows.retreiveInputs(); }
+        version(Windows)
+        {
+            return OS.Windows.retreiveInputs();
+        }
         version(Posix)
         {
             if(!OS.Posix.isPollingInput)

@@ -2,9 +2,7 @@ module scone.core;
 
 import scone.window;
 import scone.os;
-import scone.logger;
 import std.stdio : File, writefln;
-import std.datetime;
 
 static this()
 {
@@ -29,6 +27,7 @@ static ~this()
     OS.deinit();
 }
 
+//ugh, i need this for checking if program has exited in other thread
 package(scone) __gshared static bool inited = false;
 
 /**

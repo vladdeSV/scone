@@ -29,7 +29,6 @@ version(Posix)
     import core.sys.posix.sys.ioctl;
     import core.sys.posix.fcntl;
     import core.sys.posix.unistd : STDOUT_FILENO;
-    import scone.logger;
     import std.concurrency : spawn, Tid, thisTid, send;
     import std.conv : to, text;
     import std.stdio : write, writef;
@@ -1269,7 +1268,7 @@ struct OS
 
                 if(bytesRead == -1)
                 {
-                    logf("(POSIX) ERROR: polling input returned -1");
+                    //logf("(POSIX) ERROR: polling input returned -1");
                 }
                 else if(bytesRead == 0)
                 {

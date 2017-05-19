@@ -31,10 +31,10 @@ struct Ticker
      */
     auto ticks() @property
     {
-        /* Kudos to Yepoleb who helped me with this */
-        MonoTime newtime = MonoTime.currTime();
-        Duration duration = newtime - _lasttime;
-        long durationmsec = duration.total!"msecs";
+        /* Kudos to @Yepoleb who helped me with this */
+        immutable newtime = MonoTime.currTime();
+        immutable duration = newtime - _lasttime;
+        immutable durationmsec = duration.total!"msecs";
 
         _lasttime = newtime;
         _msecs += durationmsec;
