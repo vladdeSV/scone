@@ -594,7 +594,13 @@ version(Posix)
     import std.file : exists, readText;
     import std.string : chomp;
 
-    ///
+    /**
+     * Wrapper for an input sequence sent by the POSIX terminal
+     * An input from the terminal is given by numbers in sequence
+     *
+     * For example, the right arrow key might send "27, 91, 67",
+     * and will be stored as [27, 91, 67]
+     */
     struct InputSequence
     {
         this(uint[] t)
@@ -608,11 +614,13 @@ version(Posix)
     ///get InputEvent from sequence
     InputEvent eventFromSequence(InputSequence iseq)
     {
+        //check for input sequence in map
         if((iseq in inputSequences) !is null)
         {
             return inputSequences[iseq];
         }
 
+        //if not found, return unknown input
         return InputEvent(SK.unknown, SCK.none, false);
     }
 

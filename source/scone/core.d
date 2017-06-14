@@ -23,6 +23,9 @@ import std.stdio : File, writefln;
  */
 static Window window;
 
+/**
+ * Initializes scone
+ */
 static this()
 {
     if(inited) { return; }
@@ -38,6 +41,9 @@ static this()
     inited = true;
 }
 
+/**
+ * Deinitializes scone
+ */
 static ~this()
 {
     if(!inited) { return; }

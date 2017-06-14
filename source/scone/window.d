@@ -252,7 +252,7 @@ struct Window
     }
 
     ///Changes the size of the window
-    ///NOTE: Clears the window
+    ///NOTE: Clears the buffer
     void resize(uint width, uint height)
     {
         OS.resize(width, height);
@@ -284,7 +284,8 @@ struct Window
     alias h = height;
 
     /**
-    * Returns: InputEvent
+    * Get a range of all inputs since last call.
+    * Returns: InputEvent[]
     */
     InputEvent[] getInputs()
     {
@@ -294,6 +295,13 @@ struct Window
         }
         version(Posix)
         {
+            //this is some spooky hooky code, dealing with
+            //multi-thread and reading inputs with timeouts
+            //from the terminal. then converting it to something
+            //scone can understand.
+            //
+            //blesh...
+
             if(!OS.Posix.isPollingInput)
             {
                 OS.Posix.beginPolling();
@@ -317,8 +325,6 @@ struct Window
                     receivedInput = false;
                 }
             }
-
-            //if(codes !is null) writeln(codes, "       ");
 
             InputEvent[] events;
             auto ev = eventFromSequence(InputSequence(codes));
@@ -430,6 +436,7 @@ struct bg
     mixin ColorTemplate;
 }
 
+///both `fg` and `bg` work the same way. this is not not have duplicate code :)
 private template ColorTemplate()
 {
     this(Color c)
