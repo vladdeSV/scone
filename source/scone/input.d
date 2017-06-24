@@ -685,7 +685,7 @@ version(Posix)
 	///get uint[] from string in the format of "num1,num2,...,numX"
 	private uint[] sequenceFromString(string input) pure
 	{
-		string[] numbers = split(input, ',');
+		string[] numbers = split(input, ", ");
 		uint[] sequence;
 		foreach(number_as_string; numbers)
 		{
