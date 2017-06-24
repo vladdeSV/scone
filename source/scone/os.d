@@ -1136,106 +1136,6 @@ struct OS
             }
         }
 
-        /+
-        ///Get InputEvent from ascii codes
-        ///Returns: InputEvent
-        InputEvent inputEventFromAscii(uint[] ascii)
-        {
-            if(ascii.length == 3)
-            {
-                if(ascii[0] == 27 && ascii[1] == 91)
-                {
-                    if(ascii[2] == 65)
-                    {
-                        return InputEvent(SK.up, SCK.none, true);
-                    }
-                    else if(ascii[2] == 66)
-                    {
-                        return InputEvent(SK.down, SCK.none, true);
-                    }
-                    else if(ascii[2] == 67)
-                    {
-                        return InputEvent(SK.right, SCK.none, true);
-                    }
-                    else if(ascii[2] == 68)
-                    {
-                        return InputEvent(SK.left, SCK.none, true);
-                    }
-                }
-            }
-            else if(ascii.length == 2)
-            {
-
-            }
-            else if(ascii.length == 1)
-            {
-                if(ascii[0] >= 97 && ascii[0] <= 122)
-                {
-                    return InputEvent(cast(SK)(SK.a + ascii[0] - 97), SCK.none, true);
-                }
-                else if(ascii[0] >= 65 && ascii[0] <= 90)
-                {
-                    return InputEvent(cast(SK)(SK.a + ascii[0] - 97), SCK.shift, true);
-                }
-                else
-                {
-                    switch(ascii[0])
-                    {
-                        case 3: return InputEvent(SK.cancel, SCK.none, true);
-                        case 8: return InputEvent(SK.backspace, SCK.none, true);
-                        case 44: return InputEvent(SK.comma, SCK.none, true);
-                        case 47: return InputEvent(SK.divide, SCK.none, true);
-                        case 13: return InputEvent(SK.enter, SCK.none, true);
-                        case 45: return InputEvent(SK.minus, SCK.none, true);
-                        case 42: return InputEvent(SK.multiply, SCK.none, true);
-                        case 46: return InputEvent(SK.period, SCK.none, true);
-                        case 9: return InputEvent(SK.tab, SCK.none, true);
-                        case 48: return InputEvent(SK.key_0, SCK.none, true);
-                        case 49: return InputEvent(SK.key_1, SCK.none, true);
-                        case 50: return InputEvent(SK.key_2, SCK.none, true);
-                        case 51: return InputEvent(SK.key_3, SCK.none, true);
-                        case 52: return InputEvent(SK.key_4, SCK.none, true);
-                        case 53: return InputEvent(SK.key_5, SCK.none, true);
-                        case 54: return InputEvent(SK.key_6, SCK.none, true);
-                        case 55: return InputEvent(SK.key_7, SCK.none, true);
-                        case 56: return InputEvent(SK.key_8, SCK.none, true);
-                        case 57: return InputEvent(SK.key_9, SCK.none, true);
-                        case 97: return InputEvent(SK.a, SCK.none, true);
-                        case 98: return InputEvent(SK.b, SCK.none, true);
-                        case 99: return InputEvent(SK.c, SCK.none, true);
-                        case 100: return InputEvent(SK.d, SCK.none, true);
-                        case 101: return InputEvent(SK.e, SCK.none, true);
-                        case 102: return InputEvent(SK.f, SCK.none, true);
-                        case 103: return InputEvent(SK.g, SCK.none, true);
-                        case 104: return InputEvent(SK.h, SCK.none, true);
-                        case 105: return InputEvent(SK.i, SCK.none, true);
-                        case 106: return InputEvent(SK.j, SCK.none, true);
-                        case 107: return InputEvent(SK.k, SCK.none, true);
-                        case 108: return InputEvent(SK.l, SCK.none, true);
-                        case 109: return InputEvent(SK.m, SCK.none, true);
-                        case 110: return InputEvent(SK.n, SCK.none, true);
-                        case 111: return InputEvent(SK.o, SCK.none, true);
-                        case 112: return InputEvent(SK.p, SCK.none, true);
-                        case 113: return InputEvent(SK.q, SCK.none, true);
-                        case 114: return InputEvent(SK.r, SCK.none, true);
-                        case 115: return InputEvent(SK.s, SCK.none, true);
-                        case 116: return InputEvent(SK.t, SCK.none, true);
-                        case 117: return InputEvent(SK.u, SCK.none, true);
-                        case 118: return InputEvent(SK.v, SCK.none, true);
-                        case 119: return InputEvent(SK.w, SCK.none, true);
-                        case 120: return InputEvent(SK.x, SCK.none, true);
-                        case 121: return InputEvent(SK.y, SCK.none, true);
-                        case 122: return InputEvent(SK.z, SCK.none, true);
-                        case 127: return InputEvent(SK.del, SCK.none, true);
-                        default: break;
-                    }
-                }
-            }
-
-            return InputEvent();
-        }
-        +/
-
         ///Returns: bool, true if currently polling inputs.
         auto isPollingInput() @property
         {
@@ -1255,15 +1155,12 @@ struct OS
         {
             while(inited)
             {
-                //TODO: make this non-blocking. maybe with timeout
-                //immutable input = getchar(); //TODO: some sort of int -> SK converter
-
                 pollfd ufds;
                 ufds.fd = STDOUT_FILENO;
                 ufds.events = POLLIN;
 
                 uint input;
-                enum timeout = 1000;
+                enum timeout = 500;
                 immutable bytesRead = poll(&ufds, 1, timeout);
 
                 if(bytesRead == -1)
@@ -1286,11 +1183,10 @@ struct OS
                 }
             }
 
-            //to see if it stops polling input
             writeln("."); //adding this caused travis to pass...
         }
 
-        //globally shared
+        //thread shared
         private static __gshared termios oldState, newState;
         private static __gshared bool currentlyPolling = false;
     }
