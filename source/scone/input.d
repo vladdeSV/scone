@@ -105,32 +105,20 @@ enum SK
 	///Unknown key (Should never appear. If it does, please report bug)
 	unknown,
 
+	///Control-break processing
+	cancel,
+
 	///BACKSPACE key
 	backspace,
+
+	///DEL key
+	del,
 
 	///TAB key
 	tab,
 
-	///CLEAR key
-	clear,
-
 	///ENTER key
 	enter,
-
-	///SHIFT key
-	shift,
-
-	///CTRL key
-	control,
-
-	///ALT key
-	alt,
-
-	///PAUSE key
-	pause,
-
-	///CAPS LOCK key
-	capslock,
 
 	///ESC key
 	escape,
@@ -161,27 +149,6 @@ enum SK
 
 	///DOWN ARROW key
 	down,
-
-	///SELECT key
-	select,
-
-	///PRINT key
-	print,
-
-	///EXECUTE key
-	execute,
-
-	///PRINT SCREEN key
-	print_screen,
-
-	///INS key
-	insert,
-
-	///DEL key
-	del,
-
-	///HELP key
-	help,
 
 	///0 key
 	key_0,
@@ -291,18 +258,6 @@ enum SK
 	///Z key
 	z,
 
-	///Left Windows key (Natural keyboard)
-	windows_left,
-
-	///Right Windows key (Natural keyboard)
-	windows_right,
-
-	///Applications key (Natural keyboard)
-	apps,
-
-	///Computer Sleep key
-	sleep,
-
 	///Numeric keypad 0 key
 	numpad_0,
 
@@ -333,20 +288,20 @@ enum SK
 	///Numeric keypad 9 key
 	numpad_9,
 
-	///Multiply key
-	multiply,
+	///For any country/region, the '+' key
+	plus,
 
-	///Add key
-	add,
+	///For any country/region, the '-' key
+	minus,
 
-	///Separator key
-	separator,
+	///For any country/region, the '.' key
+	period,
 
-	///Subtract key
-	subtract,
+	///For any country/region, the ',' key
+	comma,
 
-	///Decimal key
-	decimal,
+	///Asterisk key
+	asterisk,
 
 	///Divide key
 	divide,
@@ -423,157 +378,36 @@ enum SK
 	///F24 key
 	f24,
 
-	///NUM LOCK key
-	numlock,
-
-	///SCROLL LOCK key
-	scroll_lock,
-
-	///Left SHIFT key
-	shift_left,
-
-	///Right SHIFT key
-	shift_right,
-
-	///Left CONTROL key
-	control_left,
-
-	///Right CONTROL key
-	control_right,
-
-	///Left MENU key
-	menu_left,
-
-	///Right MENU key
-	menu_right,
-
-	///Browser Back key
-	browser_back,
-
-	///Browser Forward key
-	browser_forward,
-
-	///Browser Refresh key
-	browser_refresh,
-
-	///Browser Stop key
-	browser_stop,
-
-	///Browser Search key
-	browser_search,
-
-	///Browser Favorites key
-	browser_favorites,
-
-	///Browser Start and Home key
-	browser_home,
-
-	///Volume Mute key
-	volume_mute,
-
-	///Volume Down key
-	volume_down,
-
-	///Volume Up key
-	volume_up,
-
-	///Next Track key
-	media_next,
-
-	///Previous Track key
-	media_prev,
-
-	///Stop Media key
-	media_stop,
-
-	///Play/Pause Media key
-	media_play_pause,
-
-	///Start Mail key
-	launch_mail,
-
-	///Select Media key
-	launch_media_select,
-
-	///Start Application 1 key
-	launch_app_1,
-
-	///Start Application 2 key
-	launch_app_2,
-
-	//Add OEM to name?
-	///For any country/region, the '+' key
-	plus,
-
-	///For any country/region, the ',' key
-	comma,
-
-	///For any country/region, the '-' key
-	minus,
-
-	///For any country/region, the '.' key
-	period,
-
-	///Used to pass Unicode characters as if they were keystrokes. The PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods. For more information, see Remark in KEYBDINPUT, SendInput, WM_KEYDOWN, and WM_KEYUP
-	packet,
-
-	///Erase EOF key
-	ereof,
-
-	///Play key
-	play,
-
-	///Zoom key
-	zoom,
-
-	///Clear key
-	oem_clear,
-
-	///Attn key
-	attn,
-
-	///CrSel key
-	crsel,
-
-	///ExSel key
-	exsel,
-
 	///Used for miscellaneous characters; it can vary by keyboard.
 	oem_1,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_2,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_3,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_4,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_5,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_6,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_7,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
+	///ditto
 	oem_8,
 
-	///Either the angle bracket key or the backslash key on the RT 102-key
-	///keyboard
+	///Either the angle bracket key or the backslash key on the RT 102-key keyboard
 	oem_102,
-
-	///Control-break processing
-	cancel,
 }
 
 /**
- * Control keys.
- * Reason to why these are in a separate enum is because it must not be confused
- * with their SK.* counter part.
+ * Control keys
  */
 enum SCK
 {
@@ -625,6 +459,7 @@ version(Posix)
 		}
 
 		uint[] value;
+		alias value this;
 	}
 
 	///get InputEvent from sequence
@@ -778,7 +613,7 @@ numpad_6	-	-	-	-
 numpad_7	-	-	-	-
 numpad_8	-	-	-	-
 numpad_9	-	-	-	-
-multiply	-	-	-	-
+asterisk	-	-	-	-
 add	-	-	-	-
 separator	-	-	-	-
 subtract	46	-	-	-
