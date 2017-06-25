@@ -4,7 +4,7 @@ import std.conv : to;
 import core.time : MonoTime, Duration;
 
 /**
- * A general ticker, intended for games. Used to count how many times the game should update.
+ * A general ticker, intended for games. Used to count how many times the game should update per second.
  *
  * Example:
  * ---
@@ -13,6 +13,10 @@ import core.time : MonoTime, Duration;
  * {
  *     // update logic, and only be run 60 times per second
  * }
+ *
+ * window.clear();
+ * window.write(...);
+ * window.print();
  * ---
  */
 struct Ticker
@@ -22,7 +26,7 @@ struct Ticker
      */
     this(uint ticksPerSecond)
     {
-        _interval = 1000.0/double(ticksPerSecond);
+        _interval = 10^^9/double(ticksPerSecond);
         reset();
     }
 
@@ -34,12 +38,14 @@ struct Ticker
         /* Kudos to @Yepoleb who helped me with this */
         immutable newtime = MonoTime.currTime();
         immutable duration = newtime - _lasttime;
-        immutable durationmsec = duration.total!"msecs";
+
+        import scone.os;
 
         _lasttime = newtime;
-        _msecs += durationmsec;
-        int ticksOccured = cast(int)(_msecs / _interval);
-        _msecs -= cast(int)(ticksOccured * _interval);
+        _nsecs += duration.total!"nsecs";
+        int ticksOccured = cast(int)(_nsecs / _interval);
+
+        _nsecs -= cast(int)(ticksOccured * _interval);
 
         return ticksOccured;
     }
@@ -54,5 +60,5 @@ struct Ticker
 
     private MonoTime _lasttime;
     private double _interval;
-    private long _msecs = 60;
+    private long _nsecs = 0;
 }

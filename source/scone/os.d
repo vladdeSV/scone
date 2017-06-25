@@ -1064,10 +1064,6 @@ struct OS
 
         auto init()
         {
-            tcgetattr(1, &oldState);
-            newState = oldState;
-            cfmakeraw(&newState);
-            tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
             loadInputSequneces();
         }
 
@@ -1147,6 +1143,11 @@ struct OS
         {
             if(!currentlyPolling)
             {
+                tcgetattr(1, &oldState);
+                newState = oldState;
+                cfmakeraw(&newState);
+                tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
+
                 currentlyPolling = true;
                 spawn(&pollInputEvent, thisTid);
             }
