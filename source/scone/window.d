@@ -2,8 +2,6 @@ module scone.window;
 
 import scone.os;
 import scone.input;
-import std.concurrency;
-import std.datetime : Duration, msecs;
 
 import std.conv : to, text;
 import std.stdio;// : write, writef, writeln, writefln;
@@ -295,45 +293,7 @@ struct Window
         }
         version(Posix)
         {
-            //this is some spooky hooky code, dealing with
-            //multi-thread and reading inputs with timeouts
-            //from the terminal. then converting it to something
-            //scone can understand.
-            //
-            //blesh...
-
-            if(!OS.Posix.isPollingInput)
-            {
-                OS.Posix.beginPolling();
-            }
-
-            uint[] codes;
-            bool receivedInput = true;
-
-            while(receivedInput)
-            {
-                bool gotSomething = false;
-
-                receiveTimeout
-                (
-                    1.msecs,
-                    (uint code) { codes ~= code; gotSomething = true; },
-                );
-
-                if(!gotSomething)
-                {
-                    receivedInput = false;
-                }
-            }
-
-            InputEvent[] events;
-            auto ev = eventFromSequence(InputSequence(codes));
-            if(ev.key != SK.unknown)
-            {
-                events ~= ev;
-            }
-
-            return events;
+            return OS.Posix.retreiveInputs();
         }
     }
 

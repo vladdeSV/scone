@@ -26,16 +26,17 @@ version(Posix)
     ///needs to be specifically set, otherwise ioctl crashes D:
     version (OSX) enum TIOCGWINSZ = 0x40087468;
 
-    import core.sys.posix.sys.ioctl;
-    import core.sys.posix.fcntl;
-    import core.sys.posix.unistd : STDOUT_FILENO;
-    import std.concurrency : spawn, Tid, thisTid, send;
-    import std.conv : to, text;
-    import std.stdio : write, writef;
-    import core.sys.posix.unistd : read;
     import core.stdc.stdio;
+    import core.sys.posix.fcntl;
     import core.sys.posix.poll;
+    import core.sys.posix.sys.ioctl;
+    import core.sys.posix.unistd : read;
+    import core.sys.posix.unistd : STDOUT_FILENO;
+    import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout;
+    import std.conv : to, text;
+    import std.datetime : Duration, msecs;
     import std.process : execute;
+    import std.stdio : write, writef;
     extern(C)
     {
         import core.sys.posix.termios;
@@ -1184,6 +1185,49 @@ struct OS
             }
 
             writeln("."); //adding this caused travis to pass...
+        }
+
+        auto retreiveInputs()
+        {
+            //this is some spooky hooky code, dealing with
+            //multi-thread and reading inputs with timeouts
+            //from the terminal. then converting it to something
+            //scone can understand.
+            //
+            //blesh...
+
+            if(!isPollingInput)
+            {
+                beginPolling();
+            }
+
+            uint[] codes;
+            bool receivedInput = true;
+
+            while(receivedInput)
+            {
+                bool gotSomething = false;
+
+                receiveTimeout
+                (
+                    1.msecs,
+                    (uint code) { codes ~= code; gotSomething = true; },
+                );
+
+                if(!gotSomething)
+                {
+                    receivedInput = false;
+                }
+            }
+
+            //if no keypresses, return null
+            //otherwise, an unknown input will always be sent
+            if(codes == null) return null;
+
+            auto event = eventFromSequence(InputSequence(codes));
+            event._keySequences = codes;
+
+            return [event];
         }
 
         //thread shared

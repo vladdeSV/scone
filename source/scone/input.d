@@ -81,9 +81,25 @@ struct InputEvent
 	private SK _key;
 	private SCK _controlKey;
 	private bool _pressed;
+
+	version(Posix)
+	{
+		/**
+		* Note: POSIX only.
+		* Get the ASCII-code sequence returned from the keypress on POSIX systems.
+		* Returns: uint[]
+		*/
+		auto keySequences() @property
+		{
+			return _keySequences;
+		}
+
+		package(scone) uint[] _keySequences;
+	}
 }
 
 ///All keys which scone can handle
+///NOTE: Limited support for POSIX
 enum SK
 {
 	///Unknown key (Should never appear. If it does, please report bug)
