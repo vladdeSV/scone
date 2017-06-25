@@ -762,12 +762,6 @@ key_7	55	47	-	124
 key_8	56	40	-	91
 key_9	57	41	-	93
 tab	9	27, 91, 90	-	-
-clear	-	-	-	-
-enter	-	-	-	-
-shift	-	-	-	-
-control	-	-	-	-
-alt	-	-	-	-
-pause	-	-	-	-
 space	32	-	0	194, 160
 page_up	-	-	-	-
 page_down	-	-	-	-
