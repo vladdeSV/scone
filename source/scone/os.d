@@ -1184,7 +1184,7 @@ struct OS
                 }
             }
 
-            writeln("."); //adding this caused travis to pass...
+            write('\r'); //adding this caused travis to pass...
         }
 
         auto retreiveInputs()
