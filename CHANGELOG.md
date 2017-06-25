@@ -1,22 +1,24 @@
 # Change Log
 
-## v2.0.1-pre.1
+## v2.0.0
+_someday_
+
+ * Cross-platform support.
+     * Limitations apply to POSIX. Read more [here](example.com#link-to-wiki).
+ * Initialization is autonomous.
+     * _scone_ is initialiazed at start by default.
+     * Access to the console/terminal is done via the global `static window`.
+ * Odd key inputs have been removed.
+
+## v2.0.0-pre.1
 _23 February 2017_
 
- * POSIX: Limited keyboard input (tested on macOS. starts polling inputs at first `getInputs()` call).
- * Defualt documentation generated in `docs/`
- * Updated README.md to suit v2.0.0
- * Minor bug-fixes
+Read the release notes.
 
 ## v2.0.0-pre.0
 _19 February 2017_
 
- * `sconeOpen();`/`sconeClose();` is now run by default.
- * No more `class Frame();`. Replaced by `struct Window`, accessed by `static Window window;`
- * `window` acts as a gateway to the console/terminal.
- * Improvement to `struct window`, modifying it is done from here.
- * Removed half-broken UI library. Need to come up with something better.
- * Tons of code refactoring.
+Read the release notes.
 
 ## v1.1.0
 _2 July 2016_
