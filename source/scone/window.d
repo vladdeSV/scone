@@ -250,6 +250,7 @@ struct Window
     }
 
     ///Changes the size of the window
+    ///NOTE: (POSIX) Does not work if terminal is maximized
     ///NOTE: Clears the buffer
     void resize(uint width, uint height)
     {
@@ -310,21 +311,6 @@ struct Cell
     fg foreground = fg(Color.white_dark);
     ///background color
     bg background = bg(Color.black_dark);
-}
-
-///Create an array of cells with foreground- and background color
-///Returns: Cell[]
-Cell[] cellString(string str, Color color, Color background)
-{
-    Cell[] ret;
-    ret.length = str.length;
-
-    foreach(n, ref c; str)
-    {
-        ret[n] = Cell(c, fg(color), bg(background));
-    }
-
-    return ret;
 }
 
 /**
