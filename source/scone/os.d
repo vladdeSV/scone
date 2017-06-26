@@ -50,7 +50,8 @@ struct OS
     static:
 
     ///Initializes console/terminal to best settings when using scone
-    package(scone) auto init()
+    package(scone)
+    auto init()
     {
         cursorVisible = false;
 
@@ -66,7 +67,8 @@ struct OS
     }
 
     ///De-initializes console/terminal
-    package(scone) auto deinit()
+    package(scone)
+    auto deinit()
     {
         cursorVisible = true;
         setCursor(0,0);
@@ -755,6 +757,9 @@ struct OS
 
         auto init()
         {
+            //store the state of the terminal
+            tcgetattr(1, &oldState);
+
             loadInputSequneces();
         }
 
@@ -834,7 +839,6 @@ struct OS
         {
             if(!currentlyPolling)
             {
-                tcgetattr(1, &oldState);
                 newState = oldState;
                 cfmakeraw(&newState);
                 tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
