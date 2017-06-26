@@ -283,9 +283,9 @@ struct Window
     alias h = height;
 
     /**
-    * Get a range of all inputs since last call.
-    * Returns: InputEvent[]
-    */
+     * Get a range of all inputs since last call.
+     * Returns: InputEvent[]
+     */
     InputEvent[] getInputs()
     {
         version(Windows)

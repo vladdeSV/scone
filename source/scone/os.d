@@ -746,7 +746,6 @@ struct OS
 
             return fin;
         }
-
     }
 
     version(Posix)
