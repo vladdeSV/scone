@@ -496,37 +496,18 @@ version(Posix)
 			if(s == "" || s[0] == '#') continue;
 
 			string[] arguments = split(s, '\t');
-			if(arguments.length != 5) continue; //something isn't right
+			if(arguments.length != 3) continue; //something isn't right
 
 			auto key = parse!(SK)(arguments[0]);
+			auto sck = parse!(SCK)(arguments[1]);
+			auto seq = arguments[2];
+			//if sequence is not defined, skip
+			if(seq == "-") continue;
 
-			foreach(n, seq; arguments[1..$])
-			{
-				//if sequence is not defined, skip
-				if(seq == "-") continue;
+			auto ie = InputEvent(key, sck, true);
+			auto iseq = InputSequence(sequenceFromString(seq));
 
-				SCK ck;
-				switch(n)
-				{
-				case 1:
-					ck = SCK.shift;
-					break;
-				case 2:
-					ck = SCK.ctrl;
-					break;
-				case 3:
-					ck = SCK.alt;
-					break;
-				default:
-					ck = SCK.none;
-					break;
-				}
-
-				auto ie = InputEvent(key, ck, true);
-				auto iseq = InputSequence(sequenceFromString(seq));
-
-				inputSequences[iseq] = ie;
-			}
+			inputSequences[iseq] = ie;
 		}
 	}
 
@@ -536,7 +517,7 @@ version(Posix)
 	///get uint[] from string in the format of "num1,num2,...,numX"
 	private uint[] sequenceFromString(string input) pure
 	{
-		string[] numbers = split(input, ", ");
+		string[] numbers = split(input, ",");
 		uint[] sequence;
 		foreach(number_as_string; numbers)
 		{
@@ -549,90 +530,386 @@ version(Posix)
 
 ///default keybindings. tested on mac
 private enum _inputSequences =
-"
-# de-facto standard
-escape	27	-	-	-
-del	127	-	-	-
-enter	13	-	-	-
+"# macOS Sierra v10.12.5, MacBook Pro (15-inch, Mid 2012)
+a	none	97
+b	none	98
+c	none	99
+d	none	100
+e	none	101
+f	none	102
+g	none	103
+h	none	104
+i	none	105
+j	none	106
+k	none	107
+l	none	108
+m	none	109
+n	none	110
+o	none	111
+p	none	112
+q	none	113
+r	none	114
+s	none	115
+t	none	116
+u	none	117
+v	none	118
+w	none	119
+x	none	120
+y	none	121
+z	none	122
+tab	none	9
+page_up	none	-
+page_down	none	-
+end	none	-
+home	none	-
+left	none	27,91,68
+up	none	27,91,65
+right	none	27,91,67
+down	none	27,91,66
+key_0	none	48
+key_1	none	49
+key_2	none	50
+key_3	none	51
+key_4	none	52
+key_5	none	53
+key_6	none	54
+key_7	none	55
+key_8	none	56
+key_9	none	57
+numpad_0	none	48
+numpad_1	none	49
+numpad_2	none	50
+numpad_3	none	51
+numpad_4	none	52
+numpad_5	none	53
+numpad_6	none	54
+numpad_7	none	55
+numpad_8	none	56
+numpad_9	none	57
+plus	none	43
+minus	none	45
+period	none	46
+comma	none	44
+asterisk	none	42
+divide	none	47
+f1	none	27,79,80
+f2	none	27,79,81
+f3	none	27,79,82
+f4	none	27,79,83
+f5	none	27,91,49,53,126
+f6	none	27,91,49,55,126
+f7	none	27,91,49,56,126
+f8	none	27,91,49,57,126
+f9	none	27,91,50,48,126
+f10	none	27,91,50,49,126
+f11	none	27,91,50,51,126
+f12	none	27,91,50,52,126
+f13	none	-
+f14	none	-
+f15	none	-
+f16	none	-
+f17	none	-
+f18	none	-
+f19	none	-
+f20	none	-
+f21	none	-
+f22	none	-
+f23	none	-
+f24	none	-
+oem_1	none	195,165
+oem_2	none	-
+oem_3	none	-
+oem_4	none	-
+oem_5	none	-
+oem_6	none	-
+oem_7	none	-
+oem_8	none	-
+oem_102	none	-
+a	shift	65
+b	shift	66
+c	shift	67
+d	shift	68
+e	shift	69
+f	shift	70
+g	shift	71
+h	shift	72
+i	shift	73
+j	shift	74
+k	shift	75
+l	shift	76
+m	shift	77
+n	shift	78
+o	shift	79
+p	shift	80
+q	shift	81
+r	shift	82
+s	shift	83
+t	shift	84
+u	shift	85
+v	shift	86
+w	shift	87
+x	shift	88
+y	shift	89
+z	shift	90
+tab	shift	27,91,90
+page_up	shift	27,91,53,126
+page_down	shift	27,91,54,126
+end	shift	27,91,70
+home	shift	27,91,72
+left	shift	27,91,49,59,50,68
+up	shift	-
+right	shift	27,91,49,59,50,67
+down	shift	-
+key_0	shift	61
+key_1	shift	33
+key_2	shift	34
+key_3	shift	35
+key_4	shift	36
+key_4	shift	226,130,172
+key_5	shift	37
+key_6	shift	38
+key_7	shift	47
+key_8	shift	40
+key_9	shift	41
+numpad_0	shift	-
+numpad_1	shift	-
+numpad_2	shift	-
+numpad_3	shift	-
+numpad_4	shift	-
+numpad_5	shift	-
+numpad_6	shift	-
+numpad_7	shift	-
+numpad_8	shift	-
+numpad_9	shift	-
+plus	shift	-
+minus	shift	-
+period	shift	58
+comma	shift	59
+asterisk	shift	-
+divide	shift	-
+f1	shift	-
+f2	shift	-
+f3	shift	-
+f4	shift	-
+f5	shift	-
+f6	shift	-
+f7	shift	-
+f8	shift	-
+f9	shift	-
+f10	shift	-
+f11	shift	-
+f12	shift	27,91,51,52,126
+f13	shift	-
+f14	shift	-
+f15	shift	-
+f16	shift	-
+f17	shift	-
+f18	shift	-
+f19	shift	-
+f20	shift	-
+f21	shift	-
+f22	shift	-
+f23	shift	-
+f24	shift	-
+oem_1	shift	-
+oem_2	shift	-
+oem_3	shift	-
+oem_4	shift	-
+oem_5	shift	-
+oem_6	shift	-
+oem_7	shift	-
+oem_8	shift	-
+oem_102	shift	-
+a	ctrl	1
+b	ctrl	2
+c	ctrl	3
+d	ctrl	4
+e	ctrl	5
+f	ctrl	6
+g	ctrl	7
+h	ctrl	8
+i	ctrl	9
+j	ctrl	10
+k	ctrl	11
+l	ctrl	12
+m	ctrl	-
+n	ctrl	14
+o	ctrl	15
+p	ctrl	16
+q	ctrl	17
+r	ctrl	18
+s	ctrl	19
+t	ctrl	20
+u	ctrl	21
+v	ctrl	22
+w	ctrl	23
+x	ctrl	24
+y	ctrl	25
+z	ctrl	26
+tab	ctrl	-
+page_up	ctrl	-
+page_down	ctrl	-
+end	ctrl	-
+home	ctrl	-
+left	ctrl	-
+up	ctrl	-
+right	ctrl	-
+down	ctrl	-
+key_0	ctrl	-
+key_1	ctrl	-
+key_2	ctrl	-
+key_3	ctrl	-
+key_4	ctrl	-
+key_5	ctrl	-
+key_6	ctrl	-
+key_7	ctrl	-
+key_8	ctrl	-
+key_9	ctrl	-
+numpad_0	ctrl	-
+numpad_1	ctrl	-
+numpad_2	ctrl	-
+numpad_3	ctrl	-
+numpad_4	ctrl	-
+numpad_5	ctrl	-
+numpad_6	ctrl	-
+numpad_7	ctrl	-
+numpad_8	ctrl	-
+numpad_9	ctrl	-
+plus	ctrl	-
+minus	ctrl	-
+period	ctrl	-
+comma	ctrl	-
+asterisk	ctrl	-
+divide	ctrl	-
+f1	ctrl	-
+f2	ctrl	-
+f3	ctrl	-
+f4	ctrl	-
+f5	ctrl	-
+f6	ctrl	-
+f7	ctrl	-
+f8	ctrl	-
+f9	ctrl	-
+f10	ctrl	-
+f11	ctrl	-
+f12	ctrl	-
+f13	ctrl	-
+f14	ctrl	-
+f15	ctrl	-
+f16	ctrl	-
+f17	ctrl	-
+f18	ctrl	-
+f19	ctrl	-
+f20	ctrl	-
+f21	ctrl	-
+f22	ctrl	-
+f23	ctrl	-
+f24	ctrl	-
+oem_1	ctrl	-
+oem_2	ctrl	-
+oem_3	ctrl	-
+oem_4	ctrl	-
+oem_5	ctrl	-
+oem_6	ctrl	-
+oem_7	ctrl	-
+oem_8	ctrl	-
+oem_102	ctrl	-
+a	alt	239,163,191
+b	alt	226,128,186
+c	alt	195,167
+d	alt	226,136,130
+e	alt	195,169
+f	alt	198,146
+g	alt	194,184
+h	alt	203,155
+i	alt	196,177
+j	alt	226,136,154
+k	alt	194,170
+l	alt	239,172,129
+m	alt	226,128,153
+n	alt	226,128,152
+o	alt	197,147
+p	alt	207,128
+q	alt	226,128,162
+r	alt	194,174
+s	alt	195,159
+t	alt	226,128,160
+u	alt	195,188
+v	alt	226,128,185
+w	alt	206,169
+x	alt	226,137,136
+y	alt	194,181
+z	alt	195,183
+tab	alt	-
+page_up	alt	-
+page_down	alt	-
+end	alt	-
+home	alt	-
+left	alt	27,98
+up	alt	-
+right	alt	27,102
+down	alt	-
+key_0	alt	226,137,136
+key_1	alt	194,169
+key_2	alt	64
+key_3	alt	194,163
+key_4	alt	36
+key_5	alt	226,136,158
+key_6	alt	194,167
+key_7	alt	124
+key_8	alt	91
+key_9	alt	93
+numpad_0	alt	-
+numpad_1	alt	-
+numpad_2	alt	-
+numpad_3	alt	-
+numpad_4	alt	-
+numpad_5	alt	-
+numpad_6	alt	-
+numpad_7	alt	-
+numpad_8	alt	-
+numpad_9	alt	-
+plus	alt	-
+minus	alt	-
+period	alt	226,128,166
+comma	alt	226,128,154
+asterisk	alt	-
+divide	alt	-
+f1	alt	27,91,49,55,126
+f2	alt	27,91,49,56,126
+f3	alt	27,91,49,57,126
+f4	alt	27,91,50,48,126
+f5	alt	27,91,50,49,126
+f6	alt	27,91,50,51,126
+f7	alt	27,91,50,52,126
+f8	alt	27,91,50,53,126
+f9	alt	27,91,50,54,126
+f10	alt	27,91,50,56,126
+f11	alt	27,91,50,57,126
+f12	alt	27,91,51,49,126
+f13	alt	-
+f14	alt	-
+f15	alt	-
+f16	alt	-
+f17	alt	-
+f18	alt	-
+f19	alt	-
+f20	alt	-
+f21	alt	-
+f22	alt	-
+f23	alt	-
+f24	alt	-
+oem_1	alt	203,153
+oem_2	alt	-
+oem_3	alt	-
+oem_4	alt	-
+oem_5	alt	-
+oem_6	alt	-
+oem_7	alt	-
+oem_8	alt	-
+oem_102	alt	-
 
-# macbook pro (15-inch mid 2012), macOS v10.12.5
-a	97	65	1	239, 163, 191
-b	98	66	2	226, 128, 186
-c	99	67	3	195, 167
-d	100	68	4	226, 136, 130
-e	101	69	5	195, 169
-f	102	70	6	198, 146
-g	103	71	7	194, 184
-h	104	72	8	203, 155
-i	105	73	9	196, 177
-j	106	74	10	226, 136, 154
-k	107	75	11	194, 170
-l	108	76	12	239, 172, 129
-m	109	77	13	226, 128, 153
-n	110	78	14	226, 128, 152
-o	111	79	15	197, 147
-p	112	80	16	207, 128
-q	113	81	17	226, 128, 162
-r	114	82	18	194, 174
-s	115	83	19	195, 159
-t	116	84	20	226, 128, 160
-u	117	85	21	195, 188
-v	118	86	22	226, 128, 185
-w	119	87	23	206, 169
-x	120	88	24	226, 137, 136
-y	121	89	25	194, 181
-z	122	90	26	195, 183
-left	27, 91, 68	27, 91, 49, 59, 50, 68	-	27, 98
-up	27, 91, 65	-	-	-
-right	27, 91, 67	27, 91, 49, 59, 50, 67	-	27, 102
-down	27, 91, 66	-	-	-
-key_0	48	61	-	226, 137, 136
-key_1	49	33	-	194, 169
-key_2	50	34	-	64
-key_3	51	35	-	194, 163
-key_4	52	226, 130, 172	-	36
-key_5	53	37	-	226, 136, 158
-key_6	55	47	124	-
-key_7	55	47	-	124
-key_8	56	40	-	91
-key_9	57	41	-	93
-tab	9	27, 91, 90	-	-
-space	32	-	0	194, 160
-page_up	-	-	-	-
-page_down	-	-	-	-
-end	-	-	-	-
-home	-	-	-	-
-del	-	-	-	-
-numpad_0	-	-	-	-
-numpad_1	-	-	-	-
-numpad_2	-	-	-	-
-numpad_3	-	-	-	-
-numpad_4	-	-	-	-
-numpad_5	-	-	-	-
-numpad_6	-	-	-	-
-numpad_7	-	-	-	-
-numpad_8	-	-	-	-
-numpad_9	-	-	-	-
-asterisk	-	-	-	-
-add	-	-	-	-
-separator	-	-	-	-
-subtract	46	-	-	-
-decimal	44	59	-	226, 128, 154
-divide	-	-	-	-
-f1	27, 79, 80	-	-	27, 91, 49, 55, 126
-f2	27, 79, 81	-	-	27, 91, 49, 56, 126
-f3	27, 79, 82	-	-	27, 91, 49, 57, 126
-f4	27, 79, 83	-	-	27, 91, 50, 48, 126
-f5	27, 91, 49, 53, 126	-	-	27, 91, 50, 49, 126
-f6	27, 91, 49, 55, 126	-	-	27, 91, 50, 51, 126
-f7	27, 91, 49, 56, 126	-	-	27, 91, 50, 52, 126
-f8	27, 91, 49, 57, 126	-	-	27, 91, 50, 53, 126
-f9	-	-	-	-
-f10	27, 91, 50, 49, 126	-	-	27, 91, 50, 56, 126
-f11	-	-	-	27, 91, 50, 57, 126
-f12	27, 91, 50, 52, 126	-	-	27, 91, 51, 49, 126
-plus	43	63	-	194, 177
-comma	44	59	-	226, 128, 154
-minus	45	95	31	226, 128, 147
-period	46	58	-	226, 128, 166
-oem_1	195, 165	195, 133	29	203, 153 ";
+# de-facto standard. adding these last will override redirects of there keys
+escape	none	27
+del	none	127
+enter	none	13";
