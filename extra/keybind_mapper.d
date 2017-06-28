@@ -1,4 +1,5 @@
 /+ This application gathers the ASCII-code sequences for some of scone's available keys. +/
+/+ Please don't kill me. This program is written horribly BUT IT WORKS!!! +/
 
 void main()
 {
@@ -105,6 +106,33 @@ void main()
 
     //open a file and store all codes
     auto f = File("input_sequences.scone.txt", "w");
+
+    foreach(n, sck; ["none", "shift", "ctrl", "alt"])
+    {
+        foreach(m, k; sks)
+        {
+            string kk;
+            if(store[m][n] == null)
+            {
+                kk = "-";
+            }
+            else
+            {
+                foreach(r, a; store[m][n])
+                {
+                    if(r == 0)
+                        kk ~= text(a);
+                    else
+                        kk ~= text(',', a);
+                }
+
+            }
+
+            f.writeln(text(k, '\t', sck, '\t', kk));
+        }
+    }
+
+    /+
     foreach(n, k; sks)
     {
         string line = text(k, '\t');
@@ -117,6 +145,7 @@ void main()
 
         f.writeln(line);
     }
+    +/
 
     //properly exit
     inited = false;
@@ -302,6 +331,21 @@ enum SK
     ///Z key
     z,
 
+    ///TAB key
+    tab,
+
+    ///PAGE UP key
+    page_up,
+
+    ///PAGE DOWN key
+    page_down,
+
+    ///END key
+    end,
+
+    ///HOME key
+    home,
+
     ///LEFT ARROW key
     left,
 
@@ -344,27 +388,6 @@ enum SK
     ///9 key
     key_9,
 
-    ///TAB key
-    tab,
-
-    ///SPACEBAR
-    space,
-
-    ///PAGE UP key
-    page_up,
-
-    ///PAGE DOWN key
-    page_down,
-
-    ///END key
-    end,
-
-    ///HOME key
-    home,
-
-    ///DEL key
-    del,
-
     ///Numeric keypad 0 key
     numpad_0,
 
@@ -395,20 +418,20 @@ enum SK
     ///Numeric keypad 9 key
     numpad_9,
 
-    ///Multiply key
-    multiply,
+    ///For any country/region, the '+' key
+    plus,
 
-    ///Add key
-    add,
+    ///For any country/region, the '-' key
+    minus,
 
-    ///Separator key
-    separator,
+    ///For any country/region, the '.' key
+    period,
 
-    ///Subtract key
-    subtract,
+    ///For any country/region, the ',' key
+    comma,
 
-    ///Decimal key
-    decimal,
+    ///Asterisk key
+    asterisk,
 
     ///Divide key
     divide,
@@ -449,43 +472,67 @@ enum SK
     ///F12 key
     f12,
 
-    ///For any country/region, the '+' key
-    plus,
+    ///F13 key
+    f13,
 
-    ///For any country/region, the ',' key
-    comma,
+    ///F14 key
+    f14,
 
-    ///For any country/region, the '-' key
-    minus,
+    ///F15 key
+    f15,
 
-    ///For any country/region, the '.' key
-    period,
+    ///F16 key
+    f16,
+
+    ///F17 key
+    f17,
+
+    ///F18 key
+    f18,
+
+    ///F19 key
+    f19,
+
+    ///F20 key
+    f20,
+
+    ///F21 key
+    f21,
+
+    ///F22 key
+    f22,
+
+    ///F23 key
+    f23,
+
+    ///F24 key
+    f24,
 
     ///Used for miscellaneous characters; it can vary by keyboard.
     oem_1,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_2,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_3,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_4,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_5,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_6,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_7,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    ///ditto
     oem_8,
 
-    ///Either the angle bracket key or the backslash key on the RT 102-key
-    ///keyboard
+    ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
     oem_102,
 }
+
