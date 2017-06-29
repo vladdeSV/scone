@@ -507,6 +507,16 @@ version(Posix)
 			auto ie = InputEvent(key, sck, true);
 			auto iseq = InputSequence(sequenceFromString(seq));
 
+			if((iseq in inputSequences) !is null)
+			{
+				auto storedInputEvent = inputSequences[iseq];
+
+				if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
+				{
+					//log(text("Replacing ", storedInputEvent, " with ", ie));
+				}
+			}
+
 			inputSequences[iseq] = ie;
 		}
 	}

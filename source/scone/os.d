@@ -192,6 +192,8 @@ struct OS
             {
                 assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
             }
+
+            cursorVisible(false);
         }
 
         auto deinit()
@@ -450,8 +452,8 @@ struct OS
                         getControlKeyFromKeyEventRecord(_inputBuffer[e].KeyEvent),
                         cast(bool) _inputBuffer[e].KeyEvent.bKeyDown
                     );
-                    break;
 
+                    break;
                 default:
                     break;
                 }
@@ -567,10 +569,10 @@ struct OS
             case VK_OEM_7: return SK.oem_7;
             case VK_OEM_8: return SK.oem_8;
             case VK_OEM_102: return SK.oem_102;
+            case VK_RETURN: return SK.enter;
 
             /+
             case VK_CLEAR: return SK.clear;
-            case VK_RETURN: return SK.enter;
             case VK_SHIFT: return SK.shift;
             case VK_CONTROL: return SK.control;
             case VK_MENU: return SK.alt;
@@ -804,12 +806,15 @@ struct OS
         ///get ansi color from Color
         uint ansiColor(Color c)
         {
+            /+
             version(OSX)
             {
+            +/
                 //color start
                 enum cs = 90;
                 //dark color start
                 enum dcs = 30;
+            /+
             }
             else
             {
@@ -818,6 +823,7 @@ struct OS
                 //dark color start
                 enum dcs = 90;
             }
+            +/
 
             if(c < 8)
             {

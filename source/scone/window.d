@@ -15,6 +15,9 @@ struct Window
     {
         //properly set the size of the console
         resize(width, height);
+
+        //get rid of all inputs
+        getInputs();
     }
 
     ///Write practically anything to the window
@@ -23,7 +26,7 @@ struct Window
     ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
     ///---
     ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
-    void write(Args...)(in uint x, in uint y, Args args)
+    void write(Args...)(in size_t x, in size_t y, Args args)
     {
         //Check if writing outside border
         if(/+x < 0 || y < 0 ||+/ x >= w || y >= h)
@@ -237,6 +240,23 @@ struct Window
         }
     }
 
+    /**
+     * Get a range of all inputs since last call.
+     * Returns: InputEvent[]
+     */
+    InputEvent[] getInputs()
+    {
+        version(Windows)
+        {
+            return OS.Windows.retreiveInputs();
+        }
+        version(Posix)
+        {
+            return OS.Posix.retreiveInputs();
+        }
+    }
+
+
     ///Set the size of the window
     void title(string title) @property
     {
@@ -281,22 +301,6 @@ struct Window
     alias w = width;
     ///
     alias h = height;
-
-    /**
-     * Get a range of all inputs since last call.
-     * Returns: InputEvent[]
-     */
-    InputEvent[] getInputs()
-    {
-        version(Windows)
-        {
-            return OS.Windows.retreiveInputs();
-        }
-        version(Posix)
-        {
-            return OS.Posix.retreiveInputs();
-        }
-    }
 
     //all cells which can be written to, and backbuffer
     private Cell[][] _cells, _backbuffer;
