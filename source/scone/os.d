@@ -193,6 +193,9 @@ struct OS
                 assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
             }
 
+            //"removes" the enter release key
+            retreiveInputs();
+            //sets the cursor invisible
             cursorVisible(false);
         }
 

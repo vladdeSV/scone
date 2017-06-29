@@ -15,9 +15,6 @@ struct Window
     {
         //properly set the size of the console
         resize(width, height);
-
-        //get rid of all inputs
-        getInputs();
     }
 
     ///Write practically anything to the window

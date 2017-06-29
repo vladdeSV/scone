@@ -9,401 +9,401 @@ import scone.os;
  */
 struct InputEvent
 {
-	/**
-	 * Initialize an InputEvent
-	 */
-	this(SK key, SCK controlKey, bool pressed)
-	{
-		_key = key;
-		_controlKey = controlKey;
-		_pressed = pressed;
-	}
+    /**
+     * Initialize an InputEvent
+     */
+    this(SK key, SCK controlKey, bool pressed)
+    {
+        _key = key;
+        _controlKey = controlKey;
+        _pressed = pressed;
+    }
 
-	/**
-	 * Get the key
-	 * Returns: SK (enum) of the key being pressed
-	 */
-	auto key() @property
-	{
-		return _key;
-	}
+    /**
+     * Get the key
+     * Returns: SK (enum) of the key being pressed
+     */
+    auto key() @property
+    {
+        return _key;
+    }
 
-	/**
-	 * Check if the button is pressed or released.
-	 * Returns: bool, true if pressed, false if not
-	 */
-	auto pressed() @property
-	{
-		return _pressed;
-	}
+    /**
+     * Check if the button is pressed or released.
+     * Returns: bool, true if pressed, false if not
+     */
+    auto pressed() @property
+    {
+        return _pressed;
+    }
 
-	/**
-	 * Check if the InputEvent has a "control key" pressed.
-	 * Returns: true, if all control keys entered are pressed
-	 *
-	 * Example:
-	 * --------------------
-	 * foreach(input; getInputs())
-	 * {
-	 *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT |
-	 *        ControlKey.SHIFT))
-	 *     {
-	 *         //do something if CTRL, ALT and SHIFT are held down...
-	 *     }
-	 * }
-	 * --------------------
-	 */
-	auto hasControlKey(SCK ck)
-	{
-		return hasFlag(controlKey, ck);
-	}
+    /**
+     * Check if the InputEvent has a "control key" pressed.
+     * Returns: true, if all control keys entered are pressed
+     *
+     * Example:
+     * --------------------
+     * foreach(input; getInputs())
+     * {
+     *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT |
+     *        ControlKey.SHIFT))
+     *     {
+     *         //do something if CTRL, ALT and SHIFT are held down...
+     *     }
+     * }
+     * --------------------
+     */
+    auto hasControlKey(SCK ck)
+    {
+        return hasFlag(controlKey, ck);
+    }
 
-	/**
-	 * Get control all keys. Used to check if ONLY specific control keys are
-	 * activated.
-	 * Returns: SCK (enum)
-	 * Example:
-	 * ---
-	 * foreach(input; getInputs())
-	 * {
-	 *     if(input.controlKey == ControlKey.CTRL | ControlKey.SHIFT)
-	 *     {
-	 *         //do something if only CTRL and SHIFT are held down...
-	 *     }
-	 * }
-	 * ---
-	 */
-	auto controlKey() @property
-	{
-		return _controlKey;
-	}
+    /**
+     * Get control all keys. Used to check if ONLY specific control keys are
+     * activated.
+     * Returns: SCK (enum)
+     * Example:
+     * ---
+     * foreach(input; getInputs())
+     * {
+     *     if(input.controlKey == ControlKey.CTRL | ControlKey.SHIFT)
+     *     {
+     *         //do something if only CTRL and SHIFT are held down...
+     *     }
+     * }
+     * ---
+     */
+    auto controlKey() @property
+    {
+        return _controlKey;
+    }
 
-	private SK _key;
-	private SCK _controlKey;
-	private bool _pressed;
+    private SK _key;
+    private SCK _controlKey;
+    private bool _pressed;
 
-	version(Posix)
-	{
-		/**
-		* Note: POSIX only.
-		* Get the ASCII-code sequence returned from the keypress on POSIX systems.
-		* Returns: uint[]
-		*/
-		auto keySequences() @property
-		{
-			return _keySequences;
-		}
+    version(Posix)
+    {
+        /**
+        * Note: POSIX only.
+        * Get the ASCII-code sequence returned from the keypress on POSIX systems.
+        * Returns: uint[]
+        */
+        auto keySequences() @property
+        {
+            return _keySequences;
+        }
 
-		package(scone) uint[] _keySequences;
-	}
+        package(scone) uint[] _keySequences;
+    }
 }
 
 ///All keys which scone can handle
 ///NOTE: Limited support for POSIX
 enum SK
 {
-	///Unknown key (Should never appear. If it does, please report bug)
-	unknown,
+    ///Unknown key (Should never appear. If it does, please report bug)
+    unknown,
 
-	///Control-break processing
-	cancel,
+    ///Control-break processing
+    cancel,
 
-	///BACKSPACE key
-	backspace,
+    ///BACKSPACE key
+    backspace,
 
-	///DEL key
-	del,
+    ///DEL key
+    del,
 
-	///TAB key
-	tab,
+    ///TAB key
+    tab,
 
-	///ENTER key
-	enter,
+    ///ENTER key
+    enter,
 
-	///ESC key
-	escape,
+    ///ESC key
+    escape,
 
-	///SPACEBAR
-	space,
+    ///SPACEBAR
+    space,
 
-	///PAGE UP key
-	page_up,
+    ///PAGE UP key
+    page_up,
 
-	///PAGE DOWN key
-	page_down,
+    ///PAGE DOWN key
+    page_down,
 
-	///END key
-	end,
+    ///END key
+    end,
 
-	///HOME key
-	home,
+    ///HOME key
+    home,
 
-	///LEFT ARROW key
-	left,
+    ///LEFT ARROW key
+    left,
 
-	///UP ARROW key
-	up,
+    ///UP ARROW key
+    up,
 
-	///RIGHT ARROW key
-	right,
+    ///RIGHT ARROW key
+    right,
 
-	///DOWN ARROW key
-	down,
+    ///DOWN ARROW key
+    down,
 
-	///0 key
-	key_0,
+    ///0 key
+    key_0,
 
-	///1 key
-	key_1,
+    ///1 key
+    key_1,
 
-	///2 key
-	key_2,
+    ///2 key
+    key_2,
 
-	///3 key
-	key_3,
+    ///3 key
+    key_3,
 
-	///4 key
-	key_4,
+    ///4 key
+    key_4,
 
-	///5 key
-	key_5,
+    ///5 key
+    key_5,
 
-	///6 key
-	key_6,
+    ///6 key
+    key_6,
 
-	///7 key
-	key_7,
+    ///7 key
+    key_7,
 
-	///8 key
-	key_8,
+    ///8 key
+    key_8,
 
-	///9 key
-	key_9,
+    ///9 key
+    key_9,
 
-	///A key
-	a,
+    ///A key
+    a,
 
-	///B key
-	b,
+    ///B key
+    b,
 
-	///C key
-	c,
+    ///C key
+    c,
 
-	///D key
-	d,
+    ///D key
+    d,
 
-	///E key
-	e,
+    ///E key
+    e,
 
-	///F key
-	f,
+    ///F key
+    f,
 
-	///G key
-	g,
+    ///G key
+    g,
 
-	///H key
-	h,
+    ///H key
+    h,
 
-	///I key
-	i,
+    ///I key
+    i,
 
-	///J key
-	j,
+    ///J key
+    j,
 
-	///K key
-	k,
+    ///K key
+    k,
 
-	///L key
-	l,
+    ///L key
+    l,
 
-	///M key
-	m,
+    ///M key
+    m,
 
-	///N key
-	n,
+    ///N key
+    n,
 
-	///O key
-	o,
+    ///O key
+    o,
 
-	///P key
-	p,
+    ///P key
+    p,
 
-	///Q key
-	q,
+    ///Q key
+    q,
 
-	///R key
-	r,
+    ///R key
+    r,
 
-	///S key
-	s,
+    ///S key
+    s,
 
-	///T key
-	t,
+    ///T key
+    t,
 
-	///U key
-	u,
+    ///U key
+    u,
 
-	///V key
-	v,
+    ///V key
+    v,
 
-	///W key
-	w,
+    ///W key
+    w,
 
-	///X key
-	x,
+    ///X key
+    x,
 
-	///Y key
-	y,
+    ///Y key
+    y,
 
-	///Z key
-	z,
+    ///Z key
+    z,
 
-	///Numeric keypad 0 key
-	numpad_0,
+    ///Numeric keypad 0 key
+    numpad_0,
 
-	///Numeric keypad 1 key
-	numpad_1,
+    ///Numeric keypad 1 key
+    numpad_1,
 
-	///Numeric keypad 2 key
-	numpad_2,
+    ///Numeric keypad 2 key
+    numpad_2,
 
-	///Numeric keypad 3 key
-	numpad_3,
+    ///Numeric keypad 3 key
+    numpad_3,
 
-	///Numeric keypad 4 key
-	numpad_4,
+    ///Numeric keypad 4 key
+    numpad_4,
 
-	///Numeric keypad 5 key
-	numpad_5,
+    ///Numeric keypad 5 key
+    numpad_5,
 
-	///Numeric keypad 6 key
-	numpad_6,
+    ///Numeric keypad 6 key
+    numpad_6,
 
-	///Numeric keypad 7 key
-	numpad_7,
+    ///Numeric keypad 7 key
+    numpad_7,
 
-	///Numeric keypad 8 key
-	numpad_8,
+    ///Numeric keypad 8 key
+    numpad_8,
 
-	///Numeric keypad 9 key
-	numpad_9,
+    ///Numeric keypad 9 key
+    numpad_9,
 
-	///For any country/region, the '+' key
-	plus,
+    ///For any country/region, the '+' key
+    plus,
 
-	///For any country/region, the '-' key
-	minus,
+    ///For any country/region, the '-' key
+    minus,
 
-	///For any country/region, the '.' key
-	period,
+    ///For any country/region, the '.' key
+    period,
 
-	///For any country/region, the ',' key
-	comma,
+    ///For any country/region, the ',' key
+    comma,
 
-	///Asterisk key
-	asterisk,
+    ///Asterisk key
+    asterisk,
 
-	///Divide key
-	divide,
+    ///Divide key
+    divide,
 
-	///F1 key
-	f1,
+    ///F1 key
+    f1,
 
-	///F2 key
-	f2,
+    ///F2 key
+    f2,
 
-	///F3 key
-	f3,
+    ///F3 key
+    f3,
 
-	///F4 key
-	f4,
+    ///F4 key
+    f4,
 
-	///F5 key
-	f5,
+    ///F5 key
+    f5,
 
-	///F6 key
-	f6,
+    ///F6 key
+    f6,
 
-	///F7 key
-	f7,
+    ///F7 key
+    f7,
 
-	///F8 key
-	f8,
+    ///F8 key
+    f8,
 
-	///F9 key
-	f9,
+    ///F9 key
+    f9,
 
-	///F10 key
-	f10,
+    ///F10 key
+    f10,
 
-	///F11 key
-	f11,
+    ///F11 key
+    f11,
 
-	///F12 key
-	f12,
+    ///F12 key
+    f12,
 
-	///F13 key
-	f13,
+    ///F13 key
+    f13,
 
-	///F14 key
-	f14,
+    ///F14 key
+    f14,
 
-	///F15 key
-	f15,
+    ///F15 key
+    f15,
 
-	///F16 key
-	f16,
+    ///F16 key
+    f16,
 
-	///F17 key
-	f17,
+    ///F17 key
+    f17,
 
-	///F18 key
-	f18,
+    ///F18 key
+    f18,
 
-	///F19 key
-	f19,
+    ///F19 key
+    f19,
 
-	///F20 key
-	f20,
+    ///F20 key
+    f20,
 
-	///F21 key
-	f21,
+    ///F21 key
+    f21,
 
-	///F22 key
-	f22,
+    ///F22 key
+    f22,
 
-	///F23 key
-	f23,
+    ///F23 key
+    f23,
 
-	///F24 key
-	f24,
+    ///F24 key
+    f24,
 
-	///Used for miscellaneous characters; it can vary by keyboard.
-	oem_1,
+    ///Used for miscellaneous characters; it can vary by keyboard.
+    oem_1,
 
-	///ditto
-	oem_2,
+    ///ditto
+    oem_2,
 
-	///ditto
-	oem_3,
+    ///ditto
+    oem_3,
 
-	///ditto
-	oem_4,
+    ///ditto
+    oem_4,
 
-	///ditto
-	oem_5,
+    ///ditto
+    oem_5,
 
-	///ditto
-	oem_6,
+    ///ditto
+    oem_6,
 
-	///ditto
-	oem_7,
+    ///ditto
+    oem_7,
 
-	///ditto
-	oem_8,
+    ///ditto
+    oem_8,
 
-	///Either the angle bracket key or the backslash key on the RT 102-key keyboard
-	oem_102,
+    ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
+    oem_102,
 }
 
 /**
@@ -411,131 +411,131 @@ enum SK
  */
 enum SCK
 {
-	///No control key is being pressed
-	none = 0,
+    ///No control key is being pressed
+    none = 0,
 
-	///CAPS LOCK light is activated
-	capslock = 1,
+    ///CAPS LOCK light is activated
+    capslock = 1,
 
-	///NUM LOCK is activated
-	numlock = 2,
+    ///NUM LOCK is activated
+    numlock = 2,
 
-	///SCROLL LOCK is activated
-	scrolllock = 4,
+    ///SCROLL LOCK is activated
+    scrolllock = 4,
 
-	///SHIFT key is pressed
-	shift = 8,
+    ///SHIFT key is pressed
+    shift = 8,
 
-	///The key is enhanced (?)
-	enhanced = 16,
+    ///The key is enhanced (?)
+    enhanced = 16,
 
-	///Left or right ALT key is pressed
-	alt = 32,
+    ///Left or right ALT key is pressed
+    alt = 32,
 
-	///Left or right CTRL key is pressed
-	ctrl = 64,
+    ///Left or right CTRL key is pressed
+    ctrl = 64,
 }
 
 ///when on posix, a list of keypresses is loaded and used
 version(Posix)
 {
-	import std.array : split;
-	import std.conv : to, parse;
-	import std.file : exists, readText;
-	import std.string : chomp;
+    import std.array : split;
+    import std.conv : to, parse;
+    import std.file : exists, readText;
+    import std.string : chomp;
 
-	/**
-	 * Wrapper for an input sequence sent by the POSIX terminal
-	 * An input from the terminal is given by numbers in sequence
-	 *
-	 * For example, the right arrow key might send "27, 91, 67",
-	 * and will be stored as [27, 91, 67]
-	 */
-	struct InputSequence
-	{
-		this(uint[] t)
-		{
-			value = t;
-		}
+    /**
+     * Wrapper for an input sequence sent by the POSIX terminal
+     * An input from the terminal is given by numbers in sequence
+     *
+     * For example, the right arrow key might send "27, 91, 67",
+     * and will be stored as [27, 91, 67]
+     */
+    struct InputSequence
+    {
+        this(uint[] t)
+        {
+            value = t;
+        }
 
-		uint[] value;
-		alias value this;
-	}
+        uint[] value;
+        alias value this;
+    }
 
-	///get InputEvent from sequence
-	InputEvent eventFromSequence(InputSequence iseq)
-	{
-		//check for input sequence in map
-		if((iseq in inputSequences) !is null)
-		{
-			return inputSequences[iseq];
-		}
+    ///get InputEvent from sequence
+    InputEvent eventFromSequence(InputSequence iseq)
+    {
+        //check for input sequence in map
+        if((iseq in inputSequences) !is null)
+        {
+            return inputSequences[iseq];
+        }
 
-		//if not found, return unknown input
-		return InputEvent(SK.unknown, SCK.none, false);
-	}
+        //if not found, return unknown input
+        return InputEvent(SK.unknown, SCK.none, false);
+    }
 
-	///use input_sequences as default keymap
-	void loadInputSequneces()
-	{
-		enum file_name = "input_sequences.scone";
+    ///use input_sequences as default keymap
+    void loadInputSequneces()
+    {
+        enum file_name = "input_sequences.scone";
 
-		string[] ies = _inputSequences.split('\n');
+        string[] ies = _inputSequences.split('\n');
 
-		//if file `input_sequence` exists, load keymap
-		//this overrides existing keybinds
-		if(exists(file_name))
-		{
-			ies ~= file_name.readText.split('\n');
-		}
+        //if file `input_sequence` exists, load keymap
+        //this overrides existing keybinds
+        if(exists(file_name))
+        {
+            ies ~= file_name.readText.split('\n');
+        }
 
-		foreach(s; ies)
-		{
-			s = s.chomp;
-			//if line begins with #
-			if(s == "" || s[0] == '#') continue;
+        foreach(s; ies)
+        {
+            s = s.chomp;
+            //if line begins with #
+            if(s == "" || s[0] == '#') continue;
 
-			string[] arguments = split(s, '\t');
-			if(arguments.length != 3) continue; //something isn't right
+            string[] arguments = split(s, '\t');
+            if(arguments.length != 3) continue; //something isn't right
 
-			auto key = parse!(SK)(arguments[0]);
-			auto sck = parse!(SCK)(arguments[1]);
-			auto seq = arguments[2];
-			//if sequence is not defined, skip
-			if(seq == "-") continue;
+            auto key = parse!(SK)(arguments[0]);
+            auto sck = parse!(SCK)(arguments[1]);
+            auto seq = arguments[2];
+            //if sequence is not defined, skip
+            if(seq == "-") continue;
 
-			auto ie = InputEvent(key, sck, true);
-			auto iseq = InputSequence(sequenceFromString(seq));
+            auto ie = InputEvent(key, sck, true);
+            auto iseq = InputSequence(sequenceFromString(seq));
 
-			if((iseq in inputSequences) !is null)
-			{
-				auto storedInputEvent = inputSequences[iseq];
+            if((iseq in inputSequences) !is null)
+            {
+                auto storedInputEvent = inputSequences[iseq];
 
-				if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
-				{
-					//log(text("Replacing ", storedInputEvent, " with ", ie));
-				}
-			}
+                if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
+                {
+                    //log(text("Replacing ", storedInputEvent, " with ", ie));
+                }
+            }
 
-			inputSequences[iseq] = ie;
-		}
-	}
+            inputSequences[iseq] = ie;
+        }
+    }
 
-	///table holding all input sequences and their respective input
-	private InputEvent[InputSequence] inputSequences;
+    ///table holding all input sequences and their respective input
+    private InputEvent[InputSequence] inputSequences;
 
-	///get uint[] from string in the format of "num1,num2,...,numX"
-	private uint[] sequenceFromString(string input) pure
-	{
-		string[] numbers = split(input, ",");
-		uint[] sequence;
-		foreach(number_as_string; numbers)
-		{
-			sequence ~= parse!uint(number_as_string);
-		}
+    ///get uint[] from string in the format of "num1,num2,...,numX"
+    private uint[] sequenceFromString(string input) pure
+    {
+        string[] numbers = split(input, ",");
+        uint[] sequence;
+        foreach(number_as_string; numbers)
+        {
+            sequence ~= parse!uint(number_as_string);
+        }
 
-		return sequence;
-	}
+        return sequence;
+    }
 }
 
 ///default keybindings. tested on mac
