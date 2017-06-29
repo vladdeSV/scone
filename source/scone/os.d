@@ -809,24 +809,10 @@ struct OS
         ///get ansi color from Color
         uint ansiColor(Color c)
         {
-            /+
-            version(OSX)
-            {
-            +/
-                //color start
-                enum cs = 90;
-                //dark color start
-                enum dcs = 30;
-            /+
-            }
-            else
-            {
-                //color start
-                enum cs = 30;
-                //dark color start
-                enum dcs = 90;
-            }
-            +/
+            //color start
+            enum cs = 90;
+            //dark color start
+            enum dcs = 30;
 
             if(c < 8)
             {
