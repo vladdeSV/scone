@@ -85,7 +85,6 @@ struct InputEvent
     version(Posix)
     {
         /**
-        * Note: POSIX only.
         * Get the ASCII-code sequence returned from the keypress on POSIX systems.
         * Returns: uint[]
         */
@@ -94,7 +93,7 @@ struct InputEvent
             return _keySequences;
         }
 
-        package(scone) uint[] _keySequences;
+        uint[] _keySequences;
     }
 }
 
