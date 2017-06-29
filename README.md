@@ -2,11 +2,15 @@
 
 <h4 align="center">Create cross-platform CLI applications with ease</h4>
 <p align="center">
-  <img src="https://badge.fury.io/gh/vladdeSV%2Fscone.svg">
+  <a href="http://code.dlang.org/packages/scone">
+    <img src="https://badge.fury.io/gh/vladdeSV%2Fscone.svg">
+  </a>
   <a href="https://raw.githubusercontent.com/vladdeSV/scone/master/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg">
   </a>
-  <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master"> 
+  <a href="https://travis-ci.org/vladdeSV/scone/">
+    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master"> 
+  </a>
   <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
 </p>
 
