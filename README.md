@@ -11,7 +11,9 @@
   <a href="https://travis-ci.org/vladdeSV/scone/">
     <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master"> 
   </a>
-  <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
+  <a href="https://github.com/vladdeSV/scone/issues">
+    <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
+  </a>
 </p>
 
 ### Features:
