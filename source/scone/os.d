@@ -807,21 +807,16 @@ struct OS
         }
 
         ///get ansi color from Color
-        uint ansiColor(Color c)
+        auto ansiColor(Color color)
         {
-            //color start
-            enum cs = 90;
-            //dark color start
-            enum dcs = 30;
+            //bright color index starts at 90,
+            //dark color index starts at 30
 
-            if(c < 8)
-            {
-                return cs + c;
-            }
-            else
-            {
-                return dcs + c - 8;
-            }
+            //checks if color is *_dark (value less than 8, check color enum),
+            //and sets approproiate starting value. then offsets by the color
+            //value. mod 8 is becuase the darker colors range from 8+0 to 8+7
+            //and they represent the same color.
+            return (color < 8 ? 90 : 30) + (color % 8);
         }
 
         ///Returns: bool, true if currently polling inputs.
