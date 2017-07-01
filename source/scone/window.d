@@ -147,6 +147,14 @@ struct Window
                 //TOOD: add a foreach_reverse to maybe speed up time,
                 //      meaning once first changed cell is found, do
                 //      another foreach_reverse loop.
+                //
+                //2017 clarafication of this:
+                //find the first the first modified cell with foreach.
+                //Once one has been found, do foreach_reverse to look
+                //for the last modified cell.
+                //
+                //I think that would speed it up?
+
                 //Go through each line
                 foreach(sx, cell; _cells[sy])
                 {
