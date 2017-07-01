@@ -74,8 +74,6 @@ struct OS
     {
         //placed ontop to work with windows
         resize(_size[0], _size[1]);
-        cursorVisible(true);
-        setCursor(0,0);
 
         version(Windows)
         {
@@ -86,6 +84,9 @@ struct OS
         {
             Posix.deinit();
         }
+
+        cursorVisible(true);
+        setCursor(0,0);
     }
 
     ///Get the size of the window
