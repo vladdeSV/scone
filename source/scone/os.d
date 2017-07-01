@@ -53,8 +53,6 @@ struct OS
     package(scone)
     auto init()
     {
-        cursorVisible = false;
-
         version(Windows)
         {
             Windows.init();
@@ -64,13 +62,19 @@ struct OS
         {
             Posix.init();
         }
+
+        //store original size
+        _size = size();
+        cursorVisible(false);
     }
 
     ///De-initializes console/terminal
     package(scone)
     auto deinit()
     {
-        cursorVisible = true;
+        //placed ontop to work with windows
+        resize(_size[0], _size[1]);
+        cursorVisible(true);
         setCursor(0,0);
 
         version(Windows)
@@ -156,6 +160,8 @@ struct OS
         }
     }
 
+    private uint[2] _size;
+
     version(Windows)
     static struct Windows
     {
@@ -193,6 +199,8 @@ struct OS
                 assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
             }
 
+            GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
+
             //"removes" the enter release key
             retreiveInputs();
             //sets the cursor invisible
@@ -206,8 +214,7 @@ struct OS
                 assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
             }
 
-            cursorVisible(true);
-            setCursor(0,0);
+            SetConsoleScreenBufferSize(_hConsoleOutput, _consoleScreenBufferInfo.dwSize);
         }
 
         auto writeCell(size_t x, size_t y, ref Cell cell)
@@ -771,7 +778,6 @@ struct OS
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
-            setCursor(0,0);
         }
 
         auto setCursor(uint x, uint y)
@@ -794,7 +800,7 @@ struct OS
             write("\033]0;", title, "\007");
         }
 
-        auto size()
+        auto size() @property
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -820,12 +826,12 @@ struct OS
         }
 
         ///Returns: bool, true if currently polling inputs.
-        auto isPollingInput() @property
+        package(scone) auto isPollingInput() @property
         {
             return currentlyPolling;
         }
 
-        package(scone) void beginPolling()
+        package(scone) auto beginPolling()
         {
             if(!currentlyPolling)
             {
