@@ -35,8 +35,8 @@ struct Window
         //everything which will be written to the window's internal memory
         Cell[] cells;
 
-        fg foreground = fg.white_dark;
-        bg background = bg.black_dark;
+        fg foreground = defaultForeground;
+        bg background = defaultBackground;
 
         //flag to warn if color arguments will not be written
         bool unsetColors;
@@ -55,7 +55,6 @@ struct Window
             else static if(is(typeof(arg) == Cell))
             {
                 cells ~= arg;
-
             }
             else static if(is(typeof(arg) == Cell[]))
             {
@@ -63,6 +62,7 @@ struct Window
                 {
                     cells ~= cell;
                 }
+
                 unsetColors = false;
             }
             else
@@ -223,7 +223,7 @@ struct Window
     {
         foreach(ref y; _cells)
         {
-            y[] = Cell(' ');
+            y[] = Cell(' ', defaultForeground, defaultBackground);
         }
     }
 
@@ -233,7 +233,7 @@ struct Window
     {
         foreach(ref row; _backbuffer)
         {
-            row[] = Cell(char(0));
+            row[] = Cell(char(0), defaultForeground, defaultBackground);
         }
     }
 
@@ -278,7 +278,7 @@ struct Window
 
         foreach(n; 0 .. height)
         {
-            _cells[n][] = Cell(' ');
+            _cells[n][] = Cell(' ', defaultForeground, defaultBackground);
         }
     }
 
@@ -299,6 +299,11 @@ struct Window
     ///
     alias h = height;
 
+    ///The default foreground color used with `window.write(x, y, ...);`
+    public fg defaultForeground = fg(Color.white_dark);
+    ///The default background color used with `window.write(x, y, ...);`
+    public bg defaultBackground = bg(Color.black_dark);
+
     //all cells which can be written to, and backbuffer
     private Cell[][] _cells, _backbuffer;
 }
@@ -309,9 +314,9 @@ struct Cell
     ///character
     char character;
     ///foreground color
-    fg foreground = fg(Color.white_dark);
+    fg foreground;
     ///background color
-    bg background = bg(Color.black_dark);
+    bg background;
 }
 
 /**
