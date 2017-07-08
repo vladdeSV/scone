@@ -900,8 +900,6 @@ struct OS
             auto event = eventFromSequence(InputSequence(codes));
             event._keySequences = codes;
 
-            if
-
             return [event];
         }
 
