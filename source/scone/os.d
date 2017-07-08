@@ -750,7 +750,6 @@ struct OS
         {
             //store the state of the terminal
             tcgetattr(1, &oldState);
-
             loadInputSequneces();
         }
 
@@ -758,6 +757,7 @@ struct OS
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
             resize(_size[0], _size[1]);
+            writef("\033[2J\033[H");
             cursorVisible(true);
         }
 
