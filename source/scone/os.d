@@ -165,6 +165,7 @@ struct OS
     {
         static:
 
+        package(scone)
         auto init()
         {
             //handle to console window
@@ -190,6 +191,7 @@ struct OS
             cursorVisible(false);
         }
 
+        package(scone)
         auto deinit()
         {
             resize(_size[0], _size[1]);
@@ -746,6 +748,7 @@ struct OS
     {
         static:
 
+        package(scone)
         auto init()
         {
             //store the state of the terminal
@@ -753,6 +756,7 @@ struct OS
             loadInputSequneces();
         }
 
+        package(scone)
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
