@@ -1,7 +1,5 @@
 module scone.os;
 
-import std.stdio : writeln, readln;
-
 import scone.input;
 import core.thread;
 import std.random;
@@ -35,14 +33,19 @@ version(Posix)
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout;
     import std.conv : to, text;
     import std.datetime : Duration, msecs;
-    import std.process : execute;
-    import std.stdio : write, writef;
+    import std.stdio : writef;
+
     extern(C)
     {
         import core.sys.posix.termios;
         void cfmakeraw(termios *termios_p);
     }
 }
+
+/+
+import std.system;
+private enum _os = (os == std.system.OS.win32 || os == std.system.OS.win64) ? "Windows" : "Posix";
++/
 
 ///Wrapper for OS specific functions
 struct OS
@@ -72,9 +75,6 @@ struct OS
     package(scone)
     auto deinit()
     {
-        //placed ontop to work with windows
-        resize(_size[0], _size[1]);
-
         version(Windows)
         {
             Windows.deinit();
@@ -84,9 +84,6 @@ struct OS
         {
             Posix.deinit();
         }
-
-        cursorVisible(true);
-        setCursor(0,0);
     }
 
     ///Get the size of the window
@@ -172,37 +169,22 @@ struct OS
         {
             //handle to console window
             _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-
             //error check
-            if(_hConsoleOutput == INVALID_HANDLE_VALUE)
-            {
-                assert(0, "_hConsoleOutput == INVALID_HANDLE_VALUE");
-            }
+            assert(_hConsoleOutput != INVALID_HANDLE_VALUE, "_hConsoleOutput == INVALID_HANDLE_VALUE");
 
             //handle to console input stuff
             _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
-
             //and error check
-            if(_hConsoleInput == INVALID_HANDLE_VALUE)
-            {
-                assert(0, "_hConsoleInput == INVALID_HANDLE_VALUE");
-            }
-
+            assert(_hConsoleInput != INVALID_HANDLE_VALUE, "_hConsoleInput == INVALID_HANDLE_VALUE");
             //store the old keyboard mode
-            if(!GetConsoleMode(_hConsoleInput, &_oldMode))
-            {
-                assert(0, "GetConsoleMode(_hConsoleInput, &_oldMode)");
-            }
-
+            assert(GetConsoleMode(_hConsoleInput, &_oldMode), "GetConsoleMode(_hConsoleInput, &_oldMode)");
             //set new inputmodes
-            if(!SetConsoleMode(_hConsoleInput, _mode))
-            {
-                assert(0, "SetConsoleMode(_hConsoleInput, _mode)");
-            }
+            assert(SetConsoleMode(_hConsoleInput, _mode), "SetConsoleMode(_hConsoleInput, _mode)");
 
+            //store current screen buffer info
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
-            //"removes" the enter release key
+            //"removes" the enter release key when `dub` is run
             retreiveInputs();
             //sets the cursor invisible
             cursorVisible(false);
@@ -210,14 +192,23 @@ struct OS
 
         auto deinit()
         {
-            if(!SetConsoleMode(_hConsoleInput, _oldMode))
-            {
-                assert(0, "SetConsoleMode(_hConsoleInput, _oldMode)");
-            }
+            resize(_size[0], _size[1]);
 
+            SetConsoleMode(_hConsoleInput, _oldMode);
             SetConsoleScreenBufferSize(_hConsoleOutput, _consoleScreenBufferInfo.dwSize);
+
+            COORD coordScreen = { 0, 0 };
+            DWORD charsWritten;
+            DWORD cellCount = _consoleScreenBufferInfo.dwSize.X * _consoleScreenBufferInfo.dwSize.Y;
+
+            FillConsoleOutputCharacter(_hConsoleOutput, cast(TCHAR) ' ', cellCount, coordScreen, &charsWritten);
+            FillConsoleOutputAttribute(_hConsoleOutput, _consoleScreenBufferInfo.wAttributes, cellCount, coordScreen, &charsWritten);
+
+            cursorVisible(true);
+            setCursor(0,0);
         }
 
+        /* Display cell in console */
         auto writeCell(size_t x, size_t y, ref Cell cell)
         {
             ushort wx = to!ushort(x), wy = to!ushort(y);
@@ -269,16 +260,12 @@ struct OS
 
         void resize(uint width, uint height)
         {
-            CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
-            if (!GetConsoleScreenBufferInfo(_hConsoleOutput, &bufferInfo))
-                assert(0, "Unable to retrieve screen buffer info.");
-
-            SMALL_RECT winInfo = bufferInfo.srWindow;
-            COORD windowSize = { to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
+            SMALL_RECT winInfo = _consoleScreenBufferInfo.srWindow;
+            COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
 
             if (windowSize.X > width || windowSize.Y > height)
             {
-                // window size needs to be adjusted before the buffer size can be reduced.
+                //window size needs to be adjusted before the buffer size can be reduced
                 SMALL_RECT info =
                 {
                     0,
@@ -287,23 +274,14 @@ struct OS
                     height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
                 };
 
-                if (!SetConsoleWindowInfo(_hConsoleOutput, 1, &info))
-                {
-                    assert(0, "Unable to resize window before resizing buffer.");
-                }
+                assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window before resizing buffer");
             }
 
             COORD size = { to!short(width), to!short(height) };
-            if (!SetConsoleScreenBufferSize(_hConsoleOutput, size))
-            {
-                assert(0, "Unable to resize screen buffer.");
-            }
+            assert(SetConsoleScreenBufferSize(_hConsoleOutput, size), "Unable to resize screen buffer");
 
             SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
-            if (!SetConsoleWindowInfo(_hConsoleOutput, 1, &info))
-            {
-                assert(0, "Unable to resize window after resizing buffer.");
-            }
+            assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window after resizing buffer");
         }
 
         uint[2] size()
@@ -779,6 +757,8 @@ struct OS
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
+            resize(_size[0], _size[1]);
+            cursorVisible(true);
         }
 
         auto setCursor(uint x, uint y)
@@ -786,19 +766,19 @@ struct OS
             writef("\033[%d;%dH", y + 1, x);
         }
 
-        auto cursorVisible(bool vis) @property
+        auto cursorVisible(bool visible) @property
         {
-            vis ? write("\033[?25h") : write("\033[?25l");
+            writef("\033[?25%s", visible ? "h" : "l");
         }
 
         auto lineWrapping(bool wrap) @property
         {
-            wrap ? write("\033[?7h") : write("\033[?7l");
+            writef("\033[?7%s", wrap ? "h" : "l");
         }
 
         auto title(string title) @property
         {
-            write("\033]0;", title, "\007");
+            writef("\033]0;%s\007", title);
         }
 
         auto size() @property
@@ -877,10 +857,10 @@ struct OS
                 }
             }
 
-            write('\r'); //adding this caused travis to pass...
+            writef("\r"); //adding this caused travis to pass...
         }
 
-        auto retreiveInputs()
+        package(scone) auto retreiveInputs()
         {
             //this is some spooky hooky code, dealing with
             //multi-thread and reading inputs with timeouts

@@ -353,23 +353,23 @@ struct Cell
  */
 enum Color
 {
-    black,
-    red,
-    green,
-    yellow,
-    blue,
-    magenta,
-    cyan,
-    white,
+    black   = 0,
+    red     = 1,
+    green   = 2,
+    yellow  = 3,
+    blue    = 4,
+    magenta = 5,
+    cyan    = 6,
+    white   = 7,
 
-    black_dark,
-    red_dark,
-    green_dark,
-    yellow_dark,
-    blue_dark,
-    magenta_dark,
-    cyan_dark,
-    white_dark,
+    black_dark   = 8,
+    red_dark     = 9,
+    green_dark   = 10,
+    yellow_dark  = 11,
+    blue_dark    = 12,
+    magenta_dark = 13,
+    cyan_dark    = 14,
+    white_dark   = 15,
 }
 
 /**
