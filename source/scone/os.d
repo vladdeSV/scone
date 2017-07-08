@@ -172,6 +172,8 @@ struct OS
             _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
             //error check
             assert(_hConsoleOutput != INVALID_HANDLE_VALUE, "_hConsoleOutput == INVALID_HANDLE_VALUE");
+            //store current screen buffer info
+            assert(GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo), "GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo)");
 
             //handle to console input stuff
             _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
@@ -179,11 +181,10 @@ struct OS
             assert(_hConsoleInput != INVALID_HANDLE_VALUE, "_hConsoleInput == INVALID_HANDLE_VALUE");
             //store the old keyboard mode
             assert(GetConsoleMode(_hConsoleInput, &_oldMode), "GetConsoleMode(_hConsoleInput, &_oldMode)");
-            //set new inputmodes
-            assert(SetConsoleMode(_hConsoleInput, _mode), "SetConsoleMode(_hConsoleInput, _mode)");
 
-            //store current screen buffer info
-            GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
+            //    does the following line even do anything?
+            //set new inputmodes
+            //assert(SetConsoleMode(_hConsoleInput, _mode), "SetConsoleMode(_hConsoleInput, _mode)");
 
             //"removes" the enter release key when `dub` is run
             retreiveInputs();
@@ -810,13 +811,7 @@ struct OS
             return (color < 8 ? 90 : 30) + (color % 8);
         }
 
-        ///Returns: bool, true if currently polling inputs.
-        package(scone) auto isPollingInput() @property
-        {
-            return currentlyPolling;
-        }
-
-        package(scone) auto beginPolling()
+        private auto beginPolling()
         {
             if(!currentlyPolling)
             {
@@ -864,7 +859,8 @@ struct OS
             writef("\r"); //adding this caused travis to pass...
         }
 
-        package(scone) auto retreiveInputs()
+        package(scone)
+        auto retreiveInputs()
         {
             //this is some spooky hooky code, dealing with
             //multi-thread and reading inputs with timeouts
@@ -873,7 +869,7 @@ struct OS
             //
             //blesh...
 
-            if(!isPollingInput)
+            if(currentlyPolling)
             {
                 beginPolling();
             }
@@ -903,6 +899,8 @@ struct OS
 
             auto event = eventFromSequence(InputSequence(codes));
             event._keySequences = codes;
+
+            if
 
             return [event];
         }

@@ -261,7 +261,6 @@ struct Window
         }
     }
 
-
     ///Set the size of the window
     void title(string title) @property
     {
