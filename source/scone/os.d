@@ -869,7 +869,7 @@ struct OS
             //
             //blesh...
 
-            if(currentlyPolling)
+            if(!currentlyPolling)
             {
                 beginPolling();
             }
