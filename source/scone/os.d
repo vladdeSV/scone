@@ -33,7 +33,7 @@ version(Posix)
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout;
     import std.conv : to, text;
     import std.datetime : Duration, msecs;
-    import std.stdio : writef;
+    import std.stdio : writef, stdout;
 
     extern(C)
     {
@@ -763,27 +763,32 @@ struct OS
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
             resize(_size[0], _size[1]);
             writef("\033[2J\033[H");
+            stdout.flush();
             cursorVisible(true);
         }
 
         auto setCursor(uint x, uint y)
         {
             writef("\033[%d;%dH", y + 1, x);
+            stdout.flush();
         }
 
         auto cursorVisible(bool visible) @property
         {
             writef("\033[?25%s", visible ? "h" : "l");
+            stdout.flush();
         }
 
         auto lineWrapping(bool wrap) @property
         {
             writef("\033[?7%s", wrap ? "h" : "l");
+            stdout.flush();
         }
 
         auto title(string title) @property
         {
             writef("\033]0;%s\007", title);
+            stdout.flush();
         }
 
         auto size() @property
@@ -796,6 +801,7 @@ struct OS
         auto resize(uint width, uint height)
         {
             writef("\033[8;%s;%st", height, width);
+            stdout.flush();
         }
 
         ///get ansi color from Color
@@ -821,6 +827,7 @@ struct OS
 
                 currentlyPolling = true;
                 spawn(&pollInputEvent, thisTid);
+                stdout.flush();
             }
         }
 
@@ -857,6 +864,7 @@ struct OS
             }
 
             writef("\r"); //adding this caused travis to pass...
+            stdout.flush();
         }
 
         package(scone)

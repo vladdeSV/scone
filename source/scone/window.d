@@ -332,8 +332,8 @@ struct Cell
  * Example:
  * --------------------
  * //Available colors:
- * black
- * black_dark
+ * black      //dark grey
+ * black_dark //black
  * blue
  * blue_dark
  * cyan
@@ -344,8 +344,8 @@ struct Cell
  * magenta_dark
  * red
  * red_dark
- * white
- * white_dark
+ * white      //white
+ * white_dark //light grey
  * yellow
  * yellow_dark
  * --------------------
