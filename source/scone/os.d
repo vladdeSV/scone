@@ -42,10 +42,8 @@ version(Posix)
     }
 }
 
-/+
 import std.system;
 private enum _os = (os == std.system.OS.win32 || os == std.system.OS.win64) ? "Windows" : "Posix";
-+/
 
 ///Wrapper for OS specific functions
 struct OS
@@ -56,15 +54,7 @@ struct OS
     package(scone)
     auto init()
     {
-        version(Windows)
-        {
-            Windows.init();
-        }
-
-        version(Posix)
-        {
-            Posix.init();
-        }
+        mixin(_os~".init();");
 
         //store original size
         _size = size();
@@ -75,87 +65,45 @@ struct OS
     package(scone)
     auto deinit()
     {
-        version(Windows)
-        {
-            Windows.deinit();
-        }
-
-        version(Posix)
-        {
-            Posix.deinit();
-        }
+        mixin(_os~".deinit();");
     }
 
     ///Get the size of the window
     ///Returns: uint[2], where [0] is width, and [1] is height
     auto size()
     {
-        version(Windows)
-        {
-            return Windows.size();
-        }
-
-        version(Posix)
-        {
-            return Posix.size();
-        }
+        mixin("return "~_os~".size();");
     }
 
     ///Set the size of the window
-    void resize(uint width, uint height)
+    auto resize(in size_t width, in size_t height)
     {
-        version(Windows)
-        {
-            Windows.resize(width, height);
-        }
+        mixin(_os~".resize(width, height);");
+    }
 
-        version(Posix)
-        {
-            Posix.resize(width, height);
-        }
+    ///Reposition the window, where x=0,y=0 is the top-left corner
+    auto reposition(in size_t x, in size_t y)
+    {
+        mixin(_os~".reposition(x, y);");
     }
 
     ///Set if the cursor should be visible
-    auto cursorVisible(bool visible) @property
+    auto cursorVisible(in bool visible) @property
     {
-        version(Windows)
-        {
-            Windows.cursorVisible(visible);
-        }
-
-        version(Posix)
-        {
-            Posix.cursorVisible(visible);
-        }
+        mixin(_os~".cursorVisible(visible);");
     }
 
     ///Set the cursor at position
     ///Note: This function should only be called by scone itself
-    auto setCursor(uint x, uint y)
+    auto setCursor(in size_t x, in size_t y)
     {
-        version(Windows)
-        {
-            return Windows.setCursor(x, y);
-        }
-
-        version(Posix)
-        {
-            return Posix.setCursor(x, y);
-        }
+        mixin(_os~".setCursor(x, y);");
     }
 
     ///Set the title of the window
-    void title(string title) @property
+    auto title(in string title) @property
     {
-        version(Windows)
-        {
-            Windows.title(title);
-        }
-
-        version(Posix)
-        {
-            Posix.title(title);
-        }
+        mixin(_os~".title(title);");
     }
 
     private uint[2] _size;
@@ -212,7 +160,7 @@ struct OS
         }
 
         /* Display cell in console */
-        auto writeCell(size_t x, size_t y, ref Cell cell)
+        auto writeCell(in size_t x, in size_t y, ref Cell cell)
         {
             ushort wx = to!ushort(x), wy = to!ushort(y);
             COORD charBufSize = {1,1};
@@ -225,7 +173,7 @@ struct OS
         }
 
         /** Set cursor position. */
-        auto setCursor(int x, int y)
+        auto setCursor(in size_t x, in size_t y)
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
             COORD change =
@@ -240,13 +188,13 @@ struct OS
         }
 
         /** Set window title */
-        auto title(string title) @property
+        auto title(in string title) @property
         {
             SetConsoleTitleA(title.toStringz);
         }
 
         /** Set cursor visible. */
-        auto cursorVisible(bool visible) @property
+        auto cursorVisible(in bool visible) @property
         {
             CONSOLE_CURSOR_INFO cci;
             GetConsoleCursorInfo(_hConsoleOutput, &cci);
@@ -255,13 +203,13 @@ struct OS
         }
 
         /** Set line wrapping. */
-        auto lineWrapping(bool lw) @property
+        auto lineWrapping(in bool lw) @property
         {
             lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
             : SetConsoleMode(_hConsoleOutput, 0x0);
         }
 
-        void resize(uint width, uint height)
+        void resize(in size_t width, in size_t height)
         {
             SMALL_RECT winInfo = _consoleScreenBufferInfo.srWindow;
             COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
@@ -285,6 +233,11 @@ struct OS
 
             SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
             assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window after resizing buffer");
+        }
+
+        auto reposition(in size_t x, in size_t y)
+        {
+            //todo...
         }
 
         uint[2] size()
@@ -767,25 +720,25 @@ struct OS
             cursorVisible(true);
         }
 
-        auto setCursor(uint x, uint y)
+        auto setCursor(in size_t x, in size_t y)
         {
             writef("\033[%d;%dH", y + 1, x);
             stdout.flush();
         }
 
-        auto cursorVisible(bool visible) @property
+        auto cursorVisible(in bool visible) @property
         {
             writef("\033[?25%s", visible ? "h" : "l");
             stdout.flush();
         }
 
-        auto lineWrapping(bool wrap) @property
+        auto lineWrapping(in bool wrap) @property
         {
             writef("\033[?7%s", wrap ? "h" : "l");
             stdout.flush();
         }
 
-        auto title(string title) @property
+        auto title(in string title) @property
         {
             writef("\033]0;%s\007", title);
             stdout.flush();
@@ -798,14 +751,20 @@ struct OS
             return [to!uint(w.ws_col), to!uint(w.ws_row)];
         }
 
-        auto resize(uint width, uint height)
+        auto resize(in size_t width, in size_t height)
         {
             writef("\033[8;%s;%st", height, width);
             stdout.flush();
         }
 
+        auto reposition(in size_t x, in size_t y)
+        {
+            writef("\033[3;%s;%st", x, y);
+            stdout.flush();
+        }
+
         ///get ansi color from Color
-        auto ansiColor(Color color)
+        auto ansiColor(in Color color)
         {
             //bright color index starts at 90,
             //dark color index starts at 30

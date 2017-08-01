@@ -2,7 +2,6 @@ module scone.core;
 
 import scone.window;
 import scone.os;
-import std.stdio : File, writefln;
 
 /**
  *

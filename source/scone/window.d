@@ -4,7 +4,6 @@ import scone.os;
 import scone.input;
 
 import std.conv : to, text;
-import std.stdio;// : write, writef, writeln, writefln;
 
 ///
 struct Window
@@ -55,6 +54,7 @@ struct Window
             else static if(is(typeof(arg) == Cell))
             {
                 cells ~= arg;
+                unsetColors = false;
             }
             else static if(is(typeof(arg) == Cell[]))
             {
@@ -287,6 +287,11 @@ struct Window
         {
             _cells[n][] = Cell(' ', defaultForeground, defaultBackground);
         }
+    }
+
+    void reposition(in size_t x, in size_t y)
+    {
+        OS.reposition(x,y);
     }
 
     ///Get the width of the window
