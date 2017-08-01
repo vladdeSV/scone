@@ -10,7 +10,7 @@ struct Window
 {
     ///initializes the window.
     ///NOTE: should only be used once. use `size(w,h);` to resize
-    this(uint width, uint height)
+    this(in size_t width, in size_t height)
     {
         //properly set the size of the console
         resize(width, height);
@@ -22,10 +22,10 @@ struct Window
     ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
     ///---
     ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
-    void write(Args...)(in size_t x, in size_t y, Args args)
+    auto write(Args...)(in size_t x, in size_t y, Args args)
     {
         //Check if writing outside border
-        if(/+x < 0 || y < 0 ||+/ x >= w || y >= h)
+        if(x >= w || y >= h)
         {
             //logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, w, h);
             return;
@@ -109,7 +109,7 @@ struct Window
     }
 
     ///Displays what has been written
-    void print()
+    auto print()
     {
         //windows version, using winapi
         version(Windows)
@@ -227,7 +227,7 @@ struct Window
     }
 
     ///Clear the screen, making it ready for the next `print();`
-    void clear()
+    auto clear()
     {
         foreach(ref y; _cells)
         {
@@ -237,7 +237,7 @@ struct Window
 
     ///Causes next `print()` to write out all cells.
     ///NOTE: Only use this if some sort of visual bug occurs.
-    void flush()
+    auto flush()
     {
         foreach(ref row; _backbuffer)
         {
@@ -249,7 +249,7 @@ struct Window
      * Get a range of all inputs since last call.
      * Returns: InputEvent[]
      */
-    InputEvent[] getInputs()
+    auto getInputs()
     {
         version(Windows)
         {
@@ -262,13 +262,13 @@ struct Window
     }
 
     ///Set the size of the window
-    void title(string title) @property
+    auto title(in string title) @property
     {
         OS.title(title);
     }
 
     ///Set if the cursor should be visible
-    void cursorVisible(bool visible) @property
+    auto cursorVisible(in bool visible) @property
     {
         OS.cursorVisible(visible);
     }
@@ -276,7 +276,7 @@ struct Window
     ///Changes the size of the window
     ///NOTE: (POSIX) Does not work if terminal is maximized
     ///NOTE: Clears the buffer
-    void resize(uint width, uint height)
+    auto resize(in size_t width, in size_t height)
     {
         OS.resize(width, height);
 
@@ -289,21 +289,22 @@ struct Window
         }
     }
 
-    void reposition(in size_t x, in size_t y)
+    //Reposition the window.
+    auto reposition(in size_t x, in size_t y)
     {
         OS.reposition(x,y);
     }
 
     ///Get the width of the window
-    uint width()
+    auto width()
     {
-        return to!uint(_cells[0].length);
+        return to!size_t(_cells[0].length);
     }
 
     ///Get the height of the window
-    uint height()
+    auto height()
     {
-        return to!uint(_cells.length);
+        return to!size_t(_cells.length);
     }
 
     ///
