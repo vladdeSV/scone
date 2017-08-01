@@ -4,6 +4,7 @@ import scone.os;
 import scone.input;
 
 import std.conv : to, text;
+import std.stdio : writef, stdout;
 
 ///
 struct Window
@@ -215,7 +216,7 @@ struct Window
                 OS.Posix.setCursor(f + 1, to!uint(sy));
 
                 //...and then print out the string via the regular write function.
-                std.stdio.write(printed);
+                writef(printed);
 
                 //Reset 'printed'.
                 printed = null;
