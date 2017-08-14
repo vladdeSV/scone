@@ -43,6 +43,7 @@ version(Posix)
 }
 
 import std.system;
+///OS struct name. Called via `mixin(_os~".init();");` //on windows becomes: `Windows.init();`
 private enum _os = (os == std.system.OS.win32 || os == std.system.OS.win64) ? "Windows" : "Posix";
 
 ///Wrapper for OS specific functions
@@ -705,9 +706,8 @@ struct OS
         package(scone)
         auto init()
         {
-            //store the state of the terminal
-            tcgetattr(1, &oldState);
             loadInputSequneces();
+            beginPolling();
         }
 
         package(scone)
@@ -780,6 +780,9 @@ struct OS
         {
             if(!currentlyPolling)
             {
+                //store the state of the terminal
+                tcgetattr(1, &oldState);
+
                 newState = oldState;
                 cfmakeraw(&newState);
                 tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
