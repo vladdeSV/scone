@@ -262,7 +262,7 @@ struct Window
         }
     }
 
-    ///Set the size of the window
+    ///Set the title of the window
     auto title(in string title) @property
     {
         OS.title(title);
