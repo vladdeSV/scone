@@ -108,6 +108,8 @@ struct Window
             }
         }
     }
+    ///ditto
+    auto write(Args...)(in size_t[2] pos, Args args) {write(pos[0],pos[1], args);}
 
     ///Displays what has been written
     auto print()
@@ -262,7 +264,7 @@ struct Window
         }
     }
 
-    ///Set the size of the window
+    ///Set the title of the window
     auto title(in string title) @property
     {
         OS.title(title);
@@ -289,12 +291,16 @@ struct Window
             _cells[n][] = Cell(' ', defaultForeground, defaultBackground);
         }
     }
+    ///ditto
+    auto resize(in size_t[2] size) {resize(size[0],size[1]);}
 
     //Reposition the window.
     auto reposition(in size_t x, in size_t y)
     {
         OS.reposition(x,y);
     }
+    ///ditto
+    auto reposition(in size_t[2] pos) {resize(pos[0],pos[1]);}
 
     ///Get the width of the window
     auto width()
@@ -312,6 +318,12 @@ struct Window
     alias w = width;
     ///
     alias h = height;
+
+    ///Get the size of the window
+    size_t[2] size()
+    {
+        return [width,height];
+    }
 
     ///The default foreground color used with `window.write(x, y, ...);`
     public fg defaultForeground = fg(Color.white_dark);
