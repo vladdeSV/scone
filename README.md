@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/license-MIT-blue.svg">
   </a>
   <!-- <a href="https://travis-ci.org/vladdeSV/scone/">
-    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master"> 
+    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master">
   </a> -->
   <a href="https://github.com/vladdeSV/scone/issues">
     <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
@@ -31,6 +31,9 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 ### Usage with [dub](https://code.dlang.org/download)
 * dub.json - `"scone": "~>2.0.0"`
 * dub.sdl - `dependency "scone" version="~>2.0.0"`
+
+### Resources
+* [Trello](https://trello.com/b/EFTaQJZa/scone)
 
 <!--
 # Examples
