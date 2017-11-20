@@ -795,7 +795,9 @@ struct OS
 
         private void pollInputEvent(Tid parentThreadID)
         {
-            while(inited)
+            Thread.getThis.isDaemon = true;
+
+            while(true)
             {
                 pollfd ufds;
                 ufds.fd = STDOUT_FILENO;
@@ -825,8 +827,8 @@ struct OS
                 }
             }
 
-            writef("\r"); //adding this caused travis to pass...
-            stdout.flush();
+//            writef("\r"); //adding this caused travis to pass...
+//            stdout.flush();
         }
 
         package(scone)

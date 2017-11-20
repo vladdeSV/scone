@@ -10,6 +10,7 @@ dub.selections.json
 scone.log
 libscone.a
 source/scone/main.d
+bin/*
 
 docs/package.html
 docs/main.html
