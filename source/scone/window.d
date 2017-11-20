@@ -143,47 +143,39 @@ struct Window
             foreach (sy, y; _cells)
             {
                 //f = first modified cell, l = last modified cell
-                uint f = rowUnchanged, l;
+                uint firstChanged = rowUnchanged, lastChanged;
 
-                //TOOD: add a foreach_reverse to maybe speed up time,
-                //      meaning once first changed cell is found, do
-                //      another foreach_reverse loop.
-                //
-                //2017 clarafication of this:
-                //find the first the first modified cell with foreach.
-                //Once one has been found, do foreach_reverse to look
-                //for the last modified cell.
-                //
-                //I think that would speed it up?
-
-                //Go through each line
+                //Go through all cells of every line
+                //Find first modified cell
                 foreach(sx, cell; _cells[sy])
                 {
                     //If backbuffer says something has changed
                     if(_backbuffer[sy][sx] != cell)
                     {
-                        //Set f once
-                        if(f == rowUnchanged)
-                        {
-                            f = to!uint(sx);
-                        }
-
-                        //Update l as many times as needed
-                        l = to!uint(sx);
-
-                        //Backbuffer is checked, make it "un-differ"
-                        _backbuffer[sy][sx] = cell;
+                        firstChanged = to!uint(sx);
+                        break;
                     }
                 }
 
-                //If no cell on this y has been modified, continue
-                if(f == rowUnchanged)
+                //If no cell on this line has been modified, continue
+                if(firstChanged == rowUnchanged)
                 {
                     continue;
                 }
 
+                //Now loop backwards to find the last modified cell
+                foreach_reverse(sx, cell; _cells[sy])
+                {
+                    //If backbuffer says something has changed
+                    if(_backbuffer[sy][sx] != cell)
+                    {
+                        lastChanged = to!uint(sx);
+                        break;
+                    }
+                }
+
                 //Loop from the first changed cell to the last edited cell.
-                foreach (px; f .. l + 1)
+                foreach (px; firstChanged .. lastChanged + 1)
                 {
                     //To save excecution time, check if the prevoisly printed
                     //chracter has the same attributes as the current one being
@@ -192,7 +184,7 @@ struct Window
 
                     if
                     (
-                        px == f ||
+                        px == firstChanged ||
                         _cells[sy][px - 1].foreground != _cells[sy][px].foreground ||
                         _cells[sy][px - 1].background != _cells[sy][px].background
                     )
@@ -213,7 +205,7 @@ struct Window
                 printed ~= "\033[0m";
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                OS.Posix.setCursor(f + 1, to!uint(sy));
+                OS.Posix.setCursor(firstChanged + 1, to!uint(sy));
 
                 //...and then print out the string via the regular write function.
                 writef(printed);
