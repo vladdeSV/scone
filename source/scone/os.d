@@ -707,7 +707,18 @@ struct OS
         auto init()
         {
             loadInputSequneces();
-            beginPolling();
+
+
+            //store the state of the terminal
+            tcgetattr(1, &oldState);
+
+            newState = oldState;
+            cfmakeraw(&newState);
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
+
+            //begin polling
+            spawn(&pollInputEvent, thisTid);
+            stdout.flush();
         }
 
         package(scone)
@@ -776,23 +787,6 @@ struct OS
             return (color < 8 ? 90 : 30) + (color % 8);
         }
 
-        private auto beginPolling()
-        {
-            if(!currentlyPolling)
-            {
-                //store the state of the terminal
-                tcgetattr(1, &oldState);
-
-                newState = oldState;
-                cfmakeraw(&newState);
-                tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
-
-                currentlyPolling = true;
-                spawn(&pollInputEvent, thisTid);
-                stdout.flush();
-            }
-        }
-
         private void pollInputEvent(Tid parentThreadID)
         {
             Thread.getThis.isDaemon = true;
@@ -826,9 +820,6 @@ struct OS
                     send(parentThreadID, input);
                 }
             }
-
-//            writef("\r"); //adding this caused travis to pass...
-//            stdout.flush();
         }
 
         package(scone)
@@ -840,11 +831,6 @@ struct OS
             //scone can understand.
             //
             //blesh...
-
-            if(!currentlyPolling)
-            {
-                beginPolling();
-            }
 
             uint[] codes;
             bool receivedInput = true;
@@ -875,8 +861,6 @@ struct OS
             return [event];
         }
 
-        //thread shared
-        private static __gshared termios oldState, newState;
-        private static __gshared bool currentlyPolling = false;
+        private termios oldState, newState;
     }
 }

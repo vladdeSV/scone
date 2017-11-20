@@ -37,7 +37,7 @@ static Window window;
 /**
  * Initializes scone
  */
-static this()
+shared static this()
 {
     if(inited) { return; }
 
@@ -55,7 +55,7 @@ static this()
 /**
  * Deinitializes scone
  */
-static ~this()
+shared static ~this()
 {
     if(!inited) { return; }
 
