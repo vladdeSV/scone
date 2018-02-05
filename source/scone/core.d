@@ -4,6 +4,9 @@ import scone.window;
 import scone.os;
 
 /**
+ * Gateway to the console/terminal
+ * All methods are called via this
+ *
  *
  *  .M"""bgd
  * ,MI    "Y
@@ -16,8 +19,6 @@ import scone.os;
  *        -- Cross-Platform CLI Library --
  *
  *
- * Gateway to the console/terminal
- * All methods are called from here
  * Example:
  * ---
  * void main()

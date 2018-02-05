@@ -1,10 +1,11 @@
 module scone.window;
 
-import scone.os;
 import scone.input;
+import scone.os;
 
-import std.conv : to, text;
-import std.stdio : writef, stdout;
+import std.algorithm : min;
+import std.conv : text, to;
+import std.stdio : stdout, writef;
 
 ///
 struct Window
@@ -23,22 +24,22 @@ struct Window
     ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
     ///---
     ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
-    auto write(Args...)(in size_t x, in size_t y, Args args)
+    auto write(Args...)(in int x, in int y, Args args)
     {
-        //Check if writing outside border
-        if(x >= w || y >= h)
+        // Check if writing outside border
+        if(x >= this.width() || y >= this.height())
         {
-            //logf("Warning: Cannot write at (%s, %s). x must be between 0 <-> %s, y must be between 0 <-> %s", x, y, w, h);
-            return;
+            //logf("Warning: Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
+            //return;
         }
 
-        //everything which will be written to the window's internal memory
+        // Everything which will be written to the window's internal memory
         Cell[] cells;
 
         fg foreground = defaultForeground;
         bg background = defaultBackground;
 
-        //flag to warn if color arguments will not be written
+        // Flag to warn if color arguments will not be written
         bool unsetColors;
         foreach(ref arg; args)
         {
@@ -77,12 +78,13 @@ struct Window
             }
         }
 
-        //If the last argument is a color, warn
+        // If there are cells to write, and the last argument is a color, warn
         if(cells.length && unsetColors)
         {
             //logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
+        // If only colors were provided, just update the colors
         if(!cells.length)
         {
             _cells[y][x].foreground = foreground;
@@ -90,11 +92,11 @@ struct Window
         }
         else
         {
-            //some hokus pokus to store stuff into memory
+            // Some hokus pokus to store stuff into memory
             int wx, wy;
             foreach(ref cell; cells)
             {
-                if(x + wx >= w || cell.character == '\n')
+                if(x + wx >= this.width() || cell.character == '\n')
                 {
                     wx = 0;
                     ++wy;
@@ -102,7 +104,11 @@ struct Window
                 }
                 else
                 {
-                    _cells[y + wy][x + wx] = cell;
+                    if(x + wx >= 0 && y + wy >= 0)
+                    {
+                        _cells[y + wy][x + wx] = cell;
+                    }
+
                     ++wx;
                 }
             }
@@ -130,23 +136,29 @@ struct Window
             }
         }
 
-        //for posix, a different method printing is used
+        // A different method printing is used for POSIX
+        // This method is built upon optimizing a string being printed
         version(Posix)
         {
-            //simple flag if row is unaffected
+            // simple flag if row is unaffected
             enum rowUnchanged = -1;
 
-            //Temporary string that will be printed out for each line.
+            // Temporary string that will be printed out for each line.
             string printed;
 
-            //Loop through all rows.
+            // Loop through all rows.
             foreach (sy, y; _cells)
             {
-                //f = first modified cell, l = last modified cell
+                if(sy >= OS.Posix.size[1])
+                {
+                    break;
+                }
+
+                // first modified cell, last modified cell
                 uint firstChanged = rowUnchanged, lastChanged;
 
-                //Go through all cells of every line
-                //Find first modified cell
+                // Go through all cells of every line
+                // Find first modified cell
                 foreach(sx, cell; _cells[sy])
                 {
                     //If backbuffer says something has changed
@@ -157,8 +169,9 @@ struct Window
                     }
                 }
 
-                //If no cell on this line has been modified, continue
-                if(firstChanged == rowUnchanged)
+                // If no cell on this line has been modified, continue
+                // If first changed cell it outside the window border, continue
+                if(firstChanged == rowUnchanged || firstChanged >= OS.Posix.size[0])
                 {
                     continue;
                 }
@@ -174,14 +187,16 @@ struct Window
                     }
                 }
 
-                //Loop from the first changed cell to the last edited cell.
+                // If last changed cell it outside the window border, set last changed cell to the window width
+                lastChanged = min(lastChanged, OS.Posix.size[0] - 1);
+
+                // Loop from the first changed cell to the last edited cell.
                 foreach (px; firstChanged .. lastChanged + 1)
                 {
-                    //To save excecution time, check if the prevoisly printed
-                    //chracter has the same attributes as the current one being
-                    //printed. If so, simply write the new character instead of
-                    //executing ANSI commands.
-
+                    // To save excecution time, check if the prevoisly printed
+                    // chracter has the same attributes as the current one being
+                    // printed. If so, simply write the new character instead of
+                    // executing ANSI commands.
                     if
                     (
                         px == firstChanged ||
@@ -254,13 +269,13 @@ struct Window
         }
     }
 
-    ///Set the size of the window
+    /// Set the size of the window
     auto title(in string title) @property
     {
         OS.title(title);
     }
 
-    ///Set if the cursor should be visible
+    /// Set if the cursor should be visible
     auto cursorVisible(in bool visible) @property
     {
         OS.cursorVisible(visible);
@@ -282,22 +297,22 @@ struct Window
         }
     }
 
-    //Reposition the window.
+    /// Reposition the window.
     auto reposition(in size_t x, in size_t y)
     {
         OS.reposition(x,y);
     }
 
-    ///Get the width of the window
+    /// Get the width of the window
     auto width()
     {
-        return to!size_t(_cells[0].length);
+        return to!int(_cells[0].length);
     }
 
-    ///Get the height of the window
+    /// Get the height of the window
     auto height()
     {
-        return to!size_t(_cells.length);
+        return to!int(_cells.length);
     }
 
     ///
@@ -305,13 +320,16 @@ struct Window
     ///
     alias h = height;
 
-    ///The default foreground color used with `window.write(x, y, ...);`
+    /// The default foreground color used with `window.write(x, y, ...);`
     public fg defaultForeground = fg(Color.white_dark);
-    ///The default background color used with `window.write(x, y, ...);`
+    /// The default background color used with `window.write(x, y, ...);`
     public bg defaultBackground = bg(Color.black_dark);
 
-    //all cells which can be written to, and backbuffer
-    private Cell[][] _cells, _backbuffer;
+    // All cells which can be written to;
+    private Cell[][] _cells;
+    // Backbuffer, storing the last printed cells. Used to compare against
+    // when printing to optimize
+    private Cell[][] _backbuffer;
 }
 
 ///
