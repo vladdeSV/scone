@@ -708,7 +708,6 @@ struct OS
         {
             loadInputSequneces();
 
-
             //store the state of the terminal
             tcgetattr(1, &oldState);
 
