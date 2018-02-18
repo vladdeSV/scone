@@ -58,7 +58,7 @@ struct OS
         mixin(_os~".init();");
 
         //store original size
-        _size = size();
+        _initialSize = size();
         cursorVisible(false);
     }
 
@@ -107,7 +107,7 @@ struct OS
         mixin(_os~".title(title);");
     }
 
-    private uint[2] _size;
+    private size_t[2] _initialSize;
 
     version(Windows)
     static struct Windows
@@ -144,7 +144,7 @@ struct OS
         package(scone)
         auto deinit()
         {
-            resize(_size[0], _size[1]);
+            resize(_initialSize[0], _initialSize[1]);
 
             SetConsoleMode(_hConsoleInput, _oldMode);
             SetConsoleScreenBufferSize(_hConsoleOutput, _consoleScreenBufferInfo.dwSize);
@@ -241,7 +241,7 @@ struct OS
             //todo...
         }
 
-        uint[2] size()
+        size_t[2] size()
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
@@ -724,8 +724,8 @@ struct OS
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
-            resize(_size[0], _size[1]);
-            writef("\033[2J\033[H");
+            resize(_initialSize[0], _initialSize[1]);
+            writef("\033[0m\033[2J\033[H");
             stdout.flush();
             cursorVisible(true);
         }
@@ -758,7 +758,7 @@ struct OS
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!uint(w.ws_col), to!uint(w.ws_row)];
+            return [to!size_t(w.ws_col), to!size_t(w.ws_row)];
         }
 
         auto resize(in size_t width, in size_t height)
