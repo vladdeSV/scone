@@ -3,8 +3,6 @@ module scone.input;
 import scone.misc.utility : hasFlag;
 import scone.os;
 
-version(Windows) import core.sys.windows.wincon : INPUT_RECORD;
-
 /**
  * Key event structure
  * Contains general information about a key press
@@ -40,8 +38,8 @@ struct InputEvent
     }
 
     /**
-     * Check if the InputEvent has a "control key" pressed.
-     * Returns: true, if all control keys entered are pressed
+     * Check if the InputEvent has a "control key" pressed
+     * Returns: bool, true if all control keys entered are pressed
      *
      * Example:
      * --------------------
@@ -62,7 +60,7 @@ struct InputEvent
 
     /**
      * Get control all keys. Used to check if ONLY specific control keys are
-     * activated.
+     * activated
      * Returns: SCK (enum)
      * Example:
      * ---
@@ -87,7 +85,8 @@ struct InputEvent
     version(Posix)
     {
         /**
-         * Get the ASCII-code sequence returned from the keypress on POSIX systems.
+         * Get the ASCII-code sequence returned from the keypress on POSIX
+         * systems
          * Returns: uint[]
          */
         auto keySequences() @property
@@ -100,6 +99,8 @@ struct InputEvent
 
     version(Windows)
     {
+        import core.sys.windows.wincon : INPUT_RECORD;
+
         /**
          * Get the Windows input record representing the keypress
          * Returns: INPUT_RECORD
@@ -460,10 +461,11 @@ version(Posix)
     import std.string : chomp;
 
     /**
-     * Wrapper for an input sequence sent by the POSIX terminal
-     * An input from the terminal is given by numbers in sequence
+     * Wrapper for an input sequence sent by the POSIX terminal.
      *
-     * For example, the right arrow key might send "27, 91, 67",
+     * An input from the terminal is given by numbers in a sequence.
+     *
+     * For example, the right arrow key might send the sequence "27 91 67",
      * and will be stored as [27, 91, 67]
      */
     struct InputSequence
@@ -477,25 +479,27 @@ version(Posix)
         alias value this;
     }
 
+    /// Globally map a sequence to an input event
     void createInputSequence(InputEvent ie, InputSequence iseq)
     {
         _inputSequences[iseq] = ie;
     }
 
-    ///use input_sequences as default keymap
+    /// Load and use the file 'input_sequences.scone' as default keymap
     void loadInputSequneces()
     {
         enum file_name = "input_sequences.scone";
 
         string[] ies = _inputSequencesList.split('\n');
 
-        //if file `input_sequence` exists, load keymap
-        //this overrides existing keybinds
+        // If file `input_sequence` exists, load keymap, which overrides
+        // existing keybinds.
         if(exists(file_name))
         {
             ies ~= file_name.readText.split('\n');
         }
 
+        // Loop all input sequences, and store them
         foreach(s; ies)
         {
             s = s.chomp;
@@ -528,7 +532,7 @@ version(Posix)
         }
     }
 
-    ///get InputEvent from sequence
+    /// Get InputEvent from sequence
     package(scone) InputEvent eventFromSequence(InputSequence iseq)
     {
         //check for input sequence in map
@@ -541,7 +545,7 @@ version(Posix)
         return InputEvent(SK.unknown, SCK.none, false);
     }
 
-    ///get uint[] from string in the format of "num1,num2,...,numX"
+    /// Get uint[], from string in the format of "num1,num2,...,numX"
     private uint[] sequenceFromString(string input) pure
     {
         string[] numbers = split(input, ",");
@@ -554,11 +558,11 @@ version(Posix)
         return sequence;
     }
 
-    ///table holding all input sequences and their respective input
+    /// Table holding all input sequences and their respective input
     private InputEvent[InputSequence] _inputSequences;
 }
 
-///default keybindings.
+///Default keybindings.
 version(OSX)
 {
     private enum _inputSequencesList =

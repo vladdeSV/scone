@@ -12,7 +12,7 @@ struct Window
 {
     ///initializes the window.
     ///NOTE: should only be used once. use `size(w,h);` to resize
-    this(in size_t width, in size_t height)
+    this(in int width, in int height)
     {
         //properly set the size of the console
         resize(width, height);
@@ -229,7 +229,7 @@ struct Window
                 printed = null;
             }
 
-            // Flush. Without this "problems" may occur.
+            //Flush. Without this problems may occur.
             stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
         }
     }
@@ -303,13 +303,13 @@ struct Window
         OS.reposition(x,y);
     }
 
-    /// Get the internal width of the window
+    /// Get the width of the window
     auto width()
     {
         return to!int(_cells[0].length);
     }
 
-    /// Get the internal height of the window
+    /// Get the height of the window
     auto height()
     {
         return to!int(_cells.length);

@@ -60,7 +60,7 @@ shared static ~this()
 {
     if(!inited) { return; }
 
-    OS.deinit();
+    //OS.deinit();
 
     inited = false;
 }
