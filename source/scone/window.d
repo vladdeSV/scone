@@ -10,8 +10,10 @@ import std.stdio : stdout, writef;
 ///
 struct Window
 {
+    /// Settins for the window
+    public Settings settings;
+
     ///initializes the window.
-    ///NOTE: should only be used once. use `size(w,h);` to resize
     this(in size_t width, in size_t height)
     {
         //properly set the size of the console
@@ -26,37 +28,33 @@ struct Window
     ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
     auto write(Args...)(in int x, in int y, Args args)
     {
-        // Check if writing outside border
+        // Check if writing outside border (assuming we only write right-to-left)
         if(x >= this.width() || y >= this.height())
         {
             //logf("Warning: Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
-            //return;
+            return;
         }
 
-        // Everything which will be written to the window's internal memory
+        // Everything that will be written to the window's internal memory
         Cell[] cells;
 
-        fg foreground = defaultForeground;
-        bg background = defaultBackground;
+        fg foreground = this.settings.defaultForeground;
+        bg background = this.settings.defaultBackground;
 
         // Flag to warn if color arguments will not be written
-        bool unsetColors;
         foreach(ref arg; args)
         {
             static if(is(typeof(arg) == fg))
             {
                 foreground = arg;
-                unsetColors = true;
             }
             else static if(is(typeof(arg) == bg))
             {
                 background = arg;
-                unsetColors = true;
             }
             else static if(is(typeof(arg) == Cell))
             {
                 cells ~= arg;
-                unsetColors = false;
             }
             else static if(is(typeof(arg) == Cell[]))
             {
@@ -64,8 +62,6 @@ struct Window
                 {
                     cells ~= cell;
                 }
-
-                unsetColors = false;
             }
             else
             {
@@ -73,13 +69,12 @@ struct Window
                 {
                     cells ~= Cell(c, foreground, background);
                 }
-
-                unsetColors = false;
             }
         }
 
         // If there are cells to write, and the last argument is a color, warn
-        if(cells.length && unsetColors)
+        auto lastArgument = args[$-1];
+        if(cells.length && (is(typeof(lastArgument) == fg) || is(typeof(lastArgument) == bg)))
         {
             //logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
@@ -89,36 +84,52 @@ struct Window
         {
             _cells[y][x].foreground = foreground;
             _cells[y][x].background = background;
+            return;
         }
-        else
-        {
-            // Some hokus pokus to store stuff into memory
-            int wx, wy;
-            foreach(ref cell; cells)
-            {
-                if(x + wx >= this.width() || cell.character == '\n')
-                {
-                    wx = 0;
-                    ++wy;
-                    continue;
-                }
-                else
-                {
-                    if(x + wx >= 0 && y + wy >= 0)
-                    {
-                        _cells[y + wy][x + wx] = cell;
-                    }
 
-                    ++wx;
-                }
+        // Some hokus pokus to store stuff into memory
+        // write x, write y
+        int wx, wy;
+        foreach(ref cell; cells)
+        {
+            // If a newline character is present, increase the write y and set write x to zero
+            if(cell.character == '\n')
+            {
+                wx = 0;
+                ++wy;
+                continue;
             }
+
+            // Make sure we are writing inside the buffer
+            if(x + wx >= 0 && y + wy >= 0 && x + wx < _cells[0].length && y + wy < _cells.length)
+            {
+                _cells[y + wy][x + wx] = cell;
+            }
+
+            ++wx;
         }
     }
 
     ///Displays what has been written
     auto print()
     {
-        //windows version, using winapi
+        int[2] windowSize = OS.size;
+        int[2] bufferSize = this.size;
+
+        // If the window has changed size, resize the the screen depending on the settings. If `this.settings.fixedSize` is true, keep the window at the same size as the buffre, else resize the buffer to the window size
+        if(bufferSize != windowSize)
+        {
+            if(this.settings.fixedSize)
+            {
+                OS.setCursor(0,0);
+            }
+            else
+            {
+                this.resize(windowSize[0], windowSize[1]);
+            }
+        }
+
+        //windows version, using winapi (super fast)
         version(Windows)
         {
             foreach(cy, ref y; _cells)
@@ -140,6 +151,26 @@ struct Window
         // This method is built upon optimizing a string being printed
         version(Posix)
         {
+            // If fixed size setting is set, and the border character is not `char(0)`
+            if(this.settings.fixedSize && this.settings.fixedSizeBorder.character != char(0))
+            {
+                if(windowSize[0] < bufferSize[0])
+                {
+                    foreach(int cy; 0 .. windowSize[1])
+                    {
+                        this.write(cast(int)(windowSize[0] - 1), cy, bg(Color.red), ' ');
+                    }
+                }
+
+                if(windowSize[1] < bufferSize[1])
+                {
+                    foreach(int cx; 0 .. windowSize[0])
+                    {
+                        this.write(cx, cast(int)(windowSize[1] - 1), bg(Color.red), ' ');
+                    }
+                }
+            }
+
             // simple flag if row is unaffected
             enum rowUnchanged = -1;
 
@@ -217,8 +248,6 @@ struct Window
                     printed ~= _cells[sy][px].character;
                 }
 
-                printed ~= "\033[0m";
-
                 //Set the cursor at the firstly edited cell... (POSIX magic)
                 OS.Posix.setCursor(firstChanged + 1, to!uint(sy));
 
@@ -230,7 +259,7 @@ struct Window
             }
 
             // Flush. Without this "problems" may occur.
-            stdout.flush(); //TODO: Check if needed for POSIX. I know without this it caused a lot of problems on the Windows console, but you know... this part is POSIX only
+            stdout.flush();
         }
     }
 
@@ -239,17 +268,7 @@ struct Window
     {
         foreach(ref y; _cells)
         {
-            y[] = Cell(' ', defaultForeground, defaultBackground);
-        }
-    }
-
-    ///Causes next `print()` to write out all cells.
-    ///NOTE: Only use this if some sort of visual bug occurs.
-    auto flush()
-    {
-        foreach(ref row; _backbuffer)
-        {
-            row[] = Cell(char(0), defaultForeground, defaultBackground);
+            y[] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
     }
 
@@ -281,11 +300,21 @@ struct Window
         OS.cursorVisible(visible);
     }
 
+    /**
+     * Get the size of the current window buffer
+     * Return: int[2], [width, height];
+     */
+    auto size() @property
+    {
+        return to!(int[2])([_cells[0].length, _cells.length]);
+    }
+
     ///Changes the size of the window
     ///NOTE: (POSIX) Does not work if terminal is maximized
     ///NOTE: Clears the buffer
     auto resize(in size_t width, in size_t height)
     {
+        // Resize the screen
         OS.resize(width, height);
 
         _cells = new Cell[][](height, width);
@@ -293,7 +322,7 @@ struct Window
 
         foreach(n; 0 .. height)
         {
-            _cells[n][] = Cell(' ', defaultForeground, defaultBackground);
+            _cells[n][] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
     }
 
@@ -304,28 +333,24 @@ struct Window
     }
 
     /// Get the internal width of the window
+    alias w = width;
+    ///
     auto width()
     {
+        //return to!int(this.size[0]);
         return to!int(_cells[0].length);
     }
 
     /// Get the internal height of the window
+    alias h = height;
+    ///
     auto height()
     {
+        //return to!int(this.size[1]);
         return to!int(_cells.length);
     }
 
-    ///
-    alias w = width;
-    ///
-    alias h = height;
-
-    /// The default foreground color used with `window.write(x, y, ...);`
-    public fg defaultForeground = fg(Color.white_dark);
-    /// The default background color used with `window.write(x, y, ...);`
-    public bg defaultBackground = bg(Color.black_dark);
-
-    // All cells which can be written to;
+    // All cells which can be written to.
     private Cell[][] _cells;
     // Backbuffer, storing the last printed cells. Used to compare against
     // when printing to optimize
@@ -422,4 +447,22 @@ private template ColorTemplate()
 
     Color color;
     alias color this;
+}
+
+private struct Settings
+{
+    /// If the window buffer always should stay the same
+    bool fixedSize = false;
+    /**
+     * The fixed window border (when the window is smaller than the buffer).
+     * If the char is `char(0)`, no border is printed
+     */
+    Cell fixedSizeBorder = Cell(' ', fg(Color.white), bg(Color.red));
+
+    /// The default foreground color used with `window.write(x, y, ...);`
+    fg defaultForeground = fg(Color.white_dark);
+    /// The default background color used with `window.write(x, y, ...);`
+    bg defaultBackground = bg(Color.black_dark);
+
+
 }

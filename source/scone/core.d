@@ -23,9 +23,18 @@ import scone.os;
  * ---
  * void main()
  * {
+ *     bool running = true;
  *     window.title = "i am happy";
- *     while(true)
+ *     while(running)
  *     {
+ *         foreach(input; window.getInputs)
+ *         {
+ *             if(input.key == SK.escape)
+ *             {
+ *                 running = false;
+ *             }
+ *         }
+ *
  *         window.clear();
  *         window.write(0,0, "hello world", fg(red), '!', bg(white), 42);
  *         window.print();
@@ -40,8 +49,6 @@ static Window window;
  */
 shared static this()
 {
-    if(inited) { return; }
-
     //get current width and height
     OS.init();
     auto w = OS.size[0];
@@ -49,8 +56,6 @@ shared static this()
 
     //init window
     window = Window(w,h);
-
-    inited = true;
 }
 
 /**
@@ -58,12 +63,5 @@ shared static this()
  */
 shared static ~this()
 {
-    if(!inited) { return; }
-
     OS.deinit();
-
-    inited = false;
 }
-
-//ugh, i need this for checking if program has exited in other thread
-package(scone) __gshared static bool inited = false;

@@ -5,7 +5,6 @@ import core.thread;
 import std.random;
 import scone.window : Color;
 import scone.input;
-import scone.core : inited;
 
 version(Windows)
 {
@@ -70,7 +69,7 @@ struct OS
     }
 
     ///Get the size of the window
-    ///Returns: uint[2], where [0] is width, and [1] is height
+    ///Returns: int[2], where [0] is width, and [1] is height
     auto size()
     {
         mixin("return "~_os~".size();");
@@ -107,7 +106,7 @@ struct OS
         mixin(_os~".title(title);");
     }
 
-    private size_t[2] _initialSize;
+    private int[2] _initialSize;
 
     version(Windows)
     static struct Windows
@@ -758,7 +757,7 @@ struct OS
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!size_t(w.ws_col), to!size_t(w.ws_row)];
+            return [to!int(w.ws_col), to!int(w.ws_row)];
         }
 
         auto resize(in size_t width, in size_t height)
