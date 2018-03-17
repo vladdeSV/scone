@@ -240,16 +240,22 @@ struct OS
             //todo...
         }
 
-        size_t[2] size()
+        int[2] size()
         {
+            import std.conv : to;
+
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
             return
             [
-                _consoleScreenBufferInfo.srWindow.Right -
-                _consoleScreenBufferInfo.srWindow.Left + 1,
-                _consoleScreenBufferInfo.srWindow.Bottom -
-                _consoleScreenBufferInfo.srWindow.Top  + 1
+                to!int(
+                    _consoleScreenBufferInfo.srWindow.Right -
+                    _consoleScreenBufferInfo.srWindow.Left + 1
+                ),
+                to!int(
+                    _consoleScreenBufferInfo.srWindow.Bottom -
+                    _consoleScreenBufferInfo.srWindow.Top  + 1
+                )
             ];
         }
 
