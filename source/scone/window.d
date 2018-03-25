@@ -26,8 +26,11 @@ struct Window
     ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
     ///---
     ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
-    auto write(Args...)(in int x, in int y, Args args)
+    auto write(X, Y, Args...)(X xx, Y yy, Args args)
+    if(__traits(isArithmetic, xx) && __traits(isArithmetic, yy) && args.length >= 1)
     {
+        auto x = to!int(xx);
+        auto y = to!int(yy);
         // Check if writing outside border (assuming we only write right-to-left)
         if(x >= this.width() || y >= this.height())
         {
@@ -151,7 +154,7 @@ struct Window
         // This method is built upon optimizing a string being printed
         version(Posix)
         {
-            // If fixed size setting is set, and the border character is not `char(0)`
+            // Displaying the border if fixed size setting is set, and the border character is not `char(0)`
             if(this.settings.fixedSize && this.settings.fixedSizeBorder.character != char(0))
             {
                 if(windowSize[0] < bufferSize[0])
@@ -282,6 +285,7 @@ struct Window
         {
             return OS.Windows.retreiveInputs();
         }
+
         version(Posix)
         {
             return OS.Posix.retreiveInputs();
@@ -326,7 +330,7 @@ struct Window
         }
     }
 
-    /// Reposition the window.
+    /// Reposition the window
     auto reposition(in size_t x, in size_t y)
     {
         OS.reposition(x,y);
@@ -337,7 +341,6 @@ struct Window
     ///
     auto width()
     {
-        //return to!int(this.size[0]);
         return to!int(_cells[0].length);
     }
 
@@ -346,7 +349,6 @@ struct Window
     ///
     auto height()
     {
-        //return to!int(this.size[1]);
         return to!int(_cells.length);
     }
 
@@ -453,6 +455,7 @@ private struct Settings
 {
     /// If the window buffer always should stay the same
     bool fixedSize = false;
+
     /**
      * The fixed window border (when the window is smaller than the buffer).
      * If the char is `char(0)`, no border is printed
@@ -461,8 +464,7 @@ private struct Settings
 
     /// The default foreground color used with `window.write(x, y, ...);`
     fg defaultForeground = fg(Color.white_dark);
+
     /// The default background color used with `window.write(x, y, ...);`
     bg defaultBackground = bg(Color.black_dark);
-
-
 }
