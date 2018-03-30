@@ -5,7 +5,6 @@ import core.thread;
 import std.random;
 import scone.window : Color;
 import scone.input;
-import scone.core : inited;
 
 version(Windows)
 {
@@ -58,7 +57,7 @@ struct OS
         mixin(_os~".init();");
 
         //store original size
-        _size = size();
+        _initialSize = size();
         cursorVisible(false);
     }
 
@@ -70,7 +69,7 @@ struct OS
     }
 
     ///Get the size of the window
-    ///Returns: uint[2], where [0] is width, and [1] is height
+    ///Returns: int[2], where [0] is width, and [1] is height
     auto size()
     {
         mixin("return "~_os~".size();");
@@ -107,7 +106,7 @@ struct OS
         mixin(_os~".title(title);");
     }
 
-    private uint[2] _size;
+    private int[2] _initialSize;
 
     version(Windows)
     static struct Windows
@@ -144,7 +143,7 @@ struct OS
         package(scone)
         auto deinit()
         {
-            resize(_size[0], _size[1]);
+            resize(_initialSize[0], _initialSize[1]);
 
             SetConsoleMode(_hConsoleInput, _oldMode);
             SetConsoleScreenBufferSize(_hConsoleOutput, _consoleScreenBufferInfo.dwSize);
@@ -241,7 +240,7 @@ struct OS
             //todo...
         }
 
-        uint[2] size()
+        int[2] size()
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
@@ -724,8 +723,8 @@ struct OS
         auto deinit()
         {
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
-            resize(_size[0], _size[1]);
-            writef("\033[2J\033[H");
+            resize(_initialSize[0], _initialSize[1]);
+            writef("\033[0m\033[2J\033[H");
             stdout.flush();
             cursorVisible(true);
         }
@@ -758,7 +757,7 @@ struct OS
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!uint(w.ws_col), to!uint(w.ws_row)];
+            return [to!int(w.ws_col), to!int(w.ws_row)];
         }
 
         auto resize(in size_t width, in size_t height)
