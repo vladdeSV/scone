@@ -240,7 +240,7 @@ struct OS
             //todo...
         }
 
-        size_t[2] size()
+        int[2] size()
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
