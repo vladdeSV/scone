@@ -76,13 +76,13 @@ struct OS
     }
 
     ///Set the size of the window
-    auto resize(in size_t width, in size_t height)
+    auto resize(in uint width, in uint height)
     {
         mixin(_os~".resize(width, height);");
     }
 
     ///Reposition the window, where x=0,y=0 is the top-left corner
-    auto reposition(in size_t x, in size_t y)
+    auto reposition(in uint x, in uint y)
     {
         mixin(_os~".reposition(x, y);");
     }
@@ -95,7 +95,7 @@ struct OS
 
     ///Set the cursor at position
     ///Note: This function should only be called by scone itself
-    auto setCursor(in size_t x, in size_t y)
+    auto setCursor(in uint x, in uint y)
     {
         mixin(_os~".setCursor(x, y);");
     }
@@ -106,7 +106,7 @@ struct OS
         mixin(_os~".title(title);");
     }
 
-    private int[2] _initialSize;
+    private uint[2] _initialSize;
 
     version(Windows)
     static struct Windows
@@ -160,7 +160,7 @@ struct OS
         }
 
         /* Display cell in console */
-        auto writeCell(in size_t x, in size_t y, ref Cell cell)
+        auto writeCell(in uint x, in uint y, ref Cell cell)
         {
             ushort wx = to!ushort(x), wy = to!ushort(y);
             COORD charBufSize = {1,1};
@@ -173,7 +173,7 @@ struct OS
         }
 
         /** Set cursor position. */
-        auto setCursor(in size_t x, in size_t y)
+        auto setCursor(in uint x, in uint y)
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
             COORD change =
@@ -209,7 +209,7 @@ struct OS
             : SetConsoleMode(_hConsoleOutput, 0x0);
         }
 
-        void resize(in size_t width, in size_t height)
+        void resize(in uint width, in uint height)
         {
             SMALL_RECT winInfo = _consoleScreenBufferInfo.srWindow;
             COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
@@ -235,12 +235,12 @@ struct OS
             assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window after resizing buffer");
         }
 
-        auto reposition(in size_t x, in size_t y)
+        auto reposition(in uint x, in uint y)
         {
             //todo...
         }
 
-        int[2] size()
+        uint[2] size()
         {
             GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
 
@@ -386,7 +386,7 @@ struct OS
             InputEvent[] _inputEvents;
 
             ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
-            for(size_t e = 0; e < read; ++e)
+            for(uint e = 0; e < read; ++e)
             {
                 switch(_inputBuffer[e].EventType)
                 {
@@ -729,7 +729,7 @@ struct OS
             cursorVisible(true);
         }
 
-        auto setCursor(in size_t x, in size_t y)
+        auto setCursor(in uint x, in uint y)
         {
             writef("\033[%d;%dH", y + 1, x);
             stdout.flush();
@@ -757,16 +757,16 @@ struct OS
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return [to!int(w.ws_col), to!int(w.ws_row)];
+            return [to!uint(w.ws_col), to!uint(w.ws_row)];
         }
 
-        auto resize(in size_t width, in size_t height)
+        auto resize(in uint width, in uint height)
         {
             writef("\033[8;%s;%st", height, width);
             stdout.flush();
         }
 
-        auto reposition(in size_t x, in size_t y)
+        auto reposition(in uint x, in uint y)
         {
             writef("\033[3;%s;%st", x, y);
             stdout.flush();

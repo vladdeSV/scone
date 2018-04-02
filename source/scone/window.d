@@ -12,7 +12,7 @@ import std.traits : isNumeric;
 struct Window
 {
     /// Initializes the window.
-    this(in size_t width, in size_t height)
+    this(in uint width, in uint height)
     {
         //properly set the size of the console
         resize(width, height);
@@ -43,7 +43,7 @@ struct Window
      * window.print();
      * ----
      * Note: Does not directly write to the window, changes will only be visible after `window.print();`
-     * Note: **(Authors note)** When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as `auto write(int x, int y, arg1, arg2, ..., argN)`. The `X` and `Y`arguments must be numbers, and you can enter how many arguments as you want.
+     * Note: (Authors note) When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as `auto write(int x, int y, arg1, arg2, ..., argN)`. The `X` and `Y` arguments must be numbers, and you can enter how many arguments as you want.
      */
     auto write(X, Y, Args...)(X tx, Y ty, Args args)
     if(isNumeric!X && isNumeric!Y && args.length >= 1)
@@ -135,8 +135,8 @@ struct Window
     /// Displays what has been written to the internal buffer
     auto print()
     {
-        int[2] windowSize = OS.size;
-        int[2] bufferSize = this.size;
+        uint[2] windowSize = OS.size;
+        uint[2] bufferSize = this.size;
 
         // If the window has changed size, resize the the screen depending on the settings. If `this.settings.fixedSize` is true, keep the window at the same size as the buffre, else resize the buffer to the window size
         if(bufferSize != windowSize)
@@ -151,7 +151,7 @@ struct Window
             }
         }
 
-        //windows version, using winapi (super fast)
+        // Windows version of printing, using winapi (super duper fast)
         version(Windows)
         {
             foreach(cy, ref y; _cells)
@@ -329,7 +329,7 @@ struct Window
      */
     auto size() @property
     {
-        return to!(int[2])([_cells[0].length, _cells.length]);
+        return to!(uint[2])([_cells[0].length, _cells.length]);
     }
 
     /**
@@ -337,7 +337,7 @@ struct Window
      * Note: (POSIX) Does not work if terminal is maximized
      * Note: Clears the internal buffer, menaing
      */
-    auto resize(in size_t width, in size_t height)
+    auto resize(in uint width, in uint height)
     {
         // Resize the screen
         OS.resize(width, height);
@@ -352,7 +352,7 @@ struct Window
     }
 
     /// Reposition the window on screen
-    auto reposition(in size_t x, in size_t y)
+    auto reposition(in uint x, in uint y)
     {
         OS.reposition(x,y);
     }

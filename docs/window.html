@@ -503,7 +503,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.this"></span>this(in size_t <code class="code">width</code>, in size_t <code class="code">height</code>);
+            <span class="ddoc_anchor" id="Window.this"></span>this(in uint <code class="code">width</code>, in uint <code class="code">height</code>);
 
           </code>
         </p>
@@ -624,7 +624,7 @@
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      What is to be written. C
+      What is to be written. Arguments will be converted to strings, except special types <code class="code">fg</code>, <code class="code">bg</code>, and <code class="code">Cell</code>.
     </p>
   </div>
 </td>
@@ -649,6 +649,7 @@ window.print();
     </div>
   </div>
 </section>
+
 
   </p>
 </div>
@@ -683,7 +684,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Note:</span>
-**(Authors note)** When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as <code class="code">auto <code class="code">write</code>(int x, int y, arg1, arg2, ..., argN)</code>. The <code class="code">X</code> and <code class="code">Y</code>arguments must be numbers, and you can enter how many arguments as you want.
+(Authors note) When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as <code class="code">auto <code class="code">write</code>(int x, int y, arg1, arg2, ..., argN)</code>. The <code class="code">X</code> and <code class="code">Y</code> arguments must be numbers, and you can enter how many arguments as you want.
   </p>
 </div>
 
@@ -909,7 +910,7 @@ int[2], [width, height];
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.resize"></span>auto <code class="code">resize</code>(in size_t <code class="code">width</code>, in size_t <code class="code">height</code>);
+            <span class="ddoc_anchor" id="Window.resize"></span>auto <code class="code">resize</code>(in uint <code class="code">width</code>, in uint <code class="code">height</code>);
 
           </code>
         </p>
@@ -955,7 +956,7 @@ Clears the internal buffer, menaing
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(in size_t <code class="code">x</code>, in size_t <code class="code">y</code>);
+            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(in uint <code class="code">x</code>, in uint <code class="code">y</code>);
 
           </code>
         </p>

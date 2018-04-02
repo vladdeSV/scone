@@ -633,14 +633,14 @@
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Check if the InputEvent has a "control key" pressed.
+    Check if the InputEvent has a "control key" pressed
 
   </p>
 </div>
 <div class="ddoc_returns">
   <h4>Return Value</h4>
   <p class="para">
-    <code class="code">true</code>, if all control keys entered are pressed
+    bool, <code class="code">true</code> if all control keys entered are pressed
 
 
   </p>
@@ -699,7 +699,7 @@
   <div class="ddoc_summary">
   <p class="para">
     Get control all keys. Used to check if ONLY specific control keys are
- activated.
+ activated
 
   </p>
 </div>
@@ -762,7 +762,8 @@
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Get the ASCII-code sequence returned from the keypress on POSIX systems.
+    Get the ASCII-code sequence returned from the keypress on POSIX
+ systems
 
   </p>
 </div>
@@ -4052,15 +4053,17 @@ Limited support for POSIX
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Wrapper for an input sequence sent by the POSIX terminal
- An input from the terminal is given by numbers in sequence
+    Wrapper for an input sequence sent by the POSIX terminal.
 
   </p>
 </div>
 <div class="ddoc_description">
   <h4>Discussion</h4>
   <p class="para">
-    For example, the right arrow key might send "27, 91, 67",
+    An input from the terminal is given by numbers in a sequence.
+<br><br>
+
+ For example, the right arrow key might send the sequence "27 91 67",
  and will be stored as [27, 91, 67]
 <br><br>
 
@@ -4096,6 +4099,13 @@ when on posix, a list of keypresses is loaded and used
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
+    Globally map a sequence to an input event
+
+  </p>
+</div>
+<div class="ddoc_description">
+  <h4>Discussion</h4>
+  <p class="para">
     when on posix, a list of keypresses is loaded and used
   </p>
 </div>
@@ -4128,7 +4138,7 @@ when on posix, a list of keypresses is loaded and used
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    use input_sequences as default keymap
+    Load and use the file 'input_sequences.scone' as default keymap
 
   </p>
 </div>
@@ -4167,7 +4177,7 @@ when on posix, a list of keypresses is loaded and used
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    get InputEvent from sequence
+    Get InputEvent from sequence
 
   </p>
 </div>
