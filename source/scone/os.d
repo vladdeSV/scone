@@ -3,7 +3,7 @@ module scone.os;
 import scone.input;
 import core.thread;
 import std.random;
-import scone.window : Color;
+import scone.color : Color;
 import scone.input;
 
 version(Windows)
