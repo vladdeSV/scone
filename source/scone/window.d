@@ -6,31 +6,50 @@ import scone.os;
 import std.algorithm : min;
 import std.conv : text, to;
 import std.stdio : stdout, writef;
+import std.traits : isNumeric;
 
 ///
 struct Window
 {
-    /// Settins for the window
-    public Settings settings;
-
-    ///initializes the window.
+    /// Initializes the window.
     this(in size_t width, in size_t height)
     {
         //properly set the size of the console
         resize(width, height);
     }
 
-    ///Write practically anything to the window
-    ///Example:
-    ///---
-    ///window.write(3, 5, "hello ", fg(Color.green)'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
-    ///---
-    ///NOTE: Does not directly write to the window, changes will only be visible after `window.print();`
-    auto write(X, Y, Args...)(X xx, Y yy, Args args)
-    if(__traits(isArithmetic, xx) && __traits(isArithmetic, yy) && args.length >= 1)
+    /// Settings for the window
+    public Settings settings;
+
+    /**
+     * Write to the internal buffer. Later on `print()` must be used to display onto the window
+     * Params:
+     *     tx = The x-position of where to write in the internal buffer
+     *     ty = The y-position of where to write in the internal buffer
+     *     args = What is to be written. C
+     * Example:
+     * ---
+     * // will display on screen "hello world 42[1337, 1001, 1]" in varied colors
+     * window.write(3, 5, "hello ", fg(Color.green), 'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
+     * window.print();
+     * ---
+     * Example:
+     * ----
+     * // will display "lorem" at position [x: 4, y: 3]
+     * real x = 4;
+     * float y = 3.84;
+     * window.write(x, y, "lorem"); // `y` is trucated/converted to `int`
+     * window.print();
+     * ----
+     * Note: Does not directly write to the window, changes will only be visible after `window.print();`
+     * Note: **(Authors note)** When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as `auto write(int x, int y, arg1, arg2, ..., argN)`. The `X` and `Y`arguments must be numbers, and you can enter how many arguments as you want.
+     */
+    auto write(X, Y, Args...)(X tx, Y ty, Args args)
+    if(isNumeric!X && isNumeric!Y && args.length >= 1)
     {
-        auto x = to!int(xx);
-        auto y = to!int(yy);
+        auto x = to!int(tx);
+        auto y = to!int(ty);
+
         // Check if writing outside border (assuming we only write right-to-left)
         if(x >= this.width() || y >= this.height())
         {
@@ -113,7 +132,7 @@ struct Window
         }
     }
 
-    ///Displays what has been written
+    /// Displays what has been written to the internal buffer
     auto print()
     {
         int[2] windowSize = OS.size;
@@ -292,7 +311,7 @@ struct Window
         }
     }
 
-    /// Set the size of the window
+    /// Set the title of the window
     auto title(in string title) @property
     {
         OS.title(title);
@@ -313,9 +332,11 @@ struct Window
         return to!(int[2])([_cells[0].length, _cells.length]);
     }
 
-    ///Changes the size of the window
-    ///NOTE: (POSIX) Does not work if terminal is maximized
-    ///NOTE: Clears the buffer
+    /**
+     * Changes the size of the window
+     * Note: (POSIX) Does not work if terminal is maximized
+     * Note: Clears the internal buffer, menaing
+     */
     auto resize(in size_t width, in size_t height)
     {
         // Resize the screen
@@ -330,43 +351,42 @@ struct Window
         }
     }
 
-    /// Reposition the window
+    /// Reposition the window on screen
     auto reposition(in size_t x, in size_t y)
     {
         OS.reposition(x,y);
     }
 
     /// Get the internal width of the window
-    alias w = width;
-    ///
     auto width()
     {
         return to!int(_cells[0].length);
     }
+    ///ditto
+    alias w = width;
 
     /// Get the internal height of the window
-    alias h = height;
-    ///
     auto height()
     {
         return to!int(_cells.length);
     }
+    ///ditto
+    alias h = height;
 
     // All cells which can be written to.
     private Cell[][] _cells;
-    // Backbuffer, storing the last printed cells. Used to compare against
-    // when printing to optimize
+    // Backbuffer, storing the last printed cells. Used to compare against when printing to optimize
     private Cell[][] _backbuffer;
 }
 
 ///
 struct Cell
 {
-    ///character
+    /// The character of the cell
     char character;
-    ///foreground color
+    /// The foreground color
     fg foreground;
-    ///background color
+    /// The background color
     bg background;
 }
 
@@ -376,7 +396,7 @@ struct Cell
  * Example:
  * --------------------
  * //Available colors:
- * black      //dark grey
+ * black      //darker grey
  * black_dark //black
  * blue
  * blue_dark
@@ -389,7 +409,7 @@ struct Cell
  * red
  * red_dark
  * white      //white
- * white_dark //light grey
+ * white_dark //lighter grey
  * yellow
  * yellow_dark
  * --------------------
@@ -431,7 +451,7 @@ struct fg
  * Definition of a background color.
  * Example:
  * ---
- * window.write(0,0, bg(Color.whites), "item");
+ * window.write(0,0, bg(Color.white), "item");
  * ---
  */
 struct bg

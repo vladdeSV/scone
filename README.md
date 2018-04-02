@@ -29,7 +29,7 @@
 To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/master/examples)
 
 ### Usage with [dub](https://code.dlang.org/download)
-NOTE: Until v2.0.0 is officially out, you need to use the master branch.
+Note: Until v2.0.0 is officially out, you need to use the master branch.
 
 * dub.json - `"scone": "~master"`
 * dub.sdl - `dependency "scone" version="~master"`

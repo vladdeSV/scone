@@ -114,7 +114,7 @@ struct InputEvent
 }
 
 ///All keys which scone can handle
-///NOTE: Limited support for POSIX
+///Note: Limited support for POSIX
 enum SK
 {
     ///Unknown key (Should never appear. If it does, please report bug)

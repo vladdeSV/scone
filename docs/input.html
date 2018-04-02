@@ -760,11 +760,9 @@
 </div>
 <div class="ddoc_decl">
   <section class="section ddoc_sections">
-  <div class="ddoc_section">
+  <div class="ddoc_summary">
   <p class="para">
-    <span class="ddoc_section_h">Note:</span>
-POSIX only.
- Get the ASCII-code sequence returned from the keypress on POSIX systems.
+    Get the ASCII-code sequence returned from the keypress on POSIX systems.
 
   </p>
 </div>
@@ -814,7 +812,7 @@ POSIX only.
 </div>
 <div class="ddoc_section">
   <p class="para">
-    <span class="ddoc_section_h">NOTE:</span>
+    <span class="ddoc_section_h">Note:</span>
 Limited support for POSIX
   </p>
 </div>
@@ -4077,7 +4075,7 @@ when on posix, a list of keypresses is loaded and used
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#eventFromSequence" id="eventFromSequence"><code class="code">eventFromSequence</code></a>
+  <a href="#createInputSequence" id="createInputSequence"><code class="code">createInputSequence</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -4086,7 +4084,7 @@ when on posix, a list of keypresses is loaded and used
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="eventFromSequence"></span>InputEvent <code class="code">eventFromSequence</code>(InputSequence <code class="code">iseq</code>);
+            <span class="ddoc_anchor" id="createInputSequence"></span>void <code class="code">createInputSequence</code>(InputEvent <code class="code">ie</code>, InputSequence <code class="code">iseq</code>);
 
           </code>
         </p>
@@ -4097,13 +4095,6 @@ when on posix, a list of keypresses is loaded and used
 <div class="ddoc_decl">
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
-  <p class="para">
-    get InputEvent from sequence
-
-  </p>
-</div>
-<div class="ddoc_description">
-  <h4>Discussion</h4>
   <p class="para">
     when on posix, a list of keypresses is loaded and used
   </p>
@@ -4138,6 +4129,45 @@ when on posix, a list of keypresses is loaded and used
   <div class="ddoc_summary">
   <p class="para">
     use input_sequences as default keymap
+
+  </p>
+</div>
+<div class="ddoc_description">
+  <h4>Discussion</h4>
+  <p class="para">
+    when on posix, a list of keypresses is loaded and used
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#eventFromSequence" id="eventFromSequence"><code class="code">eventFromSequence</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="eventFromSequence"></span>package(scone) InputEvent <code class="code">eventFromSequence</code>(InputSequence <code class="code">iseq</code>);
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    get InputEvent from sequence
 
   </p>
 </div>

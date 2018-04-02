@@ -503,7 +503,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.this"></span>this(uint <code class="code">width</code>, uint <code class="code">height</code>);
+            <span class="ddoc_anchor" id="Window.this"></span>this(in size_t <code class="code">width</code>, in size_t <code class="code">height</code>);
 
           </code>
         </p>
@@ -515,14 +515,39 @@
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    initializes the window.
-
+    Initializes the window.
   </p>
 </div>
-<div class="ddoc_section">
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#Window.settings" id="Window.settings"><code class="code">settings</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Window.settings"></span>Settings <code class="code">settings</code>;
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
   <p class="para">
-    <span class="ddoc_section_h">NOTE:</span>
-should only be used once. use <code class="code">size(w,h);</code> to resize
+    Settings for the window
   </p>
 </div>
 
@@ -542,7 +567,7 @@ should only be used once. use <code class="code">size(w,h);</code> to resize
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.write"></span>void <code class="code">write</code>(Args...)(in uint <code class="code">x</code>, in uint <code class="code">y</code>, Args <code class="code">args</code>);
+            <span class="ddoc_anchor" id="Window.write"></span>auto <code class="code">write</code>(X, Y, Args...)(X <code class="code">tx</code>, Y <code class="code">ty</code>, Args <code class="code">args</code>) if (isNumeric!X &amp;&amp; isNumeric!Y &amp;&amp; <code class="code">args</code>.length &gt;= 1);
 
           </code>
         </p>
@@ -554,7 +579,76 @@ should only be used once. use <code class="code">size(w,h);</code> to resize
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Write practically anything to the window
+    Write to the internal buffer. Later on <code class="code">print()</code> must be used to display onto the window
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">X <code class="code">tx</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      The x-position of where to <code class="code">write</code> in the internal buffer
+    </p>
+  </div>
+</td>
+</tr>
+<tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">Y <code class="code">ty</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      The y-position of where to <code class="code">write</code> in the internal buffer
+    </p>
+  </div>
+</td>
+</tr>
+<tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">Args <code class="code">args</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      What is to be written. C
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="comment">// will display on screen "hello world 42[1337, 1001, 1]" in varied colors
+</span>window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, fg(Color.green), 'w', Cell('o', fg(Color.red)), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
+window.print();
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
 
   </p>
 </div>
@@ -566,7 +660,11 @@ should only be used once. use <code class="code">size(w,h);</code> to resize
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code">window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, fg(Color.green)'w', Cell('o', fg(Color.red)), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
+        <li><code class="code"><span class="comment">// will display "lorem" at position [x: 4, y: 3]
+</span><span class="keyword">real</span> x = 4;
+<span class="keyword">float</span> y = 3.84;
+window.<span class="psymbol">write</span>(x, y, <span class="string_literal">"lorem"</span>); <span class="comment">// `y` is trucated/converted to `int`
+</span>window.print();
 </code></li>
       </ol>
     </div>
@@ -577,8 +675,15 @@ should only be used once. use <code class="code">size(w,h);</code> to resize
 </div>
 <div class="ddoc_section">
   <p class="para">
-    <span class="ddoc_section_h">NOTE:</span>
+    <span class="ddoc_section_h">Note:</span>
 Does not directly <code class="code">write</code> to the window, changes will only be visible after <code class="code">window.print();</code>
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Note:</span>
+**(Authors note)** When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as <code class="code">auto <code class="code">write</code>(int x, int y, arg1, arg2, ..., argN)</code>. The <code class="code">X</code> and <code class="code">Y</code>arguments must be numbers, and you can enter how many arguments as you want.
   </p>
 </div>
 
@@ -598,7 +703,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.print"></span>void <code class="code">print</code>();
+            <span class="ddoc_anchor" id="Window.print"></span>auto <code class="code">print</code>();
 
           </code>
         </p>
@@ -610,7 +715,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Displays what has been written
+    Displays what has been written to the internal buffer
   </p>
 </div>
 
@@ -630,7 +735,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.clear"></span>void <code class="code">clear</code>();
+            <span class="ddoc_anchor" id="Window.clear"></span>auto <code class="code">clear</code>();
 
           </code>
         </p>
@@ -653,7 +758,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#Window.flush" id="Window.flush"><code class="code">flush</code></a>
+  <a href="#Window.getInputs" id="Window.getInputs"><code class="code">getInputs</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -662,7 +767,7 @@ Does not directly <code class="code">write</code> to the window, changes will on
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.flush"></span>void <code class="code">flush</code>();
+            <span class="ddoc_anchor" id="Window.getInputs"></span>auto <code class="code">getInputs</code>();
 
           </code>
         </p>
@@ -674,14 +779,14 @@ Does not directly <code class="code">write</code> to the window, changes will on
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Causes next <code class="code">print()</code> to write out all cells.
+    Get a range of all inputs since last call.
 
   </p>
 </div>
-<div class="ddoc_section">
+<div class="ddoc_returns">
+  <h4>Return Value</h4>
   <p class="para">
-    <span class="ddoc_section_h">NOTE:</span>
-Only use this if some sort of visual bug occurs.
+    InputEvent[]
   </p>
 </div>
 
@@ -701,7 +806,7 @@ Only use this if some sort of visual bug occurs.
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.title"></span>@property void <code class="code">title</code>(string <code class="code">title</code>);
+            <span class="ddoc_anchor" id="Window.title"></span>@property auto <code class="code">title</code>(in string <code class="code">title</code>);
 
           </code>
         </p>
@@ -713,7 +818,7 @@ Only use this if some sort of visual bug occurs.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Set the size of the window
+    Set the <code class="code">title</code> of the window
   </p>
 </div>
 
@@ -733,7 +838,7 @@ Only use this if some sort of visual bug occurs.
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.cursorVisible"></span>@property void <code class="code">cursorVisible</code>(bool <code class="code">visible</code>);
+            <span class="ddoc_anchor" id="Window.cursorVisible"></span>@property auto <code class="code">cursorVisible</code>(in bool <code class="code">visible</code>);
 
           </code>
         </p>
@@ -756,6 +861,45 @@ Only use this if some sort of visual bug occurs.
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
+  <a href="#Window.size" id="Window.size"><code class="code">size</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Window.size"></span>@property auto <code class="code">size</code>();
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Get the <code class="code">size</code> of the current window buffer
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+int[2], [width, height];
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
   <a href="#Window.resize" id="Window.resize"><code class="code">resize</code></a>
 </div>
 </div><div class="ddoc_decl">
@@ -765,7 +909,7 @@ Only use this if some sort of visual bug occurs.
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.resize"></span>void <code class="code">resize</code>(uint <code class="code">width</code>, uint <code class="code">height</code>);
+            <span class="ddoc_anchor" id="Window.resize"></span>auto <code class="code">resize</code>(in size_t <code class="code">width</code>, in size_t <code class="code">height</code>);
 
           </code>
         </p>
@@ -783,8 +927,47 @@ Only use this if some sort of visual bug occurs.
 </div>
 <div class="ddoc_section">
   <p class="para">
-    <span class="ddoc_section_h">NOTE:</span>
-Clears the buffer
+    <span class="ddoc_section_h">Note:</span>
+(POSIX) Does not work if terminal is maximized
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Note:</span>
+Clears the internal buffer, menaing
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#Window.reposition" id="Window.reposition"><code class="code">reposition</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(in size_t <code class="code">x</code>, in size_t <code class="code">y</code>);
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Reposition the window on screen
   </p>
 </div>
 
@@ -804,7 +987,9 @@ Clears the buffer
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.width"></span>uint <code class="code">width</code>();
+            <span class="ddoc_anchor" id="Window.width"></span>auto <code class="code">width</code>();
+<br>
+<span class="ddoc_anchor" id="Window.w"></span>alias <code class="code">w</code> = width;
 
           </code>
         </p>
@@ -816,7 +1001,7 @@ Clears the buffer
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Get the <code class="code">width</code> of the window
+    Get the internal <code class="code">width</code> of the window
   </p>
 </div>
 
@@ -836,7 +1021,9 @@ Clears the buffer
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.height"></span>uint <code class="code">height</code>();
+            <span class="ddoc_anchor" id="Window.height"></span>auto <code class="code">height</code>();
+<br>
+<span class="ddoc_anchor" id="Window.h"></span>alias <code class="code">h</code> = height;
 
           </code>
         </p>
@@ -848,96 +1035,7 @@ Clears the buffer
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Get the <code class="code">height</code> of the window
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#Window.w" id="Window.w"><code class="code">w</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="Window.w"></span>alias <code class="code">w</code> = width;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#Window.h" id="Window.h"><code class="code">h</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="Window.h"></span>alias <code class="code">h</code> = height;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#Window.getInputs" id="Window.getInputs"><code class="code">getInputs</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="Window.getInputs"></span>InputEvent[] <code class="code">getInputs</code>();
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Get a range of all inputs since last call.
-
-  </p>
-</div>
-<div class="ddoc_returns">
-  <h4>Return Value</h4>
-  <p class="para">
-    InputEvent[]
+    Get the internal <code class="code">height</code> of the window
   </p>
 </div>
 
@@ -997,7 +1095,7 @@ Clears the buffer
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    <code class="code">character</code>
+    The <code class="code">character</code> of the cell
   </p>
 </div>
 
@@ -1029,7 +1127,7 @@ Clears the buffer
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    <code class="code">foreground</code> color
+    The <code class="code">foreground</code> color
   </p>
 </div>
 
@@ -1061,7 +1159,7 @@ Clears the buffer
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    <code class="code">background</code> color
+    The <code class="code">background</code> color
   </p>
 </div>
 
@@ -1071,45 +1169,6 @@ Clears the buffer
 
 </li>
 </ul>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#cellString" id="cellString"><code class="code">cellString</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="cellString"></span>Cell[] <code class="code">cellString</code>(string <code class="code">str</code>, Color <code class="code">color</code>, Color <code class="code">background</code>);
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Create an array of cells with foreground- and <code class="code">background</code> <code class="code">color</code>
-
-  </p>
-</div>
-<div class="ddoc_returns">
-  <h4>Return Value</h4>
-  <p class="para">
-    Cell[]
-  </p>
-</div>
-
-</section>
 
 </div>
 
@@ -1150,9 +1209,9 @@ Clears the buffer
     <div class="dlang">
       <ol class="code_lines">
         <li><code class="code"><span class="comment">//Available colors:
-</span>black
-black_dark
-blue
+</span>black      <span class="comment">//darker grey
+</span>black_dark <span class="comment">//black
+</span>blue
 blue_dark
 cyan
 cyan_dark
@@ -1162,9 +1221,9 @@ magenta
 magenta_dark
 red
 red_dark
-white
-white_dark
-yellow
+white      <span class="comment">//white
+</span>white_dark <span class="comment">//lighter grey
+</span>yellow
 yellow_dark
 </code></li>
       </ol>
@@ -1265,7 +1324,7 @@ yellow_dark
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code">window.write(0,0, <span class="psymbol">bg</span>(Color.whites), <span class="string_literal">"item"</span>);
+        <li><code class="code">window.write(0,0, <span class="psymbol">bg</span>(Color.white), <span class="string_literal">"item"</span>);
 </code></li>
       </ol>
     </div>

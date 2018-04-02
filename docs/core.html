@@ -493,7 +493,26 @@
   <div class="ddoc_summary">
   <p class="para">
     Gateway to the console/terminal
- All methods are called from here
+ All methods are called via this
+
+  </p>
+</div>
+<div class="ddoc_description">
+  <h4>Discussion</h4>
+  <p class="para">
+      .M"""bgd
+ ,MI    "Y
+ <code class="code">MMb.      ,p6"bo   ,pW"Wq.</code>7MMpMMMb.  .gP"Ya
+   <code class="code">YMMNq. 6M'  OO  6W'   </code>Wb MM    MM ,M'   Yb
+ .     `MM 8M       8M     M8 MM    MM 8M""""""
+ Mb     dM YM.    , YA.   ,A9 MM    MM YM.    ,
+ P"Ybmmd"   YMbmd'   <code class="code">Ybmd9'.JMML  JMML.</code>Mbmmd'
+<br><br>
+
+        -- Cross-Platform CLI Library --
+<br><br>
+
+
 
   </p>
 </div>
@@ -507,9 +526,18 @@
       <ol class="code_lines">
         <li><code class="code"><span class="keyword">void</span> main()
 {
+    <span class="keyword">bool</span> running = <span class="keyword">true</span>;
     <span class="psymbol">window</span>.title = <span class="string_literal">"i am happy"</span>;
-    <span class="keyword">while</span>(<span class="keyword">true</span>)
+    <span class="keyword">while</span>(running)
     {
+        <span class="keyword">foreach</span>(input; <span class="psymbol">window</span>.getInputs)
+        {
+            <span class="keyword">if</span>(input.key == SK.escape)
+            {
+                running = <span class="keyword">false</span>;
+            }
+        }
+
         <span class="psymbol">window</span>.clear();
         <span class="psymbol">window</span>.write(0,0, <span class="string_literal">"hello world"</span>, fg(red), '!', bg(white), 42);
         <span class="psymbol">window</span>.print();

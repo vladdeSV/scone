@@ -625,7 +625,7 @@
 <div class="ddoc_returns">
   <h4>Return Value</h4>
   <p class="para">
-    uint[2], where [0] is width, and [1] is height
+    int[2], where [0] is width, and [1] is height
   </p>
 </div>
 
@@ -645,7 +645,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="OS.resize"></span>static void <code class="code">resize</code>(uint <code class="code">width</code>, uint <code class="code">height</code>);
+            <span class="ddoc_anchor" id="OS.resize"></span>static auto <code class="code">resize</code>(in size_t <code class="code">width</code>, in size_t <code class="code">height</code>);
 
           </code>
         </p>
@@ -668,6 +668,38 @@
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
+  <a href="#OS.reposition" id="OS.reposition"><code class="code">reposition</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="OS.reposition"></span>static auto <code class="code">reposition</code>(in size_t <code class="code">x</code>, in size_t <code class="code">y</code>);
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Reposition the window, where <code class="code">x</code>=0,<code class="code">y</code>=0 is the top-left corner
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
   <a href="#OS.cursorVisible" id="OS.cursorVisible"><code class="code">cursorVisible</code></a>
 </div>
 </div><div class="ddoc_decl">
@@ -677,7 +709,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="OS.cursorVisible"></span>static @property auto <code class="code">cursorVisible</code>(bool <code class="code">visible</code>);
+            <span class="ddoc_anchor" id="OS.cursorVisible"></span>static @property auto <code class="code">cursorVisible</code>(in bool <code class="code">visible</code>);
 
           </code>
         </p>
@@ -709,7 +741,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="OS.setCursor"></span>static auto <code class="code">setCursor</code>(uint <code class="code">x</code>, uint <code class="code">y</code>);
+            <span class="ddoc_anchor" id="OS.setCursor"></span>static auto <code class="code">setCursor</code>(in size_t <code class="code">x</code>, in size_t <code class="code">y</code>);
 
           </code>
         </p>
@@ -748,7 +780,7 @@ This function should only be called by scone itself
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="OS.title"></span>static @property void <code class="code">title</code>(string <code class="code">title</code>);
+            <span class="ddoc_anchor" id="OS.title"></span>static @property auto <code class="code">title</code>(in string <code class="code">title</code>);
 
           </code>
         </p>
