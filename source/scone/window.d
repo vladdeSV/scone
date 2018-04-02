@@ -26,13 +26,14 @@ struct Window
      * Params:
      *     tx = The x-position of where to write in the internal buffer
      *     ty = The y-position of where to write in the internal buffer
-     *     args = What is to be written. C
+     *     args = What is to be written. Arguments will be converted to strings, except special types `fg`, `bg`, and `Cell`.
      * Example:
      * ---
      * // will display on screen "hello world 42[1337, 1001, 1]" in varied colors
      * window.write(3, 5, "hello ", fg(Color.green), 'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
      * window.print();
      * ---
+     *
      * Example:
      * ----
      * // will display "lorem" at position [x: 4, y: 3]
@@ -63,7 +64,6 @@ struct Window
         fg foreground = this.settings.defaultForeground;
         bg background = this.settings.defaultBackground;
 
-        // Flag to warn if color arguments will not be written
         foreach(ref arg; args)
         {
             static if(is(typeof(arg) == fg))
