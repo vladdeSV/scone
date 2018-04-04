@@ -567,7 +567,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.write"></span>auto <code class="code">write</code>(X, Y, Args...)(X <code class="code">tx</code>, Y <code class="code">ty</code>, Args <code class="code">args</code>) if (isNumeric!X &amp;&amp; isNumeric!Y &amp;&amp; <code class="code">args</code>.length &gt;= 1);
+            <span class="ddoc_anchor" id="Window.write"></span>auto <code class="code">write</code>(X, Y, Args...)(X <code class="code">tx</code>, Y <code class="code">ty</code>, Args <code class="code">args</code>) if (isNumeric!X &amp;&amp; isNumeric!Y &amp;&amp; (<code class="code">args</code>.length &gt;= 1));
 
           </code>
         </p>
@@ -642,7 +642,7 @@
     <div class="dlang">
       <ol class="code_lines">
         <li><code class="code"><span class="comment">// will display on screen "hello world 42[1337, 1001, 1]" in varied colors
-</span>window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, fg(Color.green), 'w', Cell('o', fg(Color.red)), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
+</span>window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, Color.green.fg, 'w', Cell('o', Color.red.fg), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
 window.print();
 </code></li>
       </ol>
@@ -1170,172 +1170,6 @@ Clears the internal buffer, menaing
 
 </li>
 </ul>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#Color" id="Color"><code class="code">Color</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="Color"></span>enum <code class="code">Color</code>: int;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    All colors
-
-  </p>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Example:</span>
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code"><span class="comment">//Available colors:
-</span>black      <span class="comment">//darker grey
-</span>black_dark <span class="comment">//black
-</span>blue
-blue_dark
-cyan
-cyan_dark
-green
-green_dark
-magenta
-magenta_dark
-red
-red_dark
-white      <span class="comment">//white
-</span>white_dark <span class="comment">//lighter grey
-</span>yellow
-yellow_dark
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#fg" id="fg"><code class="code">fg</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="fg"></span>struct <code class="code">fg</code>;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Definition of a foreground color.
-
-  </p>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Example:</span>
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code">window.write(0,0, <span class="psymbol">fg</span>(Color.red), <span class="string_literal">"item"</span>);
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#bg" id="bg"><code class="code">bg</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="bg"></span>struct <code class="code">bg</code>;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Definition of a background color.
-
-  </p>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Example:</span>
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code">window.write(0,0, <span class="psymbol">bg</span>(Color.white), <span class="string_literal">"item"</span>);
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
-
-</section>
 
 </div>
 

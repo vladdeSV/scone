@@ -88,7 +88,7 @@ struct OS
     }
 
     ///Set if the cursor should be visible
-    auto cursorVisible(in bool visible) @property
+    auto cursorVisible(in bool visible)
     {
         mixin(_os~".cursorVisible(visible);");
     }
@@ -101,7 +101,7 @@ struct OS
     }
 
     ///Set the title of the window
-    auto title(in string title) @property
+    auto title(in string title)
     {
         mixin(_os~".title(title);");
     }
@@ -188,13 +188,13 @@ struct OS
         }
 
         /** Set window title */
-        auto title(in string title) @property
+        auto title(in string title)
         {
             SetConsoleTitleA(title.toStringz);
         }
 
         /** Set cursor visible. */
-        auto cursorVisible(in bool visible) @property
+        auto cursorVisible(in bool visible)
         {
             CONSOLE_CURSOR_INFO cci;
             GetConsoleCursorInfo(_hConsoleOutput, &cci);
@@ -203,7 +203,7 @@ struct OS
         }
 
         /** Set line wrapping. */
-        auto lineWrapping(in bool lw) @property
+        auto lineWrapping(in bool lw)
         {
             lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
             : SetConsoleMode(_hConsoleOutput, 0x0);
@@ -735,25 +735,25 @@ struct OS
             stdout.flush();
         }
 
-        auto cursorVisible(in bool visible) @property
+        auto cursorVisible(in bool visible)
         {
             writef("\033[?25%s", visible ? "h" : "l");
             stdout.flush();
         }
 
-        auto lineWrapping(in bool wrap) @property
+        auto lineWrapping(in bool wrap)
         {
             writef("\033[?7%s", wrap ? "h" : "l");
             stdout.flush();
         }
 
-        auto title(in string title) @property
+        auto title(in string title)
         {
             writef("\033]0;%s\007", title);
             stdout.flush();
         }
 
-        auto size() @property
+        auto size()
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

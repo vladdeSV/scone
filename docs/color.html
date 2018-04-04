@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>scone.os</title>
+    <title>scone.color</title>
     <style type="text/css" media="screen">
       html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
       blockquote, pre, a, abbr, address, cite, code, del, dfn, em, figure,
@@ -463,7 +463,7 @@
   <body id="ddoc_main" class="ddoc dlang">
     <div class="content_wrapper">
       <article class="module">
-        <h1 class="module_name">scone.os</h1>
+        <h1 class="module_name">scone.color</h1>
         <section id="module_content">
 <section class="section ddoc_module_members_section">
   <div class="ddoc_module_members">
@@ -471,7 +471,7 @@
   <li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#TIOCGWINSZ" id="TIOCGWINSZ"><code class="code">TIOCGWINSZ</code></a>
+  <a href="#Color" id="Color"><code class="code">Color</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -480,7 +480,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="TIOCGWINSZ"></span>enum int <code class="code">TIOCGWINSZ</code>;
+            <span class="ddoc_anchor" id="Color"></span>enum <code class="code">Color</code>: int;
 
           </code>
         </p>
@@ -492,275 +492,41 @@
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    needs to be specifically set, otherwise ioctl crashes D:
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS" id="OS"><code class="code">OS</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS"></span>struct <code class="code">OS</code>;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Wrapper for <code class="code">OS</code> specific functions
-  </p>
-</div>
-
-</section>
-<ul class="ddoc_members">
-  <li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.init" id="OS.init"><code class="code">init</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.init"></span>package(scone) static auto <code class="code">init</code>();
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Initializes console/terminal to best settings when using scone
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.deinit" id="OS.deinit"><code class="code">deinit</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.deinit"></span>package(scone) static auto <code class="code">deinit</code>();
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    De-initializes console/terminal
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.size" id="OS.size"><code class="code">size</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.size"></span>static auto <code class="code">size</code>();
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Get the <code class="code">size</code> of the window
-
-  </p>
-</div>
-<div class="ddoc_returns">
-  <h4>Return Value</h4>
-  <p class="para">
-    int[2], where [0] is width, and [1] is height
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.resize" id="OS.resize"><code class="code">resize</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.resize"></span>static auto <code class="code">resize</code>(in uint <code class="code">width</code>, in uint <code class="code">height</code>);
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Set the size of the window
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.reposition" id="OS.reposition"><code class="code">reposition</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.reposition"></span>static auto <code class="code">reposition</code>(in uint <code class="code">x</code>, in uint <code class="code">y</code>);
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Reposition the window, where <code class="code">x</code>=0,<code class="code">y</code>=0 is the top-left corner
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.cursorVisible" id="OS.cursorVisible"><code class="code">cursorVisible</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.cursorVisible"></span>static auto <code class="code">cursorVisible</code>(in bool <code class="code">visible</code>);
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Set if the cursor should be <code class="code">visible</code>
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#OS.setCursor" id="OS.setCursor"><code class="code">setCursor</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="OS.setCursor"></span>static auto <code class="code">setCursor</code>(in uint <code class="code">x</code>, in uint <code class="code">y</code>);
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Set the cursor at position
+    All colors
 
   </p>
 </div>
 <div class="ddoc_section">
   <p class="para">
-    <span class="ddoc_section_h">Note:</span>
-This function should only be called by scone itself
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="comment">//Available colors:
+</span>black      <span class="comment">//darker grey
+</span>black_dark <span class="comment">//black
+</span>blue
+blue_dark
+cyan
+cyan_dark
+green
+green_dark
+magenta
+magenta_dark
+red
+red_dark
+white      <span class="comment">//white
+</span>white_dark <span class="comment">//lighter grey
+</span>yellow
+yellow_dark
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
   </p>
 </div>
 
@@ -771,7 +537,7 @@ This function should only be called by scone itself
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#OS.title" id="OS.title"><code class="code">title</code></a>
+  <a href="#fg" id="fg"><code class="code">fg</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -780,7 +546,7 @@ This function should only be called by scone itself
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="OS.title"></span>static auto <code class="code">title</code>(in string <code class="code">title</code>);
+            <span class="ddoc_anchor" id="fg"></span>struct <code class="code">fg</code>;
 
           </code>
         </p>
@@ -792,7 +558,25 @@ This function should only be called by scone itself
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Set the <code class="code">title</code> of the window
+    Definition of a foreground color
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code">window.write(0,0, Color.red.<span class="psymbol">fg</span>, <span class="string_literal">"item"</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
   </p>
 </div>
 
@@ -800,8 +584,339 @@ This function should only be called by scone itself
 
 </div>
 
-</li>
-</ul>
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#bg" id="bg"><code class="code">bg</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="bg"></span>struct <code class="code">bg</code>;
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Definition of a background color
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code">window.write(0,0, Color.white.<span class="psymbol">bg</span>, <span class="string_literal">"item"</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#light" id="light"><code class="code">light</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="light"></span>C <code class="code">light</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Convert a <code class="code">color</code> to it's dark counter-part
+ If the <code class="code">color</code> already is dark, the same <code class="code">color</code> is returned
+ If the <code class="code">color</code> doesn't exist (<code class="code">cast(Color)123</code>), <code class="code">Color.unknown</code> is returned
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+Light variant of the same type of <code class="code">color</code> passed in
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#dark" id="dark"><code class="code">dark</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="dark"></span>C <code class="code">dark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Convert a <code class="code">color</code> to it's light counter-part
+ If the <code class="code">color</code> already is light, the same <code class="code">color</code> is returned
+ If the <code class="code">color</code> doesn't exist (<code class="code">cast(Color)123</code>), <code class="code">Color.unknown</code> is returned
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+Dark variant of the same type of <code class="code">color</code> passed in
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#isLight" id="isLight"><code class="code">isLight</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="isLight"></span>auto <code class="code">isLight</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Check if a <code class="code">color</code> is a light <code class="code">color</code>
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+bool, <code class="code">true</code> if light <code class="code">color</code>, <code class="code">false</code> otherwise
+  </p>
+</div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>( Color.red.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>(!Color.red_dark.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>( Color.red.fg.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>( bg(Color.red).<span class="psymbol">isLight</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#isDark" id="isDark"><code class="code">isDark</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="isDark"></span>auto <code class="code">isDark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Check if a <code class="code">color</code> is a dark <code class="code">color</code>
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+bool, <code class="code">true</code> if dark <code class="code">color</code>, <code class="code">false</code> otherwise
+  </p>
+</div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(!Color.red.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( Color.red_dark.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( Color.red_dark.fg.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( bg(Color.red_dark).<span class="psymbol">isDark</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+</section>
 
 </div>
 
