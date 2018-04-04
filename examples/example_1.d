@@ -8,20 +8,31 @@ void main()
 
     foreach(n; 0 .. 80 * 24 * 10) //loop through n amount of times
     {
-        window.write
-        (
-            uniform(0, 80),                        /* x */
-            uniform(0, 24),                        /* y */
+        /* Normally you want to clear the screen before printing again, to remove artifacts */
+        // window.clear();
 
-            //Keep in mind: This is an example.
-            //You should use, for example:
-            //`fg(Color.red)` or `bg(Color.white)`
-            fg(cast(Color) uniform(0,16)),         /* foreground */
-            bg(cast(Color) uniform(0,16)),         /* background */
+        /* Randomly choose a position in the window */
+        auto x = uniform(0, window.w);
+        auto y = uniform(0, window.h);
 
-            cast(char)(uniform(0, 256))            /* character  */
-        );
+        /*
+         * Get random color, but more simply putColor
+         * Example:
+         * ---
+         * auto foreground = Color.green.fg;
+         * auto background = Color.white.bg;
+         * ---
+         */
+        auto foregroundColor = cast(Color)(uniform(0,16)).fg;
+        auto backgroundColor = cast(Color)(uniform(0,16)).bg;
 
-        window.print();                            /* print out everything on the screen */
+        /* A random character to be displayed */
+        auto character = cast(char)(uniform(32, 128));
+
+        /* The `windo.write(x, y, args...)` method only stages changes to the screen. Nothing will actually be displayed until... */
+        window.write(x, y, foregroundColor, backgroundColor, character);
+
+        /* ...the print method is called */
+        window.print();
     }
 }

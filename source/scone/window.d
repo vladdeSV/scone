@@ -31,7 +31,7 @@ struct Window
      * Example:
      * ---
      * // will display on screen "hello world 42[1337, 1001, 1]" in varied colors
-     * window.write(3, 5, "hello ", fg(Color.green), 'w', Cell('o', fg(Color.red)), "rld ", 42, [1337, 1001, 1]);
+     * window.write(3, 5, "hello ", Color.green.fg, 'w', Cell('o', Color.red.fg), "rld ", 42, [1337, 1001, 1]);
      * window.print();
      * ---
      *
@@ -59,13 +59,41 @@ struct Window
             return;
         }
 
+        // Calculate the lenght of what is to be printed
+        int counter = 0;
+        foreach(arg; args)
+        {
+            static if(is(typeof(arg) == fg) || is(typeof(arg) == bg))
+            {
+                continue;
+            }
+
+            else static if(is(typeof(arg) == Cell))
+            {
+                ++counter;
+                continue;
+            }
+            else static if(is(typeof(arg) == Cell[]))
+            {
+                counter += arg.length;
+                continue;
+            }
+            else
+            {
+                counter += to!string(arg).length;
+            }
+        }
+
         // Everything that will be written to the window's internal memory
         Cell[] cells;
+        cells.length = counter;
 
         fg foreground = this.settings.defaultForeground;
         bg background = this.settings.defaultBackground;
 
-        foreach(ref arg; args)
+        // A simple counter variable
+        int i = 0;
+        foreach(arg; args)
         {
             static if(is(typeof(arg) == fg))
             {
@@ -77,20 +105,23 @@ struct Window
             }
             else static if(is(typeof(arg) == Cell))
             {
-                cells ~= arg;
+                cells[i] = arg;
+                ++i;
             }
             else static if(is(typeof(arg) == Cell[]))
             {
                 foreach(cell; arg)
                 {
-                    cells ~= cell;
+                    cells[i] = cell;
+                    ++i;
                 }
             }
             else
             {
                 foreach(c; to!string(arg))
                 {
-                    cells ~= Cell(c, foreground, background);
+                    cells[i] = Cell(c, foreground, background);
+                    ++i;
                 }
             }
         }
@@ -400,11 +431,11 @@ private struct Settings
      * The fixed window border (when the window is smaller than the buffer).
      * If the char is `char(0)`, no border is printed
      */
-    Cell fixedSizeBorder = Cell(' ', fg(Color.white), bg(Color.red));
+    Cell fixedSizeBorder = Cell(' ', Color.white.fg, Color.red.bg);
 
     /// The default foreground color used with `window.write(x, y, ...);`
-    fg defaultForeground = fg(Color.white_dark);
+    fg defaultForeground = Color.white_dark.fg;
 
     /// The default background color used with `window.write(x, y, ...);`
-    bg defaultBackground = bg(Color.black_dark);
+    bg defaultBackground = Color.black_dark.bg;
 }
