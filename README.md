@@ -20,6 +20,45 @@
   </a>
 </p>
 
+# v2 is Releasing Soon(TM) and I am currently preparing this readme
+
+## Super simple example
+
+<table>
+  <tr>
+    <td width="50%">
+
+```d
+import scone;
+
+void main() {
+  window.title("example");
+  window.resize(33, 20);
+
+  bool run = true;
+  while(run) {
+    foreach(input; window.getInputs()) {
+      // if CTRL+C is pressed
+      if(input.key == SK.c && input.hasControlKey(SCK.ctrl)) {
+        run = false;
+      }
+    }
+
+    window.clear();
+    window.write(
+      12, 9,
+      Color.yellow.fg, "Hello ",
+      Color.red.fg, Color.white.bg, "World"
+    );
+    window.print();
+  }
+}
+```
+</td>
+    <td width="50%" ><p align="center"><img height="300" src="https://i.imgur.com/Y80IuZy.png"></p></td>
+  </tr>
+</table>
+
 ### Features
 * Display text and colors
 * Recieve keyboard input
