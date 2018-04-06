@@ -12,15 +12,13 @@
   <a href="https://raw.githubusercontent.com/vladdeSV/scone/master/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg">
   </a>
-  <!-- <a href="https://travis-ci.org/vladdeSV/scone/">
+  <a href="https://travis-ci.org/vladdeSV/scone/">
     <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master">
-  </a> -->
+  </a>
   <a href="https://github.com/vladdeSV/scone/issues">
     <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
   </a>
 </p>
-
-# v2 is Releasing Soon(TM) and I am currently preparing this readme
 
 ## Super simple example
 
@@ -59,13 +57,13 @@ void main() {
   </tr>
 </table>
 
+To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/master/examples)
+
 ### Features
 * Display text and colors
 * Recieve keyboard input
 * Cross-platform
     * Some restrictions apply, please see [OS Limitations](https://github.com/vladdeSV/scone/wiki/OS-Limitations)
-
-To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/master/examples)
 
 ### Usage with [dub](https://code.dlang.org/download)
 Note: Until v2.0.0 is officially out, you need to use the master branch.
