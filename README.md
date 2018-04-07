@@ -66,10 +66,18 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
     * Some restrictions apply, please see [OS Limitations](https://github.com/vladdeSV/scone/wiki/OS-Limitations)
 
 ### Usage with [dub](https://code.dlang.org/download)
-Note: Until v2.0.0 is officially out, you need to use the master branch.
 
-* dub.json - `"scone": "~master"`
-* dub.sdl - `dependency "scone" version="~master"`
+```js
+/// dub.json
+"dependencies": {
+    "scone": "~master"
+}
+```
+
+```js
+/// dub.sdl
+dependency "scone" version="~master"
+```
 
 ### Resources
 * [Trello](https://trello.com/b/EFTaQJZa/scone)
