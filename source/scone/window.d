@@ -6,7 +6,7 @@ import scone.os;
 
 import std.algorithm : min;
 import std.conv : text, to;
-import std.stdio : stdout, writef;
+import std.stdio : stdout, write;
 import std.traits : isNumeric;
 
 ///
@@ -306,7 +306,7 @@ struct Window
                 OS.Posix.setCursor(firstChanged + 1, to!uint(sy));
 
                 //...and then print out the string via the regular write function.
-                writef(printed);
+                std.stdio.write(printed);
 
                 //Reset 'printed'.
                 printed = null;
