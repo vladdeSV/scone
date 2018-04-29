@@ -361,7 +361,7 @@ struct Window
      */
     auto size() @property
     {
-        return to!(int[2])([cells[0].length, cells.length]);
+        return to!(uint[2])([cells[0].length, cells.length]);
     }
 
     /**
