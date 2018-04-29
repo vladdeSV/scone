@@ -85,8 +85,8 @@ struct Window
         }
 
         // Everything that will be written to the window's internal memory
-        Cell[] cells;
-        cells.length = counter;
+        Cell[] outputCells;
+        outputCells.length = counter;
 
         fg foreground = this.settings.defaultForeground;
         bg background = this.settings.defaultBackground;
@@ -105,14 +105,14 @@ struct Window
             }
             else static if(is(typeof(arg) == Cell))
             {
-                cells[i] = arg;
+                outputCells[i] = arg;
                 ++i;
             }
             else static if(is(typeof(arg) == Cell[]))
             {
                 foreach(cell; arg)
                 {
-                    cells[i] = cell;
+                    outputCells[i] = cell;
                     ++i;
                 }
             }
@@ -120,7 +120,7 @@ struct Window
             {
                 foreach(c; to!string(arg))
                 {
-                    cells[i] = Cell(c, foreground, background);
+                    outputCells[i] = Cell(c, foreground, background);
                     ++i;
                 }
             }
@@ -128,13 +128,13 @@ struct Window
 
         // If there are cells to write, and the last argument is a color, warn
         auto lastArgument = args[$-1];
-        if(cells.length && (is(typeof(lastArgument) == fg) || is(typeof(lastArgument) == bg)))
+        if(outputCells.length && (is(typeof(lastArgument) == fg) || is(typeof(lastArgument) == bg)))
         {
             //logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
 
         // If only colors were provided, just update the colors
-        if(!cells.length)
+        if(!outputCells.length)
         {
             cells[y][x].foreground = foreground;
             cells[y][x].background = background;
@@ -144,7 +144,7 @@ struct Window
         // Some hokus pokus to store stuff into memory
         // write x, write y
         int wx, wy;
-        foreach(ref cell; cells)
+        foreach(ref cell; outputCells)
         {
             // If a newline character is present, increase the write y and set write x to zero
             if(cell.character == '\n')
