@@ -42,7 +42,7 @@ import scone.os;
  * }
  * ---
  */
-static Window window;
+__gshared Window window;
 
 /**
  * Initializes scone
