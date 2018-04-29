@@ -117,6 +117,10 @@ struct OS
         auto init()
         {
             //handle to console window
+            consoleHandle = GetConsoleWindow();
+            assert(consoleHandle != INVALID_HANDLE_VALUE, "consoleHandle == INVALID_HANDLE_VALUE");
+
+            //handle to console output stuff
             consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             //error check
             assert(consoleOutputHandle != INVALID_HANDLE_VALUE, "consoleOutputHandle == INVALID_HANDLE_VALUE");
@@ -161,7 +165,8 @@ struct OS
         /* Display cell in console */
         auto writeCell(in uint x, in uint y, ref Cell cell)
         {
-            ushort wx = to!ushort(x), wy = to!ushort(y);
+            immutable(ushort) wx = to!ushort(x);
+            immutable(ushort) wy = to!ushort(y);
             COORD charBufSize = {1,1};
             COORD characterPos = {0,0};
             SMALL_RECT writeArea = {wx, wy, wx, wy};
@@ -236,7 +241,7 @@ struct OS
 
         auto reposition(int x, int y)
         {
-            //todo...
+            SetWindowPos(consoleHandle, cast(void*)0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
         }
 
         uint[2] size()
@@ -252,7 +257,7 @@ struct OS
             ];
         }
 
-        private HANDLE consoleOutputHandle, consoleInputHandle;
+        private HANDLE consoleHandle, consoleOutputHandle, consoleInputHandle;
         private DWORD _inputsRead, consoleMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, oldConsoleMode;
         private INPUT_RECORD[128] inputRecordBuffer;
         private CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
