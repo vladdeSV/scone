@@ -136,8 +136,8 @@ struct Window
         // If only colors were provided, just update the colors
         if(!cells.length)
         {
-            _cells[y][x].foreground = foreground;
-            _cells[y][x].background = background;
+            cells[y][x].foreground = foreground;
+            cells[y][x].background = background;
             return;
         }
 
@@ -155,9 +155,9 @@ struct Window
             }
 
             // Make sure we are writing inside the buffer
-            if(x + wx >= 0 && y + wy >= 0 && x + wx < _cells[0].length && y + wy < _cells.length)
+            if(x + wx >= 0 && y + wy >= 0 && x + wx < cells[0].length && y + wy < cells.length)
             {
-                _cells[y + wy][x + wx] = cell;
+                cells[y + wy][x + wx] = cell;
             }
 
             ++wx;
@@ -186,16 +186,16 @@ struct Window
         // Windows version of printing, using winapi (super duper fast)
         version(Windows)
         {
-            foreach(cy, ref y; _cells)
+            foreach(cy, ref y; cells)
             {
                 foreach(cx, ref cell; y)
                 {
-                    if(cell != _backbuffer[cy][cx])
+                    if(cell != backbuffer[cy][cx])
                     {
                         OS.Windows.writeCell(cx, cy, cell);
 
                         //update backbuffer
-                        _backbuffer[cy][cx] = cell;
+                        backbuffer[cy][cx] = cell;
                     }
                 }
             }
@@ -232,7 +232,7 @@ struct Window
             string printed;
 
             // Loop through all rows.
-            foreach (sy, y; _cells)
+            foreach (sy, y; cells)
             {
                 if(sy >= OS.Posix.size[1])
                 {
@@ -244,10 +244,10 @@ struct Window
 
                 // Go through all cells of every line
                 // Find first modified cell
-                foreach(sx, cell; _cells[sy])
+                foreach(sx, cell; cells[sy])
                 {
                     //If backbuffer says something has changed
-                    if(_backbuffer[sy][sx] != cell)
+                    if(backbuffer[sy][sx] != cell)
                     {
                         firstChanged = to!uint(sx);
                         break;
@@ -262,10 +262,10 @@ struct Window
                 }
 
                 //Now loop backwards to find the last modified cell
-                foreach_reverse(sx, cell; _cells[sy])
+                foreach_reverse(sx, cell; cells[sy])
                 {
                     //If backbuffer says something has changed
-                    if(_backbuffer[sy][sx] != cell)
+                    if(backbuffer[sy][sx] != cell)
                     {
                         lastChanged = to!uint(sx);
                         break;
@@ -285,21 +285,21 @@ struct Window
                     if
                     (
                         px == firstChanged ||
-                        _cells[sy][px - 1].foreground != _cells[sy][px].foreground ||
-                        _cells[sy][px - 1].background != _cells[sy][px].background
+                        cells[sy][px - 1].foreground != cells[sy][px].foreground ||
+                        cells[sy][px - 1].background != cells[sy][px].background
                     )
                     {
                         printed ~= text
                         (
                             "\033[",
                             0,
-                            ";", OS.Posix.ansiColor(_cells[sy][px].foreground),
-                            ";", OS.Posix.ansiColor(_cells[sy][px].background) + 10,
+                            ";", OS.Posix.ansiColor(cells[sy][px].foreground),
+                            ";", OS.Posix.ansiColor(cells[sy][px].background) + 10,
                             "m",
                         );
                     }
 
-                    printed ~= _cells[sy][px].character;
+                    printed ~= cells[sy][px].character;
                 }
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
@@ -320,7 +320,7 @@ struct Window
     ///Clear the screen, making it ready for the next `print();`
     auto clear()
     {
-        foreach(ref y; _cells)
+        foreach(ref y; cells)
         {
             y[] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
@@ -361,7 +361,7 @@ struct Window
      */
     auto size() @property
     {
-        return to!(uint[2])([_cells[0].length, _cells.length]);
+        return to!(int[2])([cells[0].length, cells.length]);
     }
 
     /**
@@ -374,25 +374,28 @@ struct Window
         // Resize the screen
         OS.resize(width, height);
 
-        _cells = new Cell[][](height, width);
-        _backbuffer = new Cell[][](height, width);
+        cells = new Cell[][](height, width);
+        backbuffer = new Cell[][](height, width);
 
         foreach(n; 0 .. height)
         {
-            _cells[n][] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
+            cells[n][] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
     }
 
-    /// Reposition the window on screen
-    auto reposition(in uint x, in uint y)
+    /// Reposition the window on the monitor
+    auto reposition(X, Y)(X tx, Y ty)
+    if(__traits(isArithmetic, tx) && __traits(isArithmetic, ty))
     {
+        int x = to!int(tx);
+        int y = to!int(ty);
         OS.reposition(x,y);
     }
 
     /// Get the internal width of the window
     auto width()
     {
-        return to!int(_cells[0].length);
+        return to!int(cells[0].length);
     }
     ///ditto
     alias w = width;
@@ -400,15 +403,16 @@ struct Window
     /// Get the internal height of the window
     auto height()
     {
-        return to!int(_cells.length);
+        return to!int(cells.length);
     }
     ///ditto
     alias h = height;
 
     // All cells which can be written to.
-    private Cell[][] _cells;
+    private Cell[][] cells;
+
     // Backbuffer, storing the last printed cells. Used to compare against when printing to optimize
-    private Cell[][] _backbuffer;
+    private Cell[][] backbuffer;
 }
 
 ///

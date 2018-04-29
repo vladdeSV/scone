@@ -117,22 +117,21 @@ struct OS
         auto init()
         {
             //handle to console window
-            _hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+            consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             //error check
-            assert(_hConsoleOutput != INVALID_HANDLE_VALUE, "_hConsoleOutput == INVALID_HANDLE_VALUE");
+            assert(consoleOutputHandle != INVALID_HANDLE_VALUE, "consoleOutputHandle == INVALID_HANDLE_VALUE");
             //store current screen buffer info
-            assert(GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo), "GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo)");
+            assert(GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo), "GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo)");
 
             //handle to console input stuff
-            _hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
+            consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
             //and error check
-            assert(_hConsoleInput != INVALID_HANDLE_VALUE, "_hConsoleInput == INVALID_HANDLE_VALUE");
-            //store the old keyboard mode
-            assert(GetConsoleMode(_hConsoleInput, &_oldMode), "GetConsoleMode(_hConsoleInput, &_oldMode)");
+            assert(consoleInputHandle != INVALID_HANDLE_VALUE, "consoleInputHandle == INVALID_HANDLE_VALUE");
 
-            //    does the following line even do anything?
+            //store the old keyboard mode
+            assert(GetConsoleMode(consoleInputHandle, &oldConsoleMode), "GetConsoleMode(consoleInputHandle, &oldConsoleMode)");
             //set new inputmodes
-            //assert(SetConsoleMode(_hConsoleInput, _mode), "SetConsoleMode(_hConsoleInput, _mode)");
+            assert(SetConsoleMode(consoleInputHandle, consoleMode), "SetConsoleMode(consoleInputHandle, consoleMode)");
 
             //"removes" the enter release key when `dub` is run
             retreiveInputs();
@@ -145,15 +144,15 @@ struct OS
         {
             resize(_initialSize[0], _initialSize[1]);
 
-            SetConsoleMode(_hConsoleInput, _oldMode);
-            SetConsoleScreenBufferSize(_hConsoleOutput, _consoleScreenBufferInfo.dwSize);
+            SetConsoleMode(consoleInputHandle, oldConsoleMode);
+            SetConsoleScreenBufferSize(consoleOutputHandle, consoleScreenBufferInfo.dwSize);
 
             COORD coordScreen = { 0, 0 };
             DWORD charsWritten;
-            DWORD cellCount = _consoleScreenBufferInfo.dwSize.X * _consoleScreenBufferInfo.dwSize.Y;
+            DWORD cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
 
-            FillConsoleOutputCharacter(_hConsoleOutput, cast(TCHAR) ' ', cellCount, coordScreen, &charsWritten);
-            FillConsoleOutputAttribute(_hConsoleOutput, _consoleScreenBufferInfo.wAttributes, cellCount, coordScreen, &charsWritten);
+            FillConsoleOutputCharacter(consoleOutputHandle, cast(TCHAR) ' ', cellCount, coordScreen, &charsWritten);
+            FillConsoleOutputAttribute(consoleOutputHandle, consoleScreenBufferInfo.wAttributes, cellCount, coordScreen, &charsWritten);
 
             cursorVisible(true);
             setCursor(0,0);
@@ -169,22 +168,22 @@ struct OS
             CHAR_INFO character;
             character.AsciiChar = cell.character;
             character.Attributes = attributesFromCell(cell);
-            WriteConsoleOutputA(_hConsoleOutput, &character, charBufSize, characterPos, &writeArea);
+            WriteConsoleOutputA(consoleOutputHandle, &character, charBufSize, characterPos, &writeArea);
         }
 
         /** Set cursor position. */
         auto setCursor(in uint x, in uint y)
         {
-            GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
+            GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo);
             COORD change =
             {
-                cast(short) min(_consoleScreenBufferInfo.srWindow.Right -
-                _consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short)
+                cast(short) min(consoleScreenBufferInfo.srWindow.Right -
+                consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short)
                 max(0, y)
             };
 
             stdout.flush();
-            SetConsoleCursorPosition(_hConsoleOutput, change);
+            SetConsoleCursorPosition(consoleOutputHandle, change);
         }
 
         /** Set window title */
@@ -197,21 +196,21 @@ struct OS
         auto cursorVisible(in bool visible)
         {
             CONSOLE_CURSOR_INFO cci;
-            GetConsoleCursorInfo(_hConsoleOutput, &cci);
+            GetConsoleCursorInfo(consoleOutputHandle, &cci);
             cci.bVisible = visible;
-            SetConsoleCursorInfo(_hConsoleOutput, &cci);
+            SetConsoleCursorInfo(consoleOutputHandle, &cci);
         }
 
         /** Set line wrapping. */
         auto lineWrapping(in bool lw)
         {
-            lw ? SetConsoleMode(_hConsoleOutput, 0x0002)
-            : SetConsoleMode(_hConsoleOutput, 0x0);
+            lw ? SetConsoleMode(consoleOutputHandle, 0x0002)
+            : SetConsoleMode(consoleOutputHandle, 0x0);
         }
 
         void resize(in uint width, in uint height)
         {
-            SMALL_RECT winInfo = _consoleScreenBufferInfo.srWindow;
+            SMALL_RECT winInfo = consoleScreenBufferInfo.srWindow;
             COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
 
             if (windowSize.X > width || windowSize.Y > height)
@@ -225,38 +224,38 @@ struct OS
                     height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
                 };
 
-                assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window before resizing buffer");
+                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window before resizing buffer");
             }
 
             COORD size = { to!short(width), to!short(height) };
-            assert(SetConsoleScreenBufferSize(_hConsoleOutput, size), "Unable to resize screen buffer");
+            assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer");
 
             SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
-            assert(SetConsoleWindowInfo(_hConsoleOutput, 1, &info), "Unable to resize window after resizing buffer");
+            assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window after resizing buffer");
         }
 
-        auto reposition(in uint x, in uint y)
+        auto reposition(int x, int y)
         {
             //todo...
         }
 
         uint[2] size()
         {
-            GetConsoleScreenBufferInfo(_hConsoleOutput, &_consoleScreenBufferInfo);
+            GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo);
 
             return
             [
-                _consoleScreenBufferInfo.srWindow.Right -
-                _consoleScreenBufferInfo.srWindow.Left + 1,
-                _consoleScreenBufferInfo.srWindow.Bottom -
-                _consoleScreenBufferInfo.srWindow.Top  + 1
+                consoleScreenBufferInfo.srWindow.Right -
+                consoleScreenBufferInfo.srWindow.Left + 1,
+                consoleScreenBufferInfo.srWindow.Bottom -
+                consoleScreenBufferInfo.srWindow.Top  + 1
             ];
         }
 
-        private HANDLE _hConsoleOutput, _hConsoleInput;
-        private DWORD _inputsRead, _mode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, _oldMode;
-        private INPUT_RECORD[128] _inputBuffer;
-        private CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBufferInfo;
+        private HANDLE consoleOutputHandle, consoleInputHandle;
+        private DWORD _inputsRead, consoleMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, oldConsoleMode;
+        private INPUT_RECORD[128] inputRecordBuffer;
+        private CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
 
         ushort attributesFromCell(Cell cell)
         {
@@ -376,7 +375,7 @@ struct OS
         auto retreiveInputs()
         {
             DWORD read = 0;
-            GetNumberOfConsoleInputEvents(_hConsoleInput, &read);
+            GetNumberOfConsoleInputEvents(consoleInputHandle, &read);
 
             if(!read)
             {
@@ -385,19 +384,27 @@ struct OS
 
             InputEvent[] _inputEvents;
 
-            ReadConsoleInputA(_hConsoleInput, _inputBuffer.ptr, 128, &_inputsRead);
+            ReadConsoleInputA(consoleInputHandle, inputRecordBuffer.ptr, 128, &_inputsRead);
             for(uint e = 0; e < read; ++e)
             {
-                switch(_inputBuffer[e].EventType)
+                switch(inputRecordBuffer[e].EventType)
                 {
-                case KEY_EVENT:
+                case /* 0x0002 */ MOUSE_EVENT:
+                    // this means the mouse has been clicked/moved
+                case /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
+                    // this means the window console has been resized
+                case /* 0x0008 */ MENU_EVENT:
+                    // this means the user has clicked on the menu (should be ignored according to microsoft)
+                case /* 0x0010 */ FOCUS_EVENT:
+                    // this means the user has switched focus of the window (should be ignored according to microsoft)
+                    break;
+                case /* 0x0001 */ KEY_EVENT:
                     _inputEvents ~= InputEvent
                     (
-                        getKeyFromKeyEventRecord(_inputBuffer[e].KeyEvent),
-                        getControlKeyFromKeyEventRecord(_inputBuffer[e].KeyEvent),
-                        cast(bool) _inputBuffer[e].KeyEvent.bKeyDown
+                        getKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
+                        getControlKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
+                        cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown
                     );
-
                     break;
                 default:
                     break;
@@ -407,7 +414,6 @@ struct OS
             return _inputEvents;
         }
 
-        ///todo: add mouse input
         SK getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
         {
             switch(k.wVirtualKeyCode)
