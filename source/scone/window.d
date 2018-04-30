@@ -63,7 +63,7 @@ struct Window
         int counter = 0;
         foreach(arg; args)
         {
-            static if(is(typeof(arg) == fg) || is(typeof(arg) == bg))
+            static if(is(typeof(arg) : Color))
             {
                 continue;
             }
@@ -128,7 +128,7 @@ struct Window
 
         // If there are cells to write, and the last argument is a color, warn
         auto lastArgument = args[$-1];
-        if(outputCells.length && (is(typeof(lastArgument) == fg) || is(typeof(lastArgument) == bg)))
+        if(outputCells.length && is(typeof(lastArgument) : Color))
         {
             //logf("Warning: The last argument in %s is a color, which will not be set!", args);
         }
