@@ -205,26 +205,6 @@ struct Window
         // This method is built upon optimizing a string being printed
         version(Posix)
         {
-            // Displaying the border if fixed size setting is set, and the border character is not `char(0)`
-            if(this.settings.fixedSize && this.settings.fixedSizeBorder.character != char(0))
-            {
-                if(windowSize[0] < bufferSize[0])
-                {
-                    foreach(int cy; 0 .. windowSize[1])
-                    {
-                        this.write(cast(int)(windowSize[0] - 1), cy, bg(Color.red), ' ');
-                    }
-                }
-
-                if(windowSize[1] < bufferSize[1])
-                {
-                    foreach(int cx; 0 .. windowSize[0])
-                    {
-                        this.write(cx, cast(int)(windowSize[1] - 1), bg(Color.red), ' ');
-                    }
-                }
-            }
-
             // simple flag if row is unaffected
             enum rowUnchanged = -1;
 
@@ -430,12 +410,6 @@ private struct Settings
 {
     /// If the window buffer always should stay the same
     bool fixedSize = false;
-
-    /**
-     * The fixed window border (when the window is smaller than the buffer).
-     * If the char is `char(0)`, no border is printed
-     */
-    Cell fixedSizeBorder = Cell(' ', Color.white.fg, Color.red.bg);
 
     /// The default foreground color used with `window.write(x, y, ...);`
     fg defaultForeground = Color.white_dark.fg;
