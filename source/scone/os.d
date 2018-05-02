@@ -1,10 +1,10 @@
 module scone.os;
 
-import scone.input;
-import core.thread;
-import std.random;
 import scone.color : Color;
 import scone.input;
+
+import core.thread;
+import std.random;
 
 version(Windows)
 {
