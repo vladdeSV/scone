@@ -7,18 +7,6 @@ import scone.os;
  * Gateway to the console/terminal
  * All methods are called via this
  *
- *
- *  .M"""bgd
- * ,MI    "Y
- * `MMb.      ,p6"bo   ,pW"Wq.`7MMpMMMb.  .gP"Ya
- *   `YMMNq. 6M'  OO  6W'   `Wb MM    MM ,M'   Yb
- * .     `MM 8M       8M     M8 MM    MM 8M""""""
- * Mb     dM YM.    , YA.   ,A9 MM    MM YM.    ,
- * P"Ybmmd"   YMbmd'   `Ybmd9'.JMML  JMML.`Mbmmd'
- *
- *        -- Cross-Platform CLI Library --
- *
- *
  * Example:
  * ---
  * void main()
@@ -42,7 +30,7 @@ import scone.os;
  * }
  * ---
  */
-static Window window;
+__gshared Window window;
 
 /**
  * Initializes scone
