@@ -42,8 +42,8 @@ version(Posix)
 }
 
 import std.system;
-///OS struct name. Called via `mixin(_os~".init();");` //on windows becomes: `Windows.init();`
-private enum _os = (os == std.system.OS.win32 || os == std.system.OS.win64) ? "Windows" : "Posix";
+///OS struct name. Called via `mixin(osName ~ ".init();");` (on windows becomes: `Windows.init();`)
+private enum osName = (os == std.system.OS.win32 || os == std.system.OS.win64) ? "Windows" : "Posix";
 
 ///Wrapper for OS specific functions
 struct OS
@@ -54,7 +54,7 @@ struct OS
     package(scone)
     auto init()
     {
-        mixin(_os~".init();");
+        mixin(osName ~ ".init();");
 
         //store original size
         _initialSize = size();
@@ -65,45 +65,45 @@ struct OS
     package(scone)
     auto deinit()
     {
-        mixin(_os~".deinit();");
+        mixin(osName ~ ".deinit();");
     }
 
     ///Get the size of the window
     ///Returns: int[2], where [0] is width, and [1] is height
     auto size()
     {
-        mixin("return "~_os~".size();");
+        mixin("return " ~ osName ~ ".size();");
     }
 
     ///Set the size of the window
     auto resize(in uint width, in uint height)
     {
-        mixin(_os~".resize(width, height);");
+        mixin(osName ~ ".resize(width, height);");
     }
 
     ///Reposition the window, where x=0,y=0 is the top-left corner
     auto reposition(in uint x, in uint y)
     {
-        mixin(_os~".reposition(x, y);");
+        mixin(osName ~ ".reposition(x, y);");
     }
 
     ///Set if the cursor should be visible
     auto cursorVisible(in bool visible)
     {
-        mixin(_os~".cursorVisible(visible);");
+        mixin(osName ~ ".cursorVisible(visible);");
     }
 
     ///Set the cursor at position
     ///Note: This function should only be called by scone itself
     auto setCursor(in uint x, in uint y)
     {
-        mixin(_os~".setCursor(x, y);");
+        mixin(osName ~ ".setCursor(x, y);");
     }
 
     ///Set the title of the window
     auto title(in string title)
     {
-        mixin(_os~".title(title);");
+        mixin(osName ~ ".title(title);");
     }
 
     private uint[2] _initialSize;
@@ -398,6 +398,7 @@ struct OS
                     // this means the mouse has been clicked/moved
                 case /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
                     // this means the window console has been resized
+                    // TODO: This is where we want to notify scone that the window should be cleared and redrawn
                 case /* 0x0008 */ MENU_EVENT:
                     // this means the user has clicked on the menu (should be ignored according to microsoft)
                 case /* 0x0010 */ FOCUS_EVENT:
@@ -584,7 +585,8 @@ struct OS
             }
         }
 
-        ///key codes
+        /// Specific key codes for (practically) ASCII
+        /// Authors note: I believe all these can be found in the Dlang source code, however, they are here because they didn't exist in an ealier verison of Dlang.
         enum WindowsKeyCode
         {
             ///0 key
@@ -783,52 +785,24 @@ struct OS
             stdout.flush();
         }
 
-        ///get ansi color from Color
+        /// ANSI color code from enum Color
         auto ansiColor(in Color color)
         {
-            //bright color index starts at 90,
-            //dark color index starts at 30
+            // Authors note, May 10th 2018:
+            // legit, what is this even?
+            //
+            // On a more serious note, I believe 90 and 30 are switched on OSX (macOS).
+            // Meaning, on OSX light colors begin at 90, while in Ubunut they begin at 30.
+            // todo: above --------------------------^
 
+            //bright color index starts at 90 (90 = light black, 91 = light red, etc...)
+            //dark color index starts at 30 (30 = dark black, 31 = drak red, etc...)
+            //
             //checks if color is *_dark (value less than 8, check color enum),
             //and sets approproiate starting value. then offsets by the color
             //value. mod 8 is becuase the darker colors range from 8+0 to 8+7
             //and they represent the same color.
             return (color < 8 ? 90 : 30) + (color % 8);
-        }
-
-        private void pollInputEvent(Tid parentThreadID)
-        {
-            Thread.getThis.isDaemon = true;
-
-            while(true)
-            {
-                pollfd ufds;
-                ufds.fd = STDOUT_FILENO;
-                ufds.events = POLLIN;
-
-                uint input;
-                enum timeout = 500;
-                immutable bytesRead = poll(&ufds, 1, timeout);
-
-                if(bytesRead == -1)
-                {
-                    //logf("(POSIX) ERROR: polling input returned -1");
-                }
-                else if(bytesRead == 0)
-                {
-                    //timeout!
-                    //if no key was pressed within `timeout`,
-                    //this happens. which is good!
-                }
-                else if(ufds.revents & POLLIN)
-                {
-                    //read from keyboard
-                    read(STDOUT_FILENO, &input, 1);
-
-                    //send ansi to main thread, where it will be handled.
-                    send(parentThreadID, input);
-                }
-            }
         }
 
         package(scone)
@@ -862,12 +836,53 @@ struct OS
 
             //if no keypresses, return null
             //otherwise, an unknown input will always be sent
-            if(codes == null) return null;
+            if(codes == null) {
+                return null;
+            }
 
             auto event = eventFromSequence(InputSequence(codes));
             event._keySequences = codes;
 
             return [event];
+        }
+
+        /// This method is run on a separate thread, meaning it can block
+        private void pollInputEvent(Tid parentThreadID)
+        {
+            /*
+             * Basically, a daemon thread doesn't need to finish in order for scone to exit.
+             * This means we can have an endless loop here without worrying the program won't exit properly
+             */
+            Thread.getThis.isDaemon = true;
+
+            // This loop polls input, and sends them to the main thread
+            while(true)
+            {
+                pollfd ufds;
+                ufds.fd = STDOUT_FILENO;
+                ufds.events = POLLIN;
+
+                uint input;
+                immutable bytesRead = poll(&ufds, 1, -1);
+
+                if(bytesRead == -1)
+                {
+                    // error :(
+                    //logf("(POSIX) ERROR: polling input returned -1");
+                }
+                else if(bytesRead == 0)
+                {
+                    // If no key was pressed within `timeout`
+                }
+                else if(ufds.revents & POLLIN)
+                {
+                    // Read input from keyboard
+                    read(STDOUT_FILENO, &input, 1);
+
+                    // Send key code to main thread (where it will be handled).
+                    send(parentThreadID, input);
+                }
+            }
         }
 
         private termios oldState, newState;
