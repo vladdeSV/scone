@@ -482,7 +482,7 @@ version(Posix)
     /// Globally map a sequence to an input event
     void createInputSequence(InputEvent ie, InputSequence iseq)
     {
-        _inputSequences[iseq] = ie;
+        _inputEvents[iseq] = ie;
     }
 
     /// Load and use the file 'input_sequences.scone' as default keymap
@@ -517,10 +517,11 @@ version(Posix)
 
             auto ie = InputEvent(key, sck, true);
             auto iseq = InputSequence(sequenceFromString(seq));
+            ie._keySequences = iseq;
 
-            if((iseq in _inputSequences) !is null)
+            if((iseq in _inputEvents) !is null)
             {
-                auto storedInputEvent = _inputSequences[iseq];
+                auto storedInputEvent = _inputEvents[iseq];
 
                 if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
                 {
@@ -528,21 +529,32 @@ version(Posix)
                 }
             }
 
-            _inputSequences[iseq] = ie;
+            _inputEvents[iseq] = ie;
         }
     }
 
     /// Get InputEvent from sequence
-    package(scone) InputEvent eventFromSequence(InputSequence iseq)
+    /+ todo: remove the comment signs | package(scone)+/ InputEvent eventFromSequence(InputSequence sequence)
     {
         //check for input sequence in map
-        if((iseq in _inputSequences) !is null)
+        if((sequence in _inputEvents) !is null)
         {
-            return _inputSequences[iseq];
+            return _inputEvents[sequence];
         }
 
         //if not found, return unknown input
-        return InputEvent(SK.unknown, SCK.none, false);
+        auto unknownInputEvent = InputEvent(SK.unknown, SCK.none, false);
+        unknownInputEvent._keySequences = sequence;
+        return unknownInputEvent;
+    }
+
+    /// TODO: this should check for multiple keypresses, according to Github issue #13
+    /+ todo: remove the comment signs |package(scone)+/ InputEvent[] eventsFromSequence(uint[] sequence)
+    {
+        // todo: here should code go to check if an input exists. this fix is of version type, PATCH
+        auto inputEvents = [eventFromSequence(InputSequence(sequence))];
+
+        return inputEvents;
     }
 
     /// Get uint[], from string in the format of "num1,num2,...,numX"
@@ -559,7 +571,7 @@ version(Posix)
     }
 
     /// Table holding all input sequences and their respective input
-    private InputEvent[InputSequence] _inputSequences;
+    private InputEvent[InputSequence] _inputEvents;
 }
 
 ///Default keybindings.

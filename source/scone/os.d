@@ -816,34 +816,31 @@ struct OS
             //blesh...
 
             uint[] codes;
-            bool receivedInput = true;
 
-            while(receivedInput)
+            while(true)
             {
-                bool gotSomething = false;
+                bool receivedSequence = false;
 
                 receiveTimeout
                 (
                     1.msecs,
-                    (uint code) { codes ~= code; gotSomething = true; },
+                    (uint code) { codes ~= code; receivedSequence = true; },
                 );
 
-                if(!gotSomething)
+                if(!receivedSequence)
                 {
-                    receivedInput = false;
+                    break;
                 }
             }
 
-            //if no keypresses, return null
-            //otherwise, an unknown input will always be sent
+            // if no keypresses, return null
+            // otherwise, an unknown input will always be sent
             if(codes == null) {
                 return null;
             }
 
-            auto event = eventFromSequence(InputSequence(codes));
-            event._keySequences = codes;
-
-            return [event];
+            auto events = eventsFromSequence(codes);
+            return events;
         }
 
         /// This method is run on a separate thread, meaning it can block
