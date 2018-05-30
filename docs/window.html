@@ -748,7 +748,30 @@ Does not directly <code class="code">write</code> to the window, changes will on
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Clear the screen, making it ready for the next <code class="code">print();</code>
+    Clears the internal buffer.
+
+  </p>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">while</span>(running)
+{
+    window.<span class="psymbol">clear</span>();
+    window.write(x,y,arguments);
+    window.print();
+}
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
   </p>
 </div>
 
@@ -936,7 +959,7 @@ int[2], [width, height];
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Note:</span>
-Clears the internal buffer, menaing
+Clears the internal buffer, menaing everything needs to be redrawn
   </p>
 </div>
 
@@ -956,7 +979,7 @@ Clears the internal buffer, menaing
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(in uint <code class="code">x</code>, in uint <code class="code">y</code>);
+            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(X, Y)(X <code class="code">tx</code>, Y <code class="code">ty</code>) if (__traits(isArithmetic, <code class="code">tx</code>) &amp;&amp; __traits(isArithmetic, <code class="code">ty</code>));
 
           </code>
         </p>
@@ -968,7 +991,7 @@ Clears the internal buffer, menaing
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Reposition the window on screen
+    Reposition the window on the monitor
   </p>
 </div>
 

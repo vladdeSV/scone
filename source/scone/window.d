@@ -297,7 +297,18 @@ struct Window
         }
     }
 
-    ///Clear the screen, making it ready for the next `print();`
+    /**
+     * Clears the internal buffer.
+     * Example:
+     * ---
+     * while(running)
+     * {
+     *     window.clear();
+     *     window.write(x,y,arguments);
+     *     window.print();
+     * }
+     * ---
+     */
     auto clear()
     {
         foreach(ref y; cells)
@@ -347,7 +358,7 @@ struct Window
     /**
      * Changes the size of the window
      * Note: (POSIX) Does not work if terminal is maximized
-     * Note: Clears the internal buffer, menaing
+     * Note: Clears the internal buffer, menaing everything needs to be redrawn
      */
     auto resize(in uint width, in uint height)
     {
