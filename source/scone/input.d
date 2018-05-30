@@ -492,7 +492,7 @@ version(Posix)
 
         string[] ies = _inputSequencesList.split('\n');
 
-        // If file `input_sequence` exists, load keymap, which overrides
+        // If file `input_sequence.scone` exists, load keymap, which overrides
         // existing keybinds.
         if(exists(file_name))
         {
@@ -503,17 +503,29 @@ version(Posix)
         foreach(s; ies)
         {
             s = s.chomp;
-            //if line begins with #
-            if(s == "" || s[0] == '#') continue;
+            // if line is empty or begins with #
+            if(s == "" || s[0] == '#')
+            {
+                //log(debug, "input sequence of incorrect. exprected 3 arguments, got ", arguments.length);
+                continue;
+            }
 
             string[] arguments = split(s, '\t');
-            if(arguments.length != 3) continue; //something isn't right
+            if(arguments.length != 3)
+            {
+                //log(warning, "input sequence of incorrect. exprected 3 arguments, got %i", arguments.length);
+                continue;
+            }
 
             auto key = parse!(SK)(arguments[0]);
             auto sck = parse!(SCK)(arguments[1]);
             auto seq = arguments[2];
             //if sequence is not defined, skip
-            if(seq == "-") continue;
+            if(seq == "-")
+            {
+                //log(notice, "ignoring sequence ", key);
+                continue;
+            }
 
             auto ie = InputEvent(key, sck, true);
             auto iseq = InputSequence(sequenceFromString(seq));
@@ -525,7 +537,7 @@ version(Posix)
 
                 if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
                 {
-                    //log(text("Replacing ", storedInputEvent, " with ", ie));
+                    //log(notice, "Replacing ", storedInputEvent, " with ", ie);
                 }
             }
 
@@ -551,7 +563,7 @@ version(Posix)
     /// TODO: this should check for multiple keypresses, according to Github issue #13
     /+ todo: remove the comment signs |package(scone)+/ InputEvent[] eventsFromSequence(uint[] sequence)
     {
-        // todo: here should code go to check if an input exists. this fix is of version type, PATCH
+        // todo: here should code go to check if an input exists. this fix is of version type PATCH
         auto inputEvents = [eventFromSequence(InputSequence(sequence))];
 
         return inputEvents;
@@ -578,7 +590,7 @@ version(Posix)
 version(OSX)
 {
     private enum _inputSequencesList =
-    "# tested on macOS Sierra v10.12.5, MacBook Pro (15-inch, Mid 2012)" ~ "\n" ~
+    "# tested on macOS Sierra v10.12.5, sv_SE, MacBook Pro (15-inch, Mid 2012)" ~ "\n" ~
     "a	none	97" ~ "\n" ~
     "b	none	98" ~ "\n" ~
     "c	none	99" ~ "\n" ~
