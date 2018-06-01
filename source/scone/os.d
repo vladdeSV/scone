@@ -215,9 +215,14 @@ struct OS
 
         void resize(in uint width, in uint height)
         {
+
+            // todo...
+
+            /+
             SMALL_RECT winInfo = consoleScreenBufferInfo.srWindow;
             COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
 
+            // does not work properly!
             if (windowSize.X > width || windowSize.Y > height)
             {
                 //window size needs to be adjusted before the buffer size can be reduced
@@ -229,14 +234,16 @@ struct OS
                     height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
                 };
 
-                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window before resizing buffer");
+                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window before resizing buffer: " ~ to!string(GetLastError()));
             }
 
             COORD size = { to!short(width), to!short(height) };
-            assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer");
+            assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer: " ~ to!string(GetLastError()));
 
             SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
             assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window after resizing buffer");
+
+            +/
         }
 
         auto reposition(int x, int y)
