@@ -118,24 +118,50 @@ struct OS
         {
             //handle to console window
             consoleHandle = GetConsoleWindow();
-            assert(consoleHandle != INVALID_HANDLE_VALUE, "consoleHandle == INVALID_HANDLE_VALUE");
+            assert
+            (
+                consoleHandle != INVALID_HANDLE_VALUE,
+                "Could not get console window handle: ERROR " ~ to!string(GetLastError())
+            );
 
             //handle to console output stuff
             consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
             //error check
-            assert(consoleOutputHandle != INVALID_HANDLE_VALUE, "consoleOutputHandle == INVALID_HANDLE_VALUE");
+            assert
+            (
+                consoleOutputHandle != INVALID_HANDLE_VALUE,
+                "Could not get standard output handle: ERROR " ~ to!string(GetLastError())
+            );
+
             //store current screen buffer info
-            assert(GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo), "GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo)");
+            assert
+            (
+                GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo),
+                "Could not get console screen buffer info: ERROR " ~ to!string(GetLastError())
+            );
 
             //handle to console input stuff
             consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
             //and error check
-            assert(consoleInputHandle != INVALID_HANDLE_VALUE, "consoleInputHandle == INVALID_HANDLE_VALUE");
+            assert
+            (
+                consoleInputHandle != INVALID_HANDLE_VALUE,
+                "Could not get standard window input handle: ERROR " ~ to!string(GetLastError())
+            );
 
             //store the old keyboard mode
-            assert(GetConsoleMode(consoleInputHandle, &oldConsoleMode), "GetConsoleMode(consoleInputHandle, &oldConsoleMode)");
+            assert
+            (
+                GetConsoleMode(consoleInputHandle, &oldConsoleMode),
+                "Could not get console window mode: ERROR " ~ to!string(GetLastError())
+            );
             //set new inputmodes
-            assert(SetConsoleMode(consoleInputHandle, consoleMode), "SetConsoleMode(consoleInputHandle, consoleMode)");
+            assert
+            (
+                SetConsoleMode(consoleInputHandle, consoleMode),
+                "Could not set console window mode: ERROR " ~ to!string(GetLastError())
+            );
 
             //"removes" the enter release key when `dub` is run
             retreiveInputs();
@@ -210,40 +236,30 @@ struct OS
         auto lineWrapping(in bool lw)
         {
             lw ? SetConsoleMode(consoleOutputHandle, 0x0002)
-            : SetConsoleMode(consoleOutputHandle, 0x0);
+               : SetConsoleMode(consoleOutputHandle, 0x0);
         }
 
         void resize(in uint width, in uint height)
         {
+            SMALL_RECT screenBufferWindow = consoleScreenBufferInfo.srWindow;
+            int[2] windowSize = [screenBufferWindow.Right - screenBufferWindow.Left, screenBufferWindow.Bottom - screenBufferWindow.Top];
 
-            // todo...
-
-            /+
-            SMALL_RECT winInfo = consoleScreenBufferInfo.srWindow;
-            COORD windowSize = {to!short(winInfo.Right - winInfo.Left + 1), to!short(winInfo.Bottom - winInfo.Top + 1)};
-
-            // does not work properly!
-            if (windowSize.X > width || windowSize.Y > height)
-            {
-                //window size needs to be adjusted before the buffer size can be reduced
-                SMALL_RECT info =
-                {
-                    0,
-                    0,
-                    width <  windowSize.X ? to!short(width-1)  : to!short(windowSize.X-1),
-                    height < windowSize.Y ? to!short(height-1) : to!short(windowSize.Y-1)
-                };
-
-                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window before resizing buffer: " ~ to!string(GetLastError()));
-            }
-
+            SMALL_RECT info = { 0, 0, to!short(width-1), to!short(height-1) };
             COORD size = { to!short(width), to!short(height) };
-            assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer: " ~ to!string(GetLastError()));
 
-            SMALL_RECT info = { 0, 0, to!short(width - 1), to!short(height - 1) };
-            assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window after resizing buffer");
-
-            +/
+            if (width >= windowSize[0] && height >= windowSize[1])
+            {
+                // set bufffer size first
+                assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer: ERROR " ~ to!string(GetLastError()));
+                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window after resizing buffer: ERROR " ~ to!string(GetLastError()));
+            }
+            else
+            {
+                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window before resizing buffer: ERROR " ~ to!string(GetLastError()));
+                assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "Unable to resize screen buffer: ERROR " ~ to!string(GetLastError()));
+                // workaround for windows bug causing empty space for scrollbars
+                assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "Unable to resize window the second time time: ERROR " ~ to!string(GetLastError()));
+            }
         }
 
         auto reposition(int x, int y)
