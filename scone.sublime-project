@@ -1,21 +1,20 @@
 {
-	"folders":
-	[
-		{
-			"path": "source/scone",
-			"name": "scone",
-		},
-		{
-			"path": "docs",
-			"file_include_patterns": ["core.html", "frame.html", "keyboard.html", "window.html"],
-		},
-		{
-			"path": "examples",
-		},
-		{
-			"path": "/",
-			"name": "project files",
-			"folder_exclude_patterns": ["source", "examples", "docs", "locale"],
-		},
-	]
+    "folders":
+    [
+        {
+            "path": "source/scone",
+            "name": "scone",
+        },
+        {
+            "path": "docs",
+        },
+        {
+            "path": "examples",
+        },
+        {
+            "path": "/",
+            "name": "project files",
+            "folder_exclude_patterns": ["source", "examples", "docs", "locale"],
+        },
+    ]
 }
