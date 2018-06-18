@@ -65,7 +65,7 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 * Cross-platform
     * Some restrictions apply, please see [OS Limitations](https://github.com/vladdeSV/scone/wiki/OS-Limitations)
 
-### Usage with [dub](https://code.dlang.org/download)
+### Install with [dub](https://code.dlang.org/download)
 
 ```js
 /// dub.json
@@ -80,11 +80,5 @@ dependency "scone" version="~develop"
 ```
 
 ### Resources
-* [Trello](https://trello.com/b/EFTaQJZa/scone)
-
-<!--
-# Examples
-![example_1](http://i.imgur.com/nrIuilv.gif)
-![example_2](http://i.imgur.com/1CnEG31.gif)
-![example_3](http://i.imgur.com/Uhhipkh.gif)
--->
+* [Wiki](https://github.com/vladdeSV/scone/wiki)
+* [Github Kanban](https://github.com/vladdeSV/scone/projects/2)
