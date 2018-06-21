@@ -1,9 +1,4 @@
 <h1 align="center">🍞 scone</h1>
-<p align="center">
-  <img height="300" src="http://i.imgur.com/b35uwpa.gif">
-  <span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-  <img height="300" src="http://i.imgur.com/7Yi1h89.gif">
-</p>
 <h4 align="center">Create cross-platform CLI applications with ease</h4>
 <p align="center">
   <a href="https://code.dlang.org/packages/scone">
@@ -57,6 +52,13 @@ void main() {
   </tr>
 </table>
 
+### Cross-platform input/output demo
+<p align="left">
+  <img height="300" src="http://i.imgur.com/b35uwpa.gif">
+  <span>&nbsp&nbsp&nbsp&nbsp</span>
+  <img height="300" src="http://i.imgur.com/7Yi1h89.gif">
+</p>
+
 To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/master/examples)
 
 ### Features
@@ -81,4 +83,4 @@ dependency "scone" version="~develop"
 
 ### Resources
 * [Wiki](https://github.com/vladdeSV/scone/wiki)
-* [Github Kanban](https://github.com/vladdeSV/scone/projects/2)
+* [Project kanban](https://github.com/vladdeSV/scone/projects/2)
