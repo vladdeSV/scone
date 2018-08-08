@@ -167,22 +167,6 @@ struct Window
     /// Displays what has been written to the internal buffer
     auto print()
     {
-        uint[2] windowSize = OS.size;
-        uint[2] bufferSize = this.size;
-
-        // If the window has changed size, resize the the screen depending on the settings. If `this.settings.fixedSize` is true, keep the window at the same size as the buffre, else resize the buffer to the window size
-        if(bufferSize != windowSize)
-        {
-            if(this.settings.fixedSize)
-            {
-                OS.setCursor(0,0);
-            }
-            else
-            {
-                this.resize(windowSize[0], windowSize[1]);
-            }
-        }
-
         // Windows version of printing, using winapi (super duper fast)
         version(Windows)
         {
