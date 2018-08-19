@@ -170,9 +170,9 @@ struct Window
         // Windows version of printing, using winapi (super duper fast)
         version(Windows)
         {
-            foreach(cy, ref y; cells)
+            foreach(uint cy, ref y; cells)
             {
-                foreach(cx, ref cell; y)
+                foreach(uint cx, ref cell; y)
                 {
                     if(cell != backbuffer[cy][cx])
                     {
