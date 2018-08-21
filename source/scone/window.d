@@ -151,7 +151,10 @@ struct Window
             {
                 wx = 0;
                 ++wy;
-                if (wy >= cells.length) break;
+                if (wy >= cells.length) 
+                {
+                    break;
+                }
                 continue;
             }
 
