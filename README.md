@@ -72,13 +72,13 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 ```js
 /// dub.json
 "dependencies": {
-    "scone": "~develop"
+    "scone": "~>2.0.0"
 }
 ```
 
 ```js
 /// dub.sdl
-dependency "scone" version="~develop"
+dependency "scone" version="~>2.0.0"
 ```
 
 ### Resources
