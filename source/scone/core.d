@@ -1,5 +1,6 @@
 module scone.core;
 
+import std.experimental.logger;
 import scone.window;
 import scone.os;
 
@@ -37,6 +38,8 @@ __gshared Window window;
  */
 shared static this()
 {
+    sharedLog = new FileLogger("scone.log");
+
     //get current width and height
     OS.init();
     auto w = OS.size[0];

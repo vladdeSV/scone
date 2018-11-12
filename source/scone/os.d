@@ -19,7 +19,7 @@ version(Windows)
 
     extern(Windows)
     {
-        BOOL GetCurrentConsoleFont(HANDLE hConsoleOutput, BOOL bMaximumWindow, PCONSOLE_FONT_INFO lpConsoleCurrentFont); 
+        BOOL GetCurrentConsoleFont(HANDLE hConsoleOutput, BOOL bMaximumWindow, PCONSOLE_FONT_INFO lpConsoleCurrentFont);
         COORD GetConsoleFontSize(HANDLE hConsoleOutput, DWORD nFont);
     }
 }

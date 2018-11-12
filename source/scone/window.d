@@ -8,6 +8,7 @@ import std.algorithm : min;
 import std.conv : text, to;
 import std.stdio : stdout, write;
 import std.traits : isNumeric;
+import std.experimental.logger;
 
 ///
 struct Window
@@ -15,6 +16,7 @@ struct Window
     /// Initializes the window.
     this(in uint width, in uint height)
     {
+        logf("Initalize window (%dx%d)", width, height);
         //properly set the size of the console
         resize(width, height);
     }
@@ -55,7 +57,7 @@ struct Window
         // Check if writing outside border (assuming we only write right-to-left)
         if(x >= this.width() || y >= this.height())
         {
-            //logf("Warning: Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
+            //logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
             return;
         }
 
@@ -84,14 +86,12 @@ struct Window
             }
         }
 
-        // Everything that will be written to the window's internal memory
         Cell[] outputCells;
         outputCells.length = counter;
 
         fg foreground = this.settings.defaultForeground;
         bg background = this.settings.defaultBackground;
 
-        // A simple counter variable
         int i = 0;
         foreach(arg; args)
         {
@@ -130,7 +130,7 @@ struct Window
         auto lastArgument = args[$-1];
         if(outputCells.length && is(typeof(lastArgument) : Color))
         {
-            //logf("Warning: The last argument in %s is a color, which will not be set!", args);
+            logf("The last argument in %s is a color, which will not be set.", args);
         }
 
         // If only colors were provided, just update the colors
@@ -151,7 +151,7 @@ struct Window
             {
                 wx = 0;
                 ++wy;
-                if (wy >= cells.length) 
+                if (wy >= cells.length)
                 {
                     break;
                 }
@@ -159,7 +159,13 @@ struct Window
             }
 
             // Make sure we are writing inside the buffer
-            if(x + wx >= 0 && y + wy >= 0 && x + wx < cells[0].length && y + wy < cells.length)
+            if
+            (
+                x + wx >= 0 &&
+                y + wy >= 0 &&
+                x + wx < cells[0].length &&
+                y + wy < cells.length
+            )
             {
                 cells[y + wy][x + wx] = cell;
             }
@@ -273,6 +279,8 @@ struct Window
                 //Set the cursor at the firstly edited cell... (POSIX magic)
                 OS.Posix.setCursor(firstChanged + 1, to!uint(sy));
 
+
+                static import std.stdio;
                 //...and then print out the string via the regular write function.
                 std.stdio.write(printed);
 
@@ -364,10 +372,10 @@ struct Window
 
     /// Reposition the window on the monitor
     auto reposition(X, Y)(X tx, Y ty)
-    if(__traits(isArithmetic, tx) && __traits(isArithmetic, ty))
+    if(isNumeric!X && isNumeric!Y)
     {
-        int x = to!int(tx);
-        int y = to!int(ty);
+        auto x = to!int(tx);
+        auto y = to!int(ty);
         OS.reposition(x,y);
     }
 
