@@ -21,9 +21,6 @@ struct Window
         resize(width, height);
     }
 
-    /// Settings for the window
-    public Settings settings;
-
     /**
      * Write to the internal buffer. Later on `print()` must be used to display onto the window
      * Params:
@@ -186,7 +183,7 @@ struct Window
                 {
                     if(cell != backbuffer[cy][cx])
                     {
-                        OS.Windows.writeCell(cx, cy, cell);
+                        WindowsOS.writeCell(cx, cy, cell);
 
                         //update backbuffer
                         backbuffer[cy][cx] = cell;
@@ -208,7 +205,7 @@ struct Window
             // Loop through all rows.
             foreach (sy, y; cells)
             {
-                if(sy >= OS.Posix.size[1])
+                if(sy >= PosixOS.size[1])
                 {
                     break;
                 }
@@ -230,7 +227,7 @@ struct Window
 
                 // If no cell on this line has been modified, continue
                 // If first changed cell it outside the window border, continue
-                if(firstChanged == rowUnchanged || firstChanged >= OS.Posix.size[0])
+                if(firstChanged == rowUnchanged || firstChanged >= PosixOS.size[0])
                 {
                     continue;
                 }
@@ -247,7 +244,7 @@ struct Window
                 }
 
                 // If last changed cell it outside the window border, set last changed cell to the window width
-                lastChanged = min(lastChanged, OS.Posix.size[0] - 1);
+                lastChanged = min(lastChanged, PosixOS.size[0] - 1);
 
                 // Loop from the first changed cell to the last edited cell.
                 foreach (px; firstChanged .. lastChanged + 1)
@@ -267,8 +264,8 @@ struct Window
                         (
                             "\033[",
                             0,
-                            ";", OS.Posix.ansiColor(cells[sy][px].foreground),
-                            ";", OS.Posix.ansiColor(cells[sy][px].background) + 10,
+                            ";", PosixOS.ansiColor(cells[sy][px].foreground),
+                            ";", PosixOS.ansiColor(cells[sy][px].background) + 10,
                             "m",
                         );
                     }
@@ -277,7 +274,7 @@ struct Window
                 }
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
-                OS.Posix.setCursor(firstChanged + 1, to!uint(sy));
+                PosixOS.setCursor(firstChanged + 1, to!uint(sy));
 
 
                 static import std.stdio;
@@ -319,27 +316,19 @@ struct Window
      */
     auto getInputs()
     {
-        version(Windows)
-        {
-            return OS.Windows.retreiveInputs();
-        }
-
-        version(Posix)
-        {
-            return OS.Posix.retreiveInputs();
-        }
+        return OS.retreiveInputs();
     }
 
     /// Set the title of the window
     auto title(in string title) @property
     {
-        OS.title(title);
+        OS.title = title;
     }
 
     /// Set if the cursor should be visible
     auto cursorVisible(in bool visible) @property
     {
-        OS.cursorVisible(visible);
+        OS.cursorVisible = visible;
     }
 
     /**
@@ -376,6 +365,7 @@ struct Window
     {
         auto x = to!int(tx);
         auto y = to!int(ty);
+
         OS.reposition(x,y);
     }
 
@@ -394,6 +384,9 @@ struct Window
     }
     ///ditto
     alias h = height;
+
+    /// Settings for the window
+    public Settings settings;
 
     // All cells which can be written to.
     private Cell[][] cells;
