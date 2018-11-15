@@ -1,4 +1,5 @@
 module scone.os.posix;
+version(Posix):
 
 import scone.color;
 import scone.input;
