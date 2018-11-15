@@ -1,5 +1,4 @@
 module scone.os.windows;
-
 version(Windows):
 
 import scone.os : OSInterface;
@@ -7,6 +6,7 @@ import scone.os : OSInterface;
 import core.sys.windows.windows;
 import scone.misc.utility : hasFlag;
 import scone.window : Cell;
+import scone.input : SK, SCK, InputEvent;
 import scone.core;
 import scone.color : Color;
 import std.algorithm : max, min;
