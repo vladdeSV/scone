@@ -526,38 +526,6 @@
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#Window.settings" id="Window.settings"><code class="code">settings</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="Window.settings"></span>Settings <code class="code">settings</code>;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Settings for the window
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
   <a href="#Window.write" id="Window.write"><code class="code">write</code></a>
 </div>
 </div><div class="ddoc_decl">
@@ -624,7 +592,7 @@
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      What is to be written. Arguments will be converted to strings, except special types <code class="code">fg</code>, <code class="code">bg</code>, and <code class="code">Cell</code>.
+      What is to be written. Arguments will be converted to strings, except special types <code class="code">foreground</code>, <code class="code">background</code>, and <code class="code">Cell</code>.
     </p>
   </div>
 </td>
@@ -642,7 +610,7 @@
     <div class="dlang">
       <ol class="code_lines">
         <li><code class="code"><span class="comment">// will display on screen "hello world 42[1337, 1001, 1]" in varied colors
-</span>window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, Color.green.fg, 'w', Cell('o', Color.red.fg), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
+</span>window.<span class="psymbol">write</span>(3, 5, <span class="string_literal">"hello "</span>, Color.green.foreground, 'w', Cell('o', Color.red.foreground), <span class="string_literal">"rld "</span>, 42, [1337, 1001, 1]);
 window.print();
 </code></li>
       </ol>
@@ -979,7 +947,7 @@ Clears the internal buffer, menaing everything needs to be redrawn
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(X, Y)(X <code class="code">tx</code>, Y <code class="code">ty</code>) if (__traits(isArithmetic, <code class="code">tx</code>) &amp;&amp; __traits(isArithmetic, <code class="code">ty</code>));
+            <span class="ddoc_anchor" id="Window.reposition"></span>auto <code class="code">reposition</code>(X, Y)(X <code class="code">tx</code>, Y <code class="code">ty</code>) if (isNumeric!X &amp;&amp; isNumeric!Y);
 
           </code>
         </p>
@@ -1067,6 +1035,38 @@ Clears the internal buffer, menaing everything needs to be redrawn
 
 </div>
 
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#Window.settings" id="Window.settings"><code class="code">settings</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Window.settings"></span>Settings <code class="code">settings</code>;
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Settings for the window
+  </p>
+</div>
+
+</section>
+
+</div>
+
 </li>
 </ul>
 
@@ -1139,7 +1139,7 @@ Clears the internal buffer, menaing everything needs to be redrawn
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Cell.foreground"></span>fg <code class="code">foreground</code>;
+            <span class="ddoc_anchor" id="Cell.foreground"></span>ForegroundColor <code class="code">foreground</code>;
 
           </code>
         </p>
@@ -1171,7 +1171,7 @@ Clears the internal buffer, menaing everything needs to be redrawn
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Cell.background"></span>bg <code class="code">background</code>;
+            <span class="ddoc_anchor" id="Cell.background"></span>BackgroundColor <code class="code">background</code>;
 
           </code>
         </p>

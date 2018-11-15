@@ -529,7 +529,25 @@ yellowDark
 
   </p>
 </div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    ensures within white and black, there is a total of 8 colors
 
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(<span class="psymbol">Color</span>.white - <span class="psymbol">Color</span>.black == 7);
+<span class="keyword">assert</span>(<span class="psymbol">Color</span>.whiteDark - <span class="psymbol">Color</span>.blackDark == 7);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
 </section>
 
 </div>
@@ -537,7 +555,7 @@ yellowDark
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#fg" id="fg"><code class="code">fg</code></a>
+  <a href="#ForegroundColor" id="ForegroundColor"><code class="code">ForegroundColor</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -546,7 +564,7 @@ yellowDark
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="fg"></span>struct <code class="code">fg</code>;
+            <span class="ddoc_anchor" id="ForegroundColor"></span>struct <code class="code">ForegroundColor</code>;
 
           </code>
         </p>
@@ -570,7 +588,7 @@ yellowDark
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code">window.write(0,0, Color.red.<span class="psymbol">fg</span>, <span class="string_literal">"item"</span>);
+        <li><code class="code">window.write(0,0, Color.red.foreground, <span class="string_literal">"item"</span>);
 </code></li>
       </ol>
     </div>
@@ -587,7 +605,7 @@ yellowDark
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
-  <a href="#bg" id="bg"><code class="code">bg</code></a>
+  <a href="#BackgroundColor" id="BackgroundColor"><code class="code">BackgroundColor</code></a>
 </div>
 </div><div class="ddoc_decl">
   <section class="section">
@@ -596,7 +614,7 @@ yellowDark
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="bg"></span>struct <code class="code">bg</code>;
+            <span class="ddoc_anchor" id="BackgroundColor"></span>struct <code class="code">BackgroundColor</code>;
 
           </code>
         </p>
@@ -620,7 +638,7 @@ yellowDark
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code">window.write(0,0, Color.white.<span class="psymbol">bg</span>, <span class="string_literal">"item"</span>);
+        <li><code class="code">window.write(0,0, Color.white.background, <span class="string_literal">"item"</span>);
 </code></li>
       </ol>
     </div>
@@ -637,6 +655,218 @@ yellowDark
 </li><li class="ddoc_member">
   <div class="ddoc_member_header">
   <div class="ddoc_header_anchor">
+  <a href="#isLight" id="isLight"><code class="code">isLight</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="isLight"></span>pure auto <code class="code">isLight</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Check if a <code class="code">color</code> is a light <code class="code">color</code>
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+bool, <code class="code">true</code> if light <code class="code">color</code>, <code class="code">false</code> otherwise
+  </p>
+</div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(Color.red.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>(!Color.redDark.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>(Color.red.foreground.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>(background(Color.red).<span class="psymbol">isLight</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#isDark" id="isDark"><code class="code">isDark</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="isDark"></span>pure auto <code class="code">isDark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Check if a <code class="code">color</code> is a dark <code class="code">color</code>
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">C <code class="code">color</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Return:</span>
+bool, <code class="code">true</code> if dark <code class="code">color</code>, <code class="code">false</code> otherwise
+  </p>
+</div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(!Color.red.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>(Color.redDark.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>(Color.redDark.foreground.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>(background(Color.redDark).<span class="psymbol">isDark</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#isActualColor" id="isActualColor"><code class="code">isActualColor</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="isActualColor"></span>pure auto <code class="code">isActualColor</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    See if <code class="code">color</code> is a proper <code class="code">color</code>
+  </p>
+</div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(Color.red.<span class="psymbol">isActualColor</span>);
+<span class="keyword">assert</span>(Color.red.foreground.<span class="psymbol">isActualColor</span>);
+<span class="keyword">assert</span>(Color.blueDark.<span class="psymbol">isActualColor</span>);
+<span class="keyword">assert</span>(!Color.same.<span class="psymbol">isActualColor</span>);
+<span class="keyword">assert</span>(!Color.unknown.<span class="psymbol">isActualColor</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
   <a href="#light" id="light"><code class="code">light</code></a>
 </div>
 </div><div class="ddoc_decl">
@@ -646,7 +876,7 @@ yellowDark
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="light"></span>C <code class="code">light</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+            <span class="ddoc_anchor" id="light"></span>pure C <code class="code">light</code>(C)(C <code class="code">color</code>) if (is(C : Color));
 
           </code>
         </p>
@@ -677,7 +907,7 @@ yellowDark
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
     </p>
   </div>
 </td>
@@ -692,7 +922,28 @@ yellowDark
 Light variant of the same type of <code class="code">color</code> passed in
   </p>
 </div>
+<div class="ddoc_examples">
+  <h4>Examples</h4>
+  <p class="para">
+    
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code"><span class="keyword">assert</span>(Color.redDark.<span class="psymbol">light</span> == Color.red);
+<span class="keyword">assert</span>(Color.red.<span class="psymbol">light</span> == Color.red);
+<span class="keyword">assert</span>(Color.redDark.foreground.<span class="psymbol">light</span> == Color.red.foreground);
+<span class="keyword">assert</span>(Color.redDark.background.<span class="psymbol">light</span> == Color.red.background);
+<span class="keyword">assert</span>(Color.unknown.<span class="psymbol">light</span> == Color.unknown);
+<span class="keyword">assert</span>(Color.same.<span class="psymbol">light</span> == Color.same);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
 
+  </p>
+</div>
 </section>
 
 </div>
@@ -709,7 +960,7 @@ Light variant of the same type of <code class="code">color</code> passed in
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="dark"></span>C <code class="code">dark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
+            <span class="ddoc_anchor" id="dark"></span>pure C <code class="code">dark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
 
           </code>
         </p>
@@ -740,7 +991,7 @@ Light variant of the same type of <code class="code">color</code> passed in
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
     </p>
   </div>
 </td>
@@ -752,162 +1003,23 @@ Light variant of the same type of <code class="code">color</code> passed in
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Return:</span>
-Dark variant of the same type of <code class="code">color</code> passed in
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#isLight" id="isLight"><code class="code">isLight</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="isLight"></span>auto <code class="code">isLight</code>(C)(C <code class="code">color</code>) if (is(C : Color));
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Check if a <code class="code">color</code> is a light <code class="code">color</code>
-
-  </p>
-</div>
-<div class="ddoc_params">
-  <h4>Parameters</h4>
-  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
-    <tbody>
-      <tr class="ddoc_param_row">
-  <td scope="ddoc_param_id">
-  <code class="code">
-    <em class="term">C <code class="code">color</code></em>
-  </code>
-</td>
-<td>
-  <div class="ddoc_param_desc">
-    <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
-    </p>
-  </div>
-</td>
-</tr>
-
-    </tbody>
-  </table>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Return:</span>
-bool, <code class="code">true</code> if light <code class="code">color</code>, <code class="code">false</code> otherwise
+Dark variant of the same type of <code class="code">color</code> passed in. If not a <code class="code">color</code>, return same value
   </p>
 </div>
 <div class="ddoc_examples">
   <h4>Examples</h4>
   <p class="para">
-
+    
 <section class="code_listing">
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code"><span class="keyword">assert</span>( Color.red.<span class="psymbol">isLight</span>);
-<span class="keyword">assert</span>(!Color.redDark.<span class="psymbol">isLight</span>);
-<span class="keyword">assert</span>( Color.red.fg.<span class="psymbol">isLight</span>);
-<span class="keyword">assert</span>( bg(Color.red).<span class="psymbol">isLight</span>);
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
-</section>
-
-</div>
-
-</li><li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#isDark" id="isDark"><code class="code">isDark</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="isDark"></span>auto <code class="code">isDark</code>(C)(C <code class="code">color</code>) if (is(C : Color));
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Check if a <code class="code">color</code> is a dark <code class="code">color</code>
-
-  </p>
-</div>
-<div class="ddoc_params">
-  <h4>Parameters</h4>
-  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
-    <tbody>
-      <tr class="ddoc_param_row">
-  <td scope="ddoc_param_id">
-  <code class="code">
-    <em class="term">C <code class="code">color</code></em>
-  </code>
-</td>
-<td>
-  <div class="ddoc_param_desc">
-    <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">fg</code>, or <code class="code">bg</code>
-    </p>
-  </div>
-</td>
-</tr>
-
-    </tbody>
-  </table>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Return:</span>
-bool, <code class="code">true</code> if dark <code class="code">color</code>, <code class="code">false</code> otherwise
-  </p>
-</div>
-<div class="ddoc_examples">
-  <h4>Examples</h4>
-  <p class="para">
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code"><span class="keyword">assert</span>(!Color.red.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( Color.redDark.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( Color.redDark.fg.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( bg(Color.redDark).<span class="psymbol">isDark</span>);
+        <li><code class="code"><span class="keyword">assert</span>(Color.redDark.<span class="psymbol">dark</span> == Color.redDark);
+<span class="keyword">assert</span>(Color.red.<span class="psymbol">dark</span> == Color.redDark);
+<span class="keyword">assert</span>(Color.redDark.foreground.<span class="psymbol">dark</span> == Color.redDark.foreground);
+<span class="keyword">assert</span>(Color.redDark.background.<span class="psymbol">dark</span> == Color.redDark.background);
+<span class="keyword">assert</span>(Color.unknown.<span class="psymbol">dark</span> == Color.unknown);
+<span class="keyword">assert</span>(Color.same.<span class="psymbol">dark</span> == Color.same);
 </code></li>
       </ol>
     </div>

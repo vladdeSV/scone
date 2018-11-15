@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>scone.core</title>
+    <title>scone.os.windows</title>
     <style type="text/css" media="screen">
       html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
       blockquote, pre, a, abbr, address, cite, code, del, dfn, em, figure,
@@ -463,84 +463,8 @@
   <body id="ddoc_main" class="ddoc dlang">
     <div class="content_wrapper">
       <article class="module">
-        <h1 class="module_name">scone.core</h1>
+        <h1 class="module_name">scone.os.windows</h1>
         <section id="module_content">
-<section class="section ddoc_module_members_section">
-  <div class="ddoc_module_members">
-    <ul class="ddoc_members">
-  <li class="ddoc_member">
-  <div class="ddoc_member_header">
-  <div class="ddoc_header_anchor">
-  <a href="#window" id="window"><code class="code">window</code></a>
-</div>
-</div><div class="ddoc_decl">
-  <section class="section">
-    <div class="declaration">
-      <h4>Declaration</h4>
-      <div class="dlang">
-        <p class="para">
-          <code class="code">
-            <span class="ddoc_anchor" id="window"></span>Window <code class="code">window</code>;
-
-          </code>
-        </p>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="ddoc_decl">
-  <section class="section ddoc_sections">
-  <div class="ddoc_summary">
-  <p class="para">
-    Gateway to the console/terminal
- All methods are called via this
-
-  </p>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Example:</span>
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code"><span class="keyword">void</span> main()
-{
-    <span class="keyword">bool</span> running = <span class="keyword">true</span>;
-    <span class="psymbol">window</span>.title = <span class="string_literal">"i am happy"</span>;
-    <span class="keyword">while</span>(running)
-    {
-        <span class="keyword">foreach</span>(input; <span class="psymbol">window</span>.getInputs)
-        {
-            <span class="keyword">if</span>(input.key == SK.escape)
-            {
-                running = <span class="keyword">false</span>;
-            }
-        }
-
-        <span class="psymbol">window</span>.clear();
-        <span class="psymbol">window</span>.write(0,0, <span class="string_literal">"hello world"</span>, Color.red.foreground, '!', Color.white.background, 42);
-        <span class="psymbol">window</span>.print();
-    }
-}
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
-
-</section>
-
-</div>
-
-</li>
-</ul>
-  </div>
-</section>
 </section>
       </article>
     </div>
