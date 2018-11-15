@@ -116,10 +116,11 @@ abstract class PosixOS : OSInterface
         //bright color index starts at 90 (90 = light black, 91 = light red, etc...)
         //dark color index starts at 30 (30 = dark black, 31 = drak red, etc...)
         //
-        //checks if color is *_dark (value less than 8, check color enum),
+        //checks if color is *Dark (value less than 8, check color enum),
         //and sets approproiate starting value. then offsets by the color
         //value. mod 8 is becuase the darker colors range from 8+0 to 8+7
         //and they represent the same color.
+
         return (color < 8 ? 90 : 30) + (color % 8);
     }
 

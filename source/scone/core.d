@@ -25,7 +25,7 @@ import scone.os;
  *         }
  *
  *         window.clear();
- *         window.write(0,0, "hello world", Color.red.fg, '!', Color.white.bg, 42);
+ *         window.write(0,0, "hello world", Color.red.foreground, '!', Color.white.background, 42);
  *         window.print();
  *     }
  * }

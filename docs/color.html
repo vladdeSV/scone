@@ -506,21 +506,21 @@
       <ol class="code_lines">
         <li><code class="code"><span class="comment">//Available colors:
 </span>black      <span class="comment">//darker grey
-</span>black_dark <span class="comment">//black
+</span>blackDark <span class="comment">//black
 </span>blue
-blue_dark
+blueDark
 cyan
-cyan_dark
+cyanDark
 green
-green_dark
+greenDark
 magenta
-magenta_dark
+magentaDark
 red
-red_dark
+redDark
 white      <span class="comment">//white
-</span>white_dark <span class="comment">//lighter grey
+</span>whiteDark <span class="comment">//lighter grey
 </span>yellow
-yellow_dark
+yellowDark
 </code></li>
       </ol>
     </div>
@@ -819,13 +819,13 @@ bool, <code class="code">true</code> if light <code class="code">color</code>, <
 <div class="ddoc_examples">
   <h4>Examples</h4>
   <p class="para">
-    
+
 <section class="code_listing">
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
         <li><code class="code"><span class="keyword">assert</span>( Color.red.<span class="psymbol">isLight</span>);
-<span class="keyword">assert</span>(!Color.red_dark.<span class="psymbol">isLight</span>);
+<span class="keyword">assert</span>(!Color.redDark.<span class="psymbol">isLight</span>);
 <span class="keyword">assert</span>( Color.red.fg.<span class="psymbol">isLight</span>);
 <span class="keyword">assert</span>( bg(Color.red).<span class="psymbol">isLight</span>);
 </code></li>
@@ -899,15 +899,15 @@ bool, <code class="code">true</code> if dark <code class="code">color</code>, <c
 <div class="ddoc_examples">
   <h4>Examples</h4>
   <p class="para">
-    
+
 <section class="code_listing">
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
         <li><code class="code"><span class="keyword">assert</span>(!Color.red.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( Color.red_dark.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( Color.red_dark.fg.<span class="psymbol">isDark</span>);
-<span class="keyword">assert</span>( bg(Color.red_dark).<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( Color.redDark.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( Color.redDark.fg.<span class="psymbol">isDark</span>);
+<span class="keyword">assert</span>( bg(Color.redDark).<span class="psymbol">isDark</span>);
 </code></li>
       </ol>
     </div>

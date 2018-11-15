@@ -40,8 +40,8 @@ void main() {
     window.clear();
     window.write(
       12, 9,
-      Color.yellow.fg, "Hello ",
-      Color.red.fg, Color.white.bg, "World"
+      Color.yellow.foreground, "Hello ",
+      Color.red.foreground, Color.white.background, "World"
     );
     window.print();
   }

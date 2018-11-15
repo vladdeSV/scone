@@ -26,11 +26,11 @@ struct Window
      * Params:
      *     tx = The x-position of where to write in the internal buffer
      *     ty = The y-position of where to write in the internal buffer
-     *     args = What is to be written. Arguments will be converted to strings, except special types `fg`, `bg`, and `Cell`.
+     *     args = What is to be written. Arguments will be converted to strings, except special types `foreground`, `background`, and `Cell`.
      * Example:
      * ---
      * // will display on screen "hello world 42[1337, 1001, 1]" in varied colors
-     * window.write(3, 5, "hello ", Color.green.fg, 'w', Cell('o', Color.red.fg), "rld ", 42, [1337, 1001, 1]);
+     * window.write(3, 5, "hello ", Color.green.foreground, 'w', Cell('o', Color.red.foreground), "rld ", 42, [1337, 1001, 1]);
      * window.print();
      * ---
      *
@@ -86,17 +86,17 @@ struct Window
         Cell[] outputCells;
         outputCells.length = counter;
 
-        fg foreground = this.settings.defaultForeground;
-        bg background = this.settings.defaultBackground;
+        ForegroundColor foreground = Color.same;
+        BackgroundColor background = Color.same;
 
         int i = 0;
         foreach(arg; args)
         {
-            static if(is(typeof(arg) == fg))
+            static if(is(typeof(arg) == ForegroundColor))
             {
                 foreground = arg;
             }
-            else static if(is(typeof(arg) == bg))
+            else static if(is(typeof(arg) == BackgroundColor))
             {
                 background = arg;
             }
@@ -133,8 +133,16 @@ struct Window
         // If only colors were provided, just update the colors
         if(!outputCells.length)
         {
-            cells[y][x].foreground = foreground;
-            cells[y][x].background = background;
+            if(foreground.isActualColor)
+            {
+                cells[y][x].foreground = foreground;
+            }
+
+            if(background.isActualColor)
+            {
+                cells[y][x].background = background;
+            }
+
             return;
         }
 
@@ -148,10 +156,11 @@ struct Window
             {
                 wx = 0;
                 ++wy;
-                if (wy >= cells.length)
+                if(wy >= cells.length)
                 {
                     break;
                 }
+
                 continue;
             }
 
@@ -164,7 +173,20 @@ struct Window
                 y + wy < cells.length
             )
             {
-                cells[y + wy][x + wx] = cell;
+                auto cellX = x + wx;
+                auto cellY = y + wy;
+
+                if(cell.foreground == Color.same)
+                {
+                    cell.foreground = cells[cellY][cellX].foreground;
+                }
+
+                if(cell.background == Color.same)
+                {
+                    cell.background = cells[cellY][cellX].background;
+                }
+
+                cells[cellY][cellX] = cell;
             }
 
             ++wx;
@@ -275,7 +297,6 @@ struct Window
 
                 //Set the cursor at the firstly edited cell... (POSIX magic)
                 PosixOS.setCursor(firstChanged + 1, to!uint(sy));
-
 
                 static import std.stdio;
                 //...and then print out the string via the regular write function.
@@ -401,9 +422,9 @@ struct Cell
     /// The character of the cell
     char character;
     /// The foreground color
-    fg foreground;
+    ForegroundColor foreground;
     /// The background color
-    bg background;
+    BackgroundColor background;
 }
 
 private struct Settings
@@ -412,8 +433,8 @@ private struct Settings
     bool fixedSize = false;
 
     /// The default foreground color used with `window.write(x, y, ...);`
-    fg defaultForeground = Color.white_dark.fg;
+    ForegroundColor defaultForeground = Color.whiteDark.foreground;
 
     /// The default background color used with `window.write(x, y, ...);`
-    bg defaultBackground = Color.black_dark.bg;
+    BackgroundColor defaultBackground = Color.blackDark.background;
 }

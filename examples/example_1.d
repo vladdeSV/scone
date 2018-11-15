@@ -19,12 +19,12 @@ void main()
          * Get random color, but more simply putColor
          * Example:
          * ---
-         * auto foreground = Color.green.fg;
-         * auto background = Color.white.bg;
+         * auto foreground = Color.green.foreground;
+         * auto background = Color.white.background;
          * ---
          */
-        auto foregroundColor = cast(Color)(uniform(0,16)).fg;
-        auto backgroundColor = cast(Color)(uniform(0,16)).bg;
+        auto foregroundColor = cast(Color)(uniform(0,16)).foreground;
+        auto backgroundColor = cast(Color)(uniform(0,16)).background;
 
         /* A random character to be displayed */
         auto character = cast(char)(uniform(32, 128));

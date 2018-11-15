@@ -10,71 +10,92 @@ import std.format : format;
  * --------------------
  * //Available colors:
  * black      //darker grey
- * black_dark //black
+ * blackDark //black
  * blue
- * blue_dark
+ * blueDark
  * cyan
- * cyan_dark
+ * cyanDark
  * green
- * green_dark
+ * greenDark
  * magenta
- * magenta_dark
+ * magentaDark
  * red
- * red_dark
+ * redDark
  * white      //white
- * white_dark //lighter grey
+ * whiteDark //lighter grey
  * yellow
- * yellow_dark
+ * yellowDark
  * --------------------
  */
 enum Color
 {
-    black   = 0,
-    red     = 1,
-    green   = 2,
-    yellow  = 3,
-    blue    = 4,
+    black = 0,
+    red = 1,
+    green = 2,
+    yellow = 3,
+    blue = 4,
     magenta = 5,
-    cyan    = 6,
-    white   = 7,
+    cyan = 6,
+    white = 7,
 
-    black_dark   = 8,
-    red_dark     = 9,
-    green_dark   = 10,
-    yellow_dark  = 11,
-    blue_dark    = 12,
-    magenta_dark = 13,
-    cyan_dark    = 14,
-    white_dark   = 15,
+    blackDark = 8,
+    redDark = 9,
+    greenDark = 10,
+    yellowDark = 11,
+    blueDark = 12,
+    magentaDark = 13,
+    cyanDark = 14,
+    whiteDark = 15,
 
-    unknown = 16
+    same = 16,
+    unknown = 17,
+}
+/// ensures within white and black, there is a total of 8 colors
+unittest
+{
+    assert(Color.white - Color.black == 7);
+    assert(Color.whiteDark - Color.blackDark == 7);
 }
 
 /**
  * Definition of a foreground color
  * Example:
  * ---
- * window.write(0,0, Color.red.fg, "item");
+ * window.write(0,0, Color.red.foreground, "item");
  * ---
  */
-struct fg
+struct ForegroundColor
 {
     mixin ColorTemplate;
 }
+
+ForegroundColor foreground(Color color)
+{
+    return ForegroundColor(color);
+}
+
+deprecated alias fg = foreground;
 
 /**
  * Definition of a background color
  * Example:
  * ---
- * window.write(0,0, Color.white.bg, "item");
+ * window.write(0,0, Color.white.background, "item");
  * ---
  */
-struct bg
+struct BackgroundColor
 {
     mixin ColorTemplate;
 }
 
-/// both `fg` and `bg` work the same way. this is not not have duplicate code :)
+BackgroundColor background(Color color)
+{
+    return BackgroundColor(color);
+}
+
+deprecated alias bg = background;
+
+/// both `foreground` and `background` work the same way. this is not not have duplicate code :)
 private template ColorTemplate()
 {
     this(Color c)
@@ -87,31 +108,86 @@ private template ColorTemplate()
 }
 
 /**
+ * Check if a color is a light color
+ * Params:
+ *     color = A type of color. Either `Color`, `foreground`, or `background`
+ * Return: bool, true if light color, false otherwise
+ */
+pure auto isLight(C)(C color) if (is(C : Color))
+{
+    return color >= Color.black && color <= Color.white;
+}
+///
+@system unittest
+{
+    assert(Color.red.isLight);
+    assert(!Color.redDark.isLight);
+    assert(Color.red.foreground.isLight);
+    assert(background(Color.red).isLight);
+}
+
+/**
+ * Check if a color is a dark color
+ * Params:
+ *     color = A type of color. Either `Color`, `foreground`, or `background`
+ * Return: bool, true if dark color, false otherwise
+ */
+pure auto isDark(C)(C color) if (is(C : Color))
+{
+    return color >= Color.blackDark && color <= Color.whiteDark;
+}
+///
+@system unittest
+{
+    assert(!Color.red.isDark);
+    assert(Color.redDark.isDark);
+    assert(Color.redDark.foreground.isDark);
+    assert(background(Color.redDark).isDark);
+}
+
+/**
+ * See if color is a proper color
+ */
+pure auto isActualColor(C)(C color) if (is(C : Color))
+{
+    return color.isLight || color.isDark;
+}
+///
+@system unittest
+{
+    assert(Color.red.isActualColor);
+    assert(Color.red.foreground.isActualColor);
+    assert(Color.blueDark.isActualColor);
+    assert(!Color.same.isActualColor);
+    assert(!Color.unknown.isActualColor);
+}
+
+/**
  * Convert a color to it's dark counter-part
  * If the color already is dark, the same color is returned
  * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
- *     color = A type of color. Either `Color`, `fg`, or `bg`
+ *     color = A type of color. Either `Color`, `foreground`, or `background`
  * Return: Light variant of the same type of color passed in
  */
-C light(C)(C color) if (is(C : Color))
+pure C light(C)(C color) if (is(C : Color))
 {
-    auto value = cast(byte)(color);
+    if (color.isDark)
+    {
+        color = cast(Color)(color - 8);
+    }
 
-    static if(value >= 0 && value < 8)
-    {
-        return color;
-    }
-    else static if(value >= 8 && value < 16)
-    {
-        color = cast(Color)(value - 8);
-        return color;
-    }
-    else
-    {
-        color = Color.unknown;
-        return color;
-    }
+    return color;
+}
+///
+unittest
+{
+    assert(Color.redDark.light == Color.red);
+    assert(Color.red.light == Color.red);
+    assert(Color.redDark.foreground.light == Color.red.foreground);
+    assert(Color.redDark.background.light == Color.red.background);
+    assert(Color.unknown.light == Color.unknown);
+    assert(Color.same.light == Color.same);
 }
 
 /**
@@ -119,65 +195,25 @@ C light(C)(C color) if (is(C : Color))
  * If the color already is light, the same color is returned
  * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
- *     color = A type of color. Either `Color`, `fg`, or `bg`
- * Return: Dark variant of the same type of color passed in
+ *     color = A type of color. Either `Color`, `foreground`, or `background`
+ * Return: Dark variant of the same type of color passed in. If not a color, return same value
  */
-C dark(C)(C color) if (is(C : Color))
+pure C dark(C)(C color) if (is(C : Color))
 {
-    auto value = cast(byte)(color);
+    if (color.isLight)
+    {
+        color = cast(Color)(color + 8);
+    }
 
-    if(value >= 8 && value < 16)
-    {
-        return color;
-    }
-    else if(value >= 0 && value < 8)
-    {
-        color = cast(Color)(value + 8);
-        return color;
-    }
-    else
-    {
-        color = Color.unknown;
-        return color;
-    }
-}
-
-/**
- * Check if a color is a light color
- * Params:
- *     color = A type of color. Either `Color`, `fg`, or `bg`
- * Return: bool, true if light color, false otherwise
- */
-auto isLight(C)(C color) if (is(C : Color))
-{
-    auto value = cast(byte)color;
-    return value >= 0 && value < 8;
+    return color;
 }
 ///
 unittest
 {
-    assert( Color.red.isLight);
-    assert(!Color.red_dark.isLight);
-    assert( Color.red.fg.isLight);
-    assert( bg(Color.red).isLight);
-}
-
-/**
- * Check if a color is a dark color
- * Params:
- *     color = A type of color. Either `Color`, `fg`, or `bg`
- * Return: bool, true if dark color, false otherwise
- */
-auto isDark(C)(C color) if (is(C : Color))
-{
-    auto value = cast(byte)color;
-    return value >= 8 && value < 16;
-}
-///
-unittest
-{
-    assert(!Color.red.isDark);
-    assert( Color.red_dark.isDark);
-    assert( Color.red_dark.fg.isDark);
-    assert( bg(Color.red_dark).isDark);
+    assert(Color.redDark.dark == Color.redDark);
+    assert(Color.red.dark == Color.redDark);
+    assert(Color.redDark.foreground.dark == Color.redDark.foreground);
+    assert(Color.redDark.background.dark == Color.redDark.background);
+    assert(Color.unknown.dark == Color.unknown);
+    assert(Color.same.dark == Color.same);
 }

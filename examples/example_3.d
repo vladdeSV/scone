@@ -21,9 +21,9 @@ void main()
             window.write
             (
                 0,0,
-                Color.white_dark.fg, "Key: ",         Color.red.fg, input.key, "\n",
-                Color.white_dark.fg, "Control Key: ", Color.blue.fg, input.controlKey, "\n",
-                Color.white_dark.fg, "Pressed: ",     Color.green.fg, input.pressed
+                Color.whiteDark.foreground, "Key: ",         Color.red.foreground, input.key, "\n",
+                Color.whiteDark.foreground, "Control Key: ", Color.blue.foreground, input.controlKey, "\n",
+                Color.whiteDark.foreground, "Pressed: ",     Color.green.foreground, input.pressed
             );
         }
 
