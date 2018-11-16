@@ -66,45 +66,7 @@ unittest
     assert(Color.whiteDark - Color.blackDark == 7);
 }
 
-/**
- * Definition of a foreground color
- * Example:
- * ---
- * window.write(0,0, Color.red.foreground, "item");
- * ---
- */
-struct ForegroundColor
-{
-    mixin ColorTemplate;
-}
-
-ForegroundColor foreground(Color color)
-{
-    return ForegroundColor(color);
-}
-
-deprecated alias fg = foreground;
-
-/**
- * Definition of a background color
- * Example:
- * ---
- * window.write(0,0, Color.white.background, "item");
- * ---
- */
-struct BackgroundColor
-{
-    mixin ColorTemplate;
-}
-
-BackgroundColor background(Color color)
-{
-    return BackgroundColor(color);
-}
-
-deprecated alias bg = background;
-
-/// both `foreground` and `background` work the same way. this is not not have duplicate code :)
+/// both `ForegroundColor` and `BackgroundColor` work the same way. this is not not have duplicate code :)
 private template ColorTemplate()
 {
     this(Color c)
@@ -116,10 +78,50 @@ private template ColorTemplate()
     alias color this;
 }
 
+/// Container for foreground colors
+struct ForegroundColor
+{
+    mixin ColorTemplate;
+}
+
+/// Container for background colors
+struct BackgroundColor
+{
+    mixin ColorTemplate;
+}
+
+/**
+ * Example:
+ * ---
+ * window.write(0,0, Color.red.foreground, "string");
+ * ---
+ */
+ForegroundColor foreground(Color color)
+{
+    return ForegroundColor(color);
+}
+
+/// ditto
+deprecated alias fg = foreground;
+
+/**
+ * Example:
+ * ---
+ * window.write(0,0, Color.blue.background, "string");
+ * ---
+ */
+BackgroundColor background(Color color)
+{
+    return BackgroundColor(color);
+}
+
+/// ditto
+deprecated alias bg = background;
+
 /**
  * Check if a color is a light color
  * Params:
- *     color = A type of color. Either `Color`, `foreground`, or `background`
+ *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
  * Return: bool, true if light color, false otherwise
  */
 pure auto isLight(C)(C color) if (is(C : Color))
@@ -138,7 +140,7 @@ pure auto isLight(C)(C color) if (is(C : Color))
 /**
  * Check if a color is a dark color
  * Params:
- *     color = A type of color. Either `Color`, `foreground`, or `background`
+ *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
  * Return: bool, true if dark color, false otherwise
  */
 pure auto isDark(C)(C color) if (is(C : Color))
@@ -176,7 +178,7 @@ pure auto isActualColor(C)(C color) if (is(C : Color))
  * If the color already is dark, the same color is returned
  * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
- *     color = A type of color. Either `Color`, `foreground`, or `background`
+ *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
  * Return: Light variant of the same type of color passed in
  */
 pure C light(C)(C color) if (is(C : Color))
@@ -204,7 +206,7 @@ unittest
  * If the color already is light, the same color is returned
  * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
- *     color = A type of color. Either `Color`, `foreground`, or `background`
+ *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
  * Return: Dark variant of the same type of color passed in. If not a color, return same value
  */
 pure C dark(C)(C color) if (is(C : Color))
