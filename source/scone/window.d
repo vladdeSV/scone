@@ -17,7 +17,7 @@ struct Window
     this(in uint width, in uint height)
     {
         logf("Initalize window (%dx%d)", width, height);
-        //properly set the size of the console
+        // properly set the size of the console
         resize(width, height);
     }
 
@@ -54,7 +54,7 @@ struct Window
         // Check if writing outside border (assuming we only write right-to-left)
         if(x >= this.width() || y >= this.height())
         {
-            //logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
+            // logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
             return;
         }
 
@@ -207,7 +207,7 @@ struct Window
                     {
                         WindowsOS.writeCell(cx, cy, cell);
 
-                        //update backbuffer
+                        // update backbuffer
                         backbuffer[cy][cx] = cell;
                     }
                 }
@@ -239,7 +239,7 @@ struct Window
                 // Find first modified cell
                 foreach(sx, cell; cells[sy])
                 {
-                    //If backbuffer says something has changed
+                    // If backbuffer says something has changed
                     if(backbuffer[sy][sx] != cell)
                     {
                         firstChanged = to!uint(sx);
@@ -254,10 +254,10 @@ struct Window
                     continue;
                 }
 
-                //Now loop backwards to find the last modified cell
+                // Now loop backwards to find the last modified cell
                 foreach_reverse(sx, cell; cells[sy])
                 {
-                    //If backbuffer says something has changed
+                    // If backbuffer says something has changed
                     if(backbuffer[sy][sx] != cell)
                     {
                         lastChanged = to!uint(sx);
@@ -295,14 +295,14 @@ struct Window
                     printed ~= cells[sy][px].character;
                 }
 
-                //Set the cursor at the firstly edited cell... (POSIX magic)
+                // Set the cursor at the firstly edited cell... (POSIX magic)
                 PosixOS.setCursor(firstChanged + 1, to!uint(sy));
 
                 static import std.stdio;
                 //...and then print out the string via the regular write function.
                 std.stdio.write(printed);
 
-                //Reset 'printed'.
+                // Reset 'printed'.
                 printed = null;
             }
 
@@ -395,7 +395,7 @@ struct Window
     {
         return to!int(cells[0].length);
     }
-    ///ditto
+    /// ditto
     alias w = width;
 
     /// Get the internal height of the window
@@ -403,7 +403,7 @@ struct Window
     {
         return to!int(cells.length);
     }
-    ///ditto
+    /// ditto
     alias h = height;
 
     /// Settings for the window

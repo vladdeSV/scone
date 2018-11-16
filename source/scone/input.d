@@ -48,7 +48,7 @@ struct InputEvent
      *     if(input.hasControlKey(ControlKey.CTRL | ControlKey.ALT |
      *        ControlKey.SHIFT))
      *     {
-     *         //do something if CTRL, ALT and SHIFT are held down...
+     *         // do something if CTRL, ALT and SHIFT are held down...
      *     }
      * }
      * --------------------
@@ -68,7 +68,7 @@ struct InputEvent
      * {
      *     if(input.controlKey == ControlKey.CTRL | ControlKey.SHIFT)
      *     {
-     *         //do something if only CTRL and SHIFT are held down...
+     *         // do something if only CTRL and SHIFT are held down...
      *     }
      * }
      * ---
@@ -114,311 +114,311 @@ struct InputEvent
     }
 }
 
-///All keys which scone can handle
-///Note: Limited support for POSIX
+/// All keys which scone can handle
+/// Note: Limited support for POSIX
 enum SK
 {
-    ///Unknown key (Should never appear. If it does, please report bug)
+    /// Unknown key (Should never appear. If it does, please report bug)
     unknown,
 
-    ///Control-break processing
+    /// Control-break processing
     cancel,
 
-    ///BACKSPACE key
+    /// BACKSPACE key
     backspace,
 
-    ///DEL key
+    /// DEL key
     del,
 
-    ///TAB key
+    /// TAB key
     tab,
 
-    ///ENTER key
+    /// ENTER key
     enter,
 
-    ///ESC key
+    /// ESC key
     escape,
 
-    ///SPACEBAR
+    /// SPACEBAR
     space,
 
-    ///PAGE UP key
+    /// PAGE UP key
     page_up,
 
-    ///PAGE DOWN key
+    /// PAGE DOWN key
     page_down,
 
-    ///END key
+    /// END key
     end,
 
-    ///HOME key
+    /// HOME key
     home,
 
-    ///LEFT ARROW key
+    /// LEFT ARROW key
     left,
 
-    ///UP ARROW key
+    /// UP ARROW key
     up,
 
-    ///RIGHT ARROW key
+    /// RIGHT ARROW key
     right,
 
-    ///DOWN ARROW key
+    /// DOWN ARROW key
     down,
 
-    ///0 key
+    /// 0 key
     key_0,
 
-    ///1 key
+    /// 1 key
     key_1,
 
-    ///2 key
+    /// 2 key
     key_2,
 
-    ///3 key
+    /// 3 key
     key_3,
 
-    ///4 key
+    /// 4 key
     key_4,
 
-    ///5 key
+    /// 5 key
     key_5,
 
-    ///6 key
+    /// 6 key
     key_6,
 
-    ///7 key
+    /// 7 key
     key_7,
 
-    ///8 key
+    /// 8 key
     key_8,
 
-    ///9 key
+    /// 9 key
     key_9,
 
-    ///A key
+    /// A key
     a,
 
-    ///B key
+    /// B key
     b,
 
-    ///C key
+    /// C key
     c,
 
-    ///D key
+    /// D key
     d,
 
-    ///E key
+    /// E key
     e,
 
-    ///F key
+    /// F key
     f,
 
-    ///G key
+    /// G key
     g,
 
-    ///H key
+    /// H key
     h,
 
-    ///I key
+    /// I key
     i,
 
-    ///J key
+    /// J key
     j,
 
-    ///K key
+    /// K key
     k,
 
-    ///L key
+    /// L key
     l,
 
-    ///M key
+    /// M key
     m,
 
-    ///N key
+    /// N key
     n,
 
-    ///O key
+    /// O key
     o,
 
-    ///P key
+    /// P key
     p,
 
-    ///Q key
+    /// Q key
     q,
 
-    ///R key
+    /// R key
     r,
 
-    ///S key
+    /// S key
     s,
 
-    ///T key
+    /// T key
     t,
 
-    ///U key
+    /// U key
     u,
 
-    ///V key
+    /// V key
     v,
 
-    ///W key
+    /// W key
     w,
 
-    ///X key
+    /// X key
     x,
 
-    ///Y key
+    /// Y key
     y,
 
-    ///Z key
+    /// Z key
     z,
 
-    ///Numeric keypad 0 key
+    /// Numeric keypad 0 key
     numpad_0,
 
-    ///Numeric keypad 1 key
+    /// Numeric keypad 1 key
     numpad_1,
 
-    ///Numeric keypad 2 key
+    /// Numeric keypad 2 key
     numpad_2,
 
-    ///Numeric keypad 3 key
+    /// Numeric keypad 3 key
     numpad_3,
 
-    ///Numeric keypad 4 key
+    /// Numeric keypad 4 key
     numpad_4,
 
-    ///Numeric keypad 5 key
+    /// Numeric keypad 5 key
     numpad_5,
 
-    ///Numeric keypad 6 key
+    /// Numeric keypad 6 key
     numpad_6,
 
-    ///Numeric keypad 7 key
+    /// Numeric keypad 7 key
     numpad_7,
 
-    ///Numeric keypad 8 key
+    /// Numeric keypad 8 key
     numpad_8,
 
-    ///Numeric keypad 9 key
+    /// Numeric keypad 9 key
     numpad_9,
 
-    ///For any country/region, the '+' key
+    /// For any country/region, the '+' key
     plus,
 
-    ///For any country/region, the '-' key
+    /// For any country/region, the '-' key
     minus,
 
-    ///For any country/region, the '.' key
+    /// For any country/region, the '.' key
     period,
 
-    ///For any country/region, the ',' key
+    /// For any country/region, the ',' key
     comma,
 
-    ///Asterisk key
+    /// Asterisk key
     asterisk,
 
-    ///Divide key
+    /// Divide key
     divide,
 
-    ///F1 key
+    /// F1 key
     f1,
 
-    ///F2 key
+    /// F2 key
     f2,
 
-    ///F3 key
+    /// F3 key
     f3,
 
-    ///F4 key
+    /// F4 key
     f4,
 
-    ///F5 key
+    /// F5 key
     f5,
 
-    ///F6 key
+    /// F6 key
     f6,
 
-    ///F7 key
+    /// F7 key
     f7,
 
-    ///F8 key
+    /// F8 key
     f8,
 
-    ///F9 key
+    /// F9 key
     f9,
 
-    ///F10 key
+    /// F10 key
     f10,
 
-    ///F11 key
+    /// F11 key
     f11,
 
-    ///F12 key
+    /// F12 key
     f12,
 
-    ///F13 key
+    /// F13 key
     f13,
 
-    ///F14 key
+    /// F14 key
     f14,
 
-    ///F15 key
+    /// F15 key
     f15,
 
-    ///F16 key
+    /// F16 key
     f16,
 
-    ///F17 key
+    /// F17 key
     f17,
 
-    ///F18 key
+    /// F18 key
     f18,
 
-    ///F19 key
+    /// F19 key
     f19,
 
-    ///F20 key
+    /// F20 key
     f20,
 
-    ///F21 key
+    /// F21 key
     f21,
 
-    ///F22 key
+    /// F22 key
     f22,
 
-    ///F23 key
+    /// F23 key
     f23,
 
-    ///F24 key
+    /// F24 key
     f24,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    /// Used for miscellaneous characters; it can vary by keyboard.
     oem_1,
 
-    ///ditto
+    /// ditto
     oem_2,
 
-    ///ditto
+    /// ditto
     oem_3,
 
-    ///ditto
+    /// ditto
     oem_4,
 
-    ///ditto
+    /// ditto
     oem_5,
 
-    ///ditto
+    /// ditto
     oem_6,
 
-    ///ditto
+    /// ditto
     oem_7,
 
-    ///ditto
+    /// ditto
     oem_8,
 
-    ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
+    /// Either the angle bracket key or the backslash key on the RT 102-key keyboard
     oem_102,
 }
 
@@ -427,32 +427,32 @@ enum SK
  */
 enum SCK
 {
-    ///No control key is being pressed
+    /// No control key is being pressed
     none = 0,
 
-    ///CAPS LOCK light is activated
+    /// CAPS LOCK light is activated
     capslock = 1,
 
-    ///NUM LOCK is activated
+    /// NUM LOCK is activated
     numlock = 2,
 
-    ///SCROLL LOCK is activated
+    /// SCROLL LOCK is activated
     scrolllock = 4,
 
-    ///SHIFT key is pressed
+    /// SHIFT key is pressed
     shift = 8,
 
-    ///The key is enhanced (?)
+    /// The key is enhanced (?)
     enhanced = 16,
 
-    ///Left or right ALT key is pressed
+    /// Left or right ALT key is pressed
     alt = 32,
 
-    ///Left or right CTRL key is pressed
+    /// Left or right CTRL key is pressed
     ctrl = 64,
 }
 
-///when on posix, a list of keypresses is loaded and used
+/// when on posix, a list of keypresses is loaded and used
 version(Posix)
 {
     import std.array : split;
@@ -506,24 +506,24 @@ version(Posix)
             // if line is empty or begins with #
             if(s == "" || s[0] == '#')
             {
-                //log(debug, "input sequence of incorrect. exprected 3 arguments, got ", arguments.length);
+                // log(debug, "input sequence of incorrect. exprected 3 arguments, got ", arguments.length);
                 continue;
             }
 
             string[] arguments = split(s, '\t');
             if(arguments.length != 3)
             {
-                //log(warning, "input sequence of incorrect. exprected 3 arguments, got %i", arguments.length);
+                // log(warning, "input sequence of incorrect. exprected 3 arguments, got %i", arguments.length);
                 continue;
             }
 
             auto key = parse!(SK)(arguments[0]);
             auto sck = parse!(SCK)(arguments[1]);
             auto seq = arguments[2];
-            //if sequence is not defined, skip
+            // if sequence is not defined, skip
             if(seq == "-")
             {
-                //log(notice, "ignoring sequence ", key);
+                // log(notice, "ignoring sequence ", key);
                 continue;
             }
 
@@ -537,7 +537,7 @@ version(Posix)
 
                 if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
                 {
-                    //log(notice, "Replacing ", storedInputEvent, " with ", ie);
+                    // log(notice, "Replacing ", storedInputEvent, " with ", ie);
                 }
             }
 
@@ -548,13 +548,13 @@ version(Posix)
     /// Get InputEvent from sequence
     /+ todo: remove the comment signs | package(scone)+/ InputEvent eventFromSequence(InputSequence sequence)
     {
-        //check for input sequence in map
+        // check for input sequence in map
         if((sequence in _inputEvents) !is null)
         {
             return _inputEvents[sequence];
         }
 
-        //if not found, return unknown input
+        // if not found, return unknown input
         auto unknownInputEvent = InputEvent(SK.unknown, SCK.none, false);
         unknownInputEvent._keySequences = sequence;
         return unknownInputEvent;
@@ -586,7 +586,7 @@ version(Posix)
     private InputEvent[InputSequence] _inputEvents;
 }
 
-///Default keybindings.
+/// Default keybindings.
 version(OSX)
 {
     private enum _inputSequencesList =

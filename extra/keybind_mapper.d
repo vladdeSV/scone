@@ -7,25 +7,25 @@ void main()
     writeln("Press appropriate key when asked.\n");
     writeln("HELP:\nESC - Exit application\nBACKSPACE - Redo key/move back\nENTER - Skip\n\n");
 
-    //prepare the terminal input (lots of crap)
+    // prepare the terminal input (lots of crap)
     prepareInputPolling();
     beginPolling();
 
-    //store all ascii-friendly keys in array
+    // store all ascii-friendly keys in array
     auto sks = [EnumMembers!SK];
-    //where all codes will be stored
+    // where all codes will be stored
     uint[][4][EnumMembers!(SK).length] store;
 
     main_loop:
     for(int aaa = 0; aaa < sks.length; ++aaa)
     {
-        //get current key in SK
+        // get current key in SK
         auto sk = sks[aaa];
 
-        //temporary storage. has four slots with dynamic uint arrays
+        // temporary storage. has four slots with dynamic uint arrays
         uint[][4] c;
 
-        //iterate over all modifier-keys
+        // iterate over all modifier-keys
         foreach(n, sck; ["none","shift","control","alt"])
         {
             if(sck == "none")
@@ -37,40 +37,40 @@ void main()
                 write("Please press ", sk, " while holding the ", sck, "-key.");
             }
 
-            //properly displays current line
+            // properly displays current line
             std.stdio.stdout.flush();
 
-            //i = input sequences
+            // i = input sequences
             uint[] i = null;
 
             while(i == null)
             {
-                //continously get a sequence
+                // continously get a sequence
                 i = getInputs();
 
-                //sleep to not burn the CPU
+                // sleep to not burn the CPU
                 Thread.sleep(30.msecs);
             }
 
-            //hacky way of checking for specific key in code below
+            // hacky way of checking for specific key in code below
             uint first = i.length == 1 ? i[0] : 0;
 
-            //esc, stop program and output currently stored inputs
+            // esc, stop program and output currently stored inputs
             if(first == 27)
             {
                 writeln("\r");
                 break main_loop;
             }
-            //enter, skips an input
+            // enter, skips an input
             else if(first == 13)
             {
                 writeln("\n\r  SKIPPING\r");
                 continue;
             }
-            //backspace, redo/move back
+            // backspace, redo/move back
             else if(first == 127)
             {
-                //basically, redo input if something for key was entered. otherwise move back
+                // basically, redo input if something for key was entered. otherwise move back
                 if(n == 0)
                 {
                     writeln("\n\r  MOVING BACK\r");
@@ -86,8 +86,8 @@ void main()
                 continue main_loop;
             }
 
-            //check if the same keybind exists with another modifier key.
-            //if not found, store it
+            // check if the same keybind exists with another modifier key.
+            // if not found, store it
             if(!c[0 .. n].canFind(i))
             {
                 c[n] = i;
@@ -100,11 +100,11 @@ void main()
             }
         }
 
-        //store the ASCII-codes
+        // store the ASCII-codes
         store[aaa] = c;
     }
 
-    //open a file and store all codes
+    // open a file and store all codes
     auto f = File("input_sequences.scone.txt", "w");
 
     foreach(n, sck; ["none", "shift", "ctrl", "alt"])
@@ -147,12 +147,12 @@ void main()
     }
     +/
 
-    //properly exit
+    // properly exit
     inited = false;
     tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
 }
 
-//all code below was yanked from scone
+// all code below was yanked from scone
 
 import core.stdc.stdio;
 import core.sys.posix.fcntl;
@@ -231,308 +231,308 @@ void pollInputEvent(Tid parentThreadID)
 
         if(bytesRead == -1)
         {
-            //logf("(POSIX) ERROR: polling input returned -1");
+            // logf("(POSIX) ERROR: polling input returned -1");
         }
         else if(bytesRead == 0)
         {
-            //timeout!
-            //if no key was pressed within `timeout`,
-            //this happens. which is good!
+            // timeout!
+            // if no key was pressed within `timeout`,
+            // this happens. which is good!
         }
         else if(ufds.revents & POLLIN)
         {
-            //read from keyboard
+            // read from keyboard
             read(STDOUT_FILENO, &input, 1);
 
-            //send ansi to main thread, where it will be handled.
+            // send ansi to main thread, where it will be handled.
             send(parentThreadID, input);
         }
     }
 }
 
-///Some keys which scone can handle
+/// Some keys which scone can handle
 enum SK
 {
-    ///A key
+    /// A key
     a,
 
-    ///B key
+    /// B key
     b,
 
-    ///C key
+    /// C key
     c,
 
-    ///D key
+    /// D key
     d,
 
-    ///E key
+    /// E key
     e,
 
-    ///F key
+    /// F key
     f,
 
-    ///G key
+    /// G key
     g,
 
-    ///H key
+    /// H key
     h,
 
-    ///I key
+    /// I key
     i,
 
-    ///J key
+    /// J key
     j,
 
-    ///K key
+    /// K key
     k,
 
-    ///L key
+    /// L key
     l,
 
-    ///M key
+    /// M key
     m,
 
-    ///N key
+    /// N key
     n,
 
-    ///O key
+    /// O key
     o,
 
-    ///P key
+    /// P key
     p,
 
-    ///Q key
+    /// Q key
     q,
 
-    ///R key
+    /// R key
     r,
 
-    ///S key
+    /// S key
     s,
 
-    ///T key
+    /// T key
     t,
 
-    ///U key
+    /// U key
     u,
 
-    ///V key
+    /// V key
     v,
 
-    ///W key
+    /// W key
     w,
 
-    ///X key
+    /// X key
     x,
 
-    ///Y key
+    /// Y key
     y,
 
-    ///Z key
+    /// Z key
     z,
 
-    ///TAB key
+    /// TAB key
     tab,
 
-    ///PAGE UP key
+    /// PAGE UP key
     page_up,
 
-    ///PAGE DOWN key
+    /// PAGE DOWN key
     page_down,
 
-    ///END key
+    /// END key
     end,
 
-    ///HOME key
+    /// HOME key
     home,
 
-    ///LEFT ARROW key
+    /// LEFT ARROW key
     left,
 
-    ///UP ARROW key
+    /// UP ARROW key
     up,
 
-    ///RIGHT ARROW key
+    /// RIGHT ARROW key
     right,
 
-    ///DOWN ARROW key
+    /// DOWN ARROW key
     down,
 
-    ///0 key
+    /// 0 key
     key_0,
 
-    ///1 key
+    /// 1 key
     key_1,
 
-    ///2 key
+    /// 2 key
     key_2,
 
-    ///3 key
+    /// 3 key
     key_3,
 
-    ///4 key
+    /// 4 key
     key_4,
 
-    ///5 key
+    /// 5 key
     key_5,
 
-    ///6 key
+    /// 6 key
     key_6,
 
-    ///7 key
+    /// 7 key
     key_7,
 
-    ///8 key
+    /// 8 key
     key_8,
 
-    ///9 key
+    /// 9 key
     key_9,
 
-    ///Numeric keypad 0 key
+    /// Numeric keypad 0 key
     numpad_0,
 
-    ///Numeric keypad 1 key
+    /// Numeric keypad 1 key
     numpad_1,
 
-    ///Numeric keypad 2 key
+    /// Numeric keypad 2 key
     numpad_2,
 
-    ///Numeric keypad 3 key
+    /// Numeric keypad 3 key
     numpad_3,
 
-    ///Numeric keypad 4 key
+    /// Numeric keypad 4 key
     numpad_4,
 
-    ///Numeric keypad 5 key
+    /// Numeric keypad 5 key
     numpad_5,
 
-    ///Numeric keypad 6 key
+    /// Numeric keypad 6 key
     numpad_6,
 
-    ///Numeric keypad 7 key
+    /// Numeric keypad 7 key
     numpad_7,
 
-    ///Numeric keypad 8 key
+    /// Numeric keypad 8 key
     numpad_8,
 
-    ///Numeric keypad 9 key
+    /// Numeric keypad 9 key
     numpad_9,
 
-    ///For any country/region, the '+' key
+    /// For any country/region, the '+' key
     plus,
 
-    ///For any country/region, the '-' key
+    /// For any country/region, the '-' key
     minus,
 
-    ///For any country/region, the '.' key
+    /// For any country/region, the '.' key
     period,
 
-    ///For any country/region, the ',' key
+    /// For any country/region, the ',' key
     comma,
 
-    ///Asterisk key
+    /// Asterisk key
     asterisk,
 
-    ///Divide key
+    /// Divide key
     divide,
 
-    ///F1 key
+    /// F1 key
     f1,
 
-    ///F2 key
+    /// F2 key
     f2,
 
-    ///F3 key
+    /// F3 key
     f3,
 
-    ///F4 key
+    /// F4 key
     f4,
 
-    ///F5 key
+    /// F5 key
     f5,
 
-    ///F6 key
+    /// F6 key
     f6,
 
-    ///F7 key
+    /// F7 key
     f7,
 
-    ///F8 key
+    /// F8 key
     f8,
 
-    ///F9 key
+    /// F9 key
     f9,
 
-    ///F10 key
+    /// F10 key
     f10,
 
-    ///F11 key
+    /// F11 key
     f11,
 
-    ///F12 key
+    /// F12 key
     f12,
 
-    ///F13 key
+    /// F13 key
     f13,
 
-    ///F14 key
+    /// F14 key
     f14,
 
-    ///F15 key
+    /// F15 key
     f15,
 
-    ///F16 key
+    /// F16 key
     f16,
 
-    ///F17 key
+    /// F17 key
     f17,
 
-    ///F18 key
+    /// F18 key
     f18,
 
-    ///F19 key
+    /// F19 key
     f19,
 
-    ///F20 key
+    /// F20 key
     f20,
 
-    ///F21 key
+    /// F21 key
     f21,
 
-    ///F22 key
+    /// F22 key
     f22,
 
-    ///F23 key
+    /// F23 key
     f23,
 
-    ///F24 key
+    /// F24 key
     f24,
 
-    ///Used for miscellaneous characters; it can vary by keyboard.
+    /// Used for miscellaneous characters; it can vary by keyboard.
     oem_1,
 
-    ///ditto
+    /// ditto
     oem_2,
 
-    ///ditto
+    /// ditto
     oem_3,
 
-    ///ditto
+    /// ditto
     oem_4,
 
-    ///ditto
+    /// ditto
     oem_5,
 
-    ///ditto
+    /// ditto
     oem_6,
 
-    ///ditto
+    /// ditto
     oem_7,
 
-    ///ditto
+    /// ditto
     oem_8,
 
-    ///Either the angle bracket key or the backslash key on the RT 102-key keyboard
+    /// Either the angle bracket key or the backslash key on the RT 102-key keyboard
     oem_102,
 }
 

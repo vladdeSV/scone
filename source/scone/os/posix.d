@@ -5,7 +5,7 @@ import scone.color;
 import scone.input;
 import scone.os;
 
-///needs to be specifically set, otherwise ioctl crashes D:
+/// needs to be specifically set, otherwise ioctl crashes D:
 version (OSX) enum TIOCGWINSZ = 0x40087468;
 
 import core.stdc.stdio;
@@ -38,14 +38,14 @@ abstract class PosixOS : OSInterface
 
         loadInputSequneces();
 
-        //store the state of the terminal
+        // store the state of the terminal
         tcgetattr(1, &oldState);
 
         newState = oldState;
         cfmakeraw(&newState);
         tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
 
-        //begin polling
+        // begin polling
         spawn(&pollInputEvent, thisTid);
         stdout.flush();
     }
@@ -114,13 +114,13 @@ abstract class PosixOS : OSInterface
         // Meaning, on OSX light colors begin at 90, while in Ubunut they begin at 30.
         // todo: above --------------------------^
 
-        //bright color index starts at 90 (90 = light black, 91 = light red, etc...)
-        //dark color index starts at 30 (30 = dark black, 31 = drak red, etc...)
+        // bright color index starts at 90 (90 = light black, 91 = light red, etc...)
+        // dark color index starts at 30 (30 = dark black, 31 = drak red, etc...)
         //
-        //checks if color is *Dark (value less than 8, check color enum),
-        //and sets approproiate starting value. then offsets by the color
-        //value. mod 8 is becuase the darker colors range from 8+0 to 8+7
-        //and they represent the same color.
+        // checks if color is *Dark (value less than 8, check color enum),
+        // and sets approproiate starting value. then offsets by the color
+        // value. mod 8 is becuase the darker colors range from 8+0 to 8+7
+        // and they represent the same color.
 
         return (color < 8 ? 90 : 30) + (color % 8);
     }
@@ -128,12 +128,12 @@ abstract class PosixOS : OSInterface
     package(scone)
     auto retreiveInputs()
     {
-        //this is some spooky hooky code, dealing with
-        //multi-thread and reading inputs with timeouts
-        //from the terminal. then converting it to something
-        //scone can understand.
+        // this is some spooky hooky code, dealing with
+        // multi-thread and reading inputs with timeouts
+        // from the terminal. then converting it to something
+        // scone can understand.
         //
-        //blesh...
+        // blesh...
 
         uint[] codes;
 
@@ -185,7 +185,7 @@ abstract class PosixOS : OSInterface
             if(bytesRead == -1)
             {
                 // error :(
-                //logf("(POSIX) ERROR: polling input returned -1");
+                // logf("(POSIX) ERROR: polling input returned -1");
             }
             else if(bytesRead == 0)
             {

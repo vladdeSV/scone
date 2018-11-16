@@ -40,12 +40,12 @@ shared static this()
 {
     sharedLog = new FileLogger("scone.log");
 
-    //get current width and height
+    // get current width and height
     OS.init();
     auto w = OS.size[0];
     auto h = OS.size[1];
 
-    //init window
+    // init window
     window = Window(w,h);
 }
 

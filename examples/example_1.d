@@ -6,7 +6,7 @@ void main()
     window.resize(80,24);
     window.title = "Example 1";
 
-    foreach(n; 0 .. 80 * 24 * 10) //loop through n amount of times
+    foreach(n; 0 .. 80 * 24 * 10) // loop through n amount of times
     {
         /* Normally you want to clear the screen before printing again, to remove artifacts */
         // window.clear();

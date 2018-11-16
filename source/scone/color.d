@@ -8,9 +8,9 @@ import std.format : format;
  *
  * Example:
  * --------------------
- * //Available colors:
- * black      //darker grey
- * blackDark //black
+ * // Available colors:
+ * black       // darker grey
+ * blackDark   // black
  * blue
  * blueDark
  * cyan
@@ -21,8 +21,8 @@ import std.format : format;
  * magentaDark
  * red
  * redDark
- * white      //white
- * whiteDark //lighter grey
+ * white       // white
+ * whiteDark   // lighter grey
  * yellow
  * yellowDark
  * --------------------

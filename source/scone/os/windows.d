@@ -30,7 +30,7 @@ abstract class WindowsOS : OSInterface
         _initialSize = size();
         cursorVisible(false);
 
-        //handle to console window
+        // handle to console window
         consoleHandle = GetConsoleWindow();
         assert
         (
@@ -38,39 +38,39 @@ abstract class WindowsOS : OSInterface
             "Could not get console window handle: ERROR " ~ to!string(GetLastError())
         );
 
-        //handle to console output stuff
+        // handle to console output stuff
         consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        //error check
+        // error check
         assert
         (
             consoleOutputHandle != INVALID_HANDLE_VALUE,
             "Could not get standard output handle: ERROR " ~ to!string(GetLastError())
         );
 
-        //store current screen buffer info
+        // store current screen buffer info
         assert
         (
             GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo),
             "Could not get console screen buffer info: ERROR " ~ to!string(GetLastError())
         );
 
-        //handle to console input stuff
+        // handle to console input stuff
         consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
-        //and error check
+        // and error check
         assert
         (
             consoleInputHandle != INVALID_HANDLE_VALUE,
             "Could not get standard window input handle: ERROR " ~ to!string(GetLastError())
         );
 
-        //store the old keyboard mode
+        // store the old keyboard mode
         assert
         (
             GetConsoleMode(consoleInputHandle, &oldConsoleMode),
             "Could not get console window mode: ERROR " ~ to!string(GetLastError())
         );
-        //set new inputmodes
+        // set new inputmodes
         assert
         (
             SetConsoleMode(consoleInputHandle, consoleMode),
@@ -79,7 +79,7 @@ abstract class WindowsOS : OSInterface
 
         //"removes" the enter release key when `dub` is run
         retreiveInputs();
-        //sets the cursor invisible
+        // sets the cursor invisible
         cursorVisible(false);
     }
 
@@ -165,7 +165,7 @@ abstract class WindowsOS : OSInterface
         immutable consoleMinimumPixelHeight = GetSystemMetrics(SM_CYMIN);
 
         if(width * fontSize.X < consoleMinimumPixelWidth || height * fontSize.Y < consoleMinimumPixelHeight) {
-            //log(warn, tried to set the window size smaller than allowed. ignored resize)
+            // log(warn, tried to set the window size smaller than allowed. ignored resize)
             return;
         }
 
@@ -533,77 +533,77 @@ abstract class WindowsOS : OSInterface
     /// Authors note: I believe all these can be found in the Dlang source code, however, they are here because they didn't exist in an ealier verison of Dlang.
     enum WindowsKeyCode
     {
-        ///0 key
+        /// 0 key
         K_0 = 0x30,
-        ///1 key
+        /// 1 key
         K_1 = 0x31,
-        ///2 key
+        /// 2 key
         K_2 = 0x32,
-        ///3 key
+        /// 3 key
         K_3 = 0x33,
-        ///4 key
+        /// 4 key
         K_4 = 0x34,
-        ///5 key
+        /// 5 key
         K_5 = 0x35,
-        ///6 key
+        /// 6 key
         K_6 = 0x36,
-        ///7 key
+        /// 7 key
         K_7 = 0x37,
-        ///8 key
+        /// 8 key
         K_8 = 0x38,
-        ///9 key
+        /// 9 key
         K_9 = 0x39,
-        ///A key
+        /// A key
         K_A = 0x41,
-        ///B key
+        /// B key
         K_B = 0x42,
-        ///C key
+        /// C key
         K_C = 0x43,
-        ///D key
+        /// D key
         K_D = 0x44,
-        ///E key
+        /// E key
         K_E = 0x45,
-        ///F key
+        /// F key
         K_F = 0x46,
-        ///G key
+        /// G key
         K_G = 0x47,
-        ///H key
+        /// H key
         K_H = 0x48,
-        ///I key
+        /// I key
         K_I = 0x49,
-        ///J key
+        /// J key
         K_J = 0x4A,
-        ///K key
+        /// K key
         K_K = 0x4B,
-        ///L key
+        /// L key
         K_L = 0x4C,
-        ///M key
+        /// M key
         K_M = 0x4D,
-        ///N key
+        /// N key
         K_N = 0x4E,
-        ///O key
+        /// O key
         K_O = 0x4F,
-        ///P key
+        /// P key
         K_P = 0x50,
-        ///Q key
+        /// Q key
         K_Q = 0x51,
-        ///R key
+        /// R key
         K_R = 0x52,
-        ///S key
+        /// S key
         K_S = 0x53,
-        ///T key
+        /// T key
         K_T = 0x54,
-        ///U key
+        /// U key
         K_U = 0x55,
-        ///V key
+        /// V key
         K_V = 0x56,
-        ///W key
+        /// W key
         K_W = 0x57,
-        ///X key
+        /// X key
         K_X = 0x58,
-        ///Y key
+        /// Y key
         K_Y = 0x59,
-        ///Z key
+        /// Z key
         K_Z = 0x5A,
     }
 
