@@ -59,9 +59,9 @@ enum Color
     same = 16,
     unknown = 17,
 }
-/// ensures within white and black, there is a total of 8 colors
 unittest
 {
+    // ensure there are 8 colors from Color.white(Dark) to Color.black(Dark)
     assert(Color.white - Color.black == 7);
     assert(Color.whiteDark - Color.blackDark == 7);
 }

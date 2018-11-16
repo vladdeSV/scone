@@ -504,9 +504,9 @@
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code"><span class="comment">//Available colors:
-</span>black      <span class="comment">//darker grey
-</span>blackDark <span class="comment">//black
+        <li><code class="code"><span class="comment">// Available colors:
+</span>black       <span class="comment">// darker grey
+</span>blackDark   <span class="comment">// black
 </span>blue
 blueDark
 cyan
@@ -517,8 +517,8 @@ magenta
 magentaDark
 red
 redDark
-white      <span class="comment">//white
-</span>whiteDark <span class="comment">//lighter grey
+white       <span class="comment">// white
+</span>whiteDark   <span class="comment">// lighter grey
 </span>yellow
 yellowDark
 </code></li>
@@ -529,25 +529,7 @@ yellowDark
 
   </p>
 </div>
-<div class="ddoc_examples">
-  <h4>Examples</h4>
-  <p class="para">
-    ensures within white and black, there is a total of 8 colors
 
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code"><span class="keyword">assert</span>(<span class="psymbol">Color</span>.white - <span class="psymbol">Color</span>.black == 7);
-<span class="keyword">assert</span>(<span class="psymbol">Color</span>.whiteDark - <span class="psymbol">Color</span>.blackDark == 7);
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-  </p>
-</div>
 </section>
 
 </div>
@@ -576,25 +558,7 @@ yellowDark
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Definition of a foreground color
-
-  </p>
-</div>
-<div class="ddoc_section">
-  <p class="para">
-    <span class="ddoc_section_h">Example:</span>
-
-<section class="code_listing">
-  <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li><code class="code">window.write(0,0, Color.red.foreground, <span class="string_literal">"item"</span>);
-</code></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
+    Container for foreground colors
   </p>
 </div>
 
@@ -626,11 +590,39 @@ yellowDark
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Definition of a background color
-
+    Container for background colors
   </p>
 </div>
-<div class="ddoc_section">
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#foreground" id="foreground"><code class="code">foreground</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="foreground"></span>ForegroundColor <code class="code">foreground</code>(Color <code class="code">color</code>);
+<br>
+<span class="ddoc_anchor" id="fg"></span>deprecated alias <code class="code">fg</code> = foreground;
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
 
@@ -638,7 +630,53 @@ yellowDark
   <div class="code_sample">
     <div class="dlang">
       <ol class="code_lines">
-        <li><code class="code">window.write(0,0, Color.white.background, <span class="string_literal">"item"</span>);
+        <li><code class="code">window.write(0,0, Color.red.<span class="psymbol">foreground</span>, <span class="string_literal">"string"</span>);
+</code></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#background" id="background"><code class="code">background</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="background"></span>BackgroundColor <code class="code">background</code>(Color <code class="code">color</code>);
+<br>
+<span class="ddoc_anchor" id="bg"></span>deprecated alias <code class="code">bg</code> = background;
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_section">
+  <p class="para">
+    <span class="ddoc_section_h">Example:</span>
+
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li><code class="code">window.write(0,0, Color.blue.<span class="psymbol">background</span>, <span class="string_literal">"string"</span>);
 </code></li>
       </ol>
     </div>
@@ -693,7 +731,7 @@ yellowDark
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">ForegroundColor</code>, or <code class="code">BackgroundColor</code>
     </p>
   </div>
 </td>
@@ -773,7 +811,7 @@ bool, <code class="code">true</code> if light <code class="code">color</code>, <
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">ForegroundColor</code>, or <code class="code">BackgroundColor</code>
     </p>
   </div>
 </td>
@@ -907,7 +945,7 @@ bool, <code class="code">true</code> if dark <code class="code">color</code>, <c
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">ForegroundColor</code>, or <code class="code">BackgroundColor</code>
     </p>
   </div>
 </td>
@@ -991,7 +1029,7 @@ Light variant of the same type of <code class="code">color</code> passed in
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">foreground</code>, or <code class="code">background</code>
+      A type of <code class="code">color</code>. Either <code class="code">Color</code>, <code class="code">ForegroundColor</code>, or <code class="code">BackgroundColor</code>
     </p>
   </div>
 </td>
