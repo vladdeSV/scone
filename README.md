@@ -82,8 +82,8 @@ dependency "scone" version="~>2.0.0"
 ```
 
 ### Projects using **scone**
-* [`dkorpel/tictac`](https://github.com/dkorpel/tictac) ? D port of meta tic-tac-toe
-* [`vladdeSV/2drpg`](https://github.com/vladdeSV/2drpg) ? Storytelling/self-discovery console game [Windows]
+* [`dkorpel/tictac`](https://github.com/dkorpel/tictac) — D port of meta tic-tac-toe
+* [`vladdeSV/2drpg`](https://github.com/vladdeSV/2drpg) — Storytelling/self-discovery console game [Windows]
 
 ### Resources
 * [Wiki](https://github.com/vladdeSV/scone/wiki)
