@@ -379,3 +379,6 @@ oem_102	alt	-
 escape	none	27
 del	none	127
 enter	none	13
+space	none	32
+space	ctrl	0
+space	alt	194,160
