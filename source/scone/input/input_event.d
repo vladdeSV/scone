@@ -250,10 +250,12 @@ version(Posix)
     /// Default keybindings.
     version(OSX)
     {
-        private enum _inputSequencesList = import("source/scone/input/keybinds/mac.tsv");
+        import scone.input.keybinds.mac;
+        alias _inputSequencesList = macInputSequences;
     }
     else version(Posix)
     {
-        private enum _inputSequencesList = import("source/scone/input/keybinds/posix.tsv");
+        import scone.input.keybinds.posix;
+        alias _inputSequencesList = posixInputSequences;
     }
 }
