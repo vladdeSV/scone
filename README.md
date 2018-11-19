@@ -48,7 +48,11 @@ void main() {
 }
 ```
 </td>
-    <td width="50%" ><p align="center"><img height="300" src="https://i.imgur.com/Y80IuZy.png"></p></td>
+    <td width="50%" >
+      <br>
+      <p align="center"><img height="300" src="https://i.imgur.com/Y80IuZy.png"></p>
+      <p align="center"><img height="300" src="https://i.imgur.com/oyesLyl.png"></p>
+    </td>
   </tr>
 </table>
 
@@ -72,13 +76,14 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 ```js
 /// dub.json
 "dependencies": {
-    "scone": "~>2.0.0"
+    "scone": "~>2.1.0",
+    ...
 }
 ```
 
 ```js
 /// dub.sdl
-dependency "scone" version="~>2.0.0"
+dependency "scone" version="~>2.1.0"
 ```
 
 ### Projects using **scone**
