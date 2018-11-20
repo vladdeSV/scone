@@ -1,6 +1,5 @@
 module scone.color;
 
-import std.traits : EnumMembers;
 import std.format : format;
 
 /**

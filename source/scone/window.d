@@ -113,6 +113,10 @@ struct Window
                     ++i;
                 }
             }
+            else static if(is(typeof(arg) == Color))
+            {
+                logf("Type `Color` passed in, which has no effect");
+            }
             else
             {
                 foreach(c; to!string(arg))
