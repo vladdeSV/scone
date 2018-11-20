@@ -63,7 +63,7 @@ void main() {
   <img height="300" src="http://i.imgur.com/7Yi1h89.gif">
 </p>
 
-To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/master/examples)
+To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/develop/examples)
 
 ### Features
 * Display text and colors
