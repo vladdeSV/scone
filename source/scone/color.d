@@ -36,16 +36,7 @@ enum Color
     magenta = 5,
     cyan = 6,
     white = 7,
-
-    deprecated("use `Color.blackDark` instead") black_dark = 8,
-    deprecated("use `Color.redDark` instead") red_dark = 9,
-    deprecated("use `Color.greenDark` instead") green_dark = 10,
-    deprecated("use `Color.yellowDark` instead") yellow_dark = 11,
-    deprecated("use `Color.blueDark` instead") blue_dark = 12,
-    deprecated("use `Color.magentaDark` instead") magenta_dark = 13,
-    deprecated("use `Color.cyanDark` instead") cyan_dark = 14,
-    deprecated("use `Color.whiteDark` instead") white_dark = 15,
-
+    
     blackDark = 8,
     redDark = 9,
     greenDark = 10,
