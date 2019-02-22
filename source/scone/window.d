@@ -137,6 +137,11 @@ struct Window
         // If only colors were provided, just update the colors
         if(!outputCells.length)
         {
+            if(y < 0 || x < 0)
+            {
+                return;
+            }
+
             if(foreground.isActualColor)
             {
                 cells[y][x].foreground = foreground;
