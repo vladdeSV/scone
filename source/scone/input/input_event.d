@@ -82,7 +82,7 @@ struct InputEvent
     private SCK _controlKey;
     private bool _pressed;
 
-    version(Posix)
+    version (Posix)
     {
         /**
          * Get the ASCII-code sequence returned from the keypress on POSIX
@@ -97,7 +97,7 @@ struct InputEvent
         package(scone) uint[] _keySequences;
     }
 
-    version(Windows)
+    version (Windows)
     {
         import core.sys.windows.wincon : INPUT_RECORD;
 
@@ -115,7 +115,7 @@ struct InputEvent
 }
 
 /// when on posix, a list of keypresses is loaded and used
-version(Posix)
+version (Posix)
 {
     import std.array : split;
     import std.conv : to, parse;
@@ -156,24 +156,24 @@ version(Posix)
 
         // If file `input_sequence.scone` exists, load keymap, which overrides
         // existing keybinds.
-        if(exists(file_name))
+        if (exists(file_name))
         {
             ies ~= file_name.readText.split('\n');
         }
 
         // Loop all input sequences, and store them
-        foreach(s; ies)
+        foreach (s; ies)
         {
             s = s.chomp;
             // if line is empty or begins with #
-            if(s == "" || s[0] == '#')
+            if (s == "" || s[0] == '#')
             {
                 // log(debug, "input sequence of incorrect. exprected 3 arguments, got ", arguments.length);
                 continue;
             }
 
             string[] arguments = split(s, '\t');
-            if(arguments.length != 3)
+            if (arguments.length != 3)
             {
                 // log(warning, "input sequence of incorrect. exprected 3 arguments, got %i", arguments.length);
                 continue;
@@ -183,7 +183,7 @@ version(Posix)
             auto sck = parse!(SCK)(arguments[1]);
             auto seq = arguments[2];
             // if sequence is not defined, skip
-            if(seq == "-")
+            if (seq == "-")
             {
                 // log(notice, "ignoring sequence ", key);
                 continue;
@@ -193,11 +193,11 @@ version(Posix)
             auto iseq = InputSequence(sequenceFromString(seq));
             ie._keySequences = iseq;
 
-            if((iseq in _inputEvents) !is null)
+            if ((iseq in _inputEvents) !is null)
             {
                 auto storedInputEvent = _inputEvents[iseq];
 
-                if(ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
+                if (ie.key != storedInputEvent.key || ie.controlKey != storedInputEvent.controlKey)
                 {
                     // log(notice, "Replacing ", storedInputEvent, " with ", ie);
                 }
@@ -208,10 +208,11 @@ version(Posix)
     }
 
     /// Get InputEvent from sequence
-    /+ todo: remove the comment signs | package(scone)+/ InputEvent eventFromSequence(InputSequence sequence)
+    /+ todo: remove the comment signs | package(scone)+/
+    InputEvent eventFromSequence(InputSequence sequence)
     {
         // check for input sequence in map
-        if((sequence in _inputEvents) !is null)
+        if ((sequence in _inputEvents) !is null)
         {
             return _inputEvents[sequence];
         }
@@ -223,7 +224,8 @@ version(Posix)
     }
 
     /// TODO: this should check for multiple keypresses, according to Github issue #13
-    /+ todo: remove the comment signs |package(scone)+/ InputEvent[] eventsFromSequence(uint[] sequence)
+    /+ todo: remove the comment signs |package(scone)+/
+    InputEvent[] eventsFromSequence(uint[] sequence)
     {
         // todo: here should code go to check if an input exists. this fix is of version type PATCH
         auto inputEvents = [eventFromSequence(InputSequence(sequence))];
@@ -236,7 +238,7 @@ version(Posix)
     {
         string[] numbers = split(input, ",");
         uint[] sequence;
-        foreach(number_as_string; numbers)
+        foreach (number_as_string; numbers)
         {
             sequence ~= parse!uint(number_as_string);
         }
@@ -248,14 +250,16 @@ version(Posix)
     private InputEvent[InputSequence] _inputEvents;
 
     /// Default keybindings.
-    version(OSX)
+    version (OSX)
     {
         import scone.input.keybinds.mac;
+
         alias _inputSequencesList = macInputSequences;
     }
-    else version(Posix)
+    else version (Posix)
     {
         import scone.input.keybinds.posix;
+
         alias _inputSequencesList = posixInputSequences;
     }
 }

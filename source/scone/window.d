@@ -39,20 +39,19 @@ struct Window
      * // will display "lorem" at position [x: 4, y: 3]
      * real x = 4;
      * float y = 3.84;
-     * window.write(x, y, "lorem"); // `y` is trucated/converted to `int`
+     * window.write(x, y, "lorem"); // `x` and `y` are trucated/converted to `int`
      * window.print();
      * ----
      * Note: Does not directly write to the window, changes will only be visible after `window.print();`
-     * Note: (Authors note) When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as `auto write(int x, int y, arg1, arg2, ..., argN)`. The `X` and `Y` arguments must be numbers, and you can enter how many arguments as you want.
+     * Note: (Authors note) When I got into D, I thought template functions were odd. So for beginners, the method can be viewed as `void write(int x, int y, arg1, arg2, ..., argN)`. The `x` and `y` arguments must be numbers, and you can enter how many arguments as you want.
      */
-    auto write(X, Y, Args...)(X tx, Y ty, Args args)
-    if(isNumeric!X && isNumeric!Y && args.length >= 1)
+    auto write(X, Y, Args...)(X tx, Y ty, Args args) if (isNumeric!X && isNumeric!Y && args.length >= 1)
     {
         auto x = to!int(tx);
         auto y = to!int(ty);
 
         // Check if writing outside border (assuming we only write right-to-left)
-        if(x >= this.width() || y >= this.height())
+        if (x >= this.width() || y >= this.height())
         {
             // logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
             return;
@@ -60,19 +59,19 @@ struct Window
 
         // Calculate the lenght of what is to be printed
         int counter = 0;
-        foreach(arg; args)
+        foreach (arg; args)
         {
-            static if(is(typeof(arg) : Color))
+            static if (is(typeof(arg) : Color))
             {
                 continue;
             }
 
-            else static if(is(typeof(arg) == Cell))
+            else static if (is(typeof(arg) == Cell))
             {
                 ++counter;
                 continue;
             }
-            else static if(is(typeof(arg) == Cell[]))
+            else static if (is(typeof(arg) == Cell[]))
             {
                 counter += arg.length;
                 continue;
@@ -90,36 +89,36 @@ struct Window
         BackgroundColor background = Color.same;
 
         int i = 0;
-        foreach(arg; args)
+        foreach (arg; args)
         {
-            static if(is(typeof(arg) == ForegroundColor))
+            static if (is(typeof(arg) == ForegroundColor))
             {
                 foreground = arg;
             }
-            else static if(is(typeof(arg) == BackgroundColor))
+            else static if (is(typeof(arg) == BackgroundColor))
             {
                 background = arg;
             }
-            else static if(is(typeof(arg) == Cell))
+            else static if (is(typeof(arg) == Cell))
             {
                 outputCells[i] = arg;
                 ++i;
             }
-            else static if(is(typeof(arg) == Cell[]))
+            else static if (is(typeof(arg) == Cell[]))
             {
-                foreach(cell; arg)
+                foreach (cell; arg)
                 {
                     outputCells[i] = cell;
                     ++i;
                 }
             }
-            else static if(is(typeof(arg) == Color))
+            else static if (is(typeof(arg) == Color))
             {
                 logf("Type `Color` passed in, which has no effect");
             }
             else
             {
-                foreach(c; to!string(arg))
+                foreach (c; to!string(arg))
                 {
                     outputCells[i] = Cell(c, foreground, background);
                     ++i;
@@ -128,26 +127,26 @@ struct Window
         }
 
         // If there are cells to write, and the last argument is a color, warn
-        auto lastArgument = args[$-1];
-        if(outputCells.length && is(typeof(lastArgument) : Color))
+        auto lastArgument = args[$ - 1];
+        if (outputCells.length && is(typeof(lastArgument) : Color))
         {
             logf("The last argument in %s is a color, which will not be set.", args);
         }
 
         // If only colors were provided, just update the colors
-        if(!outputCells.length)
+        if (!outputCells.length)
         {
-            if(y < 0 || x < 0)
+            if (y < 0 || x < 0)
             {
                 return;
             }
 
-            if(foreground.isActualColor)
+            if (foreground.isActualColor)
             {
                 cells[y][x].foreground = foreground;
             }
 
-            if(background.isActualColor)
+            if (background.isActualColor)
             {
                 cells[y][x].background = background;
             }
@@ -158,14 +157,14 @@ struct Window
         // Some hokus pokus to store stuff into memory
         // write x, write y
         int wx, wy;
-        foreach(ref cell; outputCells)
+        foreach (ref cell; outputCells)
         {
             // If a newline character is present, increase the write y and set write x to zero
-            if(cell.character == '\n')
+            if (cell.character == '\n')
             {
                 wx = 0;
                 ++wy;
-                if(wy >= cells.length)
+                if (wy >= cells.length)
                 {
                     break;
                 }
@@ -174,23 +173,17 @@ struct Window
             }
 
             // Make sure we are writing inside the buffer
-            if
-            (
-                x + wx >= 0 &&
-                y + wy >= 0 &&
-                x + wx < cells[0].length &&
-                y + wy < cells.length
-            )
+            if (x + wx >= 0 && y + wy >= 0 && x + wx < cells[0].length && y + wy < cells.length)
             {
                 auto cellX = x + wx;
                 auto cellY = y + wy;
 
-                if(cell.foreground == Color.same)
+                if (cell.foreground == Color.same)
                 {
                     cell.foreground = cells[cellY][cellX].foreground;
                 }
 
-                if(cell.background == Color.same)
+                if (cell.background == Color.same)
                 {
                     cell.background = cells[cellY][cellX].background;
                 }
@@ -206,13 +199,13 @@ struct Window
     auto print()
     {
         // Windows version of printing, using winapi (super duper fast)
-        version(Windows)
+        version (Windows)
         {
-            foreach(uint cy, ref y; cells)
+            foreach (uint cy, ref y; cells)
             {
-                foreach(uint cx, ref cell; y)
+                foreach (uint cx, ref cell; y)
                 {
-                    if(cell != backbuffer[cy][cx])
+                    if (cell != backbuffer[cy][cx])
                     {
                         WindowsOS.writeCell(cx, cy, cell);
 
@@ -225,7 +218,7 @@ struct Window
 
         // A different method printing is used for POSIX
         // This method is built upon optimizing a string being printed
-        version(Posix)
+        version (Posix)
         {
             // simple flag if row is unaffected
             enum rowUnchanged = -1;
@@ -236,7 +229,7 @@ struct Window
             // Loop through all rows.
             foreach (sy, y; cells)
             {
-                if(sy >= PosixOS.size[1])
+                if (sy >= PosixOS.size[1])
                 {
                     break;
                 }
@@ -246,10 +239,10 @@ struct Window
 
                 // Go through all cells of every line
                 // Find first modified cell
-                foreach(sx, cell; cells[sy])
+                foreach (sx, cell; cells[sy])
                 {
                     // If backbuffer says something has changed
-                    if(backbuffer[sy][sx] != cell)
+                    if (backbuffer[sy][sx] != cell)
                     {
                         firstChanged = to!uint(sx);
                         break;
@@ -258,16 +251,16 @@ struct Window
 
                 // If no cell on this line has been modified, continue
                 // If first changed cell it outside the window border, continue
-                if(firstChanged == rowUnchanged || firstChanged >= PosixOS.size[0])
+                if (firstChanged == rowUnchanged || firstChanged >= PosixOS.size[0])
                 {
                     continue;
                 }
 
                 // Now loop backwards to find the last modified cell
-                foreach_reverse(sx, cell; cells[sy])
+                foreach_reverse (sx, cell; cells[sy])
                 {
                     // If backbuffer says something has changed
-                    if(backbuffer[sy][sx] != cell)
+                    if (backbuffer[sy][sx] != cell)
                     {
                         lastChanged = to!uint(sx);
                         break;
@@ -280,25 +273,13 @@ struct Window
                 // Loop from the first changed cell to the last edited cell.
                 foreach (px; firstChanged .. lastChanged + 1)
                 {
-                    // To save excecution time, check if the prevoisly printed
+                    // To save time spent printing, check if the prevoisly printed
                     // chracter has the same attributes as the current one being
                     // printed. If so, simply write the new character instead of
                     // executing ANSI commands.
-                    if
-                    (
-                        px == firstChanged ||
-                        cells[sy][px - 1].foreground != cells[sy][px].foreground ||
-                        cells[sy][px - 1].background != cells[sy][px].background
-                    )
+                    if (px == firstChanged || cells[sy][px - 1].foreground != cells[sy][px].foreground || cells[sy][px - 1].background != cells[sy][px].background)
                     {
-                        printed ~= text
-                        (
-                            "\033[",
-                            0,
-                            ";", PosixOS.ansiColor(cells[sy][px].foreground),
-                            ";", PosixOS.ansiColor(cells[sy][px].background) + 10,
-                            "m",
-                        );
+                        printed ~= text("\033[", 0, ";", PosixOS.ansiColor(cells[sy][px].foreground), ";", PosixOS.ansiColor(cells[sy][px].background) + 10, "m",);
                     }
 
                     printed ~= cells[sy][px].character;
@@ -308,6 +289,7 @@ struct Window
                 PosixOS.setCursor(firstChanged + 1, to!uint(sy));
 
                 static import std.stdio;
+
                 //...and then print out the string via the regular write function.
                 std.stdio.write(printed);
 
@@ -334,7 +316,7 @@ struct Window
      */
     auto clear()
     {
-        foreach(ref y; cells)
+        foreach (ref y; cells)
         {
             y[] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
@@ -383,20 +365,19 @@ struct Window
         cells = new Cell[][](height, width);
         backbuffer = new Cell[][](height, width);
 
-        foreach(n; 0 .. height)
+        foreach (n; 0 .. height)
         {
             cells[n][] = Cell(' ', this.settings.defaultForeground, this.settings.defaultBackground);
         }
     }
 
     /// Reposition the window on the monitor
-    auto reposition(X, Y)(X tx, Y ty)
-    if(isNumeric!X && isNumeric!Y)
+    auto reposition(X, Y)(X tx, Y ty) if (isNumeric!X && isNumeric!Y)
     {
         auto x = to!int(tx);
         auto y = to!int(ty);
 
-        OS.reposition(x,y);
+        OS.reposition(x, y);
     }
 
     /// Get the internal width of the window

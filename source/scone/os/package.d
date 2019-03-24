@@ -6,7 +6,7 @@ public import scone.os.windows;
 import std.system;
 
 // Alias OS to respective system
-static if(os == std.system.OS.win32 || os == std.system.OS.win64)
+static if (os == std.system.OS.win32 || os == std.system.OS.win64)
 {
     alias OS = WindowsOS;
 }
@@ -17,15 +17,13 @@ else
 
 interface OSInterface
 {
-    static:
+static:
 
     /// Initializes console/terminal to best settings when using scone
-    package(scone)
-    void init();
+    package(scone) void init();
 
     /// De-initializes console/terminal
-    package(scone)
-    void deinit();
+    package(scone) void deinit();
 
     /// Get the size of the window
     /// Returns: int[2], where [0] is width, and [1] is height
@@ -47,6 +45,5 @@ interface OSInterface
     void title(in string title);
 
     /// Get array of inputs since last call
-    package(scone)
-    void retreiveInputs();
+    package(scone) void retreiveInputs();
 }

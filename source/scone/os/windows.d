@@ -1,7 +1,5 @@
 module scone.os.windows;
-version(Windows):
-
-import scone.os : OSInterface;
+version (Windows)  : import scone.os : OSInterface;
 
 import core.sys.windows.windows;
 import scone.misc.utility : hasFlag;
@@ -14,7 +12,7 @@ import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
 
-extern(Windows)
+extern (Windows)
 {
     BOOL GetCurrentConsoleFont(HANDLE hConsoleOutput, BOOL bMaximumWindow, PCONSOLE_FONT_INFO lpConsoleCurrentFont);
     COORD GetConsoleFontSize(HANDLE hConsoleOutput, DWORD nFont);
@@ -22,60 +20,35 @@ extern(Windows)
 
 abstract class WindowsOS : OSInterface
 {
-    static:
+static:
 
-    package(scone)
-    auto init()
+    package(scone) auto init()
     {
         _initialSize = size();
         cursorVisible(false);
 
         // handle to console window
         consoleHandle = GetConsoleWindow();
-        assert
-        (
-            consoleHandle != INVALID_HANDLE_VALUE,
-            "Could not get console window handle: ERROR " ~ to!string(GetLastError())
-        );
+        assert(consoleHandle != INVALID_HANDLE_VALUE, "Could not get console window handle: ERROR " ~ to!string(GetLastError()));
 
         // handle to console output stuff
         consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
         // error check
-        assert
-        (
-            consoleOutputHandle != INVALID_HANDLE_VALUE,
-            "Could not get standard output handle: ERROR " ~ to!string(GetLastError())
-        );
+        assert(consoleOutputHandle != INVALID_HANDLE_VALUE, "Could not get standard output handle: ERROR " ~ to!string(GetLastError()));
 
         // store current screen buffer info
-        assert
-        (
-            GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo),
-            "Could not get console screen buffer info: ERROR " ~ to!string(GetLastError())
-        );
+        assert(GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo), "Could not get console screen buffer info: ERROR " ~ to!string(GetLastError()));
 
         // handle to console input stuff
         consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
         // and error check
-        assert
-        (
-            consoleInputHandle != INVALID_HANDLE_VALUE,
-            "Could not get standard window input handle: ERROR " ~ to!string(GetLastError())
-        );
+        assert(consoleInputHandle != INVALID_HANDLE_VALUE, "Could not get standard window input handle: ERROR " ~ to!string(GetLastError()));
 
         // store the old keyboard mode
-        assert
-        (
-            GetConsoleMode(consoleInputHandle, &oldConsoleMode),
-            "Could not get console window mode: ERROR " ~ to!string(GetLastError())
-        );
+        assert(GetConsoleMode(consoleInputHandle, &oldConsoleMode), "Could not get console window mode: ERROR " ~ to!string(GetLastError()));
         // set new inputmodes
-        assert
-        (
-            SetConsoleMode(consoleInputHandle, consoleMode),
-            "Could not set console window mode: ERROR " ~ to!string(GetLastError())
-        );
+        assert(SetConsoleMode(consoleInputHandle, consoleMode), "Could not set console window mode: ERROR " ~ to!string(GetLastError()));
 
         //"removes" the enter release key when `dub` is run
         retreiveInputs();
@@ -83,15 +56,14 @@ abstract class WindowsOS : OSInterface
         cursorVisible(false);
     }
 
-    package(scone)
-    auto deinit()
+    package(scone) auto deinit()
     {
         resize(_initialSize[0], _initialSize[1]);
 
         SetConsoleMode(consoleInputHandle, oldConsoleMode);
         SetConsoleScreenBufferSize(consoleOutputHandle, consoleScreenBufferInfo.dwSize);
 
-        COORD coordScreen = { 0, 0 };
+        COORD coordScreen = {0, 0};
         DWORD charsWritten;
         DWORD cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
 
@@ -99,7 +71,7 @@ abstract class WindowsOS : OSInterface
         FillConsoleOutputAttribute(consoleOutputHandle, consoleScreenBufferInfo.wAttributes, cellCount, coordScreen, &charsWritten);
 
         cursorVisible(true);
-        setCursor(0,0);
+        setCursor(0, 0);
     }
 
     /* Display cell in console */
@@ -107,8 +79,8 @@ abstract class WindowsOS : OSInterface
     {
         immutable(ushort) wx = to!ushort(x);
         immutable(ushort) wy = to!ushort(y);
-        COORD charBufSize = {1,1};
-        COORD characterPos = {0,0};
+        COORD charBufSize = {1, 1};
+        COORD characterPos = {0, 0};
         SMALL_RECT writeArea = {wx, wy, wx, wy};
         CHAR_INFO character;
         character.AsciiChar = cell.character;
@@ -120,12 +92,7 @@ abstract class WindowsOS : OSInterface
     auto setCursor(in uint x, in uint y)
     {
         GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo);
-        COORD change =
-        {
-            cast(short) min(consoleScreenBufferInfo.srWindow.Right -
-            consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short)
-            max(0, y)
-        };
+        COORD change = {cast(short) min(consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1, max(0, x)), cast(short) max(0, y)};
 
         stdout.flush();
         SetConsoleCursorPosition(consoleOutputHandle, change);
@@ -149,8 +116,7 @@ abstract class WindowsOS : OSInterface
     /** Set line wrapping. */
     auto lineWrapping(in bool lw)
     {
-        lw ? SetConsoleMode(consoleOutputHandle, 0x0002)
-            : SetConsoleMode(consoleOutputHandle, 0x0);
+        lw ? SetConsoleMode(consoleOutputHandle, 0x0002) : SetConsoleMode(consoleOutputHandle, 0x0);
     }
 
     void resize(in uint width, in uint height)
@@ -164,40 +130,35 @@ abstract class WindowsOS : OSInterface
         immutable consoleMinimumPixelWidth = GetSystemMetrics(SM_CXMIN);
         immutable consoleMinimumPixelHeight = GetSystemMetrics(SM_CYMIN);
 
-        if(width * fontSize.X < consoleMinimumPixelWidth || height * fontSize.Y < consoleMinimumPixelHeight) {
+        if (width * fontSize.X < consoleMinimumPixelWidth || height * fontSize.Y < consoleMinimumPixelHeight)
+        {
             // log(warn, tried to set the window size smaller than allowed. ignored resize)
             return;
         }
 
         // set window size to 1x1
-        SMALL_RECT onebyone = { 0, 0, 1, 1 };
+        SMALL_RECT onebyone = {0, 0, 1, 1};
         assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &onebyone), "1. Unable to resize window to 1x1: ERROR " ~ to!string(GetLastError()));
 
         // set the buffer size to desired size
-        COORD size = { to!short(width), to!short(height) };
+        COORD size = {to!short(width), to!short(height)};
         assert(SetConsoleScreenBufferSize(consoleOutputHandle, size), "2. Unable to resize screen buffer: ERROR " ~ to!string(GetLastError()));
 
         // resize back the window to correct size
-        SMALL_RECT info = { 0, 0, to!short(width-1), to!short(height-1) };
+        SMALL_RECT info = {0, 0, to!short(width - 1), to!short(height - 1)};
         assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info), "3. Unable to resize window the second time: ERROR " ~ to!string(GetLastError()));
     }
 
     auto reposition(int x, int y)
     {
-        SetWindowPos(consoleHandle, cast(void*)0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+        SetWindowPos(consoleHandle, cast(void*) 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 
     uint[2] size()
     {
         GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo);
 
-        return
-        [
-            consoleScreenBufferInfo.srWindow.Right -
-            consoleScreenBufferInfo.srWindow.Left + 1,
-            consoleScreenBufferInfo.srWindow.Bottom -
-            consoleScreenBufferInfo.srWindow.Top  + 1
-        ];
+        return [consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1, consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1];
     }
 
     private HANDLE consoleHandle, consoleOutputHandle, consoleInputHandle;
@@ -210,7 +171,7 @@ abstract class WindowsOS : OSInterface
     {
         ushort attributes;
 
-        switch(cell.foreground)
+        switch (cell.foreground)
         {
         case Color.blue:
             attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
@@ -264,7 +225,7 @@ abstract class WindowsOS : OSInterface
             break;
         }
 
-        switch(cell.background)
+        switch (cell.background)
         {
         case Color.blue:
             attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
@@ -326,7 +287,7 @@ abstract class WindowsOS : OSInterface
         DWORD read = 0;
         GetNumberOfConsoleInputEvents(consoleInputHandle, &read);
 
-        if(!read)
+        if (!read)
         {
             return null;
         }
@@ -334,27 +295,22 @@ abstract class WindowsOS : OSInterface
         InputEvent[] _inputEvents;
 
         ReadConsoleInputA(consoleInputHandle, inputRecordBuffer.ptr, 128, &_inputsRead);
-        for(uint e = 0; e < read; ++e)
+        for (uint e = 0; e < read; ++e)
         {
-            switch(inputRecordBuffer[e].EventType)
+            switch (inputRecordBuffer[e].EventType)
             {
-            case /* 0x0002 */ MOUSE_EVENT:
+            case  /* 0x0002 */ MOUSE_EVENT:
                 // this means the mouse has been clicked/moved
-            case /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
+            case  /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
                 // this means the window console has been resized
                 // TODO: This is where we want to notify scone that the window should be cleared and redrawn
-            case /* 0x0008 */ MENU_EVENT:
+            case  /* 0x0008 */ MENU_EVENT:
                 // this means the user has clicked on the menu (should be ignored according to microsoft)
-            case /* 0x0010 */ FOCUS_EVENT:
+            case  /* 0x0010 */ FOCUS_EVENT:
                 // this means the user has switched focus of the window (should be ignored according to microsoft)
                 break;
-            case /* 0x0001 */ KEY_EVENT:
-                _inputEvents ~= InputEvent
-                (
-                    getKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
-                    getControlKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
-                    cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown
-                );
+            case  /* 0x0001 */ KEY_EVENT:
+                _inputEvents ~= InputEvent(getKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent), getControlKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent), cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown);
                 break;
             default:
                 break;
@@ -366,113 +322,216 @@ abstract class WindowsOS : OSInterface
 
     SK getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
     {
-        switch(k.wVirtualKeyCode)
+        switch (k.wVirtualKeyCode)
         {
-        case WindowsKeyCode.K_0: return SK.key_0;
-        case WindowsKeyCode.K_1: return SK.key_1;
-        case WindowsKeyCode.K_2: return SK.key_2;
-        case WindowsKeyCode.K_3: return SK.key_3;
-        case WindowsKeyCode.K_4: return SK.key_4;
-        case WindowsKeyCode.K_5: return SK.key_5;
-        case WindowsKeyCode.K_6: return SK.key_6;
-        case WindowsKeyCode.K_7: return SK.key_7;
-        case WindowsKeyCode.K_8: return SK.key_8;
-        case WindowsKeyCode.K_9: return SK.key_9;
-        case WindowsKeyCode.K_A: return SK.a;
-        case WindowsKeyCode.K_B: return SK.b;
-        case WindowsKeyCode.K_C: return SK.c;
-        case WindowsKeyCode.K_D: return SK.d;
-        case WindowsKeyCode.K_E: return SK.e;
-        case WindowsKeyCode.K_F: return SK.f;
-        case WindowsKeyCode.K_G: return SK.g;
-        case WindowsKeyCode.K_H: return SK.h;
-        case WindowsKeyCode.K_I: return SK.i;
-        case WindowsKeyCode.K_J: return SK.j;
-        case WindowsKeyCode.K_K: return SK.k;
-        case WindowsKeyCode.K_L: return SK.l;
-        case WindowsKeyCode.K_M: return SK.m;
-        case WindowsKeyCode.K_N: return SK.n;
-        case WindowsKeyCode.K_O: return SK.o;
-        case WindowsKeyCode.K_P: return SK.p;
-        case WindowsKeyCode.K_Q: return SK.q;
-        case WindowsKeyCode.K_R: return SK.r;
-        case WindowsKeyCode.K_S: return SK.s;
-        case WindowsKeyCode.K_T: return SK.t;
-        case WindowsKeyCode.K_U: return SK.u;
-        case WindowsKeyCode.K_V: return SK.v;
-        case WindowsKeyCode.K_W: return SK.w;
-        case WindowsKeyCode.K_X: return SK.x;
-        case WindowsKeyCode.K_Y: return SK.y;
-        case WindowsKeyCode.K_Z: return SK.z;
-        case VK_F1: return SK.f1;
-        case VK_F2: return SK.f2;
-        case VK_F3: return SK.f3;
-        case VK_F4: return SK.f4;
-        case VK_F5: return SK.f5;
-        case VK_F6: return SK.f6;
-        case VK_F7: return SK.f7;
-        case VK_F8: return SK.f8;
-        case VK_F9: return SK.f9;
-        case VK_F10: return SK.f10;
-        case VK_F11: return SK.f11;
-        case VK_F12: return SK.f12;
-        case VK_F13: return SK.f13;
-        case VK_F14: return SK.f14;
-        case VK_F15: return SK.f15;
-        case VK_F16: return SK.f16;
-        case VK_F17: return SK.f17;
-        case VK_F18: return SK.f18;
-        case VK_F19: return SK.f19;
-        case VK_F20: return SK.f20;
-        case VK_F21: return SK.f21;
-        case VK_F22: return SK.f22;
-        case VK_F23: return SK.f23;
-        case VK_F24: return SK.f24;
-        case VK_NUMPAD0: return SK.numpad_0;
-        case VK_NUMPAD1: return SK.numpad_1;
-        case VK_NUMPAD2: return SK.numpad_2;
-        case VK_NUMPAD3: return SK.numpad_3;
-        case VK_NUMPAD4: return SK.numpad_4;
-        case VK_NUMPAD5: return SK.numpad_5;
-        case VK_NUMPAD6: return SK.numpad_6;
-        case VK_NUMPAD7: return SK.numpad_7;
-        case VK_NUMPAD8: return SK.numpad_8;
-        case VK_NUMPAD9: return SK.numpad_9;
-        case VK_BACK: return SK.backspace;
-        case VK_TAB: return SK.tab;
-        case VK_ESCAPE: return SK.escape;
-        case VK_SPACE: return SK.space;
-        case VK_PRIOR: return SK.page_up;
-        case VK_NEXT: return SK.page_down;
-        case VK_END: return SK.end;
-        case VK_HOME: return SK.home;
-        case VK_LEFT: return SK.left;
-        case VK_RIGHT: return SK.right;
-        case VK_UP: return SK.up;
-        case VK_DOWN: return SK.down;
-        case VK_DELETE: return SK.del;
-        case VK_SEPARATOR: return SK.enter;
-        case VK_ADD: return SK.plus;
-        case VK_OEM_PLUS: return SK.plus;
-        case VK_SUBTRACT: return SK.minus;
-        case VK_OEM_MINUS: return SK.minus;
-        case VK_OEM_PERIOD: return SK.period;
-        case VK_OEM_COMMA: return SK.comma;
-        case VK_DECIMAL: return SK.comma;
-        case VK_MULTIPLY: return SK.asterisk;
-        case VK_DIVIDE: return SK.divide;
-        case VK_OEM_1: return SK.oem_1;
-        case VK_OEM_2: return SK.oem_2;
-        case VK_OEM_3: return SK.oem_3;
-        case VK_OEM_4: return SK.oem_4;
-        case VK_OEM_5: return SK.oem_5;
-        case VK_OEM_6: return SK.oem_6;
-        case VK_OEM_7: return SK.oem_7;
-        case VK_OEM_8: return SK.oem_8;
-        case VK_OEM_102: return SK.oem_102;
-        case VK_RETURN: return SK.enter;
+        case WindowsKeyCode.K_0:
+            return SK.key_0;
+        case WindowsKeyCode.K_1:
+            return SK.key_1;
+        case WindowsKeyCode.K_2:
+            return SK.key_2;
+        case WindowsKeyCode.K_3:
+            return SK.key_3;
+        case WindowsKeyCode.K_4:
+            return SK.key_4;
+        case WindowsKeyCode.K_5:
+            return SK.key_5;
+        case WindowsKeyCode.K_6:
+            return SK.key_6;
+        case WindowsKeyCode.K_7:
+            return SK.key_7;
+        case WindowsKeyCode.K_8:
+            return SK.key_8;
+        case WindowsKeyCode.K_9:
+            return SK.key_9;
+        case WindowsKeyCode.K_A:
+            return SK.a;
+        case WindowsKeyCode.K_B:
+            return SK.b;
+        case WindowsKeyCode.K_C:
+            return SK.c;
+        case WindowsKeyCode.K_D:
+            return SK.d;
+        case WindowsKeyCode.K_E:
+            return SK.e;
+        case WindowsKeyCode.K_F:
+            return SK.f;
+        case WindowsKeyCode.K_G:
+            return SK.g;
+        case WindowsKeyCode.K_H:
+            return SK.h;
+        case WindowsKeyCode.K_I:
+            return SK.i;
+        case WindowsKeyCode.K_J:
+            return SK.j;
+        case WindowsKeyCode.K_K:
+            return SK.k;
+        case WindowsKeyCode.K_L:
+            return SK.l;
+        case WindowsKeyCode.K_M:
+            return SK.m;
+        case WindowsKeyCode.K_N:
+            return SK.n;
+        case WindowsKeyCode.K_O:
+            return SK.o;
+        case WindowsKeyCode.K_P:
+            return SK.p;
+        case WindowsKeyCode.K_Q:
+            return SK.q;
+        case WindowsKeyCode.K_R:
+            return SK.r;
+        case WindowsKeyCode.K_S:
+            return SK.s;
+        case WindowsKeyCode.K_T:
+            return SK.t;
+        case WindowsKeyCode.K_U:
+            return SK.u;
+        case WindowsKeyCode.K_V:
+            return SK.v;
+        case WindowsKeyCode.K_W:
+            return SK.w;
+        case WindowsKeyCode.K_X:
+            return SK.x;
+        case WindowsKeyCode.K_Y:
+            return SK.y;
+        case WindowsKeyCode.K_Z:
+            return SK.z;
+        case VK_F1:
+            return SK.f1;
+        case VK_F2:
+            return SK.f2;
+        case VK_F3:
+            return SK.f3;
+        case VK_F4:
+            return SK.f4;
+        case VK_F5:
+            return SK.f5;
+        case VK_F6:
+            return SK.f6;
+        case VK_F7:
+            return SK.f7;
+        case VK_F8:
+            return SK.f8;
+        case VK_F9:
+            return SK.f9;
+        case VK_F10:
+            return SK.f10;
+        case VK_F11:
+            return SK.f11;
+        case VK_F12:
+            return SK.f12;
+        case VK_F13:
+            return SK.f13;
+        case VK_F14:
+            return SK.f14;
+        case VK_F15:
+            return SK.f15;
+        case VK_F16:
+            return SK.f16;
+        case VK_F17:
+            return SK.f17;
+        case VK_F18:
+            return SK.f18;
+        case VK_F19:
+            return SK.f19;
+        case VK_F20:
+            return SK.f20;
+        case VK_F21:
+            return SK.f21;
+        case VK_F22:
+            return SK.f22;
+        case VK_F23:
+            return SK.f23;
+        case VK_F24:
+            return SK.f24;
+        case VK_NUMPAD0:
+            return SK.numpad_0;
+        case VK_NUMPAD1:
+            return SK.numpad_1;
+        case VK_NUMPAD2:
+            return SK.numpad_2;
+        case VK_NUMPAD3:
+            return SK.numpad_3;
+        case VK_NUMPAD4:
+            return SK.numpad_4;
+        case VK_NUMPAD5:
+            return SK.numpad_5;
+        case VK_NUMPAD6:
+            return SK.numpad_6;
+        case VK_NUMPAD7:
+            return SK.numpad_7;
+        case VK_NUMPAD8:
+            return SK.numpad_8;
+        case VK_NUMPAD9:
+            return SK.numpad_9;
+        case VK_BACK:
+            return SK.backspace;
+        case VK_TAB:
+            return SK.tab;
+        case VK_ESCAPE:
+            return SK.escape;
+        case VK_SPACE:
+            return SK.space;
+        case VK_PRIOR:
+            return SK.page_up;
+        case VK_NEXT:
+            return SK.page_down;
+        case VK_END:
+            return SK.end;
+        case VK_HOME:
+            return SK.home;
+        case VK_LEFT:
+            return SK.left;
+        case VK_RIGHT:
+            return SK.right;
+        case VK_UP:
+            return SK.up;
+        case VK_DOWN:
+            return SK.down;
+        case VK_DELETE:
+            return SK.del;
+        case VK_SEPARATOR:
+            return SK.enter;
+        case VK_ADD:
+            return SK.plus;
+        case VK_OEM_PLUS:
+            return SK.plus;
+        case VK_SUBTRACT:
+            return SK.minus;
+        case VK_OEM_MINUS:
+            return SK.minus;
+        case VK_OEM_PERIOD:
+            return SK.period;
+        case VK_OEM_COMMA:
+            return SK.comma;
+        case VK_DECIMAL:
+            return SK.comma;
+        case VK_MULTIPLY:
+            return SK.asterisk;
+        case VK_DIVIDE:
+            return SK.divide;
+        case VK_OEM_1:
+            return SK.oem_1;
+        case VK_OEM_2:
+            return SK.oem_2;
+        case VK_OEM_3:
+            return SK.oem_3;
+        case VK_OEM_4:
+            return SK.oem_4;
+        case VK_OEM_5:
+            return SK.oem_5;
+        case VK_OEM_6:
+            return SK.oem_6;
+        case VK_OEM_7:
+            return SK.oem_7;
+        case VK_OEM_8:
+            return SK.oem_8;
+        case VK_OEM_102:
+            return SK.oem_102;
+        case VK_RETURN:
+            return SK.enter;
 
-        /+
+            /+
         case VK_CLEAR: return SK.clear;
         case VK_SHIFT: return SK.shift;
         case VK_CONTROL: return SK.control;
@@ -525,7 +584,8 @@ abstract class WindowsOS : OSInterface
         case VK_CANCEL: return SK.cancel;
         +/
 
-        default: return SK.unknown;
+        default:
+            return SK.unknown;
         }
     }
 
@@ -613,39 +673,39 @@ abstract class WindowsOS : OSInterface
 
         auto cm = k.dwControlKeyState;
 
-        if(hasFlag(cm, CAPSLOCK_ON))
+        if (hasFlag(cm, CAPSLOCK_ON))
         {
             fin |= SCK.capslock;
         }
-        if(hasFlag(cm, SCROLLLOCK_ON))
+        if (hasFlag(cm, SCROLLLOCK_ON))
         {
             fin |= SCK.scrolllock;
         }
-        if(hasFlag(cm, SHIFT_PRESSED))
+        if (hasFlag(cm, SHIFT_PRESSED))
         {
             fin |= SCK.shift;
         }
-        if(hasFlag(cm, ENHANCED_KEY))
+        if (hasFlag(cm, ENHANCED_KEY))
         {
             fin |= SCK.enhanced;
         }
-        if(hasFlag(cm, LEFT_ALT_PRESSED))
+        if (hasFlag(cm, LEFT_ALT_PRESSED))
         {
             fin |= SCK.alt;
         }
-        if(hasFlag(cm, RIGHT_ALT_PRESSED))
+        if (hasFlag(cm, RIGHT_ALT_PRESSED))
         {
             fin |= SCK.alt;
         }
-        if(hasFlag(cm, LEFT_CTRL_PRESSED))
+        if (hasFlag(cm, LEFT_CTRL_PRESSED))
         {
             fin |= SCK.ctrl;
         }
-        if(hasFlag(cm, RIGHT_CTRL_PRESSED))
+        if (hasFlag(cm, RIGHT_CTRL_PRESSED))
         {
             fin |= SCK.ctrl;
         }
-        if(hasFlag(cm, NUMLOCK_ON))
+        if (hasFlag(cm, NUMLOCK_ON))
         {
             fin |= SCK.numlock;
         }

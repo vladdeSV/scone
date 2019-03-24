@@ -46,7 +46,7 @@ shared static this()
     auto h = OS.size[1];
 
     // init window
-    window = Window(w,h);
+    window = Window(w, h);
 }
 
 /**

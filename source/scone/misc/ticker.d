@@ -26,7 +26,7 @@ struct Ticker
      */
     this(uint ticksPerSecond)
     {
-        _interval = 10^^9/double(ticksPerSecond);
+        _interval = 10 ^^ 9 / double(ticksPerSecond);
         reset();
     }
 

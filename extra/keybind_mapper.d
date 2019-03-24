@@ -16,8 +16,7 @@ void main()
     // where all codes will be stored
     uint[][4][EnumMembers!(SK).length] store;
 
-    main_loop:
-    for(int aaa = 0; aaa < sks.length; ++aaa)
+    main_loop: for (int aaa = 0; aaa < sks.length; ++aaa)
     {
         // get current key in SK
         auto sk = sks[aaa];
@@ -26,9 +25,9 @@ void main()
         uint[][4] c;
 
         // iterate over all modifier-keys
-        foreach(n, sck; ["none","shift","control","alt"])
+        foreach (n, sck; ["none", "shift", "control", "alt"])
         {
-            if(sck == "none")
+            if (sck == "none")
             {
                 write("Please press ", sk, ".                             ");
             }
@@ -43,7 +42,7 @@ void main()
             // i = input sequences
             uint[] i = null;
 
-            while(i == null)
+            while (i == null)
             {
                 // continously get a sequence
                 i = getInputs();
@@ -56,26 +55,27 @@ void main()
             uint first = i.length == 1 ? i[0] : 0;
 
             // esc, stop program and output currently stored inputs
-            if(first == 27)
+            if (first == 27)
             {
                 writeln("\r");
                 break main_loop;
             }
             // enter, skips an input
-            else if(first == 13)
+            else if (first == 13)
             {
                 writeln("\n\r  SKIPPING\r");
                 continue;
             }
             // backspace, redo/move back
-            else if(first == 127)
+            else if (first == 127)
             {
                 // basically, redo input if something for key was entered. otherwise move back
-                if(n == 0)
+                if (n == 0)
                 {
                     writeln("\n\r  MOVING BACK\r");
                     aaa -= 2;
-                    if(aaa < -1) aaa = -1;
+                    if (aaa < -1)
+                        aaa = -1;
                 }
                 else
                 {
@@ -88,7 +88,7 @@ void main()
 
             // check if the same keybind exists with another modifier key.
             // if not found, store it
-            if(!c[0 .. n].canFind(i))
+            if (!c[0 .. n].canFind(i))
             {
                 c[n] = i;
                 writeln("\t :)   Mapped ", i, " to ", (sck == "none" ? text(sk) : text(sk, " (", sck, ')')), '\r');
@@ -107,20 +107,20 @@ void main()
     // open a file and store all codes
     auto f = File("input_sequences.scone.txt", "w");
 
-    foreach(n, sck; ["none", "shift", "ctrl", "alt"])
+    foreach (n, sck; ["none", "shift", "ctrl", "alt"])
     {
-        foreach(m, k; sks)
+        foreach (m, k; sks)
         {
             string kk;
-            if(store[m][n] == null)
+            if (store[m][n] == null)
             {
                 kk = "-";
             }
             else
             {
-                foreach(r, a; store[m][n])
+                foreach (r, a; store[m][n])
                 {
-                    if(r == 0)
+                    if (r == 0)
                         kk ~= text(a);
                     else
                         kk ~= text(',', a);
@@ -170,10 +170,12 @@ import std.stdio : write, writef;
 import std.stdio;
 import std.traits : EnumMembers;
 import std.algorithm;
-extern(C)
+
+extern (C)
 {
     import core.sys.posix.termios;
-    void cfmakeraw(termios *termios_p);
+
+    void cfmakeraw(termios* termios_p);
 }
 
 static __gshared bool inited = true;
@@ -185,17 +187,13 @@ uint[] getInputs()
     uint[] codes;
     bool receivedInput = true;
 
-    while(receivedInput)
+    while (receivedInput)
     {
         bool gotSomething = false;
 
-        receiveTimeout
-        (
-            1.msecs,
-            (uint code) { codes ~= code; gotSomething = true; },
-        );
+        receiveTimeout(1.msecs, (uint code) { codes ~= code; gotSomething = true; },);
 
-        if(!gotSomething)
+        if (!gotSomething)
         {
             receivedInput = false;
         }
@@ -219,7 +217,7 @@ void beginPolling()
 
 void pollInputEvent(Tid parentThreadID)
 {
-    while(inited)
+    while (inited)
     {
         pollfd ufds;
         ufds.fd = STDOUT_FILENO;
@@ -229,17 +227,17 @@ void pollInputEvent(Tid parentThreadID)
         enum timeout = 1000;
         immutable bytesRead = poll(&ufds, 1, timeout);
 
-        if(bytesRead == -1)
+        if (bytesRead == -1)
         {
             // logf("(POSIX) ERROR: polling input returned -1");
         }
-        else if(bytesRead == 0)
+        else if (bytesRead == 0)
         {
             // timeout!
             // if no key was pressed within `timeout`,
             // this happens. which is good!
         }
-        else if(ufds.revents & POLLIN)
+        else if (ufds.revents & POLLIN)
         {
             // read from keyboard
             read(STDOUT_FILENO, &input, 1);
@@ -535,4 +533,3 @@ enum SK
     /// Either the angle bracket key or the backslash key on the RT 102-key keyboard
     oem_102,
 }
-

@@ -1,7 +1,5 @@
 module scone.os.posix;
-version(Posix):
-
-import scone.color;
+version (Posix)  : import scone.color;
 import scone.input;
 import scone.os;
 
@@ -20,18 +18,18 @@ import std.conv : to, text;
 import std.datetime : Duration, msecs;
 import std.stdio : writef, stdout;
 
-extern(C)
+extern (C)
 {
     import core.sys.posix.termios;
-    void cfmakeraw(termios *termios_p);
+
+    void cfmakeraw(termios* termios_p);
 }
 
 abstract class PosixOS : OSInterface
 {
-    static:
+static:
 
-    package(scone)
-    auto init()
+    package(scone) auto init()
     {
         _initialSize = size();
         cursorVisible(false);
@@ -50,15 +48,14 @@ abstract class PosixOS : OSInterface
         stdout.flush();
     }
 
-    package(scone)
-    auto deinit()
+    package(scone) auto deinit()
     {
         tcsetattr(STDOUT_FILENO, TCSADRAIN, &oldState);
         resize(_initialSize[0], _initialSize[1]);
         writef("\033[0m\033[2J\033[H");
         stdout.flush();
         cursorVisible(true);
-        setCursor(0,0);
+        setCursor(0, 0);
     }
 
     auto setCursor(in uint x, in uint y)
@@ -125,8 +122,7 @@ abstract class PosixOS : OSInterface
         return (color < 8 ? 90 : 30) + (color % 8);
     }
 
-    package(scone)
-    auto retreiveInputs()
+    package(scone) auto retreiveInputs()
     {
         // this is some spooky hooky code, dealing with
         // multi-thread and reading inputs with timeouts
@@ -137,17 +133,13 @@ abstract class PosixOS : OSInterface
 
         uint[] codes;
 
-        while(true)
+        while (true)
         {
             bool receivedSequence = false;
 
-            receiveTimeout
-            (
-                1.msecs,
-                (uint code) { codes ~= code; receivedSequence = true; },
-            );
+            receiveTimeout(1.msecs, (uint code) { codes ~= code; receivedSequence = true; },);
 
-            if(!receivedSequence)
+            if (!receivedSequence)
             {
                 break;
             }
@@ -155,7 +147,8 @@ abstract class PosixOS : OSInterface
 
         // if no keypresses, return null
         // otherwise, an unknown input will always be sent
-        if(codes == null) {
+        if (codes == null)
+        {
             return null;
         }
 
@@ -173,7 +166,7 @@ abstract class PosixOS : OSInterface
         Thread.getThis.isDaemon = true;
 
         // This loop polls input, and sends them to the main thread
-        while(true)
+        while (true)
         {
             pollfd ufds;
             ufds.fd = STDOUT_FILENO;
@@ -182,16 +175,16 @@ abstract class PosixOS : OSInterface
             uint input;
             immutable bytesRead = poll(&ufds, 1, -1);
 
-            if(bytesRead == -1)
+            if (bytesRead == -1)
             {
                 // error :(
                 // logf("(POSIX) ERROR: polling input returned -1");
             }
-            else if(bytesRead == 0)
+            else if (bytesRead == 0)
             {
                 // If no key was pressed within `timeout`
             }
-            else if(ufds.revents & POLLIN)
+            else if (ufds.revents & POLLIN)
             {
                 // Read input from keyboard
                 read(STDOUT_FILENO, &input, 1);

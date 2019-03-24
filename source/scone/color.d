@@ -36,7 +36,7 @@ enum Color
     magenta = 5,
     cyan = 6,
     white = 7,
-    
+
     blackDark = 8,
     redDark = 9,
     greenDark = 10,
@@ -49,6 +49,7 @@ enum Color
     same = 16,
     unknown = 17,
 }
+
 unittest
 {
     // ensure there are 8 colors from Color.white(Dark) to Color.black(Dark)
