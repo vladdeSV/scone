@@ -50,7 +50,7 @@ struct Window
         auto x = to!int(tx);
         auto y = to!int(ty);
 
-        // Check if writing outside border (assuming we only write right-to-left)
+        // Check if writing outside border (assuming we only write left-to-right)
         if (x >= this.width() || y >= this.height())
         {
             // logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
