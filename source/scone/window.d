@@ -201,13 +201,13 @@ struct Window
         // Windows version of printing, using winapi (super duper fast)
         version (Windows)
         {
-            foreach (uint cy, ref y; cells)
+            foreach (cy, ref y; cells)
             {
-                foreach (uint cx, ref cell; y)
+                foreach (cx, ref cell; y)
                 {
                     if (cell != backbuffer[cy][cx])
                     {
-                        WindowsOS.writeCell(cx, cy, cell);
+                        WindowsOS.writeCell(cast(uint) cx, cast(uint) cy, cell);
 
                         // update backbuffer
                         backbuffer[cy][cx] = cell;
