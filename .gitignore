@@ -14,3 +14,4 @@ dub.selections.json
 libscone.a
 scone.log
 source/scone/main.d
+app.d
