@@ -33,6 +33,8 @@ import scone.os;
  */
 __gshared Window window;
 
+alias logger = sharedLog;
+
 /**
  * Initializes scone
  */

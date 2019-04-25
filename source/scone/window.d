@@ -8,7 +8,7 @@ import std.algorithm : min;
 import std.conv : text, to;
 import std.stdio : stdout, write;
 import std.traits : isNumeric;
-import std.experimental.logger;
+import scone.core : logger;
 
 ///
 struct Window
@@ -16,7 +16,7 @@ struct Window
     /// Initializes the window.
     this(in uint width, in uint height)
     {
-        logf("Initalize window (%dx%d)", width, height);
+        logger.infof("Initalize window (%dx%d)", width, height);
         // properly set the size of the console
         resize(width, height);
     }
@@ -53,7 +53,7 @@ struct Window
         // Check if writing outside border (assuming we only write left-to-right)
         if (x >= this.width() || y >= this.height())
         {
-            // logf("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
+            logger.infof("Cannot write at (%s, %s). x must be less than or equal to %s, y must be less than or equal to%s", x, y, w, h);
             return;
         }
 
@@ -114,7 +114,7 @@ struct Window
             }
             else static if (is(typeof(arg) == Color))
             {
-                logf("Type `Color` passed in, which has no effect");
+                logger.warning("Type `Color` passed in, which has no effect");
             }
             else
             {
@@ -130,7 +130,7 @@ struct Window
         auto lastArgument = args[$ - 1];
         if (outputCells.length && is(typeof(lastArgument) : Color))
         {
-            logf("The last argument in %s is a color, which will not be set.", args);
+            logger.warning("The last argument in %s is a color, which will not be set.", args);
         }
 
         // If only colors were provided, just update the colors
