@@ -1,6 +1,7 @@
 module scone.os.windows;
-version (Windows)  : import scone.os : OSInterface;
+version (Windows):
 
+import scone.os : OS;
 import core.sys.windows.windows;
 import scone.misc.utility : hasFlag;
 import scone.window : Cell;
