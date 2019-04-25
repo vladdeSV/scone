@@ -6,16 +6,16 @@ public import scone.os.windows;
 import std.system;
 
 // Alias OS to respective system
-static if (os == std.system.OS.win32 || os == std.system.OS.win64)
+static if (std.system.os == std.system.OS.win32 || std.system.os == std.system.OS.win64)
 {
-    alias OS = WindowsOS;
+    alias os = WindowsOS;
 }
 else
 {
-    alias OS = PosixOS;
+    alias os = PosixOS;
 }
 
-interface OSInterface
+interface OS
 {
 static:
 

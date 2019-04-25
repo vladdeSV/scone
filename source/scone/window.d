@@ -328,19 +328,19 @@ struct Window
      */
     auto getInputs()
     {
-        return OS.retreiveInputs();
+        return os.retreiveInputs();
     }
 
     /// Set the title of the window
     auto title(in string title) @property
     {
-        OS.title = title;
+        os.title = title;
     }
 
     /// Set if the cursor should be visible
     auto cursorVisible(in bool visible) @property
     {
-        OS.cursorVisible = visible;
+        os.cursorVisible = visible;
     }
 
     /**
@@ -360,7 +360,7 @@ struct Window
     auto resize(in uint width, in uint height)
     {
         // Resize the screen
-        OS.resize(width, height);
+        os.resize(width, height);
 
         cells = new Cell[][](height, width);
         backbuffer = new Cell[][](height, width);
@@ -377,7 +377,7 @@ struct Window
         auto x = to!int(tx);
         auto y = to!int(ty);
 
-        OS.reposition(x, y);
+        os.reposition(x, y);
     }
 
     /// Get the internal width of the window

@@ -1,5 +1,7 @@
 module scone.os.posix;
-version (Posix)  : import scone.color;
+version (Posix):
+
+import scone.color;
 import scone.input;
 import scone.os;
 
@@ -25,7 +27,7 @@ extern (C)
     void cfmakeraw(termios* termios_p);
 }
 
-abstract class PosixOS : OSInterface
+abstract class PosixOS : OS
 {
 static:
 

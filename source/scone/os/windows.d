@@ -18,7 +18,7 @@ extern (Windows)
     COORD GetConsoleFontSize(HANDLE hConsoleOutput, DWORD nFont);
 }
 
-abstract class WindowsOS : OSInterface
+abstract class WindowsOS : OS
 {
 static:
 

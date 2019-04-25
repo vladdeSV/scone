@@ -41,9 +41,9 @@ shared static this()
     sharedLog = new FileLogger("scone.log");
 
     // get current width and height
-    OS.init();
-    auto w = OS.size[0];
-    auto h = OS.size[1];
+    os.init();
+    auto w = os.size[0];
+    auto h = os.size[1];
 
     // init window
     window = Window(w, h);
@@ -54,5 +54,5 @@ shared static this()
  */
 shared static ~this()
 {
-    OS.deinit();
+    os.deinit();
 }
