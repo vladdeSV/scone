@@ -15,7 +15,7 @@ import core.sys.posix.sys.ioctl;
 import core.sys.posix.unistd : read;
 import core.sys.posix.unistd : STDOUT_FILENO;
 import core.thread : Thread;
-import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout;
+import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
 import std.conv : to, text;
 import std.datetime : Duration, msecs;
 import std.stdio : writef, stdout;
@@ -46,7 +46,7 @@ static:
         tcsetattr(STDOUT_FILENO, TCSADRAIN, &newState);
 
         // begin polling
-        spawn(&pollInputEvent, thisTid);
+        spawn(&pollInputEvent);
         stdout.flush();
     }
 
@@ -164,7 +164,7 @@ static:
     }
 
     /// This method is run on a separate thread, meaning it can block
-    private void pollInputEvent(Tid parentThreadID)
+    private void pollInputEvent()
     {
         /*
          * Basically, a daemon thread doesn't need to finish in order for scone to exit.
@@ -197,7 +197,7 @@ static:
                 read(STDOUT_FILENO, &input, 1);
 
                 // Send key code to main thread (where it will be handled).
-                send(parentThreadID, input);
+                send(ownerTid, input);
             }
         }
     }
