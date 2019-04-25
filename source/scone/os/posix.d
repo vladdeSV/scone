@@ -106,6 +106,11 @@ static:
     /// ANSI color code from enum Color
     auto ansiColor(in Color color)
     {
+        if(color == Color.initial)
+        {
+            return 39;
+        }
+
         // Authors note, May 10th 2018:
         // legit, what is this even?
         //

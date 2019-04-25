@@ -48,6 +48,7 @@ enum Color
 
     same = 16,
     unknown = 17,
+    initial = 18,
 }
 
 unittest

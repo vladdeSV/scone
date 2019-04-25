@@ -423,8 +423,8 @@ private struct Settings
     bool fixedSize = false;
 
     /// The default foreground color used with `window.write(x, y, ...);`
-    ForegroundColor defaultForeground = Color.whiteDark.foreground;
+    ForegroundColor defaultForeground = Color.initial.foreground;
 
     /// The default background color used with `window.write(x, y, ...);`
-    BackgroundColor defaultBackground = Color.blackDark.background;
+    BackgroundColor defaultBackground = Color.initial.background;
 }
