@@ -1,13 +1,13 @@
-module scone.os.windows;
+module scone.os.windows_os;
 version (Windows):
 
 import scone.os : OS;
-import core.sys.windows.windows;
 import scone.misc.utility : hasFlag;
 import scone.window : Cell;
 import scone.input : SK, SCK, InputEvent;
 import scone.core;
 import scone.color : Color;
+import core.sys.windows.windows;
 import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;
@@ -21,7 +21,7 @@ extern (Windows)
 
 abstract class WindowsOS : OS
 {
-static:
+    static:
 
     package(scone) auto init()
     {
@@ -89,7 +89,6 @@ static:
         WriteConsoleOutputA(consoleOutputHandle, &character, charBufSize, characterPos, &writeArea);
     }
 
-    /** Set cursor position. */
     auto setCursor(in uint x, in uint y)
     {
         GetConsoleScreenBufferInfo(consoleOutputHandle, &consoleScreenBufferInfo);
@@ -99,13 +98,11 @@ static:
         SetConsoleCursorPosition(consoleOutputHandle, change);
     }
 
-    /** Set window title */
     auto title(in string title)
     {
         SetConsoleTitleA(title.toStringz);
     }
 
-    /** Set cursor visible. */
     auto cursorVisible(in bool visible)
     {
         CONSOLE_CURSOR_INFO cci;
@@ -114,7 +111,6 @@ static:
         SetConsoleCursorInfo(consoleOutputHandle, &cci);
     }
 
-    /** Set line wrapping. */
     auto lineWrapping(in bool lw)
     {
         lw ? SetConsoleMode(consoleOutputHandle, 0x0002) : SetConsoleMode(consoleOutputHandle, 0x0);
@@ -162,11 +158,47 @@ static:
         return [consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1, consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1];
     }
 
-    private HANDLE consoleHandle, consoleOutputHandle, consoleInputHandle;
-    private DWORD _inputsRead, consoleMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, oldConsoleMode;
-    private INPUT_RECORD[128] inputRecordBuffer;
-    private CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
-    private uint[2] _initialSize;
+    auto retreiveInputs()
+    {
+        DWORD read = 0;
+        GetNumberOfConsoleInputEvents(consoleInputHandle, &read);
+
+        if (!read)
+        {
+            return null;
+        }
+
+        InputEvent[] _inputEvents;
+
+        ReadConsoleInputA(consoleInputHandle, inputRecordBuffer.ptr, 128, &_inputsRead);
+        for (uint e = 0; e < read; ++e)
+        {
+            switch (inputRecordBuffer[e].EventType)
+            {
+            case  /* 0x0002 */ MOUSE_EVENT:
+                // this means the mouse has been clicked/moved
+            case  /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
+                // this means the window console has been resized
+                // TODO: This is where we want to notify scone that the window should be cleared and redrawn
+            case  /* 0x0008 */ MENU_EVENT:
+                // this means the user has clicked on the menu (should be ignored according to microsoft)
+            case  /* 0x0010 */ FOCUS_EVENT:
+                // this means the user has switched focus of the window (should be ignored according to microsoft)
+                break;
+            case  /* 0x0001 */ KEY_EVENT:
+                _inputEvents ~= InputEvent(
+                    getKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
+                    getControlKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent),
+                    cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown
+                );
+                break;
+            default:
+                break;
+            }
+        }
+
+        return _inputEvents;
+    }
 
     ushort attributesFromCell(Cell cell)
     {
@@ -281,44 +313,6 @@ static:
         }
 
         return attributes;
-    }
-
-    auto retreiveInputs()
-    {
-        DWORD read = 0;
-        GetNumberOfConsoleInputEvents(consoleInputHandle, &read);
-
-        if (!read)
-        {
-            return null;
-        }
-
-        InputEvent[] _inputEvents;
-
-        ReadConsoleInputA(consoleInputHandle, inputRecordBuffer.ptr, 128, &_inputsRead);
-        for (uint e = 0; e < read; ++e)
-        {
-            switch (inputRecordBuffer[e].EventType)
-            {
-            case  /* 0x0002 */ MOUSE_EVENT:
-                // this means the mouse has been clicked/moved
-            case  /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
-                // this means the window console has been resized
-                // TODO: This is where we want to notify scone that the window should be cleared and redrawn
-            case  /* 0x0008 */ MENU_EVENT:
-                // this means the user has clicked on the menu (should be ignored according to microsoft)
-            case  /* 0x0010 */ FOCUS_EVENT:
-                // this means the user has switched focus of the window (should be ignored according to microsoft)
-                break;
-            case  /* 0x0001 */ KEY_EVENT:
-                _inputEvents ~= InputEvent(getKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent), getControlKeyFromKeyEventRecord(inputRecordBuffer[e].KeyEvent), cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown);
-                break;
-            default:
-                break;
-            }
-        }
-
-        return _inputEvents;
     }
 
     SK getKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
@@ -590,9 +584,55 @@ static:
         }
     }
 
+    SCK getControlKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
+    {
+        SCK fin;
+
+        auto cm = k.dwControlKeyState;
+
+        if (hasFlag(cm, CAPSLOCK_ON))
+        {
+            fin |= SCK.capslock;
+        }
+        if (hasFlag(cm, SCROLLLOCK_ON))
+        {
+            fin |= SCK.scrolllock;
+        }
+        if (hasFlag(cm, SHIFT_PRESSED))
+        {
+            fin |= SCK.shift;
+        }
+        if (hasFlag(cm, ENHANCED_KEY))
+        {
+            fin |= SCK.enhanced;
+        }
+        if (hasFlag(cm, LEFT_ALT_PRESSED))
+        {
+            fin |= SCK.alt;
+        }
+        if (hasFlag(cm, RIGHT_ALT_PRESSED))
+        {
+            fin |= SCK.alt;
+        }
+        if (hasFlag(cm, LEFT_CTRL_PRESSED))
+        {
+            fin |= SCK.ctrl;
+        }
+        if (hasFlag(cm, RIGHT_CTRL_PRESSED))
+        {
+            fin |= SCK.ctrl;
+        }
+        if (hasFlag(cm, NUMLOCK_ON))
+        {
+            fin |= SCK.numlock;
+        }
+
+        return fin;
+    }
+ 
     /// Specific key codes for (practically) ASCII
     /// Authors note: I believe all these can be found in the Dlang source code, however, they are here because they didn't exist in an ealier verison of Dlang.
-    enum WindowsKeyCode
+    private enum WindowsKeyCode
     {
         /// 0 key
         K_0 = 0x30,
@@ -668,49 +708,9 @@ static:
         K_Z = 0x5A,
     }
 
-    SCK getControlKeyFromKeyEventRecord(KEY_EVENT_RECORD k)
-    {
-        SCK fin;
-
-        auto cm = k.dwControlKeyState;
-
-        if (hasFlag(cm, CAPSLOCK_ON))
-        {
-            fin |= SCK.capslock;
-        }
-        if (hasFlag(cm, SCROLLLOCK_ON))
-        {
-            fin |= SCK.scrolllock;
-        }
-        if (hasFlag(cm, SHIFT_PRESSED))
-        {
-            fin |= SCK.shift;
-        }
-        if (hasFlag(cm, ENHANCED_KEY))
-        {
-            fin |= SCK.enhanced;
-        }
-        if (hasFlag(cm, LEFT_ALT_PRESSED))
-        {
-            fin |= SCK.alt;
-        }
-        if (hasFlag(cm, RIGHT_ALT_PRESSED))
-        {
-            fin |= SCK.alt;
-        }
-        if (hasFlag(cm, LEFT_CTRL_PRESSED))
-        {
-            fin |= SCK.ctrl;
-        }
-        if (hasFlag(cm, RIGHT_CTRL_PRESSED))
-        {
-            fin |= SCK.ctrl;
-        }
-        if (hasFlag(cm, NUMLOCK_ON))
-        {
-            fin |= SCK.numlock;
-        }
-
-        return fin;
-    }
+    private HANDLE consoleHandle, consoleOutputHandle, consoleInputHandle;
+    private DWORD _inputsRead, consoleMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, oldConsoleMode;
+    private INPUT_RECORD[128] inputRecordBuffer;
+    private CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
+    private uint[2] _initialSize;
 }

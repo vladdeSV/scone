@@ -1,4 +1,4 @@
-module scone.os.posix;
+module scone.os.posix_os;
 version (Posix):
 
 import scone.color;
@@ -6,7 +6,7 @@ import scone.input;
 import scone.os;
 
 /// needs to be specifically set, otherwise ioctl crashes D:
-version (OSX) enum TIOCGWINSZ = 0x40087468;
+version (OSX) { enum TIOCGWINSZ = 0x40087468; }
 
 import core.stdc.stdio;
 import core.sys.posix.fcntl;
