@@ -166,12 +166,8 @@ pure auto isActualColor(C)(C color) if (is(C : Color))
 }
 
 /**
- * Convert a color to it's dark counter-part
- * If the color already is dark, the same color is returned
- * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
  *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- * Return: Light variant of the same type of color passed in
  */
 pure C light(C)(C color) if (is(C : Color))
 {
@@ -194,12 +190,8 @@ unittest
 }
 
 /**
- * Convert a color to it's light counter-part
- * If the color already is light, the same color is returned
- * If the color doesn't exist (`cast(Color)123`), `Color.unknown` is returned
  * Params:
  *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- * Return: Dark variant of the same type of color passed in. If not a color, return same value
  */
 pure C dark(C)(C color) if (is(C : Color))
 {
