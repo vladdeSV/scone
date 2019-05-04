@@ -1,6 +1,7 @@
 module scone.window;
 
 import scone.color;
+import scone.core : logger;
 import scone.input;
 import scone.os;
 
@@ -8,7 +9,7 @@ import std.algorithm : min;
 import std.conv : text, to;
 import std.stdio : stdout, write;
 import std.traits : isNumeric;
-import scone.core : logger;
+import std.typecons : tuple;
 
 ///
 struct Window
@@ -57,90 +58,20 @@ struct Window
             return;
         }
 
-        // Calculate the lenght of what is to be printed
-        int counter = 0;
-        foreach (arg; args)
+        auto data = this.cellsFromArguments(args);
+        auto outputCells = data.cells;
+        auto foreground = data.fg;
+        auto background = data.bg;
+
+        // Skip if everything happens left of / over window
+        if (y < 0 || (x + outputCells.length) < 0)
         {
-            static if (is(typeof(arg) : Color))
-            {
-                continue;
-            }
-
-            else static if (is(typeof(arg) == Cell))
-            {
-                ++counter;
-                continue;
-            }
-            else static if (is(typeof(arg) == Cell[]))
-            {
-                counter += arg.length;
-                continue;
-            }
-            else
-            {
-                counter += to!string(arg).length;
-            }
-        }
-
-        Cell[] outputCells;
-        outputCells.length = counter;
-
-        ForegroundColor foreground = Color.same;
-        BackgroundColor background = Color.same;
-
-        int i = 0;
-        foreach (arg; args)
-        {
-            static if (is(typeof(arg) == ForegroundColor))
-            {
-                foreground = arg;
-            }
-            else static if (is(typeof(arg) == BackgroundColor))
-            {
-                background = arg;
-            }
-            else static if (is(typeof(arg) == Cell))
-            {
-                outputCells[i] = arg;
-                ++i;
-            }
-            else static if (is(typeof(arg) == Cell[]))
-            {
-                foreach (cell; arg)
-                {
-                    outputCells[i] = cell;
-                    ++i;
-                }
-            }
-            else static if (is(typeof(arg) == Color))
-            {
-                logger.warning("Type `Color` passed in, which has no effect");
-            }
-            else
-            {
-                foreach (c; to!string(arg))
-                {
-                    outputCells[i] = Cell(c, foreground, background);
-                    ++i;
-                }
-            }
-        }
-
-        // If there are cells to write, and the last argument is a color, warn
-        auto lastArgument = args[$ - 1];
-        if (outputCells.length && is(typeof(lastArgument) : Color))
-        {
-            logger.warning("The last argument in %s is a color, which will not be set.", args);
+            return;
         }
 
         // If only colors were provided, just update the colors
         if (!outputCells.length)
         {
-            if (y < 0 || x < 0)
-            {
-                return;
-            }
-
             if (foreground.isActualColor)
             {
                 cells[y][x].foreground = foreground;
@@ -399,6 +330,92 @@ struct Window
     /// Settings for the window
     public Settings settings;
 
+    private auto cellsFromArguments(Args...)(Args args)
+    {
+        auto cellLength = this.cellLengthFromArguments(args);
+        auto outputCells = new Cell[](cellLength);
+
+        ForegroundColor foreground = Color.same;
+        BackgroundColor background = Color.same;
+
+        int i = 0;
+        foreach (arg; args)
+        {
+            static if (is(typeof(arg) == ForegroundColor))
+            {
+                foreground = arg;
+            }
+            else static if (is(typeof(arg) == BackgroundColor))
+            {
+                background = arg;
+            }
+            else static if (is(typeof(arg) == Cell))
+            {
+                outputCells[i] = arg;
+                ++i;
+            }
+            else static if (is(typeof(arg) == Cell[]))
+            {
+                foreach (cell; arg)
+                {
+                    outputCells[i] = cell;
+                    ++i;
+                }
+            }
+            else static if (is(typeof(arg) == Color))
+            {
+                logger.warning("`write(x, y, ...)`: Type `Color` passed in, which has no effect");
+            }
+            else
+            {
+                foreach (c; to!string(arg))
+                {
+                    outputCells[i] = Cell(c, foreground, background);
+                    ++i;
+                }
+            }
+        }
+
+        // If there are cells to write, and the last argument is a color, warn
+        auto lastArgument = args[$ - 1];
+        if (outputCells.length && is(typeof(lastArgument) : Color))
+        {
+            logger.warning("The last argument in %s is a color, which will not be set. ", args);
+        }
+
+        return tuple!("cells", "fg", "bg")(outputCells, foreground, background);
+    }
+
+    // Calculate the lenght of arguments if converted to Cell[]
+    private auto cellLengthFromArguments(Args...)(Args args)
+    {
+        int counter = 0;
+        foreach (arg; args)
+        {
+            static if (is(typeof(arg) : Color))
+            {
+                continue;
+            }
+
+            else static if (is(typeof(arg) == Cell))
+            {
+                ++counter;
+                continue;
+            }
+            else static if (is(typeof(arg) == Cell[]))
+            {
+                counter += arg.length;
+                continue;
+            }
+            else
+            {
+                counter += to!string(arg).length;
+            }
+        }
+
+        return counter;
+    }
+
     // All cells which can be written to.
     private Cell[][] cells;
 
@@ -409,18 +426,18 @@ struct Window
 ///
 struct Cell
 {
-    /// The character of the cell
+    ///
     char character;
-    /// The foreground color
+    ///
     ForegroundColor foreground;
-    /// The background color
+    ///
     BackgroundColor background;
 }
 
 private struct Settings
 {
     /// If the window buffer always should stay the same
-    bool fixedSize = false;
+    //bool fixedSize = false; todo currently not used
 
     /// The default foreground color used with `window.write(x, y, ...);`
     ForegroundColor defaultForeground = Color.initial.foreground;
