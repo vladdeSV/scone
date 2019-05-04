@@ -221,6 +221,7 @@ abstract class WindowsOS : OS
         case Color.white:
             attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
             break;
+        case Color.initial:
         case Color.whiteDark:
             attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
             break;
@@ -281,6 +282,7 @@ abstract class WindowsOS : OS
         case Color.black:
             attributes |= BACKGROUND_INTENSITY;
             break;
+        case Color.initial:
         case Color.blackDark:
             attributes |= 0;
             break;
