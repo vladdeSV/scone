@@ -19,6 +19,9 @@ import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
 import std.conv : to, text;
 import std.datetime : Duration, msecs;
 import std.stdio : writef, stdout;
+import std.process : executeShell;
+import std.string : strip;
+
 
 extern (C)
 {
@@ -33,6 +36,8 @@ static:
 
     package(scone) auto init()
     {
+        this._isWSL = "if grep -qE '(Microsoft|WSL)' /proc/version &> /dev/null ; then echo 'yes'; else echo 'no'; fi".executeShell.output.strip() == "yes".strip();
+
         _initialSize = size();
         cursorVisible(false);
 
@@ -129,6 +134,12 @@ static:
         return (color < 8 ? 90 : 30) + (color % 8);
     }
 
+    /// Is being run on Windows Subsystem for Linux (aka bash on Windows)
+    auto isWSL()
+    {
+        return this._isWSL;
+    }
+
     package(scone) auto retreiveInputs()
     {
         // this is some spooky hooky code, dealing with
@@ -204,4 +215,5 @@ static:
 
     private termios oldState, newState;
     private uint[2] _initialSize;
+    private bool _isWSL;
 }
