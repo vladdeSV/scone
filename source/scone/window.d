@@ -63,7 +63,7 @@ struct Window
         auto foreground = data.fg;
         auto background = data.bg;
 
-        // Skip if everything happens left of / over window
+        // Skip if everything happens left of or over window
         if (y < 0 || (x + outputCells.length) < 0)
         {
             return;
@@ -219,10 +219,8 @@ struct Window
                 // Set the cursor at the firstly edited cell... (POSIX magic)
                 PosixOS.setCursor(firstChanged + 1, to!uint(sy));
 
-                static import std.stdio;
-
-                //...and then print out the string via the regular write function.
-                std.stdio.write(printed);
+                //...and then print out the string via std.stdio.write function.
+                .write(printed);
 
                 // Reset 'printed'.
                 printed = null;
