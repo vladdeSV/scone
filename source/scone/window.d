@@ -214,6 +214,8 @@ struct Window
                     }
 
                     printed ~= cells[sy][px].character;
+
+                    backbuffer[sy][px] = cells[sy][px];
                 }
 
                 // Set the cursor at the firstly edited cell... (POSIX magic)
