@@ -51,7 +51,7 @@ void main() {
     <td width="50%" >
       <br>
       <p align="center"><img height="300" src="https://i.imgur.com/Y80IuZy.png"></p>
-      <p align="center"><img height="300" src="https://i.imgur.com/oyesLyl.png"></p>
+      <p align="center"><img height="300" src="https://i.imgur.com/L0MUPdE.png"></p>
     </td>
   </tr>
 </table>
