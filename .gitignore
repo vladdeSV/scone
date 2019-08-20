@@ -15,3 +15,4 @@ libscone.a
 scone.log
 source/scone/main.d
 app.d
+.vs/
