@@ -4,7 +4,7 @@
   <a href="https://code.dlang.org/packages/scone">
     <img src="https://img.shields.io/dub/v/scone.svg">
   </a>
-  <a href="https://raw.githubusercontent.com/vladdeSV/scone/master/LICENSE">
+  <a href="https://github.com/vladdeSV/scone/blob/develop/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg">
   </a>
   <a href="https://travis-ci.org/vladdeSV/scone/">
