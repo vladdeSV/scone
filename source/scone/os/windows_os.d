@@ -1,7 +1,7 @@
 module scone.os.windows_os;
 version (Windows):
 
-import scone.os : OS;
+import scone.os.os : OS;
 import scone.misc.utility : hasFlag;
 import scone.window : Cell;
 import scone.input : SK, SCK, InputEvent;
@@ -12,6 +12,8 @@ import std.algorithm : max, min;
 import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
+
+pragma(lib, "User32.lib");
 
 extern (Windows)
 {
