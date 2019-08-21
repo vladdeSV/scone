@@ -53,6 +53,8 @@ abstract class WindowsOS : OS
         // set new inputmodes
         assert(SetConsoleMode(consoleInputHandle, consoleMode), "Could not set console window mode: ERROR " ~ to!string(GetLastError()));
 
+        initialColors = consoleScreenBufferInfo.wAttributes;
+
         //"removes" the enter release key when `dub` is run
         retreiveInputs();
         // sets the cursor invisible
@@ -208,6 +210,9 @@ abstract class WindowsOS : OS
 
         switch (cell.foreground)
         {
+        case Color.initial:
+            attributes |= (initialColors & (FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
+            break;
         case Color.blue:
             attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
             break;
@@ -223,7 +228,6 @@ abstract class WindowsOS : OS
         case Color.white:
             attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
             break;
-        case Color.initial:
         case Color.whiteDark:
             attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
             break;
@@ -263,6 +267,9 @@ abstract class WindowsOS : OS
 
         switch (cell.background)
         {
+        case Color.initial:
+            attributes |= (initialColors & (BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE));
+            break;
         case Color.blue:
             attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
             break;
@@ -284,7 +291,6 @@ abstract class WindowsOS : OS
         case Color.black:
             attributes |= BACKGROUND_INTENSITY;
             break;
-        case Color.initial:
         case Color.blackDark:
             attributes |= 0;
             break;
@@ -717,4 +723,5 @@ abstract class WindowsOS : OS
     private INPUT_RECORD[128] inputRecordBuffer;
     private CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
     private uint[2] _initialSize;
+    private WORD initialColors;
 }
