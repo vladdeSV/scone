@@ -1,9 +1,9 @@
 module scone.misc.utility;
 
-import std.traits : isImplicitlyConvertible;
+import std.traits : isIntegral;
 
 /// General flag checking
-auto hasFlag(A, B)(A check, B type) if (isImplicitlyConvertible!(A, B))
+auto hasFlag(T)(T value, T flag) if (isIntegral!(T))
 {
-    return ((check & type) == type);
+    return ((value & flag) == flag);
 }
