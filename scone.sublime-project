@@ -3,10 +3,7 @@
     [
         {
             "path": "source/scone",
-            "name": "scone",
-        },
-        {
-            "path": "docs",
+            "name": "source/scone",
         },
         {
             "path": "examples",
@@ -14,7 +11,7 @@
         {
             "path": "/",
             "name": "project files",
-            "folder_exclude_patterns": ["source", "examples", "docs", "locale"],
+            "folder_exclude_patterns": ["source", "examples"],
         },
     ]
 }
