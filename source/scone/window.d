@@ -11,6 +11,10 @@ import std.stdio : stdout, write;
 import std.traits : isNumeric;
 import std.typecons : tuple;
 
+version (Windows) {
+    pragma(lib, "User32.lib");
+}
+
 ///
 struct Window
 {

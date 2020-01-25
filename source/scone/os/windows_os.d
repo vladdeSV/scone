@@ -13,8 +13,6 @@ import std.conv : to;
 import std.stdio : stdout;
 import std.string : toStringz;
 
-pragma(lib, "User32.lib");
-
 extern (Windows)
 {
     BOOL GetCurrentConsoleFont(HANDLE hConsoleOutput, BOOL bMaximumWindow, PCONSOLE_FONT_INFO lpConsoleCurrentFont);
