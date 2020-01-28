@@ -1,28 +1,37 @@
 module scone.window;
 
-import scone.color;
-import std.typecons : Tuple;
+import std.traits : isNumeric;
+import std.conv : to;
 
-alias Coordinate = Tuple!(size_t, "x", size_t, "y");
-alias Size = Tuple!(size_t, "width", size_t, "height");
+import scone.color;
+import scone.types;
+import scone.os.windows.windows_console;
+
+import std.stdio;
 
 class Window
 {
-    void write(X, Y, Args...)(X tx, Y ty, Args args) if (isNumeric!X && isNumeric!Y)
-    {
-        auto x = to!size_t(tx);
-        auto y = to!size_t(ty);
 
-        this.write(Coordinate(x, y), args);
+    private Buffer buffer;
+    private Renderer renderer;
+
+    this(Size size, Renderer renderer) //todo send in only renderer, and add size() to renderer interface?
+    {
+        //todo get window size
+        this.buffer = new Buffer(size, Cell(' ', Color.red.foreground, Color.white.background));
+        this.renderer = renderer;
     }
 
-    void write(Args...)(Coordinate origin, Args args)
+    void write(X, Y, Args...)(X tx, Y ty, Args args)
+            if (isNumeric!X && isNumeric!Y && args.length)
     {
-        if (args == 0)
-        {
-            return;
-        }
+        Coordinate origin = Coordinate(to!size_t(tx), to!size_t(ty));
 
+        this.write(origin, args);
+    }
+
+    void write(Args...)(Coordinate origin, Args args) if (args.length)
+    {
         auto cellConverter = new CellsConverter!Args(args);
         Cell[] cells = cellConverter.cells;
 
@@ -53,18 +62,18 @@ class Window
 
             Coordinate coordinate = Coordinate(origin.x + dx, origin.y + dy);
 
-            this.bufferHandler.updateCell(coordinate, cell);
+            this.buffer.updateCell(coordinate, cell);
 
             ++dx;
         }
     }
 
-    /+
     void print()
     {
-
+        this.renderer.renderBuffer(this.buffer);
     }
 
+    /+
     void title(in string title)
     {
 
@@ -97,13 +106,6 @@ class Window
     +/
 }
 
-struct Cell
-{
-    char character = ' ';
-    ForegroundColor foreground;
-    BackgroundColor background;
-}
-
 class Buffer
 {
     this(Size size, Cell defaultCell)
@@ -111,6 +113,14 @@ class Buffer
         this.size = size;
         this.buffer = new Cell[][](size.height, size.width);
         this.changed = new bool[][](size.height, size.width);
+
+        foreach (ref row; this.buffer)
+        {
+            foreach (ref cell; row)
+            {
+                cell = defaultCell;
+            }
+        }
     }
 
     void updateCell(in Coordinate coordinate, Cell cell)
@@ -121,11 +131,21 @@ class Buffer
             return;
         }
 
-        const Cell bufferCell = buffer[coordinate.y][coordinate.x];
+        const Cell bufferCell = this.cellAt(coordinate);
+
+        if (cell.foreground == Color.initial)
+        {
+            cell.foreground = Color.whiteDark;
+        }
 
         if (cell.foreground == Color.same)
         {
             cell.foreground = bufferCell.foreground;
+        }
+
+        if (cell.background == Color.initial)
+        {
+            cell.background = Color.blackDark;
         }
 
         if (cell.background == Color.same)
@@ -140,7 +160,14 @@ class Buffer
 
         changed[coordinate.y][coordinate.x] = true;
         buffer[coordinate.y][coordinate.x] = cell;
+    }
 
+    ref Cell cellAt(Coordinate coordinate)
+    {
+        assert(buffer[coordinate.y][coordinate.x].foreground != Color.same);
+        assert(buffer[coordinate.y][coordinate.x].background != Color.same);
+
+        return buffer[coordinate.y][coordinate.x];
     }
 
     void commit()
@@ -153,8 +180,20 @@ class Buffer
             }
         }
     }
-    
-    // is changed at
+
+    Coordinate[] changedCellCoordinates()
+    {
+        Coordinate[] coordinates;
+        foreach (y, ref bool[] row; changed)
+        {
+            foreach (x, bool isChanged; row)
+            {
+                coordinates ~= Coordinate(x, y);
+            }
+        }
+
+        return coordinates;
+    }
 
     private Size size;
     private bool[][] changed;
@@ -175,8 +214,8 @@ private template CellsConverter(Args...)
         {
             auto cells = new Cell[](this.length());
 
-            ForegroundColor foreground = Color.same;
-            BackgroundColor background = Color.same;
+            ForegroundColor foreground = Color.initial;
+            BackgroundColor background = Color.initial;
 
             int i = 0;
             foreach (arg; args)
@@ -228,7 +267,7 @@ private template CellsConverter(Args...)
             return cells;
         }
 
-        // Calculate the lenght of arguments if converted to Cell[]
+        // Calculate the length of arguments if converted to Cell[]
         private size_t length()
         {
             int length = 0;
