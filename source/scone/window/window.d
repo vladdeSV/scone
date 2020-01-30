@@ -74,6 +74,7 @@ class Window
     void print()
     {
         this.osWindow.renderBuffer(this.buffer);
+        this.buffer.commit();
     }
 
     /+
