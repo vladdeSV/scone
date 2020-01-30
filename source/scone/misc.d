@@ -2,8 +2,17 @@ module scone.misc;
 
 import std.traits : isIntegral;
 
-/// General flag checking
-auto hasFlag(T)(T value, T flag) if (isIntegral!(T))
+bool hasFlag(T)(T value, T flag) if (isIntegral!(T))
 {
     return ((value & flag) == flag);
+}
+
+T withFlag(T)(T value, T flag) if (isIntegral!(T))
+{
+    return value | flag;
+}
+
+T withoutFlag(T)(T value, T flag) if (isIntegral!(T))
+{
+    return value & ~flag;
 }
