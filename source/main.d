@@ -1,17 +1,28 @@
 module main;
 
 import scone;
-import scone.os.windows.windows_console;
 
 void main()
 {
-
     // should be in core.init()
 
-    auto osWindow = new WindowsConsole();
+    version(Posix)
+    {
+        import scone.os.posix.posix_terminal;
+
+        auto osWindow = new POSIXTerminal();
+    }
+
+    version(Windows)
+    {
+        import scone.os.windows.windows_console;
+
+        auto osWindow = new WindowsConsole();
+    }
 
     auto window = new Window(osWindow);
     auto inputs = new Inputs(osWindow);
+
 
     app: while (true)
     {
