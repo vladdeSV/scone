@@ -64,6 +64,8 @@ class Buffer
 
     ref Cell cellAt(Coordinate coordinate)
     {
+        assert(coordinate.x < this.size.width);
+        assert(coordinate.y < this.size.height);
         assert(buffer[coordinate.y][coordinate.x].foreground != Color.same);
         assert(buffer[coordinate.y][coordinate.x].background != Color.same);
 
@@ -88,7 +90,9 @@ class Buffer
         {
             foreach (x, bool isChanged; row)
             {
-                coordinates ~= Coordinate(x, y);
+                if (isChanged) {
+                    coordinates ~= Coordinate(x, y);
+                }
             }
         }
 

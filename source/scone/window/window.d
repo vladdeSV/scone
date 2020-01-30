@@ -10,18 +10,16 @@ import scone.window.types.color;
 import scone.window.types.coordinate : Coordinate;
 import scone.window.types.size : Size;
 
-import std.stdio;
-
 class Window
 {
-
     private Buffer buffer;
     private OSWindow osWindow;
 
     this(OSWindow osWindow)
     {
         //todo get window size
-        this.buffer = new Buffer(osWindow.windowSize(), Cell(' ', Color.red.foreground, Color.white.background));
+        this.buffer = new Buffer(osWindow.windowSize(), Cell(' ',
+                Color.red.foreground, Color.white.background));
         this.osWindow = osWindow;
     }
 

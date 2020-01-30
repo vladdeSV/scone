@@ -21,11 +21,12 @@ void main()
     }
 
     auto window = new Window(osWindow);
-    auto inputs = new Inputs(osWindow);
+    //auto inputs = new Inputs(osWindow);
 
 
     app: while (true)
     {
+        /+
         foreach (n, InputEvent key; inputs.inputs())
         {
             if (!key.pressed)
@@ -38,8 +39,10 @@ void main()
                 break app;
             }
         }
+        +/
 
         window.write(Coordinate(0, 0), "testar");
+        window.write(Coordinate(13, 6), "andra");
         window.print();
     }
 }
