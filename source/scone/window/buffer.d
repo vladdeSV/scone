@@ -23,7 +23,7 @@ class Buffer
         }
     }
 
-    void updateCell(in Coordinate coordinate, Cell cell)
+    void setCell(in Coordinate coordinate, Cell cell)
     {
         if (coordinate.x < 0 || coordinate.x >= size.width || coordinate.y < 0
                 || coordinate.y >= size.height)

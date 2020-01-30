@@ -65,7 +65,7 @@ class Window
 
             Coordinate coordinate = Coordinate(origin.x + dx, origin.y + dy);
 
-            this.buffer.updateCell(coordinate, cell);
+            this.buffer.setCell(coordinate, cell);
 
             ++dx;
         }
