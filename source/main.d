@@ -8,14 +8,14 @@ void main()
 
     version(Posix)
     {
-        import scone.os.posix.posix_terminal;
+        import scone.os.posix.posix_terminal : PosixTerminal;
 
-        auto osWindow = new POSIXTerminal();
+        auto osWindow = new PosixTerminal();
     }
 
     version(Windows)
     {
-        import scone.os.windows.windows_console;
+        import scone.os.windows.windows_console : WindowsConsole;
 
         auto osWindow = new WindowsConsole();
     }

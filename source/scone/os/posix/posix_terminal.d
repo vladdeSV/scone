@@ -7,7 +7,7 @@ import scone.os.os_window : OSWindow;
 import scone.window.buffer : Buffer;
 import scone.window.types.size : Size;
 
-class POSIXTerminal : OSWindow
+class PosixTerminal : OSWindow
 {
     this()
     {
