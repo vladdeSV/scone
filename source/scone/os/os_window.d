@@ -6,7 +6,10 @@ import scone.window.types.size : Size;
 
 interface OSWindow
 {
-    public void renderBuffer(Buffer buffer);
     public Size windowSize();
+    public void clearWindow();
+
+    public void renderBuffer(Buffer buffer);
     public InputEvent[] latestInputEvents();
+
 }

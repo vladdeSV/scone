@@ -11,6 +11,7 @@ version (Posix)
     import scone.window.types.size : Size;
     import scone.window.types.cell : Cell;
     import scone.window.types.coordinate : Coordinate;
+    import scone.window.types.size : Size;
     import std.algorithm.searching : minElement, maxElement;
 
     class PosixTerminal : OSWindow
@@ -69,9 +70,11 @@ version (Posix)
             stdout.flush();
         }
 
-        public Size windowSize()
+        Size windowSize()
         {
-            return Size(100, 100);
+            winsize w;
+            ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+            return Size(w.ws_col, w.ws_row);
         }
 
         public InputEvent[] latestInputEvents()
@@ -83,6 +86,10 @@ version (Posix)
         {
             writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
             stdout.flush();
+        }
+
+        void clearWindow() {
+            writef("\033[2J");
         }
     }
 }

@@ -82,6 +82,10 @@ version (Windows)
                     cast(size_t) csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
         }
 
+        public void clearWindow() {
+            // todo
+        }
+
         private void writeCellAt(Cell cell, Coordinate coordinate)
         {
             CHAR_INFO[] charBuffer = [CellConverter.toCharInfo(cell)];
