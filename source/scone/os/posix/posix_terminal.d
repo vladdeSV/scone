@@ -15,9 +15,9 @@ version (Posix)
     import std.conv : text;
     import std.stdio : writef, stdout;
     import core.sys.posix.sys.ioctl : ioctl, winsize;
+    import core.sys.posix.sys.ttycom : TIOCGWINSZ;
     import core.sys.posix.unistd : STDOUT_FILENO;
 
-    version (OSX) { enum TIOCGWINSZ = 0x40087468; }
 
     class PosixTerminal : OSWindow
     {
