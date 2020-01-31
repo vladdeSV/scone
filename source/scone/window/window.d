@@ -154,7 +154,7 @@ private template CellsConverter(Args...)
                 }
                 else
                 {
-                    foreach (c; to!string(arg))
+                    foreach (c; to!dstring(arg))
                     {
                         cells[i] = Cell(c, foreground, background);
                         ++i;

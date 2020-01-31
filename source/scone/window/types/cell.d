@@ -4,7 +4,7 @@ import scone.window.types.color;
 
 struct Cell
 {
-    char character = ' ';
+    dchar character = ' ';
     ForegroundColor foreground = Color.initial;
     BackgroundColor background = Color.initial;
 }
