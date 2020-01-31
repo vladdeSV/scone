@@ -18,7 +18,7 @@ class Window
     this(OSWindow osWindow)
     {
         //todo get window size
-        this.buffer = new Buffer(osWindow.windowSize(), Cell(' '));
+        this.buffer = new Buffer(osWindow.windowSize());
         this.osWindow = osWindow;
     }
 
@@ -87,33 +87,27 @@ class Window
         return this.buffer.size;
     }
 
-    /+
-    void title(in string title)
-    {
 
+    void size(in Size size)
+    {
+        this.buffer = new Buffer(size);
+        this.osWindow.windowSize(size);
     }
 
+
+    void title(in dstring title)
+    {
+        osWindow.windowTitle(title);
+    }
+
+
+    /+
     void position(X, Y)(in X tx, in Y ty) if (isNumeric!X && isNumeric!Y)
     {
 
     }
 
     void position(in Coordinate coordinate)
-    {
-
-    }
-
-    Size size()
-    {
-
-    }
-
-    void resize(in Size size)
-    {
-
-    }
-
-    void resize(in size_t width, in size_t height)
     {
 
     }

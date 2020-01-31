@@ -8,7 +8,7 @@ import scone.window.types.size : Size;
 
 class Buffer
 {
-    this(Size size, Cell defaultCell)
+    this(Size size)
     {
         this.bufferSize = size;
         this.buffer = new Cell[][](size.height, size.width);
@@ -18,7 +18,7 @@ class Buffer
         {
             foreach (ref cell; row)
             {
-                cell = defaultCell;
+                cell = Cell(' ');
             }
         }
     }
