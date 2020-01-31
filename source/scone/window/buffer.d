@@ -10,7 +10,7 @@ class Buffer
 {
     this(Size size, Cell defaultCell)
     {
-        this.size = size;
+        this.bufferSize = size;
         this.buffer = new Cell[][](size.height, size.width);
         this.changed = new bool[][](size.height, size.width);
 
@@ -23,14 +23,13 @@ class Buffer
         }
     }
 
+    Size size()
+    {
+        return this.bufferSize;
+    }
+
     void setCell(in Coordinate coordinate, Cell cell)
     {
-        if (coordinate.x < 0 || coordinate.x >= size.width || coordinate.y < 0
-                || coordinate.y >= size.height)
-        {
-            return;
-        }
-
         const Cell bufferCell = this.cellAt(coordinate);
 
         if (cell.foreground == Color.initial)
@@ -64,8 +63,10 @@ class Buffer
 
     ref Cell cellAt(Coordinate coordinate)
     {
-        assert(coordinate.x < this.size.width);
-        assert(coordinate.y < this.size.height);
+        assert(coordinate.x < this.bufferSize.width);
+        assert(coordinate.y < this.bufferSize.height);
+        assert(coordinate.x >= 0);
+        assert(coordinate.y >= 0);
         assert(buffer[coordinate.y][coordinate.x].foreground != Color.same);
         assert(buffer[coordinate.y][coordinate.x].background != Color.same);
 
@@ -99,7 +100,7 @@ class Buffer
         return coordinates;
     }
 
-    private Size size;
+    private Size bufferSize;
     private bool[][] changed;
     private Cell[][] buffer;
 }

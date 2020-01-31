@@ -62,6 +62,14 @@ class Window
 
             Coordinate coordinate = Coordinate(origin.x + dx, origin.y + dy);
 
+            if(coordinate.x < 0 || coordinate.x >= buffer.size.width) {
+                continue;
+            }
+
+            if(coordinate.y < 0 || coordinate.y >= buffer.size.height) {
+                return;
+            }
+
             this.buffer.setCell(coordinate, cell);
 
             ++dx;
