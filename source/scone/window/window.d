@@ -18,8 +18,7 @@ class Window
     this(OSWindow osWindow)
     {
         //todo get window size
-        this.buffer = new Buffer(osWindow.windowSize(), Cell(' ',
-                Color.red.foreground, Color.white.background));
+        this.buffer = new Buffer(osWindow.windowSize(), Cell(' '));
         this.osWindow = osWindow;
     }
 
