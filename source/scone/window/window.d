@@ -82,6 +82,11 @@ class Window
         this.buffer.commit();
     }
 
+    Size size()
+    {
+        return this.buffer.size;
+    }
+
     /+
     void title(in string title)
     {
@@ -125,7 +130,7 @@ private template CellsConverter(Args...)
             this.args = args;
         }
 
-        private Cell[] cells()
+        public Cell[] cells()
         {
             auto cells = new Cell[](this.length());
 
