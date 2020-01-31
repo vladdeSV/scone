@@ -14,8 +14,7 @@ version (Posix)
     import std.algorithm.searching : minElement, maxElement;
     import std.conv : text;
     import std.stdio : writef, stdout;
-    import core.sys.posix.sys.ioctl : ioctl, winsize;
-    import core.sys.posix.sys.ttycom : TIOCGWINSZ;
+    import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import core.sys.posix.unistd : STDOUT_FILENO;
 
 
