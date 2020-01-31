@@ -2,7 +2,7 @@ module scone.input.input_event;
 
 import scone.input.scone_key : SK;
 import scone.input.scone_control_key : SCK;
-import scone.misc : hasFlag;
+import scone.misc.flags : hasFlag;
 
 
 struct InputEvent
@@ -26,7 +26,7 @@ struct InputEvent
 
     auto hasControlKey(SCK ck)
     {
-        return hasFlag(controlKey, ck);
+        return controlKey.hasFlag(ck);
     }
 
     auto controlKey() @property

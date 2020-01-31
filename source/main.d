@@ -23,6 +23,7 @@ void main()
     auto window = new Window(osWindow);
     //auto inputs = new Inputs(osWindow);
 
+    osWindow.clearWindow();
 
     app: while (true)
     {
@@ -41,8 +42,8 @@ void main()
         }
         +/
 
-        window.write(Coordinate(0, 0), "testar");
-        window.write(Coordinate(13, 6), "andra");
+        window.write(Coordinate(0, 0),  window.size);
+        window.write(Coordinate(23, 6), Color.red.foreground, "andra");
         window.print();
     }
 }
