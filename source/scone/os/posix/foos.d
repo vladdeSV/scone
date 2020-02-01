@@ -8,8 +8,7 @@ import std.algorithm.searching : minElement, maxElement;
 import std.conv : text;
 import std.typecons : Tuple;
 
-alias Foo = Tuple!(Coordinate, "coordinate", string, "output");
-
+alias PartialRowOutput = Tuple!(Coordinate, "coordinate", string, "output");
 private alias DirtyRow = Tuple!(size_t, "row", size_t, "min", size_t, "max");
 
 class Foos
@@ -21,9 +20,9 @@ class Foos
         this.buffer = buffer;
     }
 
-    Foo[] foo()
+    PartialRowOutput[] partialRows()
     {
-        Foo[] foos = [];
+        PartialRowOutput[] foos;
 
         foreach (DirtyRow row; this.dirtyRows(buffer))
         {
@@ -71,11 +70,11 @@ class Foos
                 print ~= currentCell.character;
             }
 
-            Foo f;
-            f.coordinate = Coordinate(row.min, y);
-            f.output = print;
+            PartialRowOutput partialRowOutput;
+            partialRowOutput.coordinate = Coordinate(row.min, y);
+            partialRowOutput.output = print;
 
-            foos ~= f;
+            foos ~= partialRowOutput;
         }
 
         return foos;
@@ -100,12 +99,12 @@ class Foos
             size_t min = row.minElement;
             size_t max = row.maxElement;
 
-            DirtyRow c;
-            c.row = y;
-            c.min = min;
-            c.max = max;
+            DirtyRow dirtyRow;
+            dirtyRow.row = y;
+            dirtyRow.min = min;
+            dirtyRow.max = max;
 
-            affectedRows ~= c; //todo isn't this inefficient
+            affectedRows ~= dirtyRow; //todo isn't this inefficient
         }
 
         return affectedRows;
@@ -138,6 +137,13 @@ private class AnsiColor
         {
             return 39;
         }
+
+        if(color == Color.same)
+        {
+            return cast(Color) - 1;
+        }
+
+        assert(color < 16);
 
         version (OSX)
         {

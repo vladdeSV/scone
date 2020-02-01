@@ -8,7 +8,7 @@ version (Posix)
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.os.os_window : OSWindow;
-    import scone.os.posix.foo : Foos, Foo;
+    import scone.os.posix.foo : Foos, PartialRowOutput;
     import scone.window.buffer : Buffer;
     import scone.window.types.cell : Cell;
     import scone.window.types.color;
@@ -61,12 +61,12 @@ version (Posix)
 
         void renderBuffer(Buffer buffer)
         {
-            Foos foos = new Foos(buffer);
+            auto foos = new Foos(buffer);
 
-            foreach (foo; foos.foo())
+            foreach (PartialRowOutput data; foos.partialRows())
             {
-                this.cursorPosition(foo.coordinate);
-                .writef(foo.output);
+                this.cursorPosition(data.coordinate);
+                .writef(data.output);
             }
 
             .writef("\033[0m");
