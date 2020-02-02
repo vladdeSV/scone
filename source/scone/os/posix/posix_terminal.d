@@ -10,10 +10,10 @@ version (Posix)
     import scone.os.window : Window;
     import scone.os.posix.foo : Foos, PartialRowOutput;
     import scone.frame.buffer : Buffer;
-    import scone.frame.types.cell : Cell;
-    import scone.frame.types.color;
-    import scone.frame.types.coordinate : Coordinate;
-    import scone.frame.types.size : Size;
+    import scone.frame.cell : Cell;
+    import scone.frame.color;
+    import scone.frame.coordinate : Coordinate;
+    import scone.frame.size : Size;
     import std.conv : text;
     import std.stdio : writef, stdout;
 
@@ -39,12 +39,6 @@ version (Posix)
         void size(Size size)
         {
             writef("\033[8;%s;%st", size.height, size.width);
-            stdout.flush();
-        }
-
-        void cursorPosition(in Coordinate coordinate)
-        {
-            writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
             stdout.flush();
         }
 
@@ -77,6 +71,12 @@ version (Posix)
         InputEvent[] latestInputEvents()
         {
             return [];
+        }
+
+        private void cursorPosition(in Coordinate coordinate)
+        {
+            writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
+            stdout.flush();
         }
     }
 }

@@ -1,4 +1,4 @@
-module scone.frame.types.coordinate;
+module scone.frame.coordinate;
 
 struct Coordinate
 {

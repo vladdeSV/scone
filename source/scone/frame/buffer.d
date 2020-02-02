@@ -1,10 +1,10 @@
 module scone.frame.buffer;
 
 import scone.input.input_event;
-import scone.frame.types.cell : Cell;
-import scone.frame.types.color;
-import scone.frame.types.coordinate : Coordinate;
-import scone.frame.types.size : Size;
+import scone.frame.cell : Cell;
+import scone.frame.color;
+import scone.frame.coordinate : Coordinate;
+import scone.frame.size : Size;
 
 class Buffer
 {
@@ -14,11 +14,11 @@ class Buffer
         this.buffer = new Cell[][](size.height, size.width);
         this.changed = new bool[][](size.height, size.width);
 
-        foreach (ref row; this.buffer)
+        foreach (ref row; this.changed)
         {
-            foreach (ref cell; row)
+            foreach (ref changed; row)
             {
-                cell = Cell(' ');
+                changed = true;
             }
         }
     }

@@ -5,10 +5,10 @@ import std.traits : isNumeric;
 
 import scone.os.window : Window;
 import scone.frame.buffer : Buffer;
-import scone.frame.types.cell : Cell;
-import scone.frame.types.color;
-import scone.frame.types.coordinate : Coordinate;
-import scone.frame.types.size : Size;
+import scone.frame.cell : Cell;
+import scone.frame.color;
+import scone.frame.coordinate : Coordinate;
+import scone.frame.size : Size;
 
 class Frame
 {

@@ -1,4 +1,4 @@
-module scone.frame.types.size;
+module scone.frame.size;
 
 struct Size
 {

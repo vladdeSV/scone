@@ -1,4 +1,4 @@
-module scone.frame.types.color;
+module scone.frame.color;
 
 import std.format : format;
 
