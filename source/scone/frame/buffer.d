@@ -1,10 +1,10 @@
-module scone.window.buffer;
+module scone.frame.buffer;
 
 import scone.input.input_event;
-import scone.window.types.cell : Cell;
-import scone.window.types.color;
-import scone.window.types.coordinate : Coordinate;
-import scone.window.types.size : Size;
+import scone.frame.types.cell : Cell;
+import scone.frame.types.color;
+import scone.frame.types.coordinate : Coordinate;
+import scone.frame.types.size : Size;
 
 class Buffer
 {

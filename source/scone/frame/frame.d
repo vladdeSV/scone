@@ -1,25 +1,25 @@
-module scone.window.window;
+module scone.frame.frame;
 
 import std.conv : to;
 import std.traits : isNumeric;
 
-import scone.os.os_window : OSWindow;
-import scone.window.buffer : Buffer;
-import scone.window.types.cell : Cell;
-import scone.window.types.color;
-import scone.window.types.coordinate : Coordinate;
-import scone.window.types.size : Size;
+import scone.os.window : Window;
+import scone.frame.buffer : Buffer;
+import scone.frame.types.cell : Cell;
+import scone.frame.types.color;
+import scone.frame.types.coordinate : Coordinate;
+import scone.frame.types.size : Size;
 
-class Window
+class Frame
 {
     private Buffer buffer;
-    private OSWindow osWindow;
+    private Window window;
 
-    this(OSWindow osWindow)
+    this(Window window)
     {
         //todo get window size
-        this.buffer = new Buffer(osWindow.windowSize());
-        this.osWindow = osWindow;
+        this.buffer = new Buffer(window.size());
+        this.window = window;
     }
 
     void write(X, Y, Args...)(X tx, Y ty, Args args)
@@ -78,7 +78,7 @@ class Window
 
     void print()
     {
-        this.osWindow.renderBuffer(this.buffer);
+        this.window.renderBuffer(this.buffer);
         this.buffer.commit();
     }
 
@@ -91,13 +91,13 @@ class Window
     void size(in Size size)
     {
         this.buffer = new Buffer(size);
-        this.osWindow.windowSize(size);
+        this.window.size(size);
     }
 
 
     void title(in dstring title)
     {
-        osWindow.windowTitle(title);
+        window.title(title);
     }
 
 

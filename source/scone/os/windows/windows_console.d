@@ -8,16 +8,16 @@ version (Windows)
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.misc;
-    import scone.os.os_window : OSWindow;
-    import scone.window.buffer : Buffer;
-    import scone.window.types.cell : Cell;
-    import scone.window.types.color;
-    import scone.window.types.coordinate : Coordinate;
-    import scone.window.types.size : Size;
+    import scone.os.window : Window;
+    import scone.frame.buffer : Buffer;
+    import scone.frame.types.cell : Cell;
+    import scone.frame.types.color;
+    import scone.frame.types.coordinate : Coordinate;
+    import scone.frame.types.size : Size;
 
-    class WindowsConsole : OSWindow
+    class WindowsConsole : Window
     {
-        public this()
+        this()
         {
             consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
@@ -32,7 +32,7 @@ version (Windows)
             }
         }
 
-        public void renderBuffer(Buffer buffer)
+        void renderBuffer(Buffer buffer)
         {
             foreach (Coordinate coordinate; buffer.changedCellCoordinates)
             {
@@ -73,7 +73,7 @@ version (Windows)
             return inputEvents;
         }
 
-        Size windowSize()
+        Size size()
         {
             CONSOLE_SCREEN_BUFFER_INFO csbi;
             GetConsoleScreenBufferInfo(consoleOutputHandle, &csbi);
@@ -82,7 +82,7 @@ version (Windows)
                     cast(size_t) csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
         }
 
-        public void clearWindow() {
+        void clear() {
             // todo
         }
 
@@ -107,7 +107,7 @@ version (Windows)
 
     abstract final class CellConverter
     {
-        public static CHAR_INFO toCharInfo(Cell cell)
+        static CHAR_INFO toCharInfo(Cell cell)
         {
             CHAR_INFO character;
             character.AsciiChar = cell.character;
@@ -253,12 +253,12 @@ version (Windows)
     {
         private KEY_EVENT_RECORD keyEventRecord;
 
-        public this(KEY_EVENT_RECORD keyEventRecord)
+        this(KEY_EVENT_RECORD keyEventRecord)
         {
             this.keyEventRecord = keyEventRecord;
         }
 
-        public SK sconeKey()
+        SK sconeKey()
         {
             switch (this.keyEventRecord.wVirtualKeyCode)
             {
@@ -526,7 +526,7 @@ version (Windows)
             }
         }
 
-        public SCK sconeControlKey()
+        SCK sconeControlKey()
         {
             SCK sck;
 
@@ -572,7 +572,7 @@ version (Windows)
             return sck;
         }
 
-        public bool pressed()
+        bool pressed()
         {
             cast(bool) keyEventRecord.bKeyDown;
         }

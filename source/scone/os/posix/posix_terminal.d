@@ -7,17 +7,17 @@ version (Posix)
     import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.os_window : OSWindow;
+    import scone.os.window : Window;
     import scone.os.posix.foo : Foos, PartialRowOutput;
-    import scone.window.buffer : Buffer;
-    import scone.window.types.cell : Cell;
-    import scone.window.types.color;
-    import scone.window.types.coordinate : Coordinate;
-    import scone.window.types.size : Size;
+    import scone.frame.buffer : Buffer;
+    import scone.frame.types.cell : Cell;
+    import scone.frame.types.color;
+    import scone.frame.types.coordinate : Coordinate;
+    import scone.frame.types.size : Size;
     import std.conv : text;
     import std.stdio : writef, stdout;
 
-    class PosixTerminal : OSWindow
+    class PosixTerminal : Window
     {
         this()
         {
@@ -29,14 +29,14 @@ version (Posix)
             +/
         }
 
-        Size windowSize()
+        Size size()
         {
             winsize w;
             ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
             return Size(w.ws_col, w.ws_row);
         }
 
-        void windowSize(Size size)
+        void size(Size size)
         {
             writef("\033[8;%s;%st", size.height, size.width);
             stdout.flush();
@@ -48,12 +48,12 @@ version (Posix)
             stdout.flush();
         }
 
-        void clearWindow() {
+        void clear() {
             writef("\033[2J");
             stdout.flush();
         }
 
-        void windowTitle(dstring title)
+        void title(dstring title)
         {
             writef("\033]0;%s\007", title);
             stdout.flush();

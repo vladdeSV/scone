@@ -1,6 +1,6 @@
-module scone.window.types.cell;
+module scone.frame.types.cell;
 
-import scone.window.types.color;
+import scone.frame.types.color;
 
 struct Cell
 {

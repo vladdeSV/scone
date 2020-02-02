@@ -4,31 +4,10 @@ import scone;
 
 void main()
 {
-    // should be in core.init()
-
-    version(Posix)
-    {
-        import scone.os.posix.posix_terminal : PosixTerminal;
-
-        auto osWindow = new PosixTerminal();
-    }
-
-    version(Windows)
-    {
-        import scone.os.windows.windows_console : WindowsConsole;
-
-        auto osWindow = new WindowsConsole();
-    }
-
-    auto window = new Window(osWindow);
-    //auto inputs = new Inputs(osWindow);
-
-    osWindow.clearWindow();
-
     app: while (true)
     {
         /+
-        foreach (n, InputEvent key; inputs.inputs())
+        foreach (n, InputEvent key; input.inputs())
         {
             if (!key.pressed)
             {
@@ -42,8 +21,8 @@ void main()
         }
         +/
 
-        window.write(Coordinate(0, 0),  window.size);
-        window.write(Coordinate(23, 6), Color.red.foreground, "andra");
-        window.print();
+        frame.write(Coordinate(0, 0),  frame.size);
+        frame.write(Coordinate(23, 6), Color.red.foreground, "andra");
+        frame.print();
     }
 }
