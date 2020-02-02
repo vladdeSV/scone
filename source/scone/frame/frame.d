@@ -62,11 +62,13 @@ class Frame
 
             Coordinate coordinate = Coordinate(origin.x + dx, origin.y + dy);
 
-            if(coordinate.x < 0 || coordinate.x >= buffer.size.width) {
+            if (coordinate.x < 0 || coordinate.x >= buffer.size.width)
+            {
                 continue;
             }
 
-            if(coordinate.y < 0 || coordinate.y >= buffer.size.height) {
+            if (coordinate.y < 0 || coordinate.y >= buffer.size.height)
+            {
                 return;
             }
 
@@ -87,19 +89,21 @@ class Frame
         return this.buffer.size;
     }
 
-
     void size(in Size size)
     {
         this.buffer = new Buffer(size);
         this.window.size(size);
     }
 
+    void size(in size_t width, in size_t height)
+    {
+        this.size(Size(width, height));
+    }
 
     void title(in dstring title)
     {
         window.title(title);
     }
-
 
     /+
     void position(X, Y)(in X tx, in Y ty) if (isNumeric!X && isNumeric!Y)
