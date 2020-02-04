@@ -16,3 +16,4 @@ scone.log
 source/scone/main.d
 app.d
 .vs/
+source/main.d
