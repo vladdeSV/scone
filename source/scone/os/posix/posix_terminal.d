@@ -62,7 +62,7 @@ version (Posix)
             stdout.flush();
         }
 
-        void title(in dstring title)
+        void title(in string title)
         {
             writef("\033]0;%s\007", title);
             stdout.flush();

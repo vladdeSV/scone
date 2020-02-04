@@ -95,9 +95,10 @@ version (Windows)
             // todo
         }
 
-        void title(in dstring title)
+        void title(in string title)
         {
-            // todo;
+            wstring a = to!wstring(title) ~ "\0";
+            SetConsoleTitleW(a.ptr);
         }
 
         auto cursorVisible(in bool visible)

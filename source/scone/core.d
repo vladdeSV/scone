@@ -35,6 +35,6 @@ static this()
         window = new WindowsConsole();
     }
 
-    //frame = new Frame(window); todo while debugging input
+    frame = new Frame(window);
     input = new Input(window);
 }

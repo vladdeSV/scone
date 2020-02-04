@@ -9,7 +9,7 @@ interface Window
 {
     Size size();
     void size(in Size size);
-    void title(in dstring title);
+    void title(in string title);
     void clear();
     void cursorVisible(in bool visible);
 
