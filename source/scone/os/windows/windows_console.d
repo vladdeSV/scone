@@ -15,8 +15,8 @@ version (Windows)
     import scone.misc.flags : hasFlag, withFlag;
     import scone.os.window : Window;
     import scone.os.windows.key_event_record_converter : KeyEventRecordConverter;
-    import std.conv : to;
     import std.conv : ConvOverflowException;
+    import std.conv : to;
 
     class WindowsConsole : Window
     {
@@ -85,7 +85,7 @@ version (Windows)
                     cast(size_t) csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
         }
 
-        void size(Size size)
+        void size(in Size size)
         {
             // todo
         }
@@ -95,9 +95,17 @@ version (Windows)
             // todo
         }
 
-        void title(dstring title)
+        void title(in dstring title)
         {
             // todo;
+        }
+
+        auto cursorVisible(in bool visible)
+        {
+            CONSOLE_CURSOR_INFO cci;
+            GetConsoleCursorInfo(consoleOutputHandle, &cci);
+            cci.bVisible = visible;
+            SetConsoleCursorInfo(consoleOutputHandle, &cci);
         }
 
         private void writeCellAt(Cell cell, Coordinate coordinate)

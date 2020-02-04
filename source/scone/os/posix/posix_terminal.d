@@ -17,13 +17,13 @@ version (Posix)
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.os.posix.foo : Foos, PartialRowOutput;
+    import scone.os.posix.locale.input_map : InputMap;
+    import scone.os.posix.locale.locale : Locale;
     import scone.os.window : Window;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
     import std.conv : text;
     import std.datetime : Duration, msecs;
     import std.stdio : writef, stdout;
-    import scone.os.posix.locale.input_map : InputMap;
-    import scone.os.posix.locale.data;
 
     extern (C)
     {
@@ -50,7 +50,7 @@ version (Posix)
             return Size(w.ws_col, w.ws_row);
         }
 
-        void size(Size size)
+        void size(in Size size)
         {
             writef("\033[8;%s;%st", size.height, size.width);
             stdout.flush();
@@ -62,7 +62,7 @@ version (Posix)
             stdout.flush();
         }
 
-        void title(dstring title)
+        void title(in dstring title)
         {
             writef("\033]0;%s\007", title);
             stdout.flush();
@@ -83,6 +83,12 @@ version (Posix)
             stdout.flush();
         }
 
+        void cursorVisible(in bool visible)
+        {
+            writef("\033[?25%s", visible ? "h" : "l");
+            stdout.flush();
+        }
+
         private void cursorPosition(in Coordinate coordinate)
         {
             writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
@@ -91,19 +97,21 @@ version (Posix)
 
         void initializeInput()
         {
+            this.setInputMapping();
 
-            //todo: move to appropriate place
-            version(Posix)
-            {
-                alias seqs = macInputSequences;
-            }
-            else
-            {
-                alias seqs = ubuntuInputSequences;
-            }
+            this.enableRawInput();
 
-            inputMap = new InputMap(seqs);
+            this.startPollingInput();
+        }
 
+        private void setInputMapping()
+        {
+            Locale locale = new Locale();
+            this.inputMap = new InputMap(locale.systemLocaleSequences);
+        }
+
+        private void enableRawInput()
+        {
             // store the state of the terminal
             tcgetattr(1, &terminalState);
 
@@ -111,7 +119,10 @@ version (Posix)
             termios newTerminalState = terminalState;
             cfmakeraw(&newTerminalState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newTerminalState);
+        }
 
+        private void startPollingInput()
+        {
             // begin polling
             spawn(&pollInputEvent);
         }
@@ -133,7 +144,7 @@ version (Posix)
         {
             uint[] sequence;
 
-            while (receiveTimeout(1.msecs, (uint code) { sequence ~= code; }))
+            while (receiveTimeout(5.msecs, (uint code) { sequence ~= code; }))
             {
             }
 
