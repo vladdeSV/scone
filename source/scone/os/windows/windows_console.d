@@ -101,7 +101,7 @@ version (Windows)
             SetConsoleTitleW(a.ptr);
         }
 
-        auto cursorVisible(in bool visible)
+        void cursorVisible(in bool visible)
         {
             CONSOLE_CURSOR_INFO cci;
             GetConsoleCursorInfo(consoleOutputHandle, &cci);
