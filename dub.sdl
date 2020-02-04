@@ -6,13 +6,11 @@ authors "vladdeSV"
 stringImportPaths "./source/scone/os/posix/locale/locale_data"
 
 configuration "debug" {
-    buildType "debug"
     buildRequirements "allowWarnings"
 	targetType "executable"
     targetPath "bin/"
 }
 
 configuration "release" {
-    buildType "release"
     targetType "library"
 }
