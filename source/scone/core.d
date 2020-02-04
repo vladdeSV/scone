@@ -7,9 +7,19 @@ import scone.os.window : Window;
 Frame frame;
 Input input;
 
+//todo: scone settings
+// - use default scone exit handler on ctrl+c
+// - automatically resize window buffer
+// - default cell colors
+
+private __gshared Window window;
+
 static this()
 {
-    Window window;
+    if(!(window is null))
+    {
+        return;
+    }
 
     version(Posix)
     {
@@ -25,6 +35,6 @@ static this()
         window = new WindowsConsole();
     }
 
-    frame = new Frame(window);
+    //frame = new Frame(window); todo while debugging input
     input = new Input(window);
 }

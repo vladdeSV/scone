@@ -10,10 +10,11 @@ class Input
     this(Window window)
     {
         this.window = window;
+        window.initializeInput();
     }
 
     InputEvent[] latest()
     {
-        return this.window.latestInputEvents;
+        return this.window.latestInputEvents();
     }
 }

@@ -14,4 +14,5 @@ interface Window
 
     void renderBuffer(Buffer buffer);
     InputEvent[] latestInputEvents();
+    void initializeInput();
 }
