@@ -100,7 +100,7 @@ class Frame
         this.size(Size(width, height));
     }
 
-    void title(in dstring title)
+    void title(in string title)
     {
         window.title(title);
     }
