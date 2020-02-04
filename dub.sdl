@@ -1,8 +1,17 @@
 name "scone"
-description "Simple Console"
+description "Cross-platform terminal/console input/output (text, colors)"
 copyright "Copyright © 2015, Vladimirs Nordholm"
 license "MIT"
-targetType "autodetect"
 authors "vladdeSV"
-targetPath "bin/"
-buildRequirements "allowWarnings"
+
+configuration "debug" {
+    buildType "debug"
+    buildRequirements "allowWarnings"
+	targetType "executable"
+    targetPath "bin/"
+}
+
+configuration "release" {
+    buildType "release"
+    targetType "library"
+}
