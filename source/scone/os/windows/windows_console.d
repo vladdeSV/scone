@@ -109,6 +109,11 @@ version (Windows)
             SetConsoleCursorInfo(consoleOutputHandle, &cci);
         }
 
+        void initializeInput()
+        {
+
+        }
+
         private void writeCellAt(Cell cell, Coordinate coordinate)
         {
             CHAR_INFO[] charBuffer = [CellConverter.toCharInfo(cell)];
