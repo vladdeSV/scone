@@ -109,10 +109,26 @@ version (Windows)
             SetConsoleCursorInfo(consoleOutputHandle, &cci);
         }
 
+        void initializeOutput()
+        {
+
+        }
+
+        void deinitializeOutput()
+        {
+
+        }
+
         void initializeInput()
         {
 
         }
+
+        void deinitializeInput()
+        {
+
+        }
+
 
         private void writeCellAt(Cell cell, Coordinate coordinate)
         {

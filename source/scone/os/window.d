@@ -7,6 +7,12 @@ import scone.input.input_event : InputEvent;
 
 interface Window
 {
+    void initializeOutput();
+    void deinitializeOutput();
+
+    void initializeInput();
+    void deinitializeInput();
+
     Size size();
     void size(in Size size);
     void title(in string title);
@@ -15,5 +21,4 @@ interface Window
 
     void renderBuffer(Buffer buffer);
     InputEvent[] latestInputEvents();
-    void initializeInput();
 }

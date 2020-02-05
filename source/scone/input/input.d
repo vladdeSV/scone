@@ -13,6 +13,11 @@ class Input
         window.initializeInput();
     }
 
+    ~this()
+    {
+        this.window.deinitializeInput();
+    }
+
     InputEvent[] latest()
     {
         return this.window.latestInputEvents();

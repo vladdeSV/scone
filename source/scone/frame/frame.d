@@ -20,6 +20,13 @@ class Frame
         //todo get window size
         this.buffer = new Buffer(window.size());
         this.window = window;
+
+        window.initializeOutput();
+    }
+
+    ~this()
+    {
+        window.deinitializeOutput();
     }
 
     void write(X, Y, Args...)(X tx, Y ty, Args args)

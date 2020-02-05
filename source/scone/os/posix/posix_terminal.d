@@ -95,13 +95,26 @@ version (Posix)
             stdout.flush();
         }
 
+        void initializeOutput()
+        {
+            this.cursorVisible(false);
+        }
+
+        void deinitializeOutput()
+        {
+            this.cursorVisible(true);
+        }
+
         void initializeInput()
         {
             this.setInputMapping();
-
             this.enableRawInput();
-
             this.startPollingInput();
+        }
+
+        void deinitializeInput()
+        {
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &originalTerminalState);
         }
 
         private void setInputMapping()
@@ -113,10 +126,10 @@ version (Posix)
         private void enableRawInput()
         {
             // store the state of the terminal
-            tcgetattr(1, &terminalState);
+            tcgetattr(1, &originalTerminalState);
 
             // enable raw input
-            termios newTerminalState = terminalState;
+            termios newTerminalState = originalTerminalState;
             cfmakeraw(&newTerminalState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newTerminalState);
         }
@@ -185,6 +198,6 @@ version (Posix)
         }
 
         private InputMap inputMap;
-        private termios terminalState;
+        private termios originalTerminalState;
     }
 }
