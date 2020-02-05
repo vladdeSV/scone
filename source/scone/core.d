@@ -21,28 +21,24 @@ static this()
         return;
     }
 
-    import std.stdio : writeln;
-
     version(unittest)
     {
         import scone.misc.dummy_window : DummyWindow;
 
+        // use dummy when unittesting. (previously could cause haning when starting to poll input with travis-ci)
         window = new DummyWindow();
-        writeln("dummy");
     }
     else version(Posix)
     {
         import scone.os.posix.posix_terminal : PosixTerminal;
 
         window = new PosixTerminal();
-        writeln("posix");
     }
     else version(Windows)
     {
         import scone.os.windows.windows_console : WindowsConsole;
 
         window = new WindowsConsole();
-        writeln("windows");
     }
 
     frame = new Frame(window);
