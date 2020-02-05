@@ -16,7 +16,6 @@ interface Window
     Size size();
     void size(in Size size);
     void title(in string title);
-    void clear();
     void cursorVisible(in bool visible);
 
     void renderBuffer(Buffer buffer);

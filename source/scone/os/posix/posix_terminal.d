@@ -32,58 +32,6 @@ version (Posix)
 
     class PosixTerminal : Window
     {
-        Size size()
-        {
-            winsize w;
-            ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return Size(w.ws_col, w.ws_row);
-        }
-
-        void size(in Size size)
-        {
-            writef("\033[8;%s;%st", size.height, size.width);
-            stdout.flush();
-        }
-
-        void clear()
-        {
-            writef("\033[2J");
-            stdout.flush();
-        }
-
-        void title(in string title)
-        {
-            writef("\033]0;%s\007", title);
-            stdout.flush();
-        }
-
-        void renderBuffer(Buffer buffer)
-        {
-            auto foos = new Foos(buffer);
-
-            foreach (PartialRowOutput data; foos.partialRows())
-            {
-                this.cursorPosition(data.coordinate);
-                .writef(data.output);
-            }
-
-            .writef("\033[0m");
-
-            stdout.flush();
-        }
-
-        void cursorVisible(in bool visible)
-        {
-            writef("\033[?25%s", visible ? "h" : "l");
-            stdout.flush();
-        }
-
-        private void cursorPosition(in Coordinate coordinate)
-        {
-            writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
-            stdout.flush();
-        }
-
         void initializeOutput()
         {
             this.cursorVisible(false);
@@ -103,48 +51,58 @@ version (Posix)
 
         void deinitializeInput()
         {
-            tcsetattr(STDOUT_FILENO, TCSADRAIN, &originalTerminalState);
+            this.resetTerminalState();
         }
 
-        private void setInputMapping()
+        Size size()
         {
-            Locale locale = new Locale();
-            this.inputMap = new InputMap(locale.systemLocaleSequences);
+            winsize w;
+            ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+            return Size(w.ws_col, w.ws_row);
         }
 
-        private void enableRawInput()
+        void size(in Size size)
         {
-            // store the state of the terminal
-            tcgetattr(1, &originalTerminalState);
-
-            // enable raw input
-            termios newTerminalState = originalTerminalState;
-            cfmakeraw(&newTerminalState);
-            tcsetattr(STDOUT_FILENO, TCSADRAIN, &newTerminalState);
+            writef("\033[8;%s;%st", size.height, size.width);
+            stdout.flush();
         }
 
-        // unsure when to use this.
-        private void setInputEcho(in bool echo)
+        void title(in string title)
         {
-            termios termInfo;
-            tcgetattr(STDOUT_FILENO, &termInfo);
+            writef("\033]0;%s\007", title);
+            stdout.flush();
+        }
 
-            if(echo)
+        void cursorVisible(in bool visible)
+        {
+            writef("\033[?25%s", visible ? "h" : "l");
+            stdout.flush();
+        }
+
+        void renderBuffer(Buffer buffer)
+        {
+            auto foos = new Foos(buffer);
+
+            foreach (PartialRowOutput data; foos.partialRows())
             {
-                termInfo.c_lflag |= ECHO;
-            }
-            else
-            {
-                termInfo.c_lflag &= ~ECHO;
+                this.cursorPosition(data.coordinate);
+                .writef(data.output);
             }
 
-            tcsetattr(STDOUT_FILENO, TCSADRAIN, &termInfo);
+            .writef("\033[0m");
+
+            stdout.flush();
         }
 
-        private void startPollingInput()
+        uint[] retreiveInputSequence()
         {
-            // begin polling
-            spawn(&pollInputEvent);
+            uint[] sequence;
+
+            while (receiveTimeout(5.msecs, (uint code) { sequence ~= code; }))
+            {
+            }
+
+            return sequence;
         }
 
         InputEvent[] latestInputEvents()
@@ -160,18 +118,13 @@ version (Posix)
             return inputMap.inputEventsFromSequence(sequence);
         }
 
-        uint[] retreiveInputSequence()
+        private void startPollingInput()
         {
-            uint[] sequence;
-
-            while (receiveTimeout(5.msecs, (uint code) { sequence ~= code; }))
-            {
-            }
-
-            return sequence;
+            // begin polling
+            spawn(&pollInputEvent);
         }
 
-        static void pollInputEvent()
+        private static void pollInputEvent()
         {
             Thread.getThis.isDaemon = true;
 
@@ -202,6 +155,59 @@ version (Posix)
                     send(ownerTid, input);
                 }
             }
+        }
+
+        private void cursorPosition(in Coordinate coordinate)
+        {
+            writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
+            stdout.flush();
+        }
+
+        private void clear()
+        {
+            writef("\033[2J");
+            stdout.flush();
+        }
+
+        // unsure when to use this.
+        // om mac this shows a small key icon, used when entering passwords
+        private void setInputEcho(in bool echo)
+        {
+            termios termInfo;
+            tcgetattr(STDOUT_FILENO, &termInfo);
+
+            if(echo)
+            {
+                termInfo.c_lflag |= ECHO;
+            }
+            else
+            {
+                termInfo.c_lflag &= ~ECHO;
+            }
+
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &termInfo);
+        }
+
+        private void setInputMapping()
+        {
+            Locale locale = new Locale();
+            this.inputMap = new InputMap(locale.systemLocaleSequences);
+        }
+
+        private void enableRawInput()
+        {
+            // store the state of the terminal
+            tcgetattr(1, &originalTerminalState);
+
+            // enable raw input
+            termios newTerminalState = originalTerminalState;
+            cfmakeraw(&newTerminalState);
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &newTerminalState);
+        }
+
+        private void resetTerminalState()
+        {
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &originalTerminalState);
         }
 
         private InputMap inputMap;

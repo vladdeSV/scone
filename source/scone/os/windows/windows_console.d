@@ -20,19 +20,60 @@ version (Windows)
 
     class WindowsConsole : Window
     {
-        this()
+        void initializeOutput()
         {
             consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
             {
                 //todo
             }
+        }
 
+        void deinitializeOutput()
+        {
+
+        }
+
+        void initializeInput()
+        {
             consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
             if (consoleInputHandle == INVALID_HANDLE_VALUE)
             {
                 //todo
             }
+        }
+
+        void deinitializeInput()
+        {
+
+        }
+
+        Size size()
+        {
+            CONSOLE_SCREEN_BUFFER_INFO csbi;
+            GetConsoleScreenBufferInfo(consoleOutputHandle, &csbi);
+
+            return Size(cast(size_t) csbi.srWindow.Right - csbi.srWindow.Left + 1,
+                    cast(size_t) csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
+        }
+
+        void size(in Size size)
+        {
+            // todo
+        }
+
+        void title(in string title)
+        {
+            wstring a = to!wstring(title) ~ "\0";
+            SetConsoleTitleW(a.ptr);
+        }
+
+        void cursorVisible(in bool visible)
+        {
+            CONSOLE_CURSOR_INFO cci;
+            GetConsoleCursorInfo(consoleOutputHandle, &cci);
+            cci.bVisible = visible;
+            SetConsoleCursorInfo(consoleOutputHandle, &cci);
         }
 
         void renderBuffer(Buffer buffer)
@@ -74,59 +115,6 @@ version (Windows)
             }
 
             return inputEvents;
-        }
-
-        Size size()
-        {
-            CONSOLE_SCREEN_BUFFER_INFO csbi;
-            GetConsoleScreenBufferInfo(consoleOutputHandle, &csbi);
-
-            return Size(cast(size_t) csbi.srWindow.Right - csbi.srWindow.Left + 1,
-                    cast(size_t) csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
-        }
-
-        void size(in Size size)
-        {
-            // todo
-        }
-
-        void clear()
-        {
-            // todo
-        }
-
-        void title(in string title)
-        {
-            wstring a = to!wstring(title) ~ "\0";
-            SetConsoleTitleW(a.ptr);
-        }
-
-        void cursorVisible(in bool visible)
-        {
-            CONSOLE_CURSOR_INFO cci;
-            GetConsoleCursorInfo(consoleOutputHandle, &cci);
-            cci.bVisible = visible;
-            SetConsoleCursorInfo(consoleOutputHandle, &cci);
-        }
-
-        void initializeOutput()
-        {
-
-        }
-
-        void deinitializeOutput()
-        {
-
-        }
-
-        void initializeInput()
-        {
-
-        }
-
-        void deinitializeInput()
-        {
-
         }
 
 
