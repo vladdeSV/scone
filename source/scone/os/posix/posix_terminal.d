@@ -32,17 +32,6 @@ version (Posix)
 
     class PosixTerminal : Window
     {
-        this()
-        {
-            /+
-            // hide input
-            termios termInfo;
-            tcgetattr(STDOUT_FILENO, &termInfo);
-            termInfo.c_lflag &= ~ECHO;
-            tcsetattr(STDOUT_FILENO, TCSADRAIN, &termInfo);
-            +/
-        }
-
         Size size()
         {
             winsize w;
@@ -132,6 +121,24 @@ version (Posix)
             termios newTerminalState = originalTerminalState;
             cfmakeraw(&newTerminalState);
             tcsetattr(STDOUT_FILENO, TCSADRAIN, &newTerminalState);
+        }
+
+        // unsure when to use this.
+        private void setInputEcho(in bool echo)
+        {
+            termios termInfo;
+            tcgetattr(STDOUT_FILENO, &termInfo);
+
+            if(echo)
+            {
+                termInfo.c_lflag |= ECHO;
+            }
+            else
+            {
+                termInfo.c_lflag &= ~ECHO;
+            }
+
+            tcsetattr(STDOUT_FILENO, TCSADRAIN, &termInfo);
         }
 
         private void startPollingInput()
