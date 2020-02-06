@@ -30,10 +30,16 @@ version (Posix)
         void cfmakeraw(termios* termios_p);
     }
 
+    struct ResizeEvent
+    {
+        Size newSize;
+    }
+
     class PosixTerminal : Window
     {
         void initializeOutput()
         {
+            spawn(&pollTerminalResize, size);
             this.cursorVisible(false);
         }
 
@@ -110,12 +116,34 @@ version (Posix)
             auto sequence = this.retreiveInputSequence();
 
             //todo: returns null here. should this logic be here or in `inputMap.inputEventsFromSequence(sequence)` instead?
-            if(sequence.length == 0)
+            if (sequence.length == 0)
             {
                 return null;
             }
 
             return inputMap.inputEventsFromSequence(sequence);
+        }
+
+        private static void pollTerminalResize(Size initialSize)
+        {
+            Thread.getThis.isDaemon = true;
+
+            Size previousSize = initialSize;
+
+            while (true)
+            {
+                Thread.sleep(250.msecs);
+
+                winsize w;
+                ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+                Size currentSize = Size(w.ws_col, w.ws_row);
+
+                if (currentSize != previousSize)
+                {
+                    previousSize = currentSize;
+                    send(ownerTid, ResizeEvent(currentSize));
+                }
+            }
         }
 
         private void startPollingInput()
@@ -139,12 +167,11 @@ version (Posix)
 
                 if (bytesRead == -1)
                 {
-                    // error :(
-                    // logf("(POSIX) ERROR: polling input returned -1");
+                    // error
                 }
                 else if (bytesRead == 0)
                 {
-                    // If no key was pressed within `timeout`
+                    // no key was pressed within `timeout`. this is normal
                 }
                 else if (ufds.revents & POLLIN)
                 {
@@ -176,7 +203,7 @@ version (Posix)
             termios termInfo;
             tcgetattr(STDOUT_FILENO, &termInfo);
 
-            if(echo)
+            if (echo)
             {
                 termInfo.c_lflag |= ECHO;
             }

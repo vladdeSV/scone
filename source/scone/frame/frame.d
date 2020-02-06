@@ -87,6 +87,15 @@ class Frame
 
     void print()
     {
+
+        import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
+        import std.datetime : Duration, msecs;
+        import std.stdio;
+        import scone.os.posix.posix_terminal;
+        receiveTimeout(Duration.zero, (ResizeEvent event) {
+            this.buffer = new Buffer(event.newSize);
+        });
+
         this.window.renderBuffer(this.buffer);
         this.buffer.commit();
     }
