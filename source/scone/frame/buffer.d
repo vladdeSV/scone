@@ -14,13 +14,7 @@ class Buffer
         this.buffer = new Cell[][](size.height, size.width);
         this.changed = new bool[][](size.height, size.width);
 
-        foreach (ref row; this.changed)
-        {
-            foreach (ref changed; row)
-            {
-                changed = true;
-            }
-        }
+        this.redraw();
     }
 
     Size size()
@@ -32,19 +26,9 @@ class Buffer
     {
         const Cell bufferCell = this.cellAt(coordinate);
 
-        if (cell.foreground == Color.initial)
-        {
-            cell.foreground = Color.whiteDark;
-        }
-
         if (cell.foreground == Color.same)
         {
             cell.foreground = bufferCell.foreground;
-        }
-
-        if (cell.background == Color.initial)
-        {
-            cell.background = Color.blackDark;
         }
 
         if (cell.background == Color.same)
@@ -91,13 +75,26 @@ class Buffer
         {
             foreach (x, bool isChanged; row)
             {
-                if (isChanged) {
+                if (isChanged)
+                {
                     coordinates ~= Coordinate(x, y);
                 }
             }
         }
 
         return coordinates;
+    }
+
+
+    private void redraw()
+    {
+        foreach (ref row; this.changed)
+        {
+            foreach (ref changed; row)
+            {
+                changed = true;
+            }
+        }
     }
 
     private Size bufferSize;

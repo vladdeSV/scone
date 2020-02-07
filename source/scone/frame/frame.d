@@ -3,12 +3,14 @@ module scone.frame.frame;
 import std.conv : to;
 import std.traits : isNumeric;
 
-import scone.os.window : Window;
+import scone.os.window : Window, ResizeEvent;
 import scone.frame.buffer : Buffer;
 import scone.frame.cell : Cell;
 import scone.frame.color;
 import scone.frame.coordinate : Coordinate;
 import scone.frame.size : Size;
+import std.concurrency : receiveTimeout;
+import std.datetime : Duration;
 
 class Frame
 {
@@ -87,11 +89,6 @@ class Frame
 
     void print()
     {
-
-        import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
-        import std.datetime : Duration, msecs;
-        import std.stdio;
-        import scone.os.posix.posix_terminal;
         receiveTimeout(Duration.zero, (ResizeEvent event) {
             this.buffer = new Buffer(event.newSize);
         });

@@ -59,12 +59,9 @@ class Foos
 
                 if (updateColors)
                 {
-                    auto foregroundNumber = new AnsiColor(currentCell.foreground)
-                        .foregroundNumber;
-                    auto backgroundNumber = new AnsiColor(currentCell.background)
-                        .backgroundNumber;
-                    print ~= text("\033[0;", foregroundNumber, ";",
-                            backgroundNumber, "m",);
+                    auto foregroundNumber = new AnsiColor(currentCell.foreground).foregroundNumber;
+                    auto backgroundNumber = new AnsiColor(currentCell.background).backgroundNumber;
+                    print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                 }
 
                 print ~= currentCell.character;
@@ -138,9 +135,9 @@ private class AnsiColor
             return 39;
         }
 
-        if(color == Color.same)
+        if (color == Color.same)
         {
-            return cast(Color) - 1;
+            return cast(Color)-1;
         }
 
         assert(color < 16);

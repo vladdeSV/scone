@@ -21,3 +21,8 @@ interface Window
     void renderBuffer(Buffer buffer);
     InputEvent[] latestInputEvents();
 }
+
+struct ResizeEvent
+{
+    Size newSize;
+}
