@@ -16,8 +16,8 @@ private __gshared Window window;
 
 static this()
 {
-    //todo this isn't really thread safe. but it works.
-    if(!(window is null))
+    //todo this isn't really thread safe. but it works. wait i'm not actually sure if it's unsafe or not.
+    if(window !is null)
     {
         return;
     }
