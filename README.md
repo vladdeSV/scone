@@ -77,7 +77,7 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 |:---|:---:|:---:|
 |text|✓|✓|
 |emoji||✓|
-|anis-color|✓|✓|
+|ansi-color|✓|✓|
 |high performance output|✓||
 |reliable resize|✓||
 
@@ -89,6 +89,7 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 |key release detection|✓||
 
  *=Input is converted from arbitrary number sequences (may differ from system to system) to an input event. Basic ASCII should work no matter what system, however special keys like the up-arrow or function keys can vary drastically.
+ 
  **=Can only register the last pressed control key.
 
 ### Install with [dub](https://code.dlang.org/download)
