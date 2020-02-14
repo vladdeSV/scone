@@ -97,14 +97,14 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 ```js
 /// dub.json
 "dependencies": {
-    "scone": "~v3", // do not use in production yet. unfinished
+    "scone": "~develop", // do not use in production yet. unfinished
     ...
 }
 ```
 
 ```js
 /// dub.sdl
-dependency "scone" version="~v3", // do not use in production yet. unfinished
+dependency "scone" version="~develop", // do not use in production yet. unfinished
 ```
 
 ### Projects using **scone**
