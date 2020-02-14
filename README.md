@@ -1,5 +1,5 @@
 <h1 align="center">🍞 scone</h1>
-<h4 align="center">Create cross-platform CLI applications with ease</h4>
+<h4 align="center">Create cross-platform console/terminal applications with ease</h4>
 <p align="center">
   <a href="https://code.dlang.org/packages/scone">
     <img src="https://img.shields.io/dub/v/scone.svg">
@@ -8,12 +8,14 @@
     <img src="https://img.shields.io/badge/license-MIT-blue.svg">
   </a>
   <a href="https://travis-ci.org/vladdeSV/scone/">
-    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=master">
+    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=v3">
   </a>
   <a href="https://github.com/vladdeSV/scone/issues">
     <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
   </a>
 </p>
+
+v3 of scone is currently under development (not fully featured). Do not use this in production.
 
 ## Super simple example
 
@@ -25,25 +27,24 @@
 import scone;
 
 void main() {
-  window.title("example");
-  window.resize(33, 20);
+  frame.title("example");
+  frame.size(33, 20);
 
   bool run = true;
   while(run) {
-    foreach(input; window.getInputs()) {
+    foreach(input; input.latest) {
       // if CTRL+C is pressed
       if(input.key == SK.c && input.hasControlKey(SCK.ctrl)) {
         run = false;
       }
     }
 
-    window.clear();
-    window.write(
+    frame.write(
       12, 9,
       Color.yellow.foreground, "Hello ",
       Color.red.foreground, Color.white.background, "World"
     );
-    window.print();
+    frame.print();
   }
 }
 ```
@@ -71,19 +72,38 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 * Cross-platform
     * Some restrictions apply, please see [OS Limitations](https://github.com/vladdeSV/scone/wiki/OS-Limitations)
 
+#### Simple cross-platform chart
+|output|Windows|POSIX|
+|:---|:---:|:---:|
+|text|✓|✓|
+|emoji||✓|
+|anis-color|✓|✓|
+|high performance output|✓||
+|reliable resize|✓||
+
+|input|Windows|POSIX|
+|:---|:---:|:---:|
+|input detection|✓|✓|
+|reliable|✓|*|
+|control keys|✓|**|
+|key release detection|✓||
+
+ *=Input is converted from arbitrary number sequences (may differ from system to system) to an input event. Basic ASCII should work no matter what system, however special keys like the up-arrow or function keys can vary drastically.
+ **=Can only register the last pressed control key.
+
 ### Install with [dub](https://code.dlang.org/download)
 
 ```js
 /// dub.json
 "dependencies": {
-    "scone": "~>2.1.3",
+    "scone": "~v3", // do not use in production yet. unfinished
     ...
 }
 ```
 
 ```js
 /// dub.sdl
-dependency "scone" version="~>2.1.3"
+dependency "scone" version="~v3", // do not use in production yet. unfinished
 ```
 
 ### Projects using **scone**
@@ -92,4 +112,4 @@ dependency "scone" version="~>2.1.3"
 
 ### Resources
 * [Wiki](https://github.com/vladdeSV/scone/wiki)
-* [Project kanban](https://github.com/vladdeSV/scone/projects/2)
+* [Project kanban](https://github.com/vladdeSV/scone/projects/3)

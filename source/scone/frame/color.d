@@ -1,4 +1,4 @@
-module scone.color;
+module scone.frame.color;
 
 import std.format : format;
 
@@ -47,8 +47,7 @@ enum Color
     whiteDark = 15,
 
     same = 16,
-    unknown = 17,
-    initial = 18,
+    initial = 17,
 }
 
 unittest
@@ -162,7 +161,6 @@ pure auto isActualColor(C)(C color) if (is(C : Color))
     assert(Color.red.foreground.isActualColor);
     assert(Color.blueDark.isActualColor);
     assert(!Color.same.isActualColor);
-    assert(!Color.unknown.isActualColor);
 }
 
 /**
@@ -185,7 +183,6 @@ unittest
     assert(Color.red.light == Color.red);
     assert(Color.redDark.foreground.light == Color.red.foreground);
     assert(Color.redDark.background.light == Color.red.background);
-    assert(Color.unknown.light == Color.unknown);
     assert(Color.same.light == Color.same);
 }
 
@@ -209,6 +206,5 @@ unittest
     assert(Color.red.dark == Color.redDark);
     assert(Color.redDark.foreground.dark == Color.redDark.foreground);
     assert(Color.redDark.background.dark == Color.redDark.background);
-    assert(Color.unknown.dark == Color.unknown);
     assert(Color.same.dark == Color.same);
 }

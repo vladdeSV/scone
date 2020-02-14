@@ -1,60 +1,52 @@
 module scone.core;
 
-import std.experimental.logger;
-import scone.window;
-import scone.os;
+import scone.frame.frame : Frame;
+import scone.input.input : Input;
+import scone.os.window : Window;
 
-/**
- * Gateway to the console/terminal
- * All methods are called via this
- *
- * Example:
- * ---
- * void main()
- * {
- *     bool running = true;
- *     window.title = "i am happy";
- *     while(running)
- *     {
- *         foreach(input; window.getInputs)
- *         {
- *             if(input.key == SK.escape)
- *             {
- *                 running = false;
- *             }
- *         }
- *
- *         window.clear();
- *         window.write(0,0, "hello world", Color.red.foreground, '!', Color.white.background, 42);
- *         window.print();
- *     }
- * }
- * ---
- */
-__gshared Window window;
+Frame frame;
+Input input;
 
-alias logger = sharedLog;
+//todo: scone settings
+// - use default scone exit handler on ctrl+c
+// - automatically resize window buffer
+// - default cell colors
 
-/**
- * Initializes scone
- */
-shared static this()
+private __gshared Window window;
+
+static this()
 {
-    sharedLog = new FileLogger("scone.log");
+    //todo this isn't really thread safe. but it works. wait i'm not actually sure if it's unsafe or not.
+    if(window !is null)
+    {
+        return;
+    }
 
-    // get current width and height
-    os.init();
-    auto w = os.size[0];
-    auto h = os.size[1];
+    window = createApplicationWindow();
 
-    // init window
-    window = Window(w, h);
+    frame = new Frame(window);
+    input = new Input(window);
 }
 
-/**
- * Deinitializes scone
- */
-shared static ~this()
+private Window createApplicationWindow()
 {
-    os.deinit();
+    version(unittest)
+    {
+        import scone.misc.dummy_window : DummyWindow;
+
+        // use dummy when unittesting. (previously could cause haning when starting to poll input with travis-ci)
+        return new DummyWindow();
+    }
+    else version(Posix)
+    {
+        import scone.os.posix.posix_terminal : PosixTerminal;
+
+        return new PosixTerminal();
+    }
+    else version(Windows)
+    {
+        import scone.os.windows.windows_console : WindowsConsole;
+
+        return new WindowsConsole();
+    }
 }

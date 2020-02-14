@@ -1,7 +1,5 @@
-module scone.input.keys;
+module scone.input.scone_key;
 
-/// All keys which scone can handle
-/// Note: Limited support for POSIX
 enum SK
 {
     /// Unknown key (Should never appear. If it does, please report bug)
@@ -306,34 +304,4 @@ enum SK
 
     /// Either the angle bracket key or the backslash key on the RT 102-key keyboard
     oem_102,
-}
-
-/**
- * Control keys
- */
-enum SCK
-{
-    /// No control key is being pressed
-    none = 0,
-
-    /// CAPS LOCK light is activated
-    capslock = 1,
-
-    /// NUM LOCK is activated
-    numlock = 2,
-
-    /// SCROLL LOCK is activated
-    scrolllock = 4,
-
-    /// SHIFT key is pressed
-    shift = 8,
-
-    /// The key is enhanced (?)
-    enhanced = 16,
-
-    /// Left or right ALT key is pressed
-    alt = 32,
-
-    /// Left or right CTRL key is pressed
-    ctrl = 64,
 }
