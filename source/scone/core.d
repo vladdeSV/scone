@@ -4,23 +4,29 @@ import scone.frame.frame : Frame;
 import scone.input.input : Input;
 import scone.os.window : Window;
 
-Frame frame;
-Input input;
-
 //todo: scone settings
 // - use default scone exit handler on ctrl+c
 // - automatically resize window buffer
 // - default cell colors
 
-private __gshared Window window;
+Frame frame;
+Input input;
+private Window window;
+private shared initialized = false;
 
 static this()
 {
-    //todo this isn't really thread safe. but it works. wait i'm not actually sure if it's unsafe or not.
-    if(window !is null)
-    {
-        return;
+    // i am unsure if 'synchronized' is requried here, but i definitely do not
+    // want two threads going in here at the same time. although i am pretty
+    // sure it could be removed.
+    synchronized {
+        if(initialized)
+        {
+            return;
+        }
     }
+
+    initialized = true;
 
     window = createApplicationWindow();
 
