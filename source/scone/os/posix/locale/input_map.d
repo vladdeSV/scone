@@ -1,6 +1,6 @@
 module scone.os.posix.locale.input_map;
 
-version(Posix)
+version (Posix)
 {
     import scone.input.input_event : InputEvent;
     import scone.os.posix.locale.input_sequence;

@@ -41,7 +41,7 @@ version (Posix)
         {
             this.cursorVisible(true);
             this.clear();
-            this.cursorPosition(Coordinate(0,0));
+            this.cursorPosition(Coordinate(0, 0));
         }
 
         void initializeInput()

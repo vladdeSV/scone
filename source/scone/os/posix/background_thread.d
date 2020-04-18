@@ -1,6 +1,6 @@
 module scone.os.posix.background_thread;
 
-version(Posix)
+version (Posix)
 {
     import core.sys.posix.fcntl;
     import core.sys.posix.poll;

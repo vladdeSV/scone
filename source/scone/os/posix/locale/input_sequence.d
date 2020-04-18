@@ -1,6 +1,6 @@
 module scone.os.posix.locale.input_sequence;
 
-version(Posix)
+version (Posix)
 {
     /**
      * Wrapper for an input sequence sent by the POSIX terminal.

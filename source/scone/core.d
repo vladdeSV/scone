@@ -19,8 +19,9 @@ static this()
     // i am unsure if 'synchronized' is requried here, but i definitely do not
     // want two threads going in here at the same time. although i am pretty
     // sure it could be removed.
-    synchronized {
-        if(initialized)
+    synchronized
+    {
+        if (initialized)
         {
             return;
         }
@@ -36,20 +37,20 @@ static this()
 
 private Window createApplicationWindow()
 {
-    version(unittest)
+    version (unittest)
     {
         import scone.misc.dummy_window : DummyWindow;
 
         // use dummy when unittesting. (previously could cause haning when starting to poll input with travis-ci)
         return new DummyWindow();
     }
-    else version(Posix)
+    else version (Posix)
     {
         import scone.os.posix.posix_terminal : PosixTerminal;
 
         return new PosixTerminal();
     }
-    else version(Windows)
+    else version (Windows)
     {
         import scone.os.windows.windows_console : WindowsConsole;
 

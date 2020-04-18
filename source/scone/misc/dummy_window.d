@@ -25,7 +25,7 @@ class DummyWindow : Window
 
     Size size()
     {
-        return Size(80,24);
+        return Size(80, 24);
     }
 
     void size(in Size size)

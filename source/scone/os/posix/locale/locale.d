@@ -6,7 +6,7 @@ class Locale
 
     string systemLocaleSequences()
     {
-        version(OSX)
+        version (OSX)
         {
             return import("osx.sv_se.tsv");
         }

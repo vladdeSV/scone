@@ -4,7 +4,6 @@ import scone.input.scone_key : SK;
 import scone.input.scone_control_key : SCK;
 import scone.misc.flags : hasFlag;
 
-
 struct InputEvent
 {
     this(SK key, SCK controlKey, bool pressed)

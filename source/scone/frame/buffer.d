@@ -85,7 +85,6 @@ class Buffer
         return coordinates;
     }
 
-
     private void redraw()
     {
         foreach (ref row; this.changed)

@@ -118,7 +118,6 @@ version (Windows)
             return inputEvents;
         }
 
-
         private void writeCellAt(Cell cell, Coordinate coordinate)
         {
             CHAR_INFO[] charBuffer = [CellConverter.toCharInfo(cell)];
