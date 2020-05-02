@@ -16,15 +16,9 @@ private shared initialized = false;
 
 static this()
 {
-    // i am unsure if 'synchronized' is requried here, but i definitely do not
-    // want two threads going in here at the same time. although i am pretty
-    // sure it could be removed.
-    synchronized
+    if (initialized)
     {
-        if (initialized)
-        {
-            return;
-        }
+        return;
     }
 
     initialized = true;
@@ -41,7 +35,7 @@ private Window createApplicationWindow()
     {
         import scone.misc.dummy_window : DummyWindow;
 
-        // use dummy when unittesting. (previously could cause haning when starting to poll input with travis-ci)
+        // use dummy when unittesting. (previously could cause hanging when starting to poll input with travis-ci)
         return new DummyWindow();
     }
     else version (Posix)

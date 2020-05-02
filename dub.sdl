@@ -8,7 +8,7 @@ stringImportPaths "./source/scone/os/posix/locale/locale_data"
 configuration "debug" {
     buildType "debug"
     buildRequirements "allowWarnings"
-	targetType "executable"
+    targetType "executable"
     targetPath "bin/"
 }
 
