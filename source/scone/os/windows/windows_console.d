@@ -18,20 +18,28 @@ version (Windows)
     import std.conv : ConvOverflowException;
     import std.conv : to;
 
+    pragma(lib, "User32.lib");
+
     class WindowsConsole : Window
     {
         void initializeOutput()
         {
-            consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+            oldConsoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+            auto consoleOutputHandle = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
+                    FILE_SHARE_WRITE | FILE_SHARE_READ, null, CONSOLE_TEXTMODE_BUFFER, null);
+
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
             {
                 //todo
             }
+
+            SetConsoleActiveScreenBuffer(consoleOutputHandle);
         }
 
         void deinitializeOutput()
         {
-
+            SetConsoleActiveScreenBuffer(oldConsoleOutputHandle);
         }
 
         void initializeInput()
@@ -133,6 +141,7 @@ version (Windows)
         }
 
         //private HANDLE windowHandle;
+        private HANDLE oldConsoleOutputHandle;
         private HANDLE consoleOutputHandle;
         private HANDLE consoleInputHandle;
     }
