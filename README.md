@@ -106,11 +106,3 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 /// dub.sdl
 dependency "scone" version="~develop", // do not use in production yet. unfinished
 ```
-
-### Projects using **scone**
-* [`dkorpel/tictac`](https://github.com/dkorpel/tictac) — D port of meta tic-tac-toe
-* [`vladdeSV/2drpg`](https://github.com/vladdeSV/2drpg) — Storytelling/self-discovery console game [Windows]
-
-### Resources
-* [Wiki](https://github.com/vladdeSV/scone/wiki)
-* [Project kanban](https://github.com/vladdeSV/scone/projects/3)
