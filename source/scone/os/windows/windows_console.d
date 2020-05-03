@@ -86,6 +86,12 @@ version (Windows)
 
         void renderBuffer(Buffer buffer)
         {
+            bool changedSize = this.size() != lastSize;
+            if (changedSize)
+            {
+                buffer.redraw();
+            }
+
             foreach (Coordinate coordinate; buffer.changedCellCoordinates)
             {
                 Cell cell = buffer.cellAt(coordinate);
@@ -144,6 +150,7 @@ version (Windows)
         private HANDLE oldConsoleOutputHandle;
         private HANDLE consoleOutputHandle;
         private HANDLE consoleInputHandle;
+        private Size lastSize = Size(80, 24);
     }
 
     abstract final class CellConverter
