@@ -12,28 +12,6 @@ version (Posix)
     import std.concurrency : thisTid, send, ownerTid;
     import std.datetime : Duration, msecs;
 
-    static void pollTerminalResize(Size initialSize)
-    {
-        Thread.getThis.isDaemon = true;
-
-        Size previousSize = initialSize;
-
-        while (true)
-        {
-            Thread.sleep(250.msecs); //todo check for appropriate number
-
-            winsize winsz;
-            ioctl(STDOUT_FILENO, TIOCGWINSZ, &winsz);
-            Size currentSize = Size(winsz.ws_col, winsz.ws_row);
-
-            if (currentSize != previousSize)
-            {
-                previousSize = currentSize;
-                send(ownerTid, ResizeEvent(currentSize));
-            }
-        }
-    }
-
     static void pollInputEvent()
     {
         Thread.getThis.isDaemon = true;

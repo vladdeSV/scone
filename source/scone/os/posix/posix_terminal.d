@@ -32,7 +32,6 @@ version (Posix)
     {
         void initializeOutput()
         {
-            spawn(&pollTerminalResize, size);
             this.cursorVisible(false);
             this.clear();
         }

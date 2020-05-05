@@ -89,10 +89,6 @@ class Frame
 
     void print()
     {
-        receiveTimeout(Duration.zero, (ResizeEvent event) {
-            this.buffer = new Buffer(event.newSize);
-        });
-
         this.window.renderBuffer(this.buffer);
         this.buffer.commit();
     }
