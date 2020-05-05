@@ -86,10 +86,11 @@ version (Windows)
 
         void renderBuffer(Buffer buffer)
         {
-            bool changedSize = this.size() != lastSize;
-            if (changedSize)
+            auto currentSize = this.size();
+            if (currentSize != lastSize)
             {
                 buffer.redraw();
+                lastSize = currentSize;
             }
 
             foreach (Coordinate coordinate; buffer.changedCellCoordinates)

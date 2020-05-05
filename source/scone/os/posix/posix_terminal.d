@@ -82,6 +82,14 @@ version (Posix)
 
         void renderBuffer(Buffer buffer)
         {
+            auto currentSize = this.size();
+            if (currentSize != lastSize)
+            {
+                this.clear(); // todo: should screen be cleard?
+                buffer.redraw();
+                lastSize = currentSize;
+            }
+
             auto foos = new Foos(buffer);
 
             foreach (PartialRowOutput data; foos.partialRows())
@@ -101,6 +109,7 @@ version (Posix)
 
             while (receiveTimeout(5.msecs, (uint code) { sequence ~= code; }))
             {
+                // continiously repeat until no code is recieved within 5 milliseconds
             }
 
             return sequence;
@@ -138,7 +147,7 @@ version (Posix)
         }
 
         // unsure when to use this.
-        // om mac this shows a small key icon, used when entering passwords
+        // on mac this shows a small key icon, used when entering passwords
         private void setInputEcho(in bool echo)
         {
             termios termInfo;
@@ -180,5 +189,6 @@ version (Posix)
 
         private InputMap inputMap;
         private termios originalTerminalState;
+        private Size lastSize;
     }
 }
