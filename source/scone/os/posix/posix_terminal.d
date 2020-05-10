@@ -17,7 +17,7 @@ version (Posix)
     import scone.os.posix.foo : Foos, PartialRowOutput;
     import scone.os.posix.locale.input_map : InputMap;
     import scone.os.posix.locale.locale : Locale;
-    import scone.os.window : Window, ResizeEvent;
+    import scone.os.window : Window;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
     import std.conv : text;
     import std.datetime : msecs;
@@ -32,7 +32,6 @@ version (Posix)
     {
         void initializeOutput()
         {
-            spawn(&pollTerminalResize, size);
             this.cursorVisible(false);
             this.clear();
         }
