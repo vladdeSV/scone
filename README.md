@@ -1,19 +1,5 @@
 <h1 align="center">🍞 scone</h1>
 <h4 align="center">Create cross-platform console/terminal applications with ease</h4>
-<p align="center">
-  <a href="https://code.dlang.org/packages/scone">
-    <img src="https://img.shields.io/dub/v/scone.svg">
-  </a>
-  <a href="https://github.com/vladdeSV/scone/blob/develop/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg">
-  </a>
-  <a href="https://travis-ci.org/vladdeSV/scone/">
-    <img src="https://travis-ci.org/vladdeSV/scone.svg?branch=v3">
-  </a>
-  <a href="https://github.com/vladdeSV/scone/issues">
-    <img src="https://img.shields.io/github/issues/vladdeSV/scone.svg">
-  </a>
-</p>
 
 v3 of scone is currently under development (not fully featured). Do not use this in production.
 
