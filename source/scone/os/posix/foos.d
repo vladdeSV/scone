@@ -1,9 +1,9 @@
 module scone.os.posix.foo;
 
-import scone.frame.buffer : Buffer;
-import scone.frame.cell : Cell;
-import scone.frame.color;
-import scone.frame.coordinate : Coordinate;
+import scone.core.types.buffer : Buffer;
+import scone.core.types.cell : Cell;
+import scone.core.types.color;
+import scone.core.types.coordinate : Coordinate;
 import std.algorithm.searching : minElement, maxElement;
 import std.conv : text;
 import std.typecons : Tuple;

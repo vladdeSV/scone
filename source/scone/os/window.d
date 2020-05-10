@@ -1,8 +1,8 @@
 module scone.os.window;
 
-import scone.frame.buffer : Buffer;
-import scone.frame.coordinate : Coordinate;
-import scone.frame.size : Size;
+import scone.core.types.buffer : Buffer;
+import scone.core.types.coordinate : Coordinate;
+import scone.core.types.size : Size;
 import scone.input.input_event : InputEvent;
 
 interface Window
@@ -20,9 +20,4 @@ interface Window
 
     void renderBuffer(Buffer buffer);
     InputEvent[] latestInputEvents();
-}
-
-struct ResizeEvent
-{
-    Size newSize;
 }
