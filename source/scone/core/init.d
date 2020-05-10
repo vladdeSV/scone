@@ -1,4 +1,4 @@
-module scone.core;
+module scone.core.init;
 
 import scone.frame.frame : Frame;
 import scone.input.input : Input;

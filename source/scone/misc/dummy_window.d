@@ -1,7 +1,7 @@
 module scone.misc.dummy_window;
 
-import scone.frame.buffer : Buffer;
-import scone.frame.size : Size;
+import scone.core.types.buffer : Buffer;
+import scone.core.types.size : Size;
 import scone.input.input_event : InputEvent;
 import scone.os.window : Window;
 

@@ -7,8 +7,7 @@ version (Posix)
     import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import core.sys.posix.unistd : read, STDOUT_FILENO;
     import core.thread : Thread;
-    import scone.frame.size : Size;
-    import scone.os.window : ResizeEvent;
+    import scone.core.types.size : Size;
     import std.concurrency : thisTid, send, ownerTid;
     import std.datetime : Duration, msecs;
 

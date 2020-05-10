@@ -3,11 +3,11 @@ module scone.os.windows.windows_console;
 version (Windows)
 {
     import core.sys.windows.windows;
-    import scone.frame.buffer : Buffer;
-    import scone.frame.cell : Cell;
-    import scone.frame.color;
-    import scone.frame.coordinate : Coordinate;
-    import scone.frame.size : Size;
+    import scone.core.types.buffer : Buffer;
+    import scone.core.types.cell : Cell;
+    import scone.core.types.color;
+    import scone.core.types.coordinate : Coordinate;
+    import scone.core.types.size : Size;
     import scone.input.input : Input;
     import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
