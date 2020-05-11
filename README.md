@@ -1,5 +1,8 @@
-<h1 align="center">🍞 scone</h1>
-<h4 align="center">Create cross-platform console/terminal applications with ease</h4>
+# 🍞 scone
+Create cross-platform console/terminal applications with ease
+
+![develop](https://github.com/vladdeSV/scone/workflows/develop/badge.svg)
+![license](https://img.shields.io/github/license/vladdeSV/scone)
 
 v3 of scone is currently under development (not fully featured). Do not use this in production.
 
