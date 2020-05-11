@@ -15,7 +15,7 @@ jobs:
       - uses: mihails-strasuns/setup-dlang@v0.5.0
 
       - name: Build
-        run: dub build --compiler=$DC
+        run: dub build --compiler=$DC --config=ci
 
       - name: Test
-        run: dub test --compiler=$DC
+        run: dub test --compiler=$DC --config=ci

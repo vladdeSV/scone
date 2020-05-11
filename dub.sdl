@@ -16,3 +16,8 @@ configuration "release" {
     buildType "release"
     targetType "library"
 }
+
+configuration "ci" {
+    buildType "debug"
+    targetType "library"
+}
