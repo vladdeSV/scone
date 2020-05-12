@@ -1,7 +1,7 @@
 # 🍞 scone
 Create cross-platform console/terminal applications with ease
 
-![develop](https://github.com/vladdeSV/scone/workflows/develop/badge.svg)
+![develop](https://github.com/vladdeSV/scone/workflows/CI/badge.svg)
 ![license](https://img.shields.io/github/license/vladdeSV/scone)
 
 v3 of scone is currently under development (not fully featured). Do not use this in production.
