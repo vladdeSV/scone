@@ -35,6 +35,8 @@ version (Windows)
             }
 
             SetConsoleActiveScreenBuffer(consoleOutputHandle);
+
+            this.lastSize = this.size();
         }
 
         void deinitializeOutput()
@@ -151,7 +153,7 @@ version (Windows)
         private HANDLE oldConsoleOutputHandle;
         private HANDLE consoleOutputHandle;
         private HANDLE consoleInputHandle;
-        private Size lastSize = Size(80, 24);
+        private Size lastSize;
     }
 
     abstract final class CellConverter

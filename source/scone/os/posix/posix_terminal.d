@@ -34,6 +34,7 @@ version (Posix)
         {
             this.cursorVisible(false);
             this.clear();
+            this.lastSize = this.size();
         }
 
         void deinitializeOutput()
