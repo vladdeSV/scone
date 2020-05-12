@@ -1,7 +1,11 @@
 module scone.frame.cells_converter;
 
+import scone.core.types.cell : Cell;
+import scone.core.types.color;
+import std.conv : to;
+
 //todo rename to better reflect arguments -> Cell[]
-private template CellsConverter(Args...)
+template CellsConverter(Args...)
 {
     class CellsConverter
     {

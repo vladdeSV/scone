@@ -35,6 +35,8 @@ version (Windows)
             }
 
             SetConsoleActiveScreenBuffer(consoleOutputHandle);
+
+            this.lastSize = this.size();
         }
 
         void deinitializeOutput()
@@ -86,6 +88,13 @@ version (Windows)
 
         void renderBuffer(Buffer buffer)
         {
+            auto currentSize = this.size();
+            if (currentSize != lastSize)
+            {
+                buffer.redraw();
+                lastSize = currentSize;
+            }
+
             foreach (Coordinate coordinate; buffer.changedCellCoordinates)
             {
                 Cell cell = buffer.cellAt(coordinate);
@@ -144,6 +153,7 @@ version (Windows)
         private HANDLE oldConsoleOutputHandle;
         private HANDLE consoleOutputHandle;
         private HANDLE consoleInputHandle;
+        private Size lastSize;
     }
 
     abstract final class CellConverter

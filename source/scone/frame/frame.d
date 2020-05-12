@@ -1,16 +1,16 @@
 module scone.frame.frame;
 
-import std.conv : to;
-import std.traits : isNumeric;
-
 import scone.core.types.buffer : Buffer;
 import scone.core.types.cell : Cell;
 import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
+import scone.frame.cells_converter;
 import scone.os.window : Window;
 import std.concurrency : receiveTimeout;
+import std.conv : to;
 import std.datetime : Duration;
+import std.traits : isNumeric;
 
 class Frame
 {
