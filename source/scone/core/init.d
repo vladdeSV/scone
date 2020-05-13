@@ -3,6 +3,7 @@ module scone.core.init;
 import scone.frame.frame : Frame;
 import scone.input.input : Input;
 import scone.os.window : Window;
+import std.experimental.logger;
 
 //todo: scone settings
 // - use default scone exit handler on ctrl+c
@@ -22,6 +23,8 @@ static this()
     }
 
     initialized = true;
+
+    sharedLog = new FileLogger("scone.log");
 
     window = createApplicationWindow();
 

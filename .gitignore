@@ -11,3 +11,4 @@ bin/
 dub.selections.json
 main.d
 app.d
+scone.log

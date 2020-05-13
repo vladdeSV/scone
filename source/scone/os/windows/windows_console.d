@@ -18,6 +18,7 @@ version (Windows)
     import scone.os.windows.key_event_record_converter : KeyEventRecordConverter;
     import std.conv : ConvOverflowException;
     import std.conv : to;
+    import std.experimental.logger;
 
     pragma(lib, "User32.lib");
 
@@ -100,6 +101,7 @@ version (Windows)
             {
                 Cell cell = buffer.cellAt(coordinate);
                 this.writeCellAt(cell, coordinate);
+                sharedLog.log("wrote at ", coordinate, ", char ", cell.character);
             }
         }
 
