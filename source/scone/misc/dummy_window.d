@@ -3,22 +3,16 @@ module scone.misc.dummy_window;
 import scone.core.types.buffer : Buffer;
 import scone.core.types.size : Size;
 import scone.input.input_event : InputEvent;
+import scone.os.output : Output;
+import scone.os.input : Input;
 
-class DummyWindow
+class DummyOutput : Output
 {
     void initializeOutput()
     {
-    }
+}   
 
     void deinitializeOutput()
-    {
-    }
-
-    void initializeInput()
-    {
-    }
-
-    void deinitializeInput()
     {
     }
 
@@ -40,6 +34,17 @@ class DummyWindow
     }
 
     void renderBuffer(Buffer buffer)
+    {
+    }
+}
+
+class DummyInput : Input
+{
+    void initializeInput()
+    {
+    }
+
+    void deinitializeInput()
     {
     }
 

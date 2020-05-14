@@ -38,7 +38,9 @@ private Output createApplicationOutput()
 {
     version (unittest)
     {
-        assert(0, "not implemented");
+        import scone.misc.dummy_window : DummyOutput;
+
+        return new DummyOutput();
     }
     else version (Posix)
     {
@@ -58,7 +60,9 @@ private Input_ createApplicationInput()
 {
     version (unittest)
     {
-        assert(0, "not implemented");
+        import scone.misc.dummy_window : DummyInput;
+
+        return new DummyInput();
     }
     else version (Posix)
     {
