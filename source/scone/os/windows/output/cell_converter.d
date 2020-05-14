@@ -1,6 +1,6 @@
 module scone.os.windows.output.cell_converter;
 
-version(Windows)
+version (Windows)
 {
     import core.sys.windows.windows;
     import scone.core.types.cell : Cell;

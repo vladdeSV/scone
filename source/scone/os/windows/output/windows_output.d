@@ -15,14 +15,15 @@ version (Windows)
     import std.experimental.logger;
 
     pragma(lib, "User32.lib");
-    
+
     class WindowsOutput : Output
     {
         void initializeOutput()
         {
             oldConsoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-            consoleOutputHandle = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, null, CONSOLE_TEXTMODE_BUFFER, null);
+            consoleOutputHandle = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
+                    FILE_SHARE_WRITE | FILE_SHARE_READ, null, CONSOLE_TEXTMODE_BUFFER, null);
 
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
             {
@@ -45,7 +46,7 @@ version (Windows)
             // todo
         }
 
-                Size size()
+        Size size()
         {
             CONSOLE_SCREEN_BUFFER_INFO csbi;
             GetConsoleScreenBufferInfo(consoleOutputHandle, &csbi);

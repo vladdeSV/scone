@@ -1,19 +1,19 @@
 module scone.os.windows.input.windows_input;
 
-import scone.os.input : Input_ = Input;
-import core.sys.windows.windows;
-import scone.core.types.size : Size;
-import scone.input.input : Input;
-import scone.input.input_event : InputEvent;
-import scone.input.scone_control_key : SCK;
-import scone.input.scone_key : SK;
-import scone.misc.flags : hasFlag, withFlag;
-import scone.os.windows.key_event_record_converter : KeyEventRecordConverter;
-import std.conv : to;
-import std.experimental.logger;
-
 version (Windows)
 {
+    import scone.os.input : Input_ = Input;
+    import core.sys.windows.windows;
+    import scone.core.types.size : Size;
+    import scone.input.input : Input;
+    import scone.input.input_event : InputEvent;
+    import scone.input.scone_control_key : SCK;
+    import scone.input.scone_key : SK;
+    import scone.misc.flags : hasFlag, withFlag;
+    import scone.os.windows.input.key_event_record_converter : KeyEventRecordConverter;
+    import std.conv : to;
+    import std.experimental.logger;
+
     class WindowsInput : Input_
     {
         void initializeInput()
