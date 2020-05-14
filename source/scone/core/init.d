@@ -48,7 +48,9 @@ private Output createApplicationOutput()
     }
     else version (Windows)
     {
-        assert(0, "not implemented");
+        import scone.os.windows.output.windows_output : WindowsOutput;
+
+        return new WindowsOutput();
     }
 }
 
@@ -66,6 +68,8 @@ private Input_ createApplicationInput()
     }
     else version (Windows)
     {
-        assert(0, "not implemented");
+        import scone.os.windows.input.windows_input : WindowsInput;
+
+        return new WindowsInput();
     }
 }
