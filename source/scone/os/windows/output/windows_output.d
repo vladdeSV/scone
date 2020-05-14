@@ -22,12 +22,12 @@ version (Windows)
         {
             oldConsoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-            auto consoleOutputHandle = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
-                    FILE_SHARE_WRITE | FILE_SHARE_READ, null, CONSOLE_TEXTMODE_BUFFER, null);
+            consoleOutputHandle = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, null, CONSOLE_TEXTMODE_BUFFER, null);
 
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
             {
                 //todo
+                assert(0);
             }
 
             SetConsoleActiveScreenBuffer(consoleOutputHandle);
@@ -81,7 +81,6 @@ version (Windows)
             {
                 Cell cell = buffer.cellAt(coordinate);
                 this.writeCellAt(cell, coordinate);
-                sharedLog.log("wrote at ", coordinate, ", char ", cell.character);
             }
         }
 

@@ -6,11 +6,11 @@ import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
 import scone.frame.cells_converter;
+import scone.os.output : Output;
 import std.concurrency : receiveTimeout;
 import std.conv : to;
 import std.datetime : Duration;
 import std.traits : isNumeric;
-import scone.os.output : Output;
 
 
 class Frame
@@ -20,11 +20,10 @@ class Frame
 
     this(Output output)
     {
-        //todo get window size
-        this.buffer = new Buffer(output.size());
-        this.output = output;
-
         output.initializeOutput();
+
+        this.output = output;
+        this.buffer = new Buffer(output.size());
     }
 
     ~this()
