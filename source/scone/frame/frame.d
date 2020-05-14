@@ -6,29 +6,30 @@ import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
 import scone.frame.cells_converter;
-import scone.os.window : Window;
 import std.concurrency : receiveTimeout;
 import std.conv : to;
 import std.datetime : Duration;
 import std.traits : isNumeric;
+import scone.os.output : Output;
+
 
 class Frame
 {
     private Buffer buffer;
-    private Window window;
+    private Output output;
 
-    this(Window window)
+    this(Output output)
     {
         //todo get window size
-        this.buffer = new Buffer(window.size());
-        this.window = window;
+        this.buffer = new Buffer(output.size());
+        this.output = output;
 
-        window.initializeOutput();
+        output.initializeOutput();
     }
 
     ~this()
     {
-        window.deinitializeOutput();
+        output.deinitializeOutput();
     }
 
     void write(X, Y, Args...)(X tx, Y ty, Args args)
@@ -89,7 +90,7 @@ class Frame
 
     void print()
     {
-        this.window.renderBuffer(this.buffer);
+        this.output.renderBuffer(this.buffer);
         this.buffer.commit();
     }
 
@@ -101,7 +102,7 @@ class Frame
     void size(in Size size)
     {
         this.buffer = new Buffer(size);
-        this.window.size(size);
+        this.output.size(size);
     }
 
     void size(in size_t width, in size_t height)
@@ -111,7 +112,7 @@ class Frame
 
     void title(in string title)
     {
-        window.title(title);
+        output.title(title);
     }
 
     /+

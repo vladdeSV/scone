@@ -1,9 +1,9 @@
-module scone.os.posix.locale.input_map;
+module scone.os.posix.input.locale.input_map;
 
 version (Posix)
 {
     import scone.input.input_event : InputEvent;
-    import scone.os.posix.locale.input_sequence;
+    import scone.os.posix.input.locale.input_sequence;
     import std.array : split;
     import std.conv : to, parse;
     import std.file : exists, readText;

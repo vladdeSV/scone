@@ -1,8 +1,7 @@
-module scone.os.posix.posix_terminal;
+module scone.os.posix.input.posix_input;
 
 version (Posix)
 {
-    import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import core.sys.posix.termios;
     import core.sys.posix.unistd : STDOUT_FILENO;
     import scone.core.types.buffer : Buffer;
@@ -13,37 +12,22 @@ version (Posix)
     import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.posix.background_thread;
-    import scone.os.posix.foo : Foos, PartialRowOutput;
-    import scone.os.posix.locale.input_map : InputMap;
-    import scone.os.posix.locale.locale : Locale;
-    import scone.os.window : Window;
+    import scone.os.input : Input;
+    import scone.os.posix.input.background_thread;
+    import scone.os.posix.input.locale.input_map : InputMap;
+    import scone.os.posix.input.locale.locale : Locale;
+    import scone.os.posix.output.foos : Foos, PartialRowOutput;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
     import std.conv : text;
     import std.datetime : msecs;
-    import std.stdio : writef, stdout;
 
     extern (C)
     {
         void cfmakeraw(termios* termios_p);
     }
 
-    class PosixTerminal : Window
+    class PosixInput : Input
     {
-        void initializeOutput()
-        {
-            this.cursorVisible(false);
-            this.clear();
-            this.lastSize = this.size();
-        }
-
-        void deinitializeOutput()
-        {
-            this.cursorVisible(true);
-            this.clear();
-            this.cursorPosition(Coordinate(0, 0));
-        }
-
         void initializeInput()
         {
             this.setInputMapping();
@@ -54,54 +38,6 @@ version (Posix)
         void deinitializeInput()
         {
             this.resetTerminalState();
-        }
-
-        Size size()
-        {
-            winsize w;
-            ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-            return Size(w.ws_col, w.ws_row);
-        }
-
-        void size(in Size size)
-        {
-            writef("\033[8;%s;%st", size.height, size.width);
-            stdout.flush();
-        }
-
-        void title(in string title)
-        {
-            writef("\033]0;%s\007", title);
-            stdout.flush();
-        }
-
-        void cursorVisible(in bool visible)
-        {
-            writef("\033[?25%s", visible ? "h" : "l");
-            stdout.flush();
-        }
-
-        void renderBuffer(Buffer buffer)
-        {
-            auto currentSize = this.size();
-            if (currentSize != lastSize)
-            {
-                this.clear(); // todo: should screen be cleard?
-                buffer.redraw();
-                lastSize = currentSize;
-            }
-
-            auto foos = new Foos(buffer);
-
-            foreach (PartialRowOutput data; foos.partialRows())
-            {
-                this.cursorPosition(data.coordinate);
-                .writef(data.output);
-            }
-
-            .writef("\033[0m");
-
-            stdout.flush();
         }
 
         uint[] retreiveInputSequence()
@@ -133,18 +69,6 @@ version (Posix)
         {
             // begin polling
             spawn(&pollInputEvent);
-        }
-
-        private void cursorPosition(in Coordinate coordinate)
-        {
-            writef("\033[%d;%dH", coordinate.y + 1, coordinate.x + 1);
-            stdout.flush();
-        }
-
-        private void clear()
-        {
-            writef("\033[2J");
-            stdout.flush();
         }
 
         // unsure when to use this.
@@ -190,6 +114,5 @@ version (Posix)
 
         private InputMap inputMap;
         private termios originalTerminalState;
-        private Size lastSize;
     }
 }

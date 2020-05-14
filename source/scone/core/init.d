@@ -2,8 +2,10 @@ module scone.core.init;
 
 import scone.frame.frame : Frame;
 import scone.input.input : Input;
-import scone.os.window : Window;
 import std.experimental.logger;
+
+import scone.os.output : Output;
+import scone.os.input : Input_ = Input;
 
 //todo: scone settings
 // - use default scone exit handler on ctrl+c
@@ -12,7 +14,6 @@ import std.experimental.logger;
 
 Frame frame;
 Input input;
-private Window window;
 private shared initialized = false;
 
 static this()
@@ -26,31 +27,45 @@ static this()
 
     sharedLog = new FileLogger("scone.log");
 
-    window = createApplicationWindow();
+    auto output = createApplicationOutput();
+    frame = new Frame(output);
 
-    frame = new Frame(window);
-    input = new Input(window);
+    auto input_ = createApplicationInput();
+    input = new Input(input_);
 }
 
-private Window createApplicationWindow()
+private Output createApplicationOutput()
 {
     version (unittest)
     {
-        import scone.misc.dummy_window : DummyWindow;
-
-        // use dummy when unittesting. (previously could cause hanging when starting to poll input with travis-ci)
-        return new DummyWindow();
+        assert(0, "not implemented");
     }
     else version (Posix)
     {
-        import scone.os.posix.posix_terminal : PosixTerminal;
+        import scone.os.posix.output.posix_output : PosixOutput;
 
-        return new PosixTerminal();
+        return new PosixOutput();
     }
     else version (Windows)
     {
-        import scone.os.windows.windows_console : WindowsConsole;
+        assert(0, "not implemented");
+    }
+}
 
-        return new WindowsConsole();
+private Input_ createApplicationInput()
+{
+    version (unittest)
+    {
+        assert(0, "not implemented");
+    }
+    else version (Posix)
+    {
+        import scone.os.posix.input.posix_input : PosixInput;
+
+        return new PosixInput();
+    }
+    else version (Windows)
+    {
+        assert(0, "not implemented");
     }
 }

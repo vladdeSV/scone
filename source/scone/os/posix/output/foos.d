@@ -1,4 +1,4 @@
-module scone.os.posix.foo;
+module scone.os.posix.output.foos;
 
 import scone.core.types.buffer : Buffer;
 import scone.core.types.cell : Cell;

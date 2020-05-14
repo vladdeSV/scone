@@ -1,17 +1,14 @@
-module scone.os.window;
+module scone.os.output;
 
 import scone.core.types.buffer : Buffer;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
 import scone.input.input_event : InputEvent;
 
-interface Window
+interface Output
 {
     void initializeOutput();
     void deinitializeOutput();
-
-    void initializeInput();
-    void deinitializeInput();
 
     Size size();
     void size(in Size size);
@@ -19,5 +16,4 @@ interface Window
     void cursorVisible(in bool visible);
 
     void renderBuffer(Buffer buffer);
-    InputEvent[] latestInputEvents();
 }

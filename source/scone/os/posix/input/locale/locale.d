@@ -1,4 +1,4 @@
-module scone.os.posix.locale.locale;
+module scone.os.posix.input.locale.locale;
 
 class Locale
 {

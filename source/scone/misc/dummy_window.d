@@ -3,9 +3,8 @@ module scone.misc.dummy_window;
 import scone.core.types.buffer : Buffer;
 import scone.core.types.size : Size;
 import scone.input.input_event : InputEvent;
-import scone.os.window : Window;
 
-class DummyWindow : Window
+class DummyWindow
 {
     void initializeOutput()
     {
