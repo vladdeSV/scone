@@ -1,4 +1,4 @@
-module scone.os.posix.background_thread;
+module scone.os.posix.input.background_thread;
 
 version (Posix)
 {

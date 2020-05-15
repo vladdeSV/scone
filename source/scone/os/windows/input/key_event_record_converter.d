@@ -1,4 +1,4 @@
-module scone.os.windows.key_event_record_converter;
+module scone.os.windows.input.key_event_record_converter;
 
 version (Windows)
 {

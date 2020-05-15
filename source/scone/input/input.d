@@ -1,25 +1,25 @@
 module scone.input.input;
 
-import scone.os.window : Window;
+import scone.os.input : OSInput = Input;
 import scone.input.input_event : InputEvent;
 
 class Input
 {
-    private Window window;
+    private OSInput input;
 
-    this(Window window)
+    this(OSInput input)
     {
-        this.window = window;
-        window.initializeInput();
+        this.input = input;
+        input.initializeInput();
     }
 
     ~this()
     {
-        this.window.deinitializeInput();
+        this.input.deinitializeInput();
     }
 
     InputEvent[] latest()
     {
-        return this.window.latestInputEvents();
+        return this.input.latestInputEvents();
     }
 }
