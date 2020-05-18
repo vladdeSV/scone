@@ -16,6 +16,13 @@ version (Windows)
 
     pragma(lib, "User32.lib");
 
+    extern (Windows)
+    {
+        BOOL GetCurrentConsoleFont(HANDLE hConsoleOutput, BOOL bMaximumWindow,
+                PCONSOLE_FONT_INFO lpConsoleCurrentFont);
+        COORD GetConsoleFontSize(HANDLE hConsoleOutput, DWORD nFont);
+    }
+
     class WindowsOutput : Output
     {
         void initializeOutput()
@@ -43,7 +50,43 @@ version (Windows)
 
         void size(in Size size)
         {
-            // todo
+            // todo this was copied from my old codebase. this should really be reworked
+            auto width = size.width;
+            auto height = size.height;
+
+            // here comes a workaround of windows stange behaviour (in my honest opinion)
+            // it sets the WINDOW size to 1x1, then sets the BUFFER size (crashes if window size is larger than buffer size), finally setting the correct window size
+
+            CONSOLE_FONT_INFO consoleFontInfo;
+            GetCurrentConsoleFont(consoleOutputHandle, FALSE, &consoleFontInfo);
+            immutable COORD fontSize = GetConsoleFontSize(consoleOutputHandle,
+                    consoleFontInfo.nFont);
+            immutable consoleMinimumPixelWidth = GetSystemMetrics(SM_CXMIN);
+            immutable consoleMinimumPixelHeight = GetSystemMetrics(SM_CYMIN);
+
+            if (width * fontSize.X < consoleMinimumPixelWidth
+                    || height * fontSize.Y < consoleMinimumPixelHeight)
+            {
+                // log(warn, tried to set the window size smaller than allowed. ignored resize)
+                return;
+            }
+
+            // set window size to 1x1
+            SMALL_RECT onebyone = {0, 0, 1, 1};
+            assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &onebyone),
+                    "1. Unable to resize window to 1x1: ERROR " ~ to!string(GetLastError()));
+
+            // set the buffer size to desired size
+            COORD bufferSize = {to!short(width), to!short(height)};
+            assert(SetConsoleScreenBufferSize(consoleOutputHandle, bufferSize),
+                    "2. Unable to resize screen buffer: ERROR " ~ to!string(GetLastError()));
+
+            // resize back the window to correct size
+            SMALL_RECT info = {0, 0, to!short(width - 1), to!short(height - 1)};
+            assert(SetConsoleWindowInfo(consoleOutputHandle, 1, &info),
+                    "3. Unable to resize window the second time: ERROR " ~ to!string(
+                        GetLastError()));
+
         }
 
         Size size()
