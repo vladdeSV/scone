@@ -59,7 +59,7 @@ To get the hang of **scone** you take a look at the [wiki](https://github.com/vl
 
 ### Features
 * Display text and colors
-* Recieve keyboard input
+* Receive keyboard input
 * Cross-platform
     * Some restrictions apply, please see [OS Limitations](https://github.com/vladdeSV/scone/wiki/OS-Limitations)
 
