@@ -23,11 +23,13 @@ class Frame
         output.initializeOutput();
 
         this.output = output;
+        this.output.cursorVisible(false);
         this.buffer = new Buffer(output.size());
     }
 
     ~this()
     {
+        this.output.cursorVisible(true);
         output.deinitializeOutput();
     }
 
