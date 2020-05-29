@@ -1,19 +1,22 @@
 module scone.os.posix.input.locale.locale;
 
-class Locale
+version (Posix)
 {
-    //todo: figure out if can get information about locale from terminal session?
-
-    string systemLocaleSequences()
+    class Locale
     {
-        version (OSX)
+        //todo: figure out if can get information about locale from terminal session?
+
+        string systemLocaleSequences()
         {
-            return import("osx.sv_se.tsv");
-        }
-        else
-        {
-            //fallback
-            return import("ubuntu.sv_se.tsv");
+            version (OSX)
+            {
+                return import("osx.sv_se.tsv");
+            }
+            else
+            {
+                //fallback
+                return import("ubuntu.sv_se.tsv");
+            }
         }
     }
 }
