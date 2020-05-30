@@ -2,15 +2,9 @@ module scone.core.init;
 
 import scone.frame.frame : Frame;
 import scone.input.input : Input;
-import std.experimental.logger;
-
-import scone.os.output : Output;
 import scone.os.input : Input_ = Input;
-
-//todo: scone settings
-// - use default scone exit handler on ctrl+c
-// - automatically resize window buffer
-// - default cell colors
+import scone.os.output : Output;
+import std.experimental.logger;
 
 Frame frame;
 Input input;

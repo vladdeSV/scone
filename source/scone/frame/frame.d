@@ -12,7 +12,6 @@ import std.conv : to;
 import std.datetime : Duration;
 import std.traits : isNumeric;
 
-
 class Frame
 {
     private Buffer buffer;
