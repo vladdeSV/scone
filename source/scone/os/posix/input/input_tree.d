@@ -1,95 +1,64 @@
 module scone.os.posix.input.input_tree;
 
-version (Posix)
+import scone.input.scone_control_key : SCK;
+import scone.input.scone_key : SK;
+import std.typecons : Nullable;
+
+private struct Data
 {
-    import scone.input.scone_control_key : SCK;
-    import scone.input.scone_key : SK;
-    import std.experimental.logger : sharedLog;
-    import std.typecons : Nullable;
+    SK key;
+    SCK controlKey;
+}
 
-    class InputTree
+class Node
+{
+    Node[uint] children;
+    Nullable!Data value;
+}
+
+Nullable!Data find(Node root, in uint[] sequence)
+{
+    Node node = root;
+
+    foreach (number; sequence)
     {
-        InputNode root = new InputNode();
-
-        void addInputActionForSequence(InputAction inputAction, uint[] seq)
+        if ((number in root.children) !is null)
         {
-            assert(seq.length);
-            root.mapInputEvent(inputAction, seq);
+            node = root.children[number];
+        }
+        else
+        {
+            return (Nullable!Data).init;
         }
     }
 
-    unittest
+    return node.value;
+}
+
+void insert(Node root, in uint[] sequence, Data data)
+{
+    Node node = root;
+    foreach (number; sequence)
     {
-        auto tree = new InputTree();
-        tree.addInputActionForSequence(InputAction(SK.a, SCK.none), [1]);
-        tree.addInputActionForSequence(InputAction(SK.b, SCK.none), [2, 3, 4]);
-        tree.addInputActionForSequence(InputAction(SK.b, SCK.none), [2, 3, 5]);
-
-        assert(SK.a == tree.root.children[1].input.get.key);
-        assert(SK.b == tree.root.children[2].children[3].children[4].input.get.key);
-        assert(SK.b == tree.root.children[2].children[3].children[5].input.get.key);
-    }
-
-    private class InputNode
-    {
-        Nullable!InputAction input;
-        InputNode[uint] children;
-
-        void mapInputEvent(InputAction inputAction, uint[] sequence)
+        if ((number in node.children) is null)
         {
-            if (sequence.length == 0)
-            {
-                this.setInputEvent(inputAction);
-                return;
-            }
-
-            auto value = sequence.popFrontValue;
-            auto node = this.getOrCreateChildNodeForValue(value);
-
-            node.mapInputEvent(inputAction, sequence);
+            node.children[number] = new Node();
         }
 
-        private void setInputEvent(InputAction ia)
-        {
-            if (!this.input.isNull)
-            {
-                assert(0, "trying to redefine input");
-            }
-
-            this.input = ia;
-        }
-
-        private InputNode getOrCreateChildNodeForValue(uint value)
-        {
-            InputNode node;
-            if ((value in this.children) is null)
-            {
-                node = new InputNode();
-                this.children[value] = node;
-            }
-            else
-            {
-                node = this.children[value];
-            }
-
-            return node;
-        }
+        node = node.children[number];
     }
 
-    private struct InputAction
-    {
-        SK key;
-        SCK controlKey;
-    }
+    node.value = data;
+}
 
-    private uint popFrontValue(ref uint[] array) pure
-    {
-        auto value = array[0];
+unittest
+{
+    auto root = new Node();
+    root.insert([1], Data(SK.a, SCK.none));
+    root.insert([2, 3, 4], Data(SK.b, SCK.none));
+    root.insert([2, 3, 5], Data(SK.b, SCK.none));
 
-        import std.range.primitives : popFront;
-
-        popFront(array);
-
-        return value;
-    }
+    assert(SK.a == root.children[1].value.get.key);
+    assert(SK.b == root.children[2].children[3].children[4].value.get.key);
+    assert(SK.b == root.children[2].children[3].children[5].value.get.key);
 }
