@@ -6,6 +6,7 @@ import std.typecons : Nullable;
 
 // todo this logic for inserting values has some problems
 // i believe it does not safeguard a node from having both children and a value
+// also, getting multiple inputs from a sequence is not 100% reliable. it should work for known sequences, but i would not consider this reliable yet.
 class KeypressTree
 {
     public Keypress[] find(in uint[] sequence)
