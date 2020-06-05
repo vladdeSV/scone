@@ -3,8 +3,9 @@ module scone.os.posix.input.keypress_tree;
 import scone.input.scone_control_key : SCK;
 import scone.input.scone_key : SK;
 import std.typecons : Nullable;
-import std.experimental.logger : sharedLog;
 
+// todo this logic for inserting values has some problems
+// i believe it does not safeguard a node from having both children and a value
 class KeypressTree
 {
     public Keypress[] find(in uint[] sequence)
@@ -44,7 +45,7 @@ class KeypressTree
         return keypresses;
     }
 
-    public void insert(in uint[] sequence, Keypress data)
+    public bool insert(in uint[] sequence, Keypress data)
     {
         auto node = this.root;
 
@@ -52,10 +53,10 @@ class KeypressTree
         {
             if ((number in node.children) is null)
             {
-                import std.conv : text;
-
-                assert(node.value.isNull(), text("trying to create child tree from node with value. in sequence ",
-                        sequence, " at number ", number, "."));
+                if(!node.value.isNull())
+                {
+                    return false;
+                }
 
                 node.children[number] = new KeypressNode();
             }
@@ -64,7 +65,8 @@ class KeypressTree
         }
 
         node.value = data;
-        sharedLog.log("set the value of ", sequence, " to ", data);
+
+        return true;
     }
 
     private KeypressNode root = new KeypressNode();
