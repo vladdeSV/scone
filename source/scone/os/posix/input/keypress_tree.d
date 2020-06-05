@@ -94,7 +94,8 @@ unittest
     assert(SK.down == y[1].key);
 }
 
-private struct Keypress
+/// todo move to own file. it is being used in multiple places
+struct Keypress
 {
     SK key;
     SCK controlKey;

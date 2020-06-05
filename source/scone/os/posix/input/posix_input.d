@@ -14,6 +14,7 @@ version (Posix)
     import scone.input.scone_key : SK;
     import scone.os.input : Input;
     import scone.os.posix.input.background_thread;
+    import scone.os.posix.input.keypress_tree : Keypress;
     import scone.os.posix.input.locale.input_map : InputMap;
     import scone.os.posix.input.locale.locale : Locale;
     import scone.os.posix.output.foos : Foos, PartialRowOutput;
@@ -62,7 +63,14 @@ version (Posix)
                 return null;
             }
 
-            return inputMap.inputEventsFromSequence(sequence);
+            // conversion to input events. refactor whole (winodws+posix) code to use keypresses instead of input events?
+            InputEvent[] inputEvents = [];
+            foreach (Keypress keypress; inputMap.inputEventsFromSequence(sequence))
+            {
+                inputEvents ~= InputEvent(keypress.key, keypress.controlKey, true);
+            }
+
+            return inputEvents;
         }
 
         private void startPollingInput()
