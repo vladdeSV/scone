@@ -4,42 +4,43 @@ import scone.input.scone_control_key : SCK;
 import scone.input.scone_key : SK;
 import std.typecons : Nullable;
 
+
 // todo this logic for inserting values has some problems
 // i believe it does not safeguard a node from having both children and a value
 // also, getting multiple inputs from a sequence is not 100% reliable. it should work for known sequences, but i would not consider this reliable yet.
 class KeypressTree
 {
-    public Keypress[] find(in uint[] sequence)
+    public Keypress[] find(uint[] sequence)
     {
         assert(sequence.length);
 
         Keypress[] keypresses = [];
         auto node = this.root;
 
-        foreach (number; sequence)
+        foreach (n, number; sequence)
         {
-            if ((number in node.children) !is null)
+            const bool nodeHasChild = (number in node.children) !is null;
+            if(node.value.isNull() && !nodeHasChild)
             {
-                node = node.children[number];
-            }
-            else
-            {
-                if (node.value.isNull())
+                if (!(keypresses.length && keypresses[$ - 1].key == SK.unknown))
                 {
-                    if (!(keypresses.length && keypresses[$ - 1].key == SK.unknown))
-                    {
-                        keypresses ~= Keypress(SK.unknown, SCK.none);
-                    }
+                    keypresses ~= Keypress(SK.unknown, SCK.none);
                 }
 
                 node = this.root;
+                continue;
             }
 
-            if (!node.value.isNull())
+            if(nodeHasChild)
             {
-                //assert node.children is empty
+                node = node.children[number];
+            }
+
+            if(!node.value.isNull())
+            {
                 keypresses ~= node.value.get();
                 node = this.root;
+                continue;
             }
         }
 
@@ -79,11 +80,16 @@ unittest
     tree.insert([27, 91, 67], Keypress(SK.right, SCK.none));
     tree.insert([27, 91, 66], Keypress(SK.down, SCK.none));
     tree.insert([48], Keypress(SK.key_0, SCK.none));
+    tree.insert([49], Keypress(SK.key_1, SCK.none));
 
     assert(SK.unknown == tree.find([1])[0].key);
     assert(SK.key_0 == tree.find([48])[0].key);
     assert(SK.right == tree.find([27, 91, 67])[0].key);
     assert(SK.down == tree.find([27, 91, 66])[0].key);
+
+    auto w = tree.find([48, 49]);
+    assert(SK.key_0 == w[0].key);
+    assert(SK.key_1 == w[1].key);
 
     auto x = tree.find([27, 91, 67, 27, 91, 66]);
     assert(SK.right == x[0].key);
