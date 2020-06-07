@@ -53,12 +53,12 @@ class KeypressTree
         return keypresses;
     }
 
-    public void insert(in uint[] sequence, Keypress data)
+    public bool insert(in uint[] sequence, Keypress data)
     {
         // special case for escape key until i figure out this logic
         if (sequence == [27])
         {
-            return;
+            return true;
         }
 
         auto node = this.root;
@@ -67,7 +67,10 @@ class KeypressTree
         {
             if ((number in node.children) is null)
             {
-                assert(node.value.isNull());
+                if(!node.value.isNull())
+                {
+                    return false;
+                }
 
                 node.children[number] = new KeypressNode();
             }
@@ -76,6 +79,8 @@ class KeypressTree
         }
 
         node.value = data;
+
+        return true;
     }
 
     private KeypressNode root = new KeypressNode();
