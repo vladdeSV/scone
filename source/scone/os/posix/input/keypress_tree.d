@@ -4,7 +4,6 @@ import scone.input.scone_control_key : SCK;
 import scone.input.scone_key : SK;
 import std.typecons : Nullable;
 
-
 // todo this logic for inserting values has some problems
 // i believe it does not safeguard a node from having both children and a value
 // also, getting multiple inputs from a sequence is not 100% reliable. it should work for known sequences, but i would not consider this reliable yet.
@@ -14,13 +13,20 @@ class KeypressTree
     {
         assert(sequence.length);
 
+        // special case for escape key until i figure out this logic
+        if (sequence == [27])
+        {
+            return [Keypress(SK.escape, SCK.none)];
+        }
+
         Keypress[] keypresses = [];
         auto node = this.root;
 
         foreach (n, number; sequence)
         {
-            const bool nodeHasChild = (number in node.children) !is null;
-            if(node.value.isNull() && !nodeHasChild)
+            const bool hasNodeChild = (number in node.children) !is null;
+
+            if (node.value.isNull() && !hasNodeChild)
             {
                 if (!(keypresses.length && keypresses[$ - 1].key == SK.unknown))
                 {
@@ -31,12 +37,12 @@ class KeypressTree
                 continue;
             }
 
-            if(nodeHasChild)
+            if (hasNodeChild)
             {
                 node = node.children[number];
             }
 
-            if(!node.value.isNull())
+            if (!node.value.isNull())
             {
                 keypresses ~= node.value.get();
                 node = this.root;
@@ -47,18 +53,21 @@ class KeypressTree
         return keypresses;
     }
 
-    public bool insert(in uint[] sequence, Keypress data)
+    public void insert(in uint[] sequence, Keypress data)
     {
+        // special case for escape key until i figure out this logic
+        if (sequence == [27])
+        {
+            return;
+        }
+
         auto node = this.root;
 
         foreach (number; sequence)
         {
             if ((number in node.children) is null)
             {
-                if(!node.value.isNull())
-                {
-                    return false;
-                }
+                assert(node.value.isNull());
 
                 node.children[number] = new KeypressNode();
             }
@@ -67,8 +76,6 @@ class KeypressTree
         }
 
         node.value = data;
-
-        return true;
     }
 
     private KeypressNode root = new KeypressNode();
@@ -77,27 +84,48 @@ class KeypressTree
 unittest
 {
     auto tree = new KeypressTree();
+    tree.insert([27], Keypress(SK.escape, SCK.none));
     tree.insert([27, 91, 67], Keypress(SK.right, SCK.none));
     tree.insert([27, 91, 66], Keypress(SK.down, SCK.none));
     tree.insert([48], Keypress(SK.key_0, SCK.none));
     tree.insert([49], Keypress(SK.key_1, SCK.none));
 
-    assert(SK.unknown == tree.find([1])[0].key);
-    assert(SK.key_0 == tree.find([48])[0].key);
-    assert(SK.right == tree.find([27, 91, 67])[0].key);
-    assert(SK.down == tree.find([27, 91, 66])[0].key);
+    Keypress[] find;
 
-    auto w = tree.find([48, 49]);
-    assert(SK.key_0 == w[0].key);
-    assert(SK.key_1 == w[1].key);
+    find = tree.find([1]);
+    assert(find.length == 1);
+    assert(SK.unknown == find[0].key);
 
-    auto x = tree.find([27, 91, 67, 27, 91, 66]);
-    assert(SK.right == x[0].key);
-    assert(SK.down == x[1].key);
+    find = tree.find([48]);
+    assert(find.length == 1);
+    assert(SK.key_0 == find[0].key);
 
-    auto y = tree.find([27, 6, 67, 27, 91, 66]);
-    assert(SK.unknown == y[0].key);
-    assert(SK.down == y[1].key);
+    find = tree.find([27]);
+    assert(find.length == 1);
+    assert(SK.escape == find[0].key);
+
+    find = tree.find([27, 91, 67]);
+    assert(find.length == 1);
+    assert(SK.right == find[0].key);
+
+    find = tree.find([27, 91, 66]);
+    assert(find.length == 1);
+    assert(SK.down == find[0].key);
+
+    find = tree.find([48, 49]);
+    assert(find.length == 2);
+    assert(SK.key_0 == find[0].key);
+    assert(SK.key_1 == find[1].key);
+
+    find = tree.find([27, 91, 67, 27, 91, 66]);
+    assert(find.length == 2);
+    assert(SK.right == find[0].key);
+    assert(SK.down == find[1].key);
+
+    find = tree.find([27, 6, 67, 27, 91, 66]);
+    assert(find.length == 2);
+    assert(SK.unknown == find[0].key);
+    assert(SK.down == find[1].key);
 }
 
 /// todo move to own file. it is being used in multiple places
