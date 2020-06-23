@@ -7,6 +7,7 @@ version (Posix)
     import scone.input.scone_key : SK;
     import scone.os.posix.input.keypress_tree : KeypressTree, Keypress;
     import scone.os.posix.input.locale.input_sequence : InputSequence;
+    import std.experimental.logger : sharedLog;
 
     class InputMap
     {
@@ -43,7 +44,8 @@ version (Posix)
                 string[] arguments = split(s, '\t');
                 if (arguments.length != 3)
                 {
-                    // log(warning, "input sequence of incorrect. exprected 3 arguments, got %i", arguments.length);
+                    sharedLog.warning("Reading input sequences CSV found %i arguments, exprected 3", arguments.length);
+                    
                     continue;
                 }
 
@@ -59,12 +61,12 @@ version (Posix)
                 bool inserted = tree.insert(sequenceFromString(seq), Keypress(key, controlKey));
                 if(!inserted)
                 {
-                    // todo log error something went wrong
+                    sharedLog.error("Could not map sequence ", seq, " to keypress ", key, "+", controlKey);
                 }
             }
         }
 
-        /// Get uint[], from string in the format of "num1,num2,...,numX"
+        /// get uint[], from string in the format of "num1,num2,...,numX"
         private uint[] sequenceFromString(string input) pure
         {
             import std.array : split;
