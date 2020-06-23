@@ -5,7 +5,7 @@ import scone.core.types.cell : Cell;
 import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
-import scone.frame.cells_converter;
+import scone.frame.arguments_to_cells_converter;
 import scone.os.output : Output;
 import std.concurrency : receiveTimeout;
 import std.conv : to;
@@ -42,7 +42,7 @@ class Frame
 
     void write(Args...)(Coordinate origin, Args args) if (args.length)
     {
-        auto cellConverter = new CellsConverter!Args(args);
+        auto cellConverter = new ArgumentsToCellsConverter!Args(args);
         Cell[] cells = cellConverter.cells;
 
         uint dx, dy;

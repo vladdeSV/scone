@@ -1,13 +1,13 @@
-module scone.frame.cells_converter;
+module scone.frame.arguments_to_cells_converter;
 
 import scone.core.types.cell : Cell;
 import scone.core.types.color;
 import std.conv : to;
 
-//todo rename to better reflect arguments -> Cell[]
-template CellsConverter(Args...)
+/// convert arguments to Cell[]
+template ArgumentsToCellsConverter(Args...)
 {
-    class CellsConverter
+    class ArgumentsToCellsConverter
     {
         this(Args args)
         {
@@ -66,12 +66,10 @@ template CellsConverter(Args...)
             //    logger.warning("The last argument in %s is a color, which will not be set. ", args);
             //}
 
-            //return tuple!("cells", "fg", "bg")(cells, foreground, background);
-
             return cells;
         }
 
-        // Calculate the length of arguments if converted to Cell[]
+        /// calculate the length of arguments if converted to Cell[]
         private size_t length()
         {
             int length = 0;
