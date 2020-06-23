@@ -51,6 +51,7 @@ version (Windows)
         void size(in Size size)
         {
             // todo this was copied from my old codebase. this should really be reworked
+            // todo does not work with windows terminal v1.0.1401.0, see https://github.com/microsoft/terminal/issues/5094
             auto width = size.width;
             auto height = size.height;
 
