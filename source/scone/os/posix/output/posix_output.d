@@ -33,7 +33,7 @@ version (Posix)
             auto currentSize = this.size();
             if (currentSize != lastSize)
             {
-                this.clear(); // todo: should screen be cleard?
+                this.clear();
                 buffer.redraw();
                 lastSize = currentSize;
             }
