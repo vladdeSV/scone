@@ -21,13 +21,12 @@ version (Windows)
             consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
             if (consoleInputHandle == INVALID_HANDLE_VALUE)
             {
-                //todo
+                throw new Exception("Cannot initialize input. Got INVALID_HANDLE_VALUE.");
             }
         }
 
         void deinitializeInput()
         {
-
         }
 
         InputEvent[] latestInputEvents()

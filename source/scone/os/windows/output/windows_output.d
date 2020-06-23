@@ -34,8 +34,7 @@ version (Windows)
 
             if (consoleOutputHandle == INVALID_HANDLE_VALUE)
             {
-                //todo
-                assert(0);
+                throw new Exception("Cannot initialize output. Got INVALID_HANDLE_VALUE.");
             }
 
             SetConsoleActiveScreenBuffer(consoleOutputHandle);
