@@ -37,6 +37,10 @@ version (Windows)
                 throw new Exception("Cannot initialize output. Got INVALID_HANDLE_VALUE.");
             }
 
+            CONSOLE_SCREEN_BUFFER_INFO csbi;
+            GetConsoleScreenBufferInfo(consoleOutputHandle, &csbi);
+            this.initialAttributes = csbi.wAttributes;
+
             SetConsoleActiveScreenBuffer(consoleOutputHandle);
 
             this.lastSize = this.size();
@@ -138,7 +142,7 @@ version (Windows)
 
         private void writeCellAt(Cell cell, Coordinate coordinate)
         {
-            CHAR_INFO[] charBuffer = [CellConverter.toCharInfo(cell)];
+            CHAR_INFO[] charBuffer = [CellConverter.toCharInfo(cell, this.initialAttributes)];
             COORD bufferSize = {1, 1};
             COORD bufferCoord = {0, 0};
             SMALL_RECT writeRegion = {
@@ -154,5 +158,6 @@ version (Windows)
         private HANDLE oldConsoleOutputHandle;
         private HANDLE consoleOutputHandle;
         private Size lastSize;
+        private WORD initialAttributes;
     }
 }

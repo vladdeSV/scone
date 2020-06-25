@@ -10,7 +10,7 @@ version (Windows)
 
     abstract final class CellConverter
     {
-        public static CHAR_INFO toCharInfo(Cell cell)
+        public static CHAR_INFO toCharInfo(Cell cell, WORD initialAttributes)
         {
             wchar unicodeCharacter;
 
@@ -25,12 +25,15 @@ version (Windows)
 
             CHAR_INFO character;
             character.UnicodeChar = unicodeCharacter;
-            character.Attributes = typeof(this).attributesFromCell(cell);
+            character.Attributes = typeof(this).attributesFromCell(cell, initialAttributes);
+
+            import std.experimental.logger;
+            sharedLog.log(cell, " ", character.Attributes, " ", initialAttributes);
 
             return character;
         }
 
-        private static WORD attributesFromCell(Cell cell)
+        private static WORD attributesFromCell(Cell cell, WORD initialAttributes)
         {
             WORD attributes;
 
@@ -38,10 +41,7 @@ version (Windows)
             {
             case Color.initial:
                 // take the inital colors, and filter out all flags except the foreground ones
-                //attributes |= (initialColors & (FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
-
-                //todo
-                attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+                attributes |= (initialAttributes & (FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
                 break;
             case Color.blue:
                 attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
@@ -100,10 +100,7 @@ version (Windows)
             {
             case Color.initial:
                 // take the inital colors, and filter out all flags except the background ones
-                //attributes |= (initialColors & (BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE));
-
-                //todo
-                attributes = 0;
+                attributes |= (initialAttributes & (BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE));
                 break;
             case Color.blue:
                 attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;
