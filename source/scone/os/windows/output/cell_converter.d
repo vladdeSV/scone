@@ -27,9 +27,6 @@ version (Windows)
             character.UnicodeChar = unicodeCharacter;
             character.Attributes = typeof(this).attributesFromCell(cell, initialAttributes);
 
-            import std.experimental.logger;
-            sharedLog.log(cell, " ", character.Attributes, " ", initialAttributes);
-
             return character;
         }
 
@@ -56,8 +53,7 @@ version (Windows)
                 attributes |= FOREGROUND_GREEN | FOREGROUND_BLUE;
                 break;
             case Color.white:
-                attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED
-                    | FOREGROUND_GREEN | FOREGROUND_BLUE;
+                attributes |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
                 break;
             case Color.whiteDark:
                 attributes |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
@@ -115,8 +111,7 @@ version (Windows)
                 attributes |= BACKGROUND_GREEN | BACKGROUND_BLUE;
                 break;
             case Color.white:
-                attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED
-                    | BACKGROUND_GREEN | BACKGROUND_BLUE;
+                attributes |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
                 break;
             case Color.whiteDark:
                 attributes |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
