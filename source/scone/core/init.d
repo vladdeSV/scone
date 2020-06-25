@@ -6,9 +6,17 @@ import scone.os.input : Input_ = Input;
 import scone.os.output : Output;
 import std.experimental.logger;
 
-void delegate() sconeSetup;
 Frame frame;
 Input input;
+
+/// can be overidden
+void delegate() sconeSetup = {
+    auto output = createApplicationOutput();
+    frame = new Frame(output);
+
+    auto input_ = createApplicationInput();
+    input = new Input(input_);
+};
 
 private shared initialized = false;
 
@@ -21,17 +29,6 @@ static this()
 
     initialized = true;
     sharedLog = new FileLogger("scone.log");
-
-    if(sconeSetup is null)
-    {
-        sconeSetup = {
-            auto output = createApplicationOutput();
-            frame = new Frame(output);
-
-            auto input_ = createApplicationInput();
-            input = new Input(input_);
-        };
-    }
 
     sconeSetup();
 }
