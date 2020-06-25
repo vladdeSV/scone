@@ -92,9 +92,6 @@ ForegroundColor foreground(Color color)
     return ForegroundColor(color);
 }
 
-/// ditto
-deprecated alias fg = foreground;
-
 /**
  * Example:
  * ---
@@ -105,9 +102,6 @@ BackgroundColor background(Color color)
 {
     return BackgroundColor(color);
 }
-
-/// ditto
-deprecated alias bg = background;
 
 /**
  * Check if a color is a light color
