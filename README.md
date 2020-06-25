@@ -1,5 +1,3 @@
-**This is an on-going rewrite of v2, and some fundamental features might not work properly.** There might be days where printing to the screen does not work. I highly suggest you use the latest stable release [`v2.1.3`](https://github.com/vladdeSV/scone/tree/v2.1.3#-scone) (not the `develop` branch!) if you plan to use scone (for now). v3 of scone is currently under heavy development (not fully featured). Do not use this in production.
-
 # 🍞 scone
 Create cross-platform console/terminal applications with ease
 
