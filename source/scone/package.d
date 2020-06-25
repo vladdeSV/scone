@@ -1,6 +1,6 @@
 module scone;
 
-public import scone.core.init : frame, input;
+public import scone.core.init : frame, input, sconeSetup;
 public import scone.core.types.cell : Cell;
 public import scone.core.types.color;
 public import scone.core.types.coordinate : Coordinate;
