@@ -1,9 +1,9 @@
-module scone.input.input;
+module scone.input.keyboard;
 
 import scone.os.input : OSInput = Input;
 import scone.input.keyboard_event : KeyboardEvent;
 
-class Input
+class Keyboard
 {
     private OSInput input;
 

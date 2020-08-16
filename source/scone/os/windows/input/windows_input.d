@@ -5,7 +5,7 @@ version (Windows)
     import scone.os.input : Input_ = Input;
     import core.sys.windows.windows;
     import scone.core.types.size : Size;
-    import scone.input.input : Input;
+    import scone.input.keyboard : Keyboard;
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
