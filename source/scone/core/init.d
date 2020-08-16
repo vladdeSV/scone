@@ -2,7 +2,7 @@ module scone.core.init;
 
 import scone.frame.frame : Frame;
 import scone.input.keyboard : Keyboard;
-import scone.os.input : Input_ = Input;
+import scone.os.input : Input;
 import scone.os.output : Output;
 import std.experimental.logger;
 
@@ -14,8 +14,8 @@ void delegate() sconeSetup = {
     auto output = createApplicationOutput();
     frame = new Frame(output);
 
-    auto input_ = createApplicationInput();
-    keyboard = new Keyboard(input_);
+    auto input = createApplicationInput();
+    keyboard = new Keyboard(input);
 };
 
 private shared initialized = false;
@@ -55,7 +55,7 @@ Output createApplicationOutput()
     }
 }
 
-Input_ createApplicationInput()
+Input createApplicationInput()
 {
     version (unittest)
     {
