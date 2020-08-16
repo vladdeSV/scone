@@ -1,26 +1,16 @@
-module scone.input.input_event;
+module scone.input.keyboard_event;
 
 import scone.input.scone_key : SK;
 import scone.input.scone_control_key : SCK;
 import scone.misc.flags : hasFlag;
 
-struct InputEvent
+struct KeyboardEvent
 {
     this(SK key, SCK controlKey, bool pressed)
     {
-        _key = key;
-        _controlKey = controlKey;
-        _pressed = pressed;
-    }
-
-    auto key() @property
-    {
-        return _key;
-    }
-
-    auto pressed() @property
-    {
-        return _pressed;
+        this.key = key;
+        this.controlKey = controlKey;
+        this.pressed = pressed;
     }
 
     auto hasControlKey(SCK ck)
@@ -28,14 +18,9 @@ struct InputEvent
         return controlKey.hasFlag(ck);
     }
 
-    auto controlKey() @property
-    {
-        return _controlKey;
-    }
-
-    private SK _key;
-    private SCK _controlKey;
-    private bool _pressed;
+    public SK key;
+    public SCK controlKey;
+    public bool pressed;
 
     /+
     version (Posix)

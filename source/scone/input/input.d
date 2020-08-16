@@ -1,7 +1,7 @@
 module scone.input.input;
 
 import scone.os.input : OSInput = Input;
-import scone.input.input_event : InputEvent;
+import scone.input.keyboard_event : KeyboardEvent;
 
 class Input
 {
@@ -18,8 +18,8 @@ class Input
         this.input.deinitializeInput();
     }
 
-    InputEvent[] latest()
+    KeyboardEvent[] latest()
     {
-        return this.input.latestInputEvents();
+        return this.input.latestKeyboardEvents();
     }
 }
