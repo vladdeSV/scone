@@ -9,7 +9,7 @@ version (Posix)
     import scone.core.types.color;
     import scone.core.types.coordinate : Coordinate;
     import scone.core.types.size : Size;
-    import scone.input.keyboard_event : KeyboardEvent;
+    import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.os.input : Input;
@@ -53,30 +53,30 @@ version (Posix)
             return sequence;
         }
 
-        KeyboardEvent[] latestKeyboardEvents()
+        InputEvent[] latestInputEvents()
         {
             auto sequence = this.retreiveInputSequence();
 
-            //todo: returns null here. should this logic be here or in `inputMap.keyboardEventsFromSequence(sequence)` instead?
+            //todo: returns null here. should this logic be here or in `inputMap.inputEventsFromSequence(sequence)` instead?
             if (sequence.length == 0)
             {
                 return null;
             }
 
             // conversion to input events. refactor whole (winodws+posix) code to use keypresses instead of input events?
-            KeyboardEvent[] keyboardEvents = [];
-            foreach (Keypress keypress; inputMap.keyboardEventsFromSequence(sequence))
+            InputEvent[] inputEvents = [];
+            foreach (Keypress keypress; inputMap.inputEventsFromSequence(sequence))
             {
-                keyboardEvents ~= KeyboardEvent(keypress.key, keypress.controlKey, true);
+                inputEvents ~= InputEvent(keypress.key, keypress.controlKey, true);
             }
 
-            return keyboardEvents;
+            return inputEvents;
         }
 
         private void startPollingInput()
         {
             // begin polling
-            spawn(&pollKeyboardEvent);
+            spawn(&pollInputEvent);
         }
 
         // unsure when to use this.

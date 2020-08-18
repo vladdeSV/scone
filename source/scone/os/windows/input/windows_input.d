@@ -2,11 +2,11 @@ module scone.os.windows.input.windows_input;
 
 version (Windows)
 {
-    import scone.os.input : Input;
+    import scone.os.input : Input_ = Input;
     import core.sys.windows.windows;
     import scone.core.types.size : Size;
-    import scone.input.keyboard : Keyboard;
-    import scone.input.keyboard_event : KeyboardEvent;
+    import scone.input.input : Input;
+    import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.misc.flags : hasFlag, withFlag;
@@ -14,7 +14,7 @@ version (Windows)
     import std.conv : to;
     import std.experimental.logger;
 
-    class WindowsInput : Input
+    class WindowsInput : Input_
     {
         void initializeInput()
         {
@@ -29,13 +29,13 @@ version (Windows)
         {
         }
 
-        KeyboardEvent[] latestKeyboardEvents()
+        InputEvent[] latestInputEvents()
         {
             INPUT_RECORD[16] inputRecordBuffer;
             DWORD read = 0;
             ReadConsoleInput(consoleInputHandle, inputRecordBuffer.ptr, 16, &read);
 
-            KeyboardEvent[] keyboardEvents;
+            InputEvent[] inputEvents;
 
             for (size_t e = 0; e < read; ++e)
             {
@@ -53,13 +53,13 @@ version (Windows)
                     break;
                 case  /* 0x0001 */ KEY_EVENT:
                     auto foo = new KeyEventRecordConverter(inputRecordBuffer[e].KeyEvent);
-                    keyboardEvents ~= KeyboardEvent(foo.sconeKey, foo.sconeControlKey,
+                    inputEvents ~= InputEvent(foo.sconeKey, foo.sconeControlKey,
                             cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown);
                     break;
                 }
             }
 
-            return keyboardEvents;
+            return inputEvents;
         }
 
         private HANDLE consoleInputHandle;

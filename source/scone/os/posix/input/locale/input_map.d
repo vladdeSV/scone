@@ -2,7 +2,7 @@ module scone.os.posix.input.locale.input_map;
 
 version (Posix)
 {
-    import scone.input.keyboard_event : KeyboardEvent;
+    import scone.input.input_event : InputEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.os.posix.input.keypress_tree : KeypressTree, Keypress;
@@ -17,7 +17,7 @@ version (Posix)
             loadKeypressTree(this.keypressTree, tsv);
         }
 
-        Keypress[] keyboardEventsFromSequence(uint[] sequence)
+        Keypress[] inputEventsFromSequence(uint[] sequence)
         {
             return this.keypressTree.find(sequence);
         }

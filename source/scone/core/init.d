@@ -1,21 +1,21 @@
 module scone.core.init;
 
 import scone.frame.frame : Frame;
-import scone.input.keyboard : Keyboard;
-import scone.os.input : Input;
+import scone.input.input : Input;
+import scone.os.input : Input_ = Input;
 import scone.os.output : Output;
 import std.experimental.logger;
 
 Frame frame;
-Keyboard keyboard;
+Input input;
 
 /// can be overidden
 void delegate() sconeSetup = {
     auto output = createApplicationOutput();
     frame = new Frame(output);
 
-    auto input = createApplicationInput();
-    keyboard = new Keyboard(input);
+    auto input_ = createApplicationInput();
+    input = new Input(input_);
 };
 
 private shared initialized = false;
@@ -55,7 +55,7 @@ Output createApplicationOutput()
     }
 }
 
-Input createApplicationInput()
+Input_ createApplicationInput()
 {
     version (unittest)
     {
