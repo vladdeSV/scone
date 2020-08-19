@@ -3,14 +3,14 @@ module scone.misc.dummy_window;
 import scone.core.types.buffer : Buffer;
 import scone.core.types.size : Size;
 import scone.input.keyboard_event : KeyboardEvent;
-import scone.os.output : Output;
+import scone.os.standard_output : StandardOutput;
 import scone.os.input : Input;
 
-class DummyOutput : Output
+class DummyOutput : StandardOutput
 {
     void initializeOutput()
     {
-}   
+    }   
 
     void deinitializeOutput()
     {

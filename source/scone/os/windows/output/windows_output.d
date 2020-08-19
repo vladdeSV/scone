@@ -8,7 +8,7 @@ version (Windows)
     import scone.core.types.color;
     import scone.core.types.coordinate : Coordinate;
     import scone.core.types.size : Size;
-    import scone.os.output : Output;
+    import scone.os.standard_output : StandardOutput;
     import scone.os.windows.output.cell_converter : CellConverter;
     import std.conv : ConvOverflowException;
     import std.conv : to;
@@ -23,7 +23,7 @@ version (Windows)
         COORD GetConsoleFontSize(HANDLE hConsoleOutput, DWORD nFont);
     }
 
-    class WindowsOutput : Output
+    class WindowsOutput : StandardOutput
     {
         void initializeOutput()
         {
