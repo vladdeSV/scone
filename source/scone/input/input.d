@@ -18,7 +18,7 @@ class Input
         this.input.deinitializeInput();
     }
 
-    KeyboardEvent[] latest()
+    KeyboardEvent[] keyboard()
     {
         return this.input.latestKeyboardEvents();
     }
