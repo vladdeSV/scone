@@ -2,8 +2,8 @@ module scone.core.init;
 
 import scone.frame.frame : Frame;
 import scone.input.input : Input;
-import scone.os.input : Input_ = Input;
-import scone.os.output : Output;
+import scone.os.standard_input : StandardInput;
+import scone.os.standard_output : StandardOutput;
 import std.experimental.logger;
 
 Frame frame;
@@ -11,11 +11,11 @@ Input input;
 
 /// can be overidden
 void delegate() sconeSetup = {
-    auto output = createApplicationOutput();
-    frame = new Frame(output);
+    auto standardOutput = createApplicationOutput();
+    frame = new Frame(standardOutput);
 
-    auto input_ = createApplicationInput();
-    input = new Input(input_);
+    auto standardInput = createApplicationInput();
+    input = new Input(standardInput);
 };
 
 private shared initialized = false;
@@ -33,7 +33,7 @@ static this()
     sconeSetup();
 }
 
-Output createApplicationOutput()
+StandardOutput createApplicationOutput()
 {
     version (unittest)
     {
@@ -55,7 +55,7 @@ Output createApplicationOutput()
     }
 }
 
-Input_ createApplicationInput()
+StandardInput createApplicationInput()
 {
     version (unittest)
     {

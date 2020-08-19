@@ -1,13 +1,13 @@
 module scone.input.input;
 
-import scone.os.input : OSInput = Input;
-import scone.input.input_event : InputEvent;
+import scone.os.standard_input : StandardInput;
+import scone.input.keyboard_event : KeyboardEvent;
 
 class Input
 {
-    private OSInput input;
+    private StandardInput input;
 
-    this(OSInput input)
+    this(StandardInput input)
     {
         this.input = input;
         input.initializeInput();
@@ -18,8 +18,8 @@ class Input
         this.input.deinitializeInput();
     }
 
-    InputEvent[] latest()
+    KeyboardEvent[] latest()
     {
-        return this.input.latestInputEvents();
+        return this.input.latestKeyboardEvents();
     }
 }

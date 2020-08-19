@@ -2,7 +2,7 @@ module scone.os.posix.output.posix_output;
 
 version (Posix)
 {
-    import scone.os.output : Output;
+    import scone.os.standard_output : StandardOutput;
     import scone.core.types.size : Size;
     import scone.core.types.coordinate : Coordinate;
     import scone.core.types.buffer : Buffer;
@@ -12,7 +12,7 @@ version (Posix)
     import std.stdio : writef, stdout;
     import core.sys.posix.unistd : STDOUT_FILENO;
 
-    class PosixOutput : Output
+    class PosixOutput : StandardOutput
     {
         void initializeOutput()
         {

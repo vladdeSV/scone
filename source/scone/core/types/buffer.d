@@ -1,6 +1,5 @@
 module scone.core.types.buffer;
 
-import scone.input.input_event;
 import scone.core.types.cell : Cell;
 import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;

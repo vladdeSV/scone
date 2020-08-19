@@ -2,15 +2,15 @@ module scone.misc.dummy_window;
 
 import scone.core.types.buffer : Buffer;
 import scone.core.types.size : Size;
-import scone.input.input_event : InputEvent;
-import scone.os.output : Output;
-import scone.os.input : Input;
+import scone.input.keyboard_event : KeyboardEvent;
+import scone.os.standard_output : StandardOutput;
+import scone.os.standard_input : StandardInput;
 
-class DummyOutput : Output
+class DummyOutput : StandardOutput
 {
     void initializeOutput()
     {
-}   
+    }   
 
     void deinitializeOutput()
     {
@@ -38,7 +38,7 @@ class DummyOutput : Output
     }
 }
 
-class DummyInput : Input
+class DummyInput : StandardInput
 {
     void initializeInput()
     {
@@ -48,7 +48,7 @@ class DummyInput : Input
     {
     }
 
-    InputEvent[] latestInputEvents()
+    KeyboardEvent[] latestKeyboardEvents()
     {
         return [];
     }

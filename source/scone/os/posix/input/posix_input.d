@@ -9,10 +9,10 @@ version (Posix)
     import scone.core.types.color;
     import scone.core.types.coordinate : Coordinate;
     import scone.core.types.size : Size;
-    import scone.input.input_event : InputEvent;
+    import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.input : Input;
+    import scone.os.standard_input : StandardInput;
     import scone.os.posix.input.background_thread;
     import scone.os.posix.input.keypress_tree : Keypress;
     import scone.os.posix.input.locale.input_map : InputMap;
@@ -27,7 +27,7 @@ version (Posix)
         void cfmakeraw(termios* termios_p);
     }
 
-    class PosixInput : Input
+    class PosixInput : StandardInput
     {
         void initializeInput()
         {
@@ -53,30 +53,30 @@ version (Posix)
             return sequence;
         }
 
-        InputEvent[] latestInputEvents()
+        KeyboardEvent[] latestKeyboardEvents()
         {
             auto sequence = this.retreiveInputSequence();
 
-            //todo: returns null here. should this logic be here or in `inputMap.inputEventsFromSequence(sequence)` instead?
+            //todo: returns null here. should this logic be here or in `inputMap.keyboardEventsFromSequence(sequence)` instead?
             if (sequence.length == 0)
             {
                 return null;
             }
 
             // conversion to input events. refactor whole (winodws+posix) code to use keypresses instead of input events?
-            InputEvent[] inputEvents = [];
-            foreach (Keypress keypress; inputMap.inputEventsFromSequence(sequence))
+            KeyboardEvent[] keyboardEvents = [];
+            foreach (Keypress keypress; inputMap.keyboardEventsFromSequence(sequence))
             {
-                inputEvents ~= InputEvent(keypress.key, keypress.controlKey, true);
+                keyboardEvents ~= KeyboardEvent(keypress.key, keypress.controlKey, true);
             }
 
-            return inputEvents;
+            return keyboardEvents;
         }
 
         private void startPollingInput()
         {
             // begin polling
-            spawn(&pollInputEvent);
+            spawn(&pollKeyboardEvent);
         }
 
         // unsure when to use this.

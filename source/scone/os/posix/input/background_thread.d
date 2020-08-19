@@ -11,7 +11,7 @@ version (Posix)
     import std.concurrency : thisTid, send, ownerTid;
     import std.datetime : Duration, msecs;
 
-    static void pollInputEvent()
+    static void pollKeyboardEvent()
     {
         Thread.getThis.isDaemon = true;
 

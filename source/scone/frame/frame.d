@@ -6,7 +6,7 @@ import scone.core.types.color;
 import scone.core.types.coordinate : Coordinate;
 import scone.core.types.size : Size;
 import scone.frame.arguments_to_cells_converter;
-import scone.os.output : Output;
+import scone.os.standard_output : StandardOutput;
 import std.concurrency : receiveTimeout;
 import std.conv : to;
 import std.datetime : Duration;
@@ -15,9 +15,9 @@ import std.traits : isNumeric;
 class Frame
 {
     private Buffer buffer;
-    private Output output;
+    private StandardOutput output;
 
-    this(Output output)
+    this(StandardOutput output)
     {
         output.initializeOutput();
 
