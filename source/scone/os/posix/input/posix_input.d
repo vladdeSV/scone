@@ -27,7 +27,7 @@ version (Posix)
         void cfmakeraw(termios* termios_p);
     }
 
-    class PosixInput : Input
+    class PosixInput : StandardInput
     {
         void initializeInput()
         {
