@@ -1,8 +1,8 @@
-module scone.os.input;
+module scone.os.standard_input;
 
 import scone.input.keyboard_event : KeyboardEvent;
 
-interface Input
+interface StandardInput
 {
     public void initializeInput();
     public void deinitializeInput();

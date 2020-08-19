@@ -4,7 +4,7 @@ import scone.core.types.buffer : Buffer;
 import scone.core.types.size : Size;
 import scone.input.keyboard_event : KeyboardEvent;
 import scone.os.standard_output : StandardOutput;
-import scone.os.input : Input;
+import scone.os.standard_input : StandardInput;
 
 class DummyOutput : StandardOutput
 {
@@ -38,7 +38,7 @@ class DummyOutput : StandardOutput
     }
 }
 
-class DummyInput : Input
+class DummyInput : StandardInput
 {
     void initializeInput()
     {

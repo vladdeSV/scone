@@ -12,7 +12,7 @@ version (Posix)
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.input : Input;
+    import scone.os.standard_input : StandardInput;
     import scone.os.posix.input.background_thread;
     import scone.os.posix.input.keypress_tree : Keypress;
     import scone.os.posix.input.locale.input_map : InputMap;

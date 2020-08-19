@@ -2,7 +2,7 @@ module scone.os.windows.input.windows_input;
 
 version (Windows)
 {
-    import scone.os.input : Input_ = Input;
+    import scone.os.standard_input : StandardInput;
     import core.sys.windows.windows;
     import scone.core.types.size : Size;
     import scone.input.input : Input;
@@ -14,7 +14,7 @@ version (Windows)
     import std.conv : to;
     import std.experimental.logger;
 
-    class WindowsInput : Input_
+    class WindowsInput : StandardInput
     {
         void initializeInput()
         {
