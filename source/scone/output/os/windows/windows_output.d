@@ -9,7 +9,7 @@ version (Windows)
     import scone.output.types.coordinate : Coordinate;
     import scone.output.types.size : Size;
     import scone.output.os.standard_output : StandardOutput;
-    import scone.output.os.windows.output.cell_converter : CellConverter;
+    import scone.output.os.windows.cell_converter : CellConverter;
     import std.conv : ConvOverflowException;
     import std.conv : to;
     import std.experimental.logger;

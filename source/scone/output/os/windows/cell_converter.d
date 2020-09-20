@@ -1,4 +1,4 @@
-module scone.output.os.windows.output.cell_converter;
+module scone.output.os.windows.cell_converter;
 
 version (Windows)
 {
