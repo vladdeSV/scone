@@ -1,7 +1,5 @@
 module scone.core.types.color;
 
-import std.format : format;
-
 /**
  * All colors
  *

@@ -4,11 +4,6 @@ version (Posix)
 {
     import core.sys.posix.termios;
     import core.sys.posix.unistd : STDOUT_FILENO;
-    import scone.core.types.buffer : Buffer;
-    import scone.core.types.cell : Cell;
-    import scone.core.types.color;
-    import scone.core.types.coordinate : Coordinate;
-    import scone.core.types.size : Size;
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
