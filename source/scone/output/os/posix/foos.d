@@ -1,11 +1,11 @@
-module scone.os.posix.output.foos;
+module scone.output.os.posix.output.foos;
 
 version (Posix)
 {
-    import scone.core.types.buffer : Buffer;
-    import scone.core.types.cell : Cell;
-    import scone.core.types.color;
-    import scone.core.types.coordinate : Coordinate;
+    import scone.output.types.buffer : Buffer;
+    import scone.output.types.cell : Cell;
+    import scone.output.types.color;
+    import scone.output.types.coordinate : Coordinate;
     import std.algorithm.searching : minElement, maxElement;
     import std.conv : text;
     import std.typecons : Tuple;

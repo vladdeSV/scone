@@ -1,7 +1,7 @@
-module scone.frame.arguments_to_cells_converter;
+module scone.output.helpers.arguments_to_cells_converter;
 
-import scone.core.types.cell : Cell;
-import scone.core.types.color;
+import scone.output.types.cell : Cell;
+import scone.output.types.color;
 import std.conv : to;
 
 /// convert arguments to Cell[]

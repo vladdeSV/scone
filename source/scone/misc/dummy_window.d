@@ -1,10 +1,10 @@
 module scone.misc.dummy_window;
 
-import scone.core.types.buffer : Buffer;
-import scone.core.types.size : Size;
+import scone.output.types.buffer : Buffer;
+import scone.output.types.size : Size;
 import scone.input.keyboard_event : KeyboardEvent;
-import scone.os.standard_output : StandardOutput;
-import scone.os.standard_input : StandardInput;
+import scone.output.os.standard_output : StandardOutput;
+import scone.input.os.standard_input : StandardInput;
 
 class DummyOutput : StandardOutput
 {

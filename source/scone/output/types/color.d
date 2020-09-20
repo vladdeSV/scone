@@ -1,4 +1,4 @@
-module scone.core.types.color;
+module scone.output.types.color;
 
 /**
  * All colors

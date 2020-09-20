@@ -1,9 +1,9 @@
-module scone.core.types.buffer;
+module scone.output.types.buffer;
 
-import scone.core.types.cell : Cell;
-import scone.core.types.color;
-import scone.core.types.coordinate : Coordinate;
-import scone.core.types.size : Size;
+import scone.output.types.cell : Cell;
+import scone.output.types.color;
+import scone.output.types.coordinate : Coordinate;
+import scone.output.types.size : Size;
 
 class Buffer
 {

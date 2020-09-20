@@ -1,12 +1,12 @@
-module scone.os.posix.input.locale.input_map;
+module scone.input.os.posix.locale.input_map;
 
 version (Posix)
 {
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.posix.input.keypress_tree : KeypressTree, Keypress;
-    import scone.os.posix.input.locale.input_sequence : InputSequence;
+    import scone.input.os.posix.keypress_tree : KeypressTree, Keypress;
+    import scone.input.os.posix.locale.input_sequence : InputSequence;
     import std.experimental.logger : sharedLog;
 
     class InputMap

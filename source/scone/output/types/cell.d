@@ -1,6 +1,6 @@
-module scone.core.types.cell;
+module scone.output.types.cell;
 
-import scone.core.types.color;
+import scone.output.types.color;
 
 struct Cell
 {

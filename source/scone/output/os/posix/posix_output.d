@@ -1,12 +1,12 @@
-module scone.os.posix.output.posix_output;
+module scone.output.os.posix.output.posix_output;
 
 version (Posix)
 {
-    import scone.os.standard_output : StandardOutput;
-    import scone.core.types.size : Size;
-    import scone.core.types.coordinate : Coordinate;
-    import scone.core.types.buffer : Buffer;
-    import scone.os.posix.output.foos : Foos, PartialRowOutput;
+    import scone.output.os.standard_output : StandardOutput;
+    import scone.output.types.size : Size;
+    import scone.output.types.coordinate : Coordinate;
+    import scone.output.types.buffer : Buffer;
+    import scone.output.os.posix.output.foos : Foos, PartialRowOutput;
 
     import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import std.stdio : writef, stdout;

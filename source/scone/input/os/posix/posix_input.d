@@ -1,4 +1,4 @@
-module scone.os.posix.input.posix_input;
+module scone.input.os.posix.input.posix_input;
 
 version (Posix)
 {
@@ -7,12 +7,12 @@ version (Posix)
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.os.standard_input : StandardInput;
-    import scone.os.posix.input.background_thread;
-    import scone.os.posix.input.keypress_tree : Keypress;
-    import scone.os.posix.input.locale.input_map : InputMap;
-    import scone.os.posix.input.locale.locale : Locale;
-    import scone.os.posix.output.foos : Foos, PartialRowOutput;
+    import scone.input.os.standard_input : StandardInput;
+    import scone.input.os.posix.background_thread;
+    import scone.input.os.posix.keypress_tree : Keypress;
+    import scone.input.os.posix.locale.input_map : InputMap;
+    import scone.input.os.posix.locale.locale : Locale;
+    import scone.output.os.posix.output.foos : Foos, PartialRowOutput;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
     import std.conv : text;
     import std.datetime : msecs;

@@ -1,4 +1,4 @@
-module scone.os.posix.input.keypress_tree;
+module scone.input.os.posix.keypress_tree;
 
 version (Posix)
 {

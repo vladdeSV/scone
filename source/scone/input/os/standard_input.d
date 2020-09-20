@@ -1,4 +1,4 @@
-module scone.os.standard_input;
+module scone.input.os.standard_input;
 
 import scone.input.keyboard_event : KeyboardEvent;
 

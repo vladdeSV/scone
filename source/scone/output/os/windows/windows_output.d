@@ -1,15 +1,15 @@
-module scone.os.windows.output.windows_output;
+module scone.output.os.windows.windows_output;
 
 version (Windows)
 {
     import core.sys.windows.windows;
-    import scone.core.types.buffer : Buffer;
-    import scone.core.types.cell : Cell;
-    import scone.core.types.color;
-    import scone.core.types.coordinate : Coordinate;
-    import scone.core.types.size : Size;
-    import scone.os.standard_output : StandardOutput;
-    import scone.os.windows.output.cell_converter : CellConverter;
+    import scone.output.types.buffer : Buffer;
+    import scone.output.types.cell : Cell;
+    import scone.output.types.color;
+    import scone.output.types.coordinate : Coordinate;
+    import scone.output.types.size : Size;
+    import scone.output.os.standard_output : StandardOutput;
+    import scone.output.os.windows.output.cell_converter : CellConverter;
     import std.conv : ConvOverflowException;
     import std.conv : to;
     import std.experimental.logger;

@@ -1,12 +1,12 @@
-module scone.frame.frame;
+module scone.output.frame;
 
-import scone.core.types.buffer : Buffer;
-import scone.core.types.cell : Cell;
-import scone.core.types.color;
-import scone.core.types.coordinate : Coordinate;
-import scone.core.types.size : Size;
-import scone.frame.arguments_to_cells_converter;
-import scone.os.standard_output : StandardOutput;
+import scone.output.types.buffer : Buffer;
+import scone.output.types.cell : Cell;
+import scone.output.types.color;
+import scone.output.types.coordinate : Coordinate;
+import scone.output.types.size : Size;
+import scone.output.helpers.arguments_to_cells_converter;
+import scone.output.os.standard_output : StandardOutput;
 import std.concurrency : receiveTimeout;
 import std.conv : to;
 import std.datetime : Duration;

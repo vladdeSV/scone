@@ -1,4 +1,4 @@
-module scone.os.posix.input.locale.input_sequence;
+module scone.input.os.posix.locale.input_sequence;
 
 version (Posix)
 {

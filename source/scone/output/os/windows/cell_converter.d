@@ -1,10 +1,10 @@
-module scone.os.windows.output.cell_converter;
+module scone.output.os.windows.output.cell_converter;
 
 version (Windows)
 {
     import core.sys.windows.windows;
-    import scone.core.types.cell : Cell;
-    import scone.core.types.color;
+    import scone.output.types.cell : Cell;
+    import scone.output.types.color;
     import std.conv : ConvOverflowException;
     import std.conv : to;
 

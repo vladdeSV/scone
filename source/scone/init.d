@@ -1,9 +1,9 @@
 module scone.core.init;
 
-import scone.frame.frame : Frame;
+import scone.output.frame : Frame;
 import scone.input.input : Input;
-import scone.os.standard_input : StandardInput;
-import scone.os.standard_output : StandardOutput;
+import scone.input.os.standard_input : StandardInput;
+import scone.output.os.standard_output : StandardOutput;
 import std.experimental.logger;
 
 Frame frame;
@@ -43,13 +43,13 @@ StandardOutput createApplicationOutput()
     }
     else version (Posix)
     {
-        import scone.os.posix.output.posix_output : PosixOutput;
+        import scone.output.os.posix.output.posix_output : PosixOutput;
 
         return new PosixOutput();
     }
     else version (Windows)
     {
-        import scone.os.windows.output.windows_output : WindowsOutput;
+        import scone.output.os.windows.windows_output : WindowsOutput;
 
         return new WindowsOutput();
     }
@@ -65,7 +65,7 @@ StandardInput createApplicationInput()
     }
     else version (Posix)
     {
-        import scone.os.posix.input.posix_input : PosixInput;
+        import scone.input.os.posix.input.posix_input : PosixInput;
 
         return new PosixInput();
     }

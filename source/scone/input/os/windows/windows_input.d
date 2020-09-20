@@ -2,15 +2,15 @@ module scone.os.windows.input.windows_input;
 
 version (Windows)
 {
-    import scone.os.standard_input : StandardInput;
+    import scone.input.os.standard_input : StandardInput;
     import core.sys.windows.windows;
-    import scone.core.types.size : Size;
+    import scone.output.types.size : Size;
     import scone.input.input : Input;
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.misc.flags : hasFlag, withFlag;
-    import scone.os.windows.input.key_event_record_converter : KeyEventRecordConverter;
+    import scone.input.os.windows.input.key_event_record_converter : KeyEventRecordConverter;
     import std.conv : to;
     import std.experimental.logger;
 
