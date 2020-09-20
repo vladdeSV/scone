@@ -37,14 +37,6 @@ void main() {
   }
 }
 ```
-</td>
-    <td width="50%" >
-      <br>
-      <p align="center"><img height="300" src="https://camo.githubusercontent.com/ad4e79f4b7aa7a2568fa064aaa823945b51be223/68747470733a2f2f692e696d6775722e636f6d2f59383049755a792e706e67"></p>
-      <p align="center"><img height="300" src="https://camo.githubusercontent.com/7965e13de89ce8c39fddf008dde099a2be4867c4/68747470733a2f2f692e696d6775722e636f6d2f4c304d555064452e706e67"></p>
-    </td>
-  </tr>
-</table>
 
 ### Cross-platform input/output demo
 <p align="left">
@@ -52,8 +44,6 @@ void main() {
   <span>&nbsp&nbsp&nbsp&nbsp</span>
   <img height="300" src="http://i.imgur.com/7Yi1h89.gif">
 </p>
-
-To get the hang of **scone** you take a look at the [wiki](https://github.com/vladdeSV/scone/wiki), or you could dive straight into the rather [simple examples](https://github.com/vladdeSV/scone/tree/develop/examples)
 
 ### Features
 * Display text and colors
