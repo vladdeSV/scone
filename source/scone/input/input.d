@@ -1,6 +1,6 @@
 module scone.input.input;
 
-import scone.os.standard_input : StandardInput;
+import scone.input.os.standard_input : StandardInput;
 import scone.input.keyboard_event : KeyboardEvent;
 
 class Input
