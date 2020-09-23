@@ -1,4 +1,4 @@
-Note: This README covers the upcoming 3.0 release. View the 2.x docs [here](https://github.com/vladdeSV/scone/tree/v2.1.3).
+Note: This README covers the upcoming 3.0 release. View the latest 2.1.3 docs [here](https://github.com/vladdeSV/scone/tree/v2.1.3).
 
 # 🍞 scone
 Create cross-platform console/terminal applications with ease
