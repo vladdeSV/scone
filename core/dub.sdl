@@ -1,0 +1,9 @@
+name "core"
+description "Core"
+authors "Vladimirs Nordholm"
+copyright "Copyright © 2020, Vladimirs Nordholm"
+license "MIT"
+targetType "none"
+
+dependency "scone:output" version=">=0.0.0"
+dependency "scone:input" version=">=0.0.0"

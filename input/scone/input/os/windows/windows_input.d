@@ -4,7 +4,6 @@ version (Windows)
 {
     import scone.input.os.standard_input : StandardInput;
     import core.sys.windows.windows;
-    import scone.output.types.size : Size;
     import scone.input.input : Input;
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
@@ -48,8 +47,9 @@ version (Windows)
                     break;
                 case  /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
                     // console has been resized
-                    COORD foo = inputRecordBuffer[e].WindowBufferSizeEvent.dwSize;
-                    Size newSize = Size(foo.X, foo.Y);
+                    // todo: what should happen here?
+                    //COORD foo = inputRecordBuffer[e].WindowBufferSizeEvent.dwSize;
+                    //Size newSize = Size(foo.X, foo.Y);
                     break;
                 case  /* 0x0001 */ KEY_EVENT:
                     auto foo = new KeyEventRecordConverter(inputRecordBuffer[e].KeyEvent);

@@ -4,12 +4,7 @@ copyright "Copyright © 2015, Vladimirs Nordholm"
 license "MIT"
 authors "vladdeSV"
 
-stringImportPaths "./source/scone/input/os/posix/locale/locale_data"
-subPackage "./source/scone/output/"
-subPackage "./source/scone/input/"
-
-dependency "scone:output" version="*"
-dependency "scone:input" version="*"
+stringImportPaths "./input/scone/input/os/posix/locale/locale_data"
 
 configuration "debug" {
     buildType "debug"
@@ -27,3 +22,13 @@ configuration "ci" {
     buildType "debug"
     targetType "library"
 }
+
+dependency ":core" version="*"
+dependency ":misc" version="*"
+dependency ":output" version="*"
+dependency ":input" version="*"
+
+subPackage "core"
+subPackage "misc"
+subPackage "output"
+subPackage "input"

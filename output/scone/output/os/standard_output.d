@@ -3,7 +3,6 @@ module scone.output.os.standard_output;
 import scone.output.types.buffer : Buffer;
 import scone.output.types.coordinate : Coordinate;
 import scone.output.types.size : Size;
-import scone.input.keyboard_event : KeyboardEvent;
 
 interface StandardOutput
 {

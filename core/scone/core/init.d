@@ -1,4 +1,4 @@
-module scone.core.init;
+module scone.misc.init;
 
 import scone.output.frame : Frame;
 import scone.input.input : Input;
@@ -37,7 +37,7 @@ StandardOutput createApplicationOutput()
 {
     version (unittest)
     {
-        import scone.misc.dummy_window : DummyOutput;
+        import scone.core.dummy_window : DummyOutput;
 
         return new DummyOutput();
     }
@@ -59,7 +59,7 @@ StandardInput createApplicationInput()
 {
     version (unittest)
     {
-        import scone.misc.dummy_window : DummyInput;
+        import scone.core.dummy_window : DummyInput;
 
         return new DummyInput();
     }

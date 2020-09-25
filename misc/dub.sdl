@@ -1,0 +1,8 @@
+name "misc"
+description "\"Starter kit\" for using scone."
+authors "Vladimirs Nordholm"
+copyright "Copyright © 2020, Vladimirs Nordholm"
+license "MIT"
+targetType "library"
+sourcePaths "."
+importPaths "."
