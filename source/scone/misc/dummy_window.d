@@ -1,4 +1,4 @@
-module scone.core.dummy_window;
+module scone.misc.dummy_window;
 
 import scone.output.types.buffer : Buffer;
 import scone.output.types.size : Size;
