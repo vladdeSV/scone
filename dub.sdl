@@ -3,13 +3,7 @@ description "Cross-platform terminal/console input/output (text, colors)"
 copyright "Copyright © 2015, Vladimirs Nordholm"
 license "MIT"
 authors "vladdeSV"
-
 stringImportPaths "./source/scone/input/os/posix/locale/locale_data"
-subPackage "./source/scone/output/"
-subPackage "./source/scone/input/"
-
-dependency "scone:output" version="*"
-dependency "scone:input" version="*"
 
 configuration "debug" {
     buildType "debug"
