@@ -66,7 +66,6 @@ void main() {
 |emoji||✓|
 |ansi-color|✓|✓|
 |high performance output|✓||
-|reliable resize|✓||
 
 |input|Windows|POSIX|
 |:---|:---:|:---:|
