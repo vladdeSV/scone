@@ -53,9 +53,12 @@ version (Windows)
                     +/
                     break;
                 case  /* 0x0001 */ KEY_EVENT:
-                    auto foo = new KeyEventRecordConverter(inputRecordBuffer[e].KeyEvent);
-                    keyboardEvents ~= KeyboardEvent(foo.sconeKey, foo.sconeControlKey,
-                            cast(bool) inputRecordBuffer[e].KeyEvent.bKeyDown);
+                    auto keyEventRecordConverter = new KeyEventRecordConverter(inputRecordBuffer[e].KeyEvent);
+                    keyboardEvents ~= KeyboardEvent(
+                        keyEventRecordConverter.sconeKey,
+                        keyEventRecordConverter.sconeControlKey,
+                        keyEventRecordConverter.pressed
+                    );
                     break;
                 }
             }
