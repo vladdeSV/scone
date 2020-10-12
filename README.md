@@ -21,7 +21,7 @@ void main() {
 
   bool run = true;
   while(run) {
-    foreach(input; input.latest) {
+    foreach(input; input.keyboard) {
       // if CTRL+C is pressed
       if(input.key == SK.c && input.hasControlKey(SCK.ctrl)) {
         run = false;
