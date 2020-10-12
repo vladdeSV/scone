@@ -5,7 +5,7 @@ version (Windows)
     import core.sys.windows.windows;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.misc.flags : hasFlag, withFlag;
+    import scone.core.flags : hasFlag, withFlag;
 
     final class KeyEventRecordConverter
     {

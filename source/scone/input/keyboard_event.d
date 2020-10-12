@@ -2,7 +2,7 @@ module scone.input.keyboard_event;
 
 import scone.input.scone_key : SK;
 import scone.input.scone_control_key : SCK;
-import scone.misc.flags : hasFlag;
+import scone.core.flags : hasFlag;
 
 struct KeyboardEvent
 {

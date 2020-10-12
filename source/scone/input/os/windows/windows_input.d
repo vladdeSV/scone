@@ -9,7 +9,7 @@ version (Windows)
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.misc.flags : hasFlag, withFlag;
+    import scone.core.flags : hasFlag, withFlag;
     import scone.input.os.windows.input.key_event_record_converter : KeyEventRecordConverter;
     import std.conv : to;
     import std.experimental.logger;

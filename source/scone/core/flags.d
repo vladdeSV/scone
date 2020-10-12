@@ -1,4 +1,4 @@
-module scone.misc.flags;
+module scone.core.flags;
 
 import std.traits : isIntegral;
 
