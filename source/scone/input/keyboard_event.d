@@ -21,37 +21,4 @@ struct KeyboardEvent
     public SK key;
     public SCK controlKey;
     public bool pressed;
-
-    /+
-    version (Posix)
-    {
-        /**
-         * Get the ASCII-code sequence returned from the keypress on POSIX
-         * systems
-         * Returns: uint[]
-         */
-        auto keySequences() @property
-        {
-            return _keySequences;
-        }
-
-        package(scone) uint[] _keySequences;
-    }
-
-    version (Windows)
-    {
-        import core.sys.windows.wincon : INPUT_RECORD;
-
-        /**
-         * Get the Windows input record representing the keypress
-         * Returns: INPUT_RECORD
-         */
-        auto inputRecord() @property
-        {
-            return _inputRecord;
-        }
-
-        package(scone) INPUT_RECORD _inputRecord;
-    }
-    +/
 }
