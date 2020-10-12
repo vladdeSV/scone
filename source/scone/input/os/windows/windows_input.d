@@ -47,9 +47,10 @@ version (Windows)
                     // mouse has been clicked/moved
                     break;
                 case  /* 0x0004 */ WINDOW_BUFFER_SIZE_EVENT:
-                    // console has been resized
+                    /+ console has been resized
                     COORD foo = inputRecordBuffer[e].WindowBufferSizeEvent.dwSize;
                     Size newSize = Size(foo.X, foo.Y);
+                    +/
                     break;
                 case  /* 0x0001 */ KEY_EVENT:
                     auto foo = new KeyEventRecordConverter(inputRecordBuffer[e].KeyEvent);
