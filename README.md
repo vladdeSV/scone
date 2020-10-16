@@ -46,13 +46,6 @@ void main() {
   </tr>
 </table>
 
-### Cross-platform input/output demo
-<p align="left">
-  <img height="300" src="http://i.imgur.com/b35uwpa.gif">
-  <span>&nbsp&nbsp&nbsp&nbsp</span>
-  <img height="300" src="http://i.imgur.com/7Yi1h89.gif">
-</p>
-
 ### Features
 * Display text and colors
 * Receive keyboard input
