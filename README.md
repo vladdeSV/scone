@@ -6,7 +6,7 @@ Create cross-platform console/terminal applications with ease
 ![develop](https://github.com/vladdeSV/scone/workflows/CI/badge.svg)
 ![license](https://img.shields.io/github/license/vladdeSV/scone?color=black)
 
-## Super simple example
+## Example
 
 <table>
   <tr>
