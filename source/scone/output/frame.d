@@ -114,16 +114,4 @@ class Frame
     {
         output.title(title);
     }
-
-    /+
-    void position(X, Y)(in X tx, in Y ty) if (isNumeric!X && isNumeric!Y)
-    {
-
-    }
-
-    void position(in Coordinate coordinate)
-    {
-
-    }
-    +/
 }
