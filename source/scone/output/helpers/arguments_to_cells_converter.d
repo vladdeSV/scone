@@ -128,4 +128,9 @@ unittest
     auto converter5 = new ArgumentsToCellsConverter!(Cell, Cell[])(Cell('1'), [Cell('2'), Cell('3')]);
     assert(converter5.cells == [Cell('1'), Cell('2'), Cell('3')]);
     assert(converter5.length == 3);
+
+    auto converter6 = new ArgumentsToCellsConverter!(ForegroundColor, BackgroundColor)(Color.red.foreground, Color.green.background);
+    assert(converter6.cells == []);
+    assert(converter6.length == 0);
+
 }
