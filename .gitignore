@@ -6,6 +6,7 @@
 *.o
 *.obj
 *.sublime-workspace
+scone-test-release
 libscone.a
 bin/
 dub.selections.json
