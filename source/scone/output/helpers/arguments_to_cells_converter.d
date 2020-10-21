@@ -16,8 +16,13 @@ template ArgumentsToCellsConverter(Args...)
 
         public Cell[] cells()
         {
-            auto cells = new Cell[](this.length());
+            auto length = this.length();
+            if (length == 0)
+            {
+                return [];
+            }
 
+            auto cells = new Cell[](length);
             ForegroundColor foreground = Color.initial;
             BackgroundColor background = Color.initial;
 
