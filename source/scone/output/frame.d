@@ -14,9 +14,6 @@ import std.traits : isNumeric;
 
 class Frame
 {
-    private Buffer buffer;
-    private StandardOutput output;
-
     this(StandardOutput output)
     {
         output.initializeOutput();
@@ -114,4 +111,7 @@ class Frame
     {
         output.title(title);
     }
+
+    private StandardOutput output;
+    private Buffer buffer;
 }
