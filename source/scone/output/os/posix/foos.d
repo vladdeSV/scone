@@ -14,8 +14,9 @@ version (Posix)
 
     class Foos
     {
-        private alias DirtyRow = Tuple!(size_t, "row", size_t, "min", size_t, "max");
-        
+        private alias ModifiedRowSection = Tuple!(size_t, "row", size_t,
+                "firstChangedIndex", size_t, "lastChangedIndex");
+
         this(Buffer buffer)
         {
             this.buffer = buffer;
@@ -25,19 +26,18 @@ version (Posix)
         {
             PartialRowOutput[] foos;
 
-            foreach (DirtyRow row; this.dirtyRows(buffer))
+            foreach (ModifiedRowSection row; this.modifiedRowSections(buffer))
             {
                 size_t y = row.row;
                 string print;
 
-                Cell[] cells = new Cell[](row.max - row.min + 1);
-                foreach (x; row.min .. (row.max + 1))
+                foreach (x; row.firstChangedIndex .. (row.lastChangedIndex + 1))
                 {
                     Cell currentCell = this.buffer.cellAt(Coordinate(x, y));
 
                     bool updateColors = false;
 
-                    if (x == row.min)
+                    if (x == row.firstChangedIndex)
                     {
                         updateColors = true;
                     }
@@ -71,7 +71,7 @@ version (Posix)
                 }
 
                 PartialRowOutput partialRowOutput;
-                partialRowOutput.coordinate = Coordinate(row.min, y);
+                partialRowOutput.coordinate = Coordinate(row.firstChangedIndex, y);
                 partialRowOutput.output = print;
 
                 foos ~= partialRowOutput;
@@ -80,7 +80,7 @@ version (Posix)
             return foos;
         }
 
-        private DirtyRow[] dirtyRows(Buffer buffer)
+        private ModifiedRowSection[] modifiedRowSections(Buffer buffer)
         {
             size_t[][size_t] changedCellsMap;
             foreach (Coordinate coordinate; buffer.changedCellCoordinates)
@@ -93,23 +93,23 @@ version (Posix)
                 changedCellsMap[coordinate.y] ~= coordinate.x;
             }
 
-            DirtyRow[] affectedRows = [];
+            ModifiedRowSection[] affectedRows = [];
             foreach (y, size_t[] row; changedCellsMap)
             {
-                size_t min = row.minElement;
-                size_t max = row.maxElement;
+                size_t firstChangedIndex = row.minElement;
+                size_t lastChangedIndex = row.maxElement;
 
-                DirtyRow dirtyRow;
+                ModifiedRowSection dirtyRow;
                 dirtyRow.row = y;
-                dirtyRow.min = min;
-                dirtyRow.max = max;
+                dirtyRow.firstChangedIndex = firstChangedIndex;
+                dirtyRow.lastChangedIndex = lastChangedIndex;
 
                 affectedRows ~= dirtyRow; //todo isn't this inefficient
             }
 
             return affectedRows;
         }
-    
+
         private Buffer buffer;
     }
 
