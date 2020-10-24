@@ -11,12 +11,11 @@ version (Posix)
     import std.typecons : Tuple;
 
     alias PartialRowOutput = Tuple!(Coordinate, "coordinate", string, "output");
-    private alias DirtyRow = Tuple!(size_t, "row", size_t, "min", size_t, "max");
 
     class Foos
     {
-        private Buffer buffer;
-
+        private alias DirtyRow = Tuple!(size_t, "row", size_t, "min", size_t, "max");
+        
         this(Buffer buffer)
         {
             this.buffer = buffer;
@@ -110,6 +109,8 @@ version (Posix)
 
             return affectedRows;
         }
+    
+        private Buffer buffer;
     }
 
     private class AnsiColor
