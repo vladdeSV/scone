@@ -12,7 +12,6 @@ version (Posix)
     import scone.input.os.posix.keypress_tree : Keypress;
     import scone.input.os.posix.locale.input_map : InputMap;
     import scone.input.os.posix.locale.locale : Locale;
-    import scone.output.os.posix.output.foos : Foos, PartialRowOutput;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
     import std.conv : text;
     import std.datetime : msecs;
