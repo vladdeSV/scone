@@ -18,11 +18,12 @@ class DummyOutput : StandardOutput
 
     Size size()
     {
-        return Size(80, 24);
+        return this.currentSize;
     }
 
     void size(in Size size)
     {
+        this.currentSize = size;
     }
 
     void title(in string title)
@@ -36,6 +37,8 @@ class DummyOutput : StandardOutput
     void renderBuffer(Buffer buffer)
     {
     }
+
+    private Size currentSize = Size(80, 24);
 }
 
 class DummyInput : StandardInput
