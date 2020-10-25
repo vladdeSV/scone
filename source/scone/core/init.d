@@ -65,7 +65,7 @@ StandardInput createApplicationInput()
     }
     else version (Posix)
     {
-        import scone.input.os.posix.input.posix_input : PosixInput;
+        import scone.input.os.posix.posix_input : PosixInput;
 
         return new PosixInput();
     }

@@ -1,4 +1,4 @@
-module scone.input.os.posix.input.posix_input;
+module scone.input.os.posix.posix_input;
 
 version (Posix)
 {
