@@ -38,7 +38,7 @@ version (Posix)
                 lastSize = currentSize;
             }
 
-            auto foos = new Foos(buffer);
+            auto foos = Foos(buffer);
 
             foreach (PartialRowOutput data; foos.partialRows())
             {

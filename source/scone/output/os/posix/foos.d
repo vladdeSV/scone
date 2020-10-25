@@ -12,7 +12,7 @@ version (Posix)
 
     alias PartialRowOutput = Tuple!(Coordinate, "coordinate", string, "output");
 
-    class Foos
+    struct Foos
     {
         private alias ModifiedRowSection = Tuple!(size_t, "row", size_t,
                 "firstChangedIndex", size_t, "lastChangedIndex");
@@ -60,10 +60,8 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        auto foregroundNumber = new AnsiColor(currentCell.foreground)
-                            .foregroundNumber;
-                        auto backgroundNumber = new AnsiColor(currentCell.background)
-                            .backgroundNumber;
+                        auto foregroundNumber = AnsiColor(currentCell.foreground).foregroundNumber;
+                        auto backgroundNumber = AnsiColor(currentCell.background).backgroundNumber;
                         print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                     }
 
@@ -113,7 +111,7 @@ version (Posix)
         private Buffer buffer;
     }
 
-    private class AnsiColor
+    private struct AnsiColor
     {
         private Color color;
 
@@ -147,18 +145,8 @@ version (Posix)
 
             assert(color < 16);
 
-            version (OSX)
-            {
-                // mac
-                enum light = 90;
-                enum dark = 30;
-            }
-            else
-            {
-                // ubuntu
-                enum light = 30;
-                enum dark = 90;
-            }
+            enum light = 90;
+            enum dark = 30;
 
             auto startIndex = color.isLight ? light : dark;
             auto colorOffset = (cast(ubyte) color) % 8;
