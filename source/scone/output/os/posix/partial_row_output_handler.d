@@ -1,4 +1,4 @@
-module scone.output.os.posix.output.foos;
+module scone.output.os.posix.partial_row_output_handler;
 
 version (Posix)
 {
@@ -12,7 +12,7 @@ version (Posix)
 
     alias PartialRowOutput = Tuple!(Coordinate, "coordinate", string, "output");
 
-    struct Foos
+    struct PartialRowOutputHandler
     {
         private alias ModifiedRowSection = Tuple!(size_t, "row", size_t,
                 "firstChangedIndex", size_t, "lastChangedIndex");

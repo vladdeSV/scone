@@ -43,7 +43,7 @@ StandardOutput createApplicationOutput()
     }
     else version (Posix)
     {
-        import scone.output.os.posix.output.posix_output : PosixOutput;
+        import scone.output.os.posix.posix_output : PosixOutput;
 
         return new PosixOutput();
     }

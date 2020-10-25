@@ -1,4 +1,4 @@
-module scone.output.os.posix.output.posix_output;
+module scone.output.os.posix.posix_output;
 
 version (Posix)
 {
@@ -6,7 +6,7 @@ version (Posix)
     import scone.output.types.size : Size;
     import scone.output.types.coordinate : Coordinate;
     import scone.output.types.buffer : Buffer;
-    import scone.output.os.posix.output.foos : Foos, PartialRowOutput;
+    import scone.output.os.posix.partial_row_output_handler : PartialRowOutputHandler, PartialRowOutput;
 
     import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import std.stdio : writef, stdout;
@@ -38,7 +38,7 @@ version (Posix)
                 lastSize = currentSize;
             }
 
-            auto foos = Foos(buffer);
+            auto foos = PartialRowOutputHandler(buffer);
 
             foreach (PartialRowOutput data; foos.partialRows())
             {
