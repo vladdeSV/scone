@@ -41,6 +41,15 @@ class DummyOutput : StandardOutput
     private Size currentSize = Size(80, 24);
 }
 
+unittest
+{
+    auto output = new DummyOutput();
+    assert(output.size == Size(80, 24));
+
+    output.size = Size(10, 10);
+    assert(output.size == Size(10, 10));
+}
+
 class DummyInput : StandardInput
 {
     void initializeInput()
@@ -67,4 +76,18 @@ class DummyInput : StandardInput
     }
 
     private KeyboardEvent[] latestDummyEvents;
+}
+
+unittest
+{
+    import scone.input.scone_key : SK;
+    import scone.input.scone_control_key : SCK;
+
+    auto input = new DummyInput();
+    assert(input.latestKeyboardEvents == []);
+
+    input.appendDummyKeyboardInput(KeyboardEvent(SK.a, SCK.none, true));
+    input.appendDummyKeyboardInput(KeyboardEvent(SK.b, SCK.none, true));
+    assert(input.latestKeyboardEvents == [KeyboardEvent(SK.a, SCK.none, true), KeyboardEvent(SK.b, SCK.none, true)]);
+    assert(input.latestKeyboardEvents == []);
 }
