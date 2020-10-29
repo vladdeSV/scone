@@ -53,6 +53,18 @@ class DummyInput : StandardInput
 
     KeyboardEvent[] latestKeyboardEvents()
     {
-        return [];
+        scope(exit)
+        {
+            this.latestDummyEvents = [];
+        }
+
+        return this.latestDummyEvents;
     }
+
+    void appendDummyKeyboardInput(KeyboardEvent event)
+    {
+        this.latestDummyEvents ~= event;
+    }
+
+    private KeyboardEvent[] latestDummyEvents;
 }
