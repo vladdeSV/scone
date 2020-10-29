@@ -132,5 +132,4 @@ unittest
     auto converter6 = new ArgumentsToCellsConverter!(ForegroundColor, BackgroundColor)(Color.red.foreground, Color.green.background);
     assert(converter6.cells == []);
     assert(converter6.length == 0);
-
 }

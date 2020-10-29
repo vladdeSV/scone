@@ -8,10 +8,6 @@ Create cross-platform console/terminal applications with ease
 
 ## Example
 
-<table>
-  <tr>
-    <td width="50%">
-
 ```d
 import scone;
 
@@ -37,14 +33,9 @@ void main() {
   }
 }
 ```
-</td>
-    <td width="50%" >
-      <br>
-      <p align="center"><img height="300" src="https://camo.githubusercontent.com/ad4e79f4b7aa7a2568fa064aaa823945b51be223/68747470733a2f2f692e696d6775722e636f6d2f59383049755a792e706e67"></p>
-      <p align="center"><img height="300" src="https://camo.githubusercontent.com/7965e13de89ce8c39fddf008dde099a2be4867c4/68747470733a2f2f692e696d6775722e636f6d2f4c304d555064452e706e67"></p>
-    </td>
-  </tr>
-</table>
+
+![win](https://public.vladde.net/scone-example-mac-434.png)
+![mac](https://public.vladde.net/scone-example-windows-434.png)
 
 ### Features
 * Display text and colors

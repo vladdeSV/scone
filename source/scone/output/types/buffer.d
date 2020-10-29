@@ -98,38 +98,38 @@ class Buffer
     private Size bufferSize;
     private bool[][] changed;
     private Cell[][] buffer;
+}
 
-    unittest
-    {
-        auto buffer = new Buffer(Size(4, 2));
-        assert(buffer.size == Size(4, 2));
+unittest
+{
+    auto buffer = new Buffer(Size(4, 2));
+    assert(buffer.size == Size(4, 2));
 
-        buffer.redraw();
-        assert(buffer.changedCellCoordinates.length == 8);
+    buffer.redraw();
+    assert(buffer.changedCellCoordinates.length == 8);
 
-        buffer.commit();
-        assert(buffer.changedCellCoordinates.length == 0);
+    buffer.commit();
+    assert(buffer.changedCellCoordinates.length == 0);
 
-        buffer.setCell(Coordinate(1, 1), Cell());
-        assert(buffer.changedCellCoordinates.length == 0);
+    buffer.setCell(Coordinate(1, 1), Cell());
+    assert(buffer.changedCellCoordinates.length == 0);
 
-        auto cell = Cell('1');
-        buffer.setCell(Coordinate(1, 1), cell);
-        assert(buffer.changedCellCoordinates.length == 1);
-        assert(buffer.changedCellCoordinates[0] == Coordinate(1, 1));
+    auto cell = Cell('1');
+    buffer.setCell(Coordinate(1, 1), cell);
+    assert(buffer.changedCellCoordinates.length == 1);
+    assert(buffer.changedCellCoordinates[0] == Coordinate(1, 1));
 
-        buffer.commit();
-        assert(buffer.changedCellCoordinates.length == 0);
+    buffer.commit();
+    assert(buffer.changedCellCoordinates.length == 0);
 
-        auto cellFromBuffer = buffer.cellAt(Coordinate(1,1));
-        assert(cellFromBuffer == cell);
+    auto cellFromBuffer = buffer.cellAt(Coordinate(1, 1));
+    assert(cellFromBuffer == cell);
 
-        buffer.setCell(Coordinate(2,1), Cell(' ', Color.green.foreground, Color.red.background));
-        assert(buffer.changedCellCoordinates.length == 1);
-        buffer.commit();
-        assert(buffer.changedCellCoordinates.length == 0);
+    buffer.setCell(Coordinate(2, 1), Cell(' ', Color.green.foreground, Color.red.background));
+    assert(buffer.changedCellCoordinates.length == 1);
+    buffer.commit();
+    assert(buffer.changedCellCoordinates.length == 0);
 
-        buffer.setCell(Coordinate(2,1), Cell(' ', Color.same.foreground, Color.same.background));
-        assert(buffer.changedCellCoordinates.length == 0);
-    }
+    buffer.setCell(Coordinate(2, 1), Cell(' ', Color.same.foreground, Color.same.background));
+    assert(buffer.changedCellCoordinates.length == 0);
 }
