@@ -1,4 +1,4 @@
-module scone.output.types.buffer;
+module scone.output.buffer;
 
 import scone.output.types.cell : Cell;
 import scone.output.types.color;

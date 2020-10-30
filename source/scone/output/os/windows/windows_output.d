@@ -3,7 +3,7 @@ module scone.output.os.windows.windows_output;
 version (Windows)
 {
     import core.sys.windows.windows;
-    import scone.output.types.buffer : Buffer;
+    import scone.output.buffer : Buffer;
     import scone.output.types.cell : Cell;
     import scone.output.types.color;
     import scone.output.types.coordinate : Coordinate;

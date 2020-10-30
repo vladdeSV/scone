@@ -1,6 +1,6 @@
 module scone.core.dummy_window;
 
-import scone.output.types.buffer : Buffer;
+import scone.output.buffer : Buffer;
 import scone.output.types.size : Size;
 import scone.input.keyboard_event : KeyboardEvent;
 import scone.output.os.standard_output : StandardOutput;

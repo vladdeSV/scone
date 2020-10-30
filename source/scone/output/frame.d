@@ -1,6 +1,6 @@
 module scone.output.frame;
 
-import scone.output.types.buffer : Buffer;
+import scone.output.buffer : Buffer;
 import scone.output.types.cell : Cell;
 import scone.output.types.color;
 import scone.output.types.coordinate : Coordinate;
