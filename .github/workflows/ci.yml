@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: dlang-community/setup-dlang@v1
+      - uses: dlang-community/setup-dlang@v1.0.3
 
       - name: Build
         run: dub build --config=ci
