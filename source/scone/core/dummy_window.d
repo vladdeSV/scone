@@ -8,11 +8,11 @@ import scone.input.os.standard_input : StandardInput;
 
 class DummyOutput : StandardOutput
 {
-    void initializeOutput()
+    void initialize()
     {
     }
 
-    void deinitializeOutput()
+    void deinitialize()
     {
     }
 
@@ -52,11 +52,11 @@ unittest
 
 class DummyInput : StandardInput
 {
-    void initializeInput()
+    void initialize()
     {
     }
 
-    void deinitializeInput()
+    void deinitialize()
     {
     }
 

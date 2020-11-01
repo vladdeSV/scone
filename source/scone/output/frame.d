@@ -16,7 +16,7 @@ class Frame
 {
     this(StandardOutput output)
     {
-        output.initializeOutput();
+        output.initialize();
 
         this.output = output;
         this.output.cursorVisible(false);
@@ -26,7 +26,7 @@ class Frame
     ~this()
     {
         this.output.cursorVisible(true);
-        output.deinitializeOutput();
+        output.deinitialize();
     }
 
     void write(X, Y, Args...)(X tx, Y ty, Args args)

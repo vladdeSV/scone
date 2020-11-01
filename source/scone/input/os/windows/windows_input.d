@@ -16,7 +16,7 @@ version (Windows)
 
     class WindowsInput : StandardInput
     {
-        void initializeInput()
+        void initialize()
         {
             consoleInputHandle = GetStdHandle(STD_INPUT_HANDLE);
             if (consoleInputHandle == INVALID_HANDLE_VALUE)
@@ -25,7 +25,7 @@ version (Windows)
             }
         }
 
-        void deinitializeInput()
+        void deinitialize()
         {
         }
 

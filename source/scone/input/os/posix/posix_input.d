@@ -23,14 +23,14 @@ version (Posix)
 
     class PosixInput : StandardInput
     {
-        void initializeInput()
+        void initialize()
         {
             this.setInputMapping();
             this.enableRawInput();
             this.startPollingInput();
         }
 
-        void deinitializeInput()
+        void deinitialize()
         {
             this.resetTerminalState();
         }

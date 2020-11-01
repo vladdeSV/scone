@@ -25,7 +25,7 @@ version (Windows)
 
     class WindowsOutput : StandardOutput
     {
-        void initializeOutput()
+        void initialize()
         {
             oldConsoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -46,7 +46,7 @@ version (Windows)
             this.lastSize = this.size();
         }
 
-        void deinitializeOutput()
+        void deinitialize()
         {
             SetConsoleActiveScreenBuffer(oldConsoleOutputHandle);
         }

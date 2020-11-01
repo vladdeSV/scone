@@ -10,12 +10,12 @@ class Input
     this(StandardInput input)
     {
         this.input = input;
-        input.initializeInput();
+        input.initialize();
     }
 
     ~this()
     {
-        this.input.deinitializeInput();
+        this.input.deinitialize();
     }
 
     KeyboardEvent[] keyboard()

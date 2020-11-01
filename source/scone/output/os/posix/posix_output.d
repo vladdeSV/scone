@@ -14,14 +14,14 @@ version (Posix)
 
     class PosixOutput : StandardOutput
     {
-        void initializeOutput()
+        void initialize()
         {
             this.cursorVisible(false);
             this.clear();
             this.lastSize = this.size();
         }
 
-        void deinitializeOutput()
+        void deinitialize()
         {
             this.cursorVisible(true);
             this.clear();

@@ -4,7 +4,7 @@ import scone.input.keyboard_event : KeyboardEvent;
 
 interface StandardInput
 {
-    public void initializeInput();
-    public void deinitializeInput();
+    public void initialize();
+    public void deinitialize();
     public KeyboardEvent[] latestKeyboardEvents();
 }

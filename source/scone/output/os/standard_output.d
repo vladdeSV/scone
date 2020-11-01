@@ -7,8 +7,8 @@ import scone.input.keyboard_event : KeyboardEvent;
 
 interface StandardOutput
 {
-    void initializeOutput();
-    void deinitializeOutput();
+    void initialize();
+    void deinitialize();
 
     Size size();
     void size(in Size size);
