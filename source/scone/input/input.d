@@ -5,8 +5,6 @@ import scone.input.keyboard_event : KeyboardEvent;
 
 class Input
 {
-    private StandardInput input;
-
     this(StandardInput input)
     {
         this.input = input;
@@ -22,4 +20,6 @@ class Input
     {
         return this.input.latestKeyboardEvents();
     }
+
+    private StandardInput input;
 }
