@@ -9,6 +9,62 @@ class Buffer
 {
     this(Size size)
     {
+
+    }
+
+    Size size()
+    {
+        return Size(80, 24);
+    }
+
+    void setCell(Coordinate coordinate, Cell cell) // fixme: rename `stage`
+    {
+
+    }
+
+    Coordinate[] changedCellCoordinates() // fixme: rename `diffs`
+    {
+        return [];
+    }
+
+    Cell cellAt(Coordinate coordinate) // fixme: rename `get`
+    {
+        return Cell();
+    }
+
+    void commit()
+    {
+
+    }
+
+    void redraw() // fixme: delete and move logic to `void size(Size size) { ... }`
+    {
+    }
+}
+
+unittest
+{
+    auto buffer = new Buffer(Size(4, 2));
+    assert(buffer.changedCellCoordinates.length == 8);
+
+    buffer.commit();
+    assert(buffer.changedCellCoordinates.length == 0);
+
+    assert(buffer.cellAt(Coordinate(0, 0)) == Cell());
+    buffer.setCell(Coordinate(0, 0), Cell('1'));
+    assert(buffer.cellAt(Coordinate(0, 0)) == Cell('1'));
+    assert(buffer.changedCellCoordinates == [Coordinate(0, 0)]);
+
+    buffer.commit();
+    assert(buffer.cellAt(Coordinate(0, 0)) == Cell('1'));
+    assert(buffer.changedCellCoordinates.length == 0);
+}
+
+/+
+class Buffer
+{
+    this(Size size)
+    {
         this.bufferSize = size;
         this.buffer = new Cell[][](size.height, size.width);
         this.changed = new bool[][](size.height, size.width);
@@ -133,3 +189,4 @@ unittest
     buffer.setCell(Coordinate(2, 1), Cell(' ', Color.same.foreground, Color.same.background));
     assert(buffer.changedCellCoordinates.length == 0);
 }
++/
