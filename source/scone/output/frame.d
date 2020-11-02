@@ -79,7 +79,7 @@ class Frame
                 return;
             }
 
-            this.buffer.setCell(coordinate, cell);
+            this.buffer.stage(coordinate, cell);
 
             ++dx;
         }
