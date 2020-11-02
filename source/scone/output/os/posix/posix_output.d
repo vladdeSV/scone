@@ -34,7 +34,7 @@ version (Posix)
             if (currentSize != lastSize)
             {
                 this.clear();
-                buffer.redraw();
+                buffer.size = currentSize;
                 lastSize = currentSize;
             }
 

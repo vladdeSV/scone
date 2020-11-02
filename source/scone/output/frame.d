@@ -79,7 +79,7 @@ class Frame
                 return;
             }
 
-            this.buffer.setCell(coordinate, cell);
+            this.buffer.stage(coordinate, cell);
 
             ++dx;
         }
@@ -89,6 +89,7 @@ class Frame
     {
         this.output.renderBuffer(this.buffer);
         this.buffer.commit();
+        this.buffer.clear();
     }
 
     Size size()

@@ -129,7 +129,7 @@ version (Windows)
             auto currentSize = this.size();
             if (currentSize != lastSize)
             {
-                buffer.redraw();
+                buffer.size = currentSize;
                 lastSize = currentSize;
             }
 

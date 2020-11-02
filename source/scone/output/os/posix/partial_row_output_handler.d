@@ -33,7 +33,7 @@ version (Posix)
 
                 foreach (x; row.firstChangedIndex .. (row.lastChangedIndex + 1))
                 {
-                    Cell currentCell = this.buffer.cellAt(Coordinate(x, y));
+                    Cell currentCell = this.buffer.get(Coordinate(x, y));
 
                     bool updateColors = false;
 
@@ -44,7 +44,7 @@ version (Posix)
                     else
                     {
                         assert(x > 0);
-                        immutable Cell previousCell = this.buffer.cellAt(Coordinate(x - 1, y));
+                        immutable Cell previousCell = this.buffer.get(Coordinate(x - 1, y));
 
                         //todo revisit and see if i though of this correctly
                         bool a = previousCell.foreground != currentCell.foreground
@@ -81,7 +81,7 @@ version (Posix)
         private ModifiedRowSection[] modifiedRowSections(Buffer buffer)
         {
             size_t[][size_t] changedCellsMap;
-            foreach (Coordinate coordinate; buffer.changedCellCoordinates)
+            foreach (Coordinate coordinate; buffer.diffs())
             {
                 if ((coordinate.y in changedCellsMap) is null)
                 {
