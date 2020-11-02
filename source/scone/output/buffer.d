@@ -13,7 +13,6 @@ class Buffer
         alias setCell = stage;
         alias changedCellCoordinates = diffs;
         alias cellAt = get;
-        alias redraw = flush;
     }
 
     this(Size size)
@@ -72,8 +71,6 @@ class Buffer
             coordinates ~= Coordinate(x, y);
         }
 
-        this.willFlush = false;
-
         return coordinates;
     }
 
@@ -91,6 +88,7 @@ class Buffer
     void commit()
     {
         this.buffer = this.staging.dup;
+        this.willFlush = false;
     }
 
     void clear()
@@ -114,6 +112,7 @@ class Buffer
 unittest
 {
     auto buffer = new Buffer(Size(4, 2));
+    assert(buffer.size == Size(4, 2));
     assert(buffer.diffs.length == 8);
 
     buffer.commit();
@@ -126,6 +125,21 @@ unittest
 
     buffer.commit();
     assert(buffer.get(Coordinate(1, 1)) == Cell('1'));
+    assert(buffer.diffs.length == 0);
+
+    buffer.flush();
+    assert(buffer.diffs.length == 8);
+    buffer.commit();
+    assert(buffer.diffs.length == 0);
+
+    buffer.clear();
+    assert(buffer.diffs == [Coordinate(1, 1)]);
+    buffer.commit();
+
+    buffer.stage(Coordinate(0, 0), Cell('2', Color.red.foreground, Color.green.background));
+    assert(buffer.diffs.length == 1);
+    buffer.commit();
+    buffer.stage(Coordinate(0, 0), Cell('2', Color.same.foreground, Color.same.background));
     assert(buffer.diffs.length == 0);
 }
 
