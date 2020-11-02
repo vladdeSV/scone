@@ -93,6 +93,11 @@ class Buffer
         this.buffer = this.staging.dup;
     }
 
+    void clear()
+    {
+        this.staging[] = Cell();
+    }
+
     void flush()
     {
         this.willFlush = true;

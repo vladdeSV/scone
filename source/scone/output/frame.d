@@ -89,6 +89,7 @@ class Frame
     {
         this.output.renderBuffer(this.buffer);
         this.buffer.commit();
+        this.buffer.clear();
     }
 
     Size size()
