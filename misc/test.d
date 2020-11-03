@@ -3,7 +3,7 @@ import scone;
 void main()
 {
     frame.title("👮🏿‍♀️");
-    frame.size(20, 10);
+    frame.size(20, 12);
 
     bool run = true;
     auto lastInput = KeyboardEvent();
@@ -25,23 +25,26 @@ void main()
         // light and dark color stripes
         frame.write(0, 0, Color.blue.background, "        ", Color.initial.background, Color.red.foreground, " light");
         frame.write(0, 1, Color.blueDark.background, "        ", Color.initial.background, Color.redDark.foreground, " dark");
+        frame.write(4, 0, Color.initial.background, "1", Color.same.background, "1", Color.blackDark.background, "1");
 
         // corners
         frame.write(19, 0, Color.red.background, " ");
-        frame.write(19, 9, Color.red.background, " ");
-        frame.write(0, 9, Color.red.background, " ");
+        frame.write(19, 11, Color.red.background, " ");
+        frame.write(0, 11, Color.red.background, " ");
 
         // emoji
-        frame.write(0, 3, Color.black.background, "....");
-        frame.write(0, 4, Color.black.background, "🍞...");
-        frame.write(0, 5, Color.redDark.background, "abcdefghijklmno_åäö");
+        frame.write(0, 3, "1", Color.black.background, "234");
+        frame.write(0, 4, "🍞", Color.black.background, "234");
+        frame.write(0, 5, Color.redDark.background, "abcdefghijklmn_åäö");
         frame.write(0, 5, Color.redDark.background, "🇸🇪");
-        frame.write(0, 6, Color.black.background, "👮🏿‍♀️");
+        frame.write(0, 6, Color.black.background, Color.blue.foreground, "👮🏿‍♀️");
+        frame.write(0, 7, Color.black.background, "👮🏿‍♀️");
+        frame.write(1, 7, ".");
 
         // last key
         if (lastInput != KeyboardEvent())
         {
-            frame.write(0, 8, lastInput.key, ", ", lastInput.controlKey, " ", lastInput.pressed ? "pressed" : "released");
+            frame.write(0, 9, lastInput.key, ", ", lastInput.controlKey, " ", lastInput.pressed ? "pressed" : "released");
         }
 
         frame.print();
