@@ -135,7 +135,7 @@ version (Windows)
 
             foreach (Coordinate coordinate; buffer.diffs)
             {
-                Cell cell = buffer.cellAt(coordinate);
+                Cell cell = buffer.get(coordinate);
                 this.writeCellAt(cell, coordinate);
             }
         }
