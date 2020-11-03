@@ -93,7 +93,7 @@ class Buffer
 
     void clear()
     {
-        this.staging[] = Cell();
+        this.staging[] = Cell.init;
     }
 
     void flush()
@@ -103,10 +103,10 @@ class Buffer
 
     private Size bufferSize;
     private Cell[] buffer, staging;
-
     private bool willFlush = true;
 
-    invariant(buffer.length == staging.length);
+    invariant(this.buffer.length == this.staging.length);
+    invariant(this.buffer.length == (this.bufferSize.width * this.bufferSize.height));
 }
 
 unittest
