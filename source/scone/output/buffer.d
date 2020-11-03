@@ -8,13 +8,6 @@ import std.range : chunks;
 
 class Buffer
 {
-    deprecated
-    {
-        alias setCell = stage;
-        alias changedCellCoordinates = diffs;
-        alias cellAt = get;
-    }
-
     this(Size size)
     {
         this.size = size;
