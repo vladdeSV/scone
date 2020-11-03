@@ -133,7 +133,7 @@ version (Windows)
                 lastSize = currentSize;
             }
 
-            foreach (Coordinate coordinate; buffer.changedCellCoordinates)
+            foreach (Coordinate coordinate; buffer.diffs)
             {
                 Cell cell = buffer.cellAt(coordinate);
                 this.writeCellAt(cell, coordinate);
