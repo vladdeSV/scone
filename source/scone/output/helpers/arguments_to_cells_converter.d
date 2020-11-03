@@ -23,8 +23,8 @@ template ArgumentsToCellsConverter(Args...)
             }
 
             auto cells = new Cell[](length);
-            ForegroundColor foreground = Color.initial;
-            BackgroundColor background = Color.initial;
+            ForegroundColor foreground = Color.same;
+            BackgroundColor background = Color.same;
 
             int i = 0;
             foreach (arg; args)
