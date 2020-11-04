@@ -4,6 +4,7 @@ import scone.output.types.cell : Cell;
 import scone.output.types.color;
 import scone.output.types.coordinate : Coordinate;
 import scone.output.types.size : Size;
+import scone.output.text_style : TextStyle;
 import std.range : chunks;
 
 class Buffer
@@ -129,9 +130,9 @@ unittest
     assert(buffer.diffs == [Coordinate(1, 1)]);
     buffer.commit();
 
-    buffer.stage(Coordinate(0, 0), Cell('2', Color.red.foreground, Color.green.background));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.red.foreground, Color.green.background)));
     assert(buffer.diffs.length == 1);
     buffer.commit();
-    buffer.stage(Coordinate(0, 0), Cell('2', Color.same.foreground, Color.same.background));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.same.foreground, Color.same.background)));
     assert(buffer.diffs.length == 0);
 }

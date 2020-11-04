@@ -115,15 +115,15 @@ unittest
     assert(converter1.length == 0);
 
     auto converter2 = new ArgumentsToCellsConverter!(int, int, int)(0, 0, 0);
-    assert(converter2.cells == [Cell('0', Color.same.foreground, Color.same.background), Cell('0', Color.same.foreground, Color.same.background), Cell('0', Color.same.foreground, Color.same.background)]);
+    assert(converter2.cells == [Cell('0', TextStyle(Color.same.foreground, Color.same.background)), Cell('0', TextStyle(Color.same.foreground, Color.same.background)), Cell('0', TextStyle(Color.same.foreground, Color.same.background))]);
     assert(converter2.length == 3);
 
     auto converter3 = new ArgumentsToCellsConverter!(string)("foo");
-    assert(converter3.cells == [Cell('f', Color.same.foreground, Color.same.background), Cell('o', Color.same.foreground, Color.same.background), Cell('o', Color.same.foreground, Color.same.background)]);
+    assert(converter3.cells == [Cell('f', TextStyle(Color.same.foreground, Color.same.background)), Cell('o', TextStyle(Color.same.foreground, Color.same.background)), Cell('o', TextStyle(Color.same.foreground, Color.same.background))]);
     assert(converter3.length == 3);
 
     auto converter4 = new ArgumentsToCellsConverter!(string, ForegroundColor, string, BackgroundColor, string)("f", Color.red.foreground, "o", Color.green.background, "o");
-    assert(converter4.cells == [Cell('f', Color.same.foreground, Color.same.background), Cell('o', Color.red.foreground, Color.same.background), Cell('o', Color.red.foreground, Color.green.background)]);
+    assert(converter4.cells == [Cell('f', TextStyle(Color.same.foreground, Color.same.background)), Cell('o', TextStyle(Color.red.foreground, Color.same.background)), Cell('o', TextStyle(Color.red.foreground, Color.green.background))]);
     assert(converter4.length == 3);
 
     auto converter5 = new ArgumentsToCellsConverter!(Cell, Cell[])(Cell('1'), [Cell('2'), Cell('3')]);

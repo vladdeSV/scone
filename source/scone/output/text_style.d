@@ -32,6 +32,10 @@ unittest
     auto style2 = TextStyle().bg(Color.green);
     assert(style2.foreground == Color.same);
     assert(style2.background == Color.green);
+
+    auto style3 = TextStyle(Color.red);
+    assert(style3.foreground == Color.red);
+    assert(style3.background == Color.same);
 }
 
 unittest
