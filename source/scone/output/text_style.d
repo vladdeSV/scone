@@ -39,7 +39,7 @@ unittest
     assert(a.isBold == false);
 
     auto b = TextStyle();
-    b.foreground = Color.red,
+    b.foreground = Color.red;
     b.background = Color.green;
     assert(a == b);
 }
