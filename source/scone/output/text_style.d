@@ -19,27 +19,30 @@ struct TextStyle
         return this;
     }
 
-    typeof(this) bold(bool isBold)
-    {
-        this.isBold = isBold;
-
-        return this;
-    }
-
     Color foreground = Color.same;
     Color background = Color.same;
-    bool isBold;
 }
 
 unittest
 {
-    auto a = TextStyle().fg(Color.red).bg(Color.green);
-    assert(a.foreground == Color.red);
-    assert(a.background == Color.green);
-    assert(a.isBold == false);
+    auto style1 = TextStyle();
+    assert(style1.foreground == Color.same);
+    assert(style1.background == Color.same);
 
-    auto b = TextStyle();
-    b.foreground = Color.red;
-    b.background = Color.green;
-    assert(a == b);
+    auto style2 = TextStyle().bg(Color.green);
+    assert(style2.foreground == Color.same);
+    assert(style2.background == Color.green);
+}
+
+unittest
+{
+    auto style1 = TextStyle().fg(Color.red).bg(Color.green);
+    assert(style1.foreground == Color.red);
+    assert(style1.background == Color.green);
+
+    auto style2 = TextStyle();
+    style2.foreground = Color.red;
+    style2.background = Color.green;
+
+    assert(style1 == style2);
 }
