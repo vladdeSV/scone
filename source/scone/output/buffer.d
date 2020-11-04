@@ -34,14 +34,14 @@ class Buffer
 
         const Cell bufferCell = this.get(coordinate);
 
-        if (cell.foreground == Color.same)
+        if (cell.style.foreground == Color.same)
         {
-            cell.foreground = bufferCell.foreground;
+            cell.style.foreground = bufferCell.style.foreground;
         }
 
-        if (cell.background == Color.same)
+        if (cell.style.background == Color.same)
         {
-            cell.background = bufferCell.background;
+            cell.style.background = bufferCell.style.background;
         }
 
         auto view = this.staging.chunks(this.bufferSize.width);

@@ -2,6 +2,7 @@ module scone.output.helpers.arguments_to_cells_converter;
 
 import scone.output.types.cell : Cell;
 import scone.output.types.color;
+import scone.output.text_style : TextStyle;
 import std.conv : to;
 
 /// convert arguments to Cell[]
@@ -58,7 +59,7 @@ template ArgumentsToCellsConverter(Args...)
                 {
                     foreach (c; to!dstring(arg))
                     {
-                        cells[i] = Cell(c, foreground, background);
+                        cells[i] = Cell(c, TextStyle(foreground, background));
                         ++i;
                     }
                 }

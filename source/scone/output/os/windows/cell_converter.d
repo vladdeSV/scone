@@ -34,7 +34,7 @@ version (Windows)
         {
             WORD attributes;
 
-            switch (cell.foreground)
+            switch (cell.style.foreground)
             {
             case Color.initial:
                 // take the inital colors, and filter out all flags except the foreground ones
@@ -92,7 +92,7 @@ version (Windows)
                 break;
             }
 
-            switch (cell.background)
+            switch (cell.style.background)
             {
             case Color.initial:
                 // take the inital colors, and filter out all flags except the background ones
