@@ -4,7 +4,6 @@ import scone.output.types.cell : Cell;
 import scone.output.types.color;
 import scone.output.text_style : TextStyle;
 import std.conv : to;
-import std.typecons : Nullable;
 
 /// convert arguments to Cell[]
 template ArgumentsToCellsConverter(Args...)
@@ -60,7 +59,7 @@ template ArgumentsToCellsConverter(Args...)
                 {
                     foreach (c; to!dstring(arg))
                     {
-                        cells[i] = Cell(c, TextStyle(Nullable!Color(foreground), Nullable!Color(background)));
+                        cells[i] = Cell(c, TextStyle(foreground, background));
                         ++i;
                     }
                 }

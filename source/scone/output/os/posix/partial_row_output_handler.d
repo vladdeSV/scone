@@ -60,8 +60,8 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        auto foregroundNumber = AnsiColor(currentCell.style.foreground.get).foregroundNumber;
-                        auto backgroundNumber = AnsiColor(currentCell.style.background.get).backgroundNumber;
+                        auto foregroundNumber = AnsiColor(currentCell.style.foreground).foregroundNumber;
+                        auto backgroundNumber = AnsiColor(currentCell.style.background).backgroundNumber;
                         print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                     }
 
