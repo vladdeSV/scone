@@ -2,7 +2,6 @@ module scone.output.text_style;
 
 import scone.output.types.color : Color;
 
-/// Semi-factory
 struct TextStyle
 {
     typeof(this) fg(Color color)
