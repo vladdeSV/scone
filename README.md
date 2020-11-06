@@ -26,8 +26,8 @@ void main() {
 
     frame.write(
       12, 9,
-      Color.yellow.foreground, "Hello ",
-      Color.red.foreground, Color.white.background, "World"
+      TextStyle().fg(Color.yellow), "Hello ", // color text
+      Color.red.foreground, Color.white.background, "World" // alternative way
     );
     frame.print();
   }
