@@ -47,10 +47,10 @@ version (Posix)
                         immutable Cell previousCell = this.buffer.get(Coordinate(x - 1, y));
 
                         //todo revisit and see if i though of this correctly
-                        bool a = previousCell.foreground != currentCell.foreground
-                            || previousCell.background != currentCell.background;
+                        bool a = previousCell.style.foreground != currentCell.style.foreground
+                            || previousCell.style.background != currentCell.style.background;
                         bool b = currentCell.character == ' '
-                            && previousCell.background == currentCell.background;
+                            && previousCell.style.background == currentCell.style.background;
 
                         if (a && !b)
                         {
@@ -60,8 +60,8 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        auto foregroundNumber = AnsiColor(currentCell.foreground).foregroundNumber;
-                        auto backgroundNumber = AnsiColor(currentCell.background).backgroundNumber;
+                        auto foregroundNumber = AnsiColor(currentCell.style.foreground).foregroundNumber;
+                        auto backgroundNumber = AnsiColor(currentCell.style.background).backgroundNumber;
                         print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                     }
 

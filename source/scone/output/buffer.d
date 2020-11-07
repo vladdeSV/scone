@@ -4,6 +4,7 @@ import scone.output.types.cell : Cell;
 import scone.output.types.color;
 import scone.output.types.coordinate : Coordinate;
 import scone.output.types.size : Size;
+import scone.output.text_style : TextStyle;
 import std.range : chunks;
 
 class Buffer
@@ -34,14 +35,14 @@ class Buffer
 
         const Cell bufferCell = this.get(coordinate);
 
-        if (cell.foreground == Color.same)
+        if (cell.style.foreground == Color.same)
         {
-            cell.foreground = bufferCell.foreground;
+            cell.style.foreground = bufferCell.style.foreground;
         }
 
-        if (cell.background == Color.same)
+        if (cell.style.background == Color.same)
         {
-            cell.background = bufferCell.background;
+            cell.style.background = bufferCell.style.background;
         }
 
         auto view = this.staging.chunks(this.bufferSize.width);
@@ -129,9 +130,9 @@ unittest
     assert(buffer.diffs == [Coordinate(1, 1)]);
     buffer.commit();
 
-    buffer.stage(Coordinate(0, 0), Cell('2', Color.red.foreground, Color.green.background));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.red.foreground, Color.green.background)));
     assert(buffer.diffs.length == 1);
     buffer.commit();
-    buffer.stage(Coordinate(0, 0), Cell('2', Color.same.foreground, Color.same.background));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.same.foreground, Color.same.background)));
     assert(buffer.diffs.length == 0);
 }
