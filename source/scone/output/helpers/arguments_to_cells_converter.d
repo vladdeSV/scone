@@ -22,24 +22,22 @@ class ArgumentsToCellsConverter(Args...)
         }
 
         auto cells = new Cell[](length);
-        ForegroundColor foreground = Color.same;
-        BackgroundColor background = Color.same;
+        TextStyle textStyle = TextStyle();
 
         int i = 0;
         foreach (arg; args)
         {
             static if (is(typeof(arg) == TextStyle))
             {
-                foreground = arg.foreground.foreground;
-                background = arg.background.background;
+                textStyle = arg;
             }
             else static if (is(typeof(arg) == ForegroundColor))
             {
-                foreground = arg;
+                textStyle.foreground = arg;
             }
             else static if (is(typeof(arg) == BackgroundColor))
             {
-                background = arg;
+                textStyle.background = arg;
             }
             else static if (is(typeof(arg) == Cell))
             {
@@ -62,18 +60,11 @@ class ArgumentsToCellsConverter(Args...)
             {
                 foreach (c; to!dstring(arg))
                 {
-                    cells[i] = Cell(c, TextStyle(foreground, background));
+                    cells[i] = Cell(c, textStyle);
                     ++i;
                 }
             }
         }
-
-        // If there are cells to write, and the last argument is a color, warn
-        //auto lastArgument = args[$ - 1];
-        //if (cells.length && is(typeof(lastArgument) : Color))
-        //{
-        //    logger.warning("The last argument in %s is a color, which will not be set. ", args);
-        //}
 
         return cells;
     }
