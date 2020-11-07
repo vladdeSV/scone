@@ -116,3 +116,75 @@ class Frame
     private StandardOutput output;
     private Buffer buffer;
 }
+
+/// basic
+unittest
+{
+    import scone.core.dummy : DummyOutput;
+
+    auto output = new DummyOutput();
+    output.size = Size(5, 3);
+
+    auto frame = new Frame(output);
+    assert(frame.size == Size(5, 3));
+
+    frame.size(5, 4);
+    assert(frame.size == Size(5, 4));
+}
+/// special control characters
+unittest
+{
+    import scone.core.dummy : DummyOutput;
+    import scone.output.text_style : TextStyle;
+
+    auto output = new DummyOutput();
+    output.size = Size(5, 3);
+    auto frame = new Frame(output);
+
+    frame.write(0, 0, "1");
+    assert(frame.buffer.get(Coordinate(0, 0)) == Cell('1'));
+
+    frame.print();
+    frame.write(0, 0, "\n2");
+    assert(frame.buffer.get(Coordinate(0, 1)) == Cell('2'));
+
+    frame.print();
+    frame.write(0, 0, "11\r3");
+    assert(frame.buffer.get(Coordinate(0, 0)) == Cell('3'));
+    assert(frame.buffer.get(Coordinate(1, 0)) == Cell('1'));
+}
+/// tab special character. should be changed in the future?
+unittest
+{
+    import scone.core.dummy : DummyOutput;
+    import scone.output.text_style : TextStyle;
+
+    auto output = new DummyOutput();
+    output.size = Size(5, 3);
+    auto frame = new Frame(output);
+
+    frame.print();
+    frame.write(2, 0, TextStyle(Color.green), "X");
+    frame.write(0, 0, TextStyle(Color.red), "0\t4");
+    assert(frame.buffer.get(Coordinate(0, 0)) == Cell('0', TextStyle(Color.red, Color.initial)));
+    assert(frame.buffer.get(Coordinate(1, 0)) == Cell(' ', TextStyle(Color.initial, Color.initial)));
+    assert(frame.buffer.get(Coordinate(2, 0)) == Cell('X', TextStyle(Color.green, Color.initial)));
+    assert(frame.buffer.get(Coordinate(3, 0)) == Cell(' ', TextStyle(Color.initial, Color.initial)));
+    assert(frame.buffer.get(Coordinate(4, 0)) == Cell('4', TextStyle(Color.red, Color.initial)));
+}
+/// cells use its own style, independen of previous text style
+unittest
+{
+    import scone.core.dummy : DummyOutput;
+    import scone.output.text_style : TextStyle;
+
+    auto output = new DummyOutput();
+    output.size = Size(5, 3);
+    auto frame = new Frame(output);
+
+    frame.print();
+    frame.write(0, 0, TextStyle(Color.blue, Color.yellow), Cell('1',
+            TextStyle(Color.red, Color.green)), '2');
+    assert(frame.buffer.get(Coordinate(0, 0)) == Cell('1', TextStyle(Color.red, Color.green)));
+    assert(frame.buffer.get(Coordinate(1, 0)) == Cell('2', TextStyle(Color.blue, Color.yellow)));
+}
