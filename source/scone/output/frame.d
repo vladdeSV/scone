@@ -130,6 +130,11 @@ unittest
 
     frame.size(5, 4);
     assert(frame.size == Size(5, 4));
+
+    frame.title("test");
+    // todo: assert(frame.title == "test");
+
+    destroy(frame);
 }
 /// special control characters
 unittest
@@ -152,6 +157,13 @@ unittest
     frame.write(0, 0, "11\r3");
     assert(frame.buffer.get(Coordinate(0, 0)) == Cell('3'));
     assert(frame.buffer.get(Coordinate(1, 0)) == Cell('1'));
+
+    frame.print();
+    frame.buffer.commit();
+    frame.write(4,2, "11\n1");
+    import std.stdio: writeln;
+    frame.buffer.diffs.writeln;
+    assert(frame.buffer.diffs == [Coordinate(4,2)]);
 }
 /// tab special character. should be changed in the future?
 unittest
