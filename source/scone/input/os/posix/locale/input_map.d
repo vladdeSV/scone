@@ -6,8 +6,17 @@ version (Posix)
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
     import scone.input.os.posix.keypress_tree : KeypressTree, Keypress;
-    import scone.input.os.posix.locale.input_sequence : InputSequence;
     import std.experimental.logger : sharedLog;
+
+    /**
+     * Wrapper for an input sequence sent by the POSIX terminal.
+     *
+     * An input from the terminal is given by numbers in a sequence.
+     *
+     * For example, the right arrow key might send the sequence "27 91 67",
+     * and will be stored as [27, 91, 67]
+     */
+    alias InputSequence = uint[];
 
     class InputMap
     {
