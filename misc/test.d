@@ -3,7 +3,7 @@ import scone;
 void main()
 {
     frame.title("👮🏿‍♀️");
-    frame.size(20, 12);
+    frame.size(40, 12);
 
     bool run = true;
     auto lastInput = KeyboardEvent();
@@ -28,8 +28,8 @@ void main()
         frame.write(4, 0, Color.initial.background, "1", Color.same.background, "1", Color.blackDark.background, "1");
 
         // corners
-        frame.write(19, 0, Color.red.background, " ");
-        frame.write(19, 11, Color.red.background, " ");
+        frame.write(39, 0, Color.red.background, " ");
+        frame.write(39, 11, Color.red.background, " ");
         frame.write(0, 11, Color.red.background, " ");
 
         // emoji
