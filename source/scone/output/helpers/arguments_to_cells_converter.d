@@ -155,7 +155,6 @@ unittest
 /// only color
 unittest
 {
-    import std.stdio : writeln;
     auto converter1 = new ArgumentsToCellsConverter!(Color)(Color.green);
     assert(converter1.cells == []);
     assert(converter1.length == 0);

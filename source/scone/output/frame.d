@@ -161,8 +161,6 @@ unittest
     frame.print();
     frame.buffer.commit();
     frame.write(4,2, "11\n1");
-    import std.stdio: writeln;
-    frame.buffer.diffs.writeln;
     assert(frame.buffer.diffs == [Coordinate(4,2)]);
 }
 /// tab special character. should be changed in the future?
