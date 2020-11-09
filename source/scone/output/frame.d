@@ -160,8 +160,8 @@ unittest
 
     frame.print();
     frame.buffer.commit();
-    frame.write(4,2, "11\n1");
-    assert(frame.buffer.diffs == [Coordinate(4,2)]);
+    frame.write(4, 2, "11\n1");
+    assert(frame.buffer.diffs == [Coordinate(4, 2)]);
 }
 /// tab special character. should be changed in the future?
 unittest
@@ -186,7 +186,7 @@ unittest
 unittest
 {
     import scone.core.dummy : DummyOutput;
-    import scone.output.text_style : TextStyle;
+    import scone.output.text_style : TextStyle, StyledText;
 
     auto output = new DummyOutput();
     output.size = Size(5, 3);
@@ -197,4 +197,11 @@ unittest
             TextStyle(Color.red, Color.green)), '2');
     assert(frame.buffer.get(Coordinate(0, 0)) == Cell('1', TextStyle(Color.red, Color.green)));
     assert(frame.buffer.get(Coordinate(1, 0)) == Cell('2', TextStyle(Color.blue, Color.yellow)));
+
+    frame.print();
+    frame.write(0, 0, TextStyle(Color.green, Color.black), "a", StyledText("bc", TextStyle(Color.red, Color.black)), "d");
+    assert(frame.buffer.get(Coordinate(0, 0)) == Cell('a', TextStyle(Color.green, Color.black)));
+    assert(frame.buffer.get(Coordinate(1, 0)) == Cell('b', TextStyle(Color.red, Color.black)));
+    assert(frame.buffer.get(Coordinate(2, 0)) == Cell('c', TextStyle(Color.red, Color.black)));
+    assert(frame.buffer.get(Coordinate(3, 0)) == Cell('d', TextStyle(Color.green, Color.black)));
 }

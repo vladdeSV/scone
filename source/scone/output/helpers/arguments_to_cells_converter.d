@@ -2,7 +2,7 @@ module scone.output.helpers.arguments_to_cells_converter;
 
 import scone.output.types.cell : Cell;
 import scone.output.types.color;
-import scone.output.text_style : TextStyle;
+import scone.output.text_style : TextStyle, StyledText;
 import std.conv : to;
 
 /// convert arguments to Cell[]
@@ -52,6 +52,14 @@ class ArgumentsToCellsConverter(Args...)
                     ++i;
                 }
             }
+            else static if (is(typeof(arg) == StyledText))
+            {
+                foreach (cell; arg.cells)
+                {
+                    cells[i] = cell;
+                    ++i;
+                }
+            }
             else static if (is(typeof(arg) == Color))
             {
                 //logger.warning("`write(x, y, ...)`: Type `Color` passed in, which has no effect");
@@ -91,6 +99,11 @@ class ArgumentsToCellsConverter(Args...)
             else static if (is(typeof(arg) == Cell[]))
             {
                 length += arg.length;
+                continue;
+            }
+            else static if (is(typeof(arg) == StyledText))
+            {
+                length += arg.cells.length;
                 continue;
             }
             else
@@ -151,6 +164,10 @@ unittest
     auto converter4 = new ArgumentsToCellsConverter!(TextStyle, Cell)(TextStyle().fg(Color.red), Cell('1'));
     assert(converter4.cells == [Cell('1', TextStyle(Color.initial, Color.initial))]);
     assert(converter4.length == 1);
+
+    auto converter5 = new ArgumentsToCellsConverter!(StyledText)(StyledText("abc", TextStyle().fg(Color.red)));
+    assert(converter5.cells == [Cell('a', TextStyle(Color.red, Color.same)), Cell('b', TextStyle(Color.red, Color.same)), Cell('c', TextStyle(Color.red, Color.same))]);
+    assert(converter5.length == 3);
 }
 /// only color
 unittest
