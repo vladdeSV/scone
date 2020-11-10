@@ -1,5 +1,7 @@
 module scone.audio.audio;
 
+import std.algorithm: canFind;
+
 interface StandardAudio
 {
 
@@ -11,6 +13,7 @@ class DummyAudio : StandardAudio
 }
 
 alias AudioId = size_t;
+alias AudioHandle = size_t;
 
 class Audio
 {
@@ -27,25 +30,21 @@ class Audio
 
     AudioHandle play(AudioId id)
     {
-        return new AudioHandle(id);
+        this.tempAudioHandleCounter++;
+        return tempAudioHandleCounter;
     }
 
     void stop(ref AudioHandle handle)
     {
-        handle = null;
+        
     }
 
-    private uint tempAudioIdCounter;
-}
-
-class AudioHandle
-{
-    this(AudioId id)
+    bool isValidHandle(AudioHandle handle)
     {
-        this.id = id;
+        return true; //fixme check some sort of array for
     }
 
-    private AudioId id;
+    private uint tempAudioIdCounter, tempAudioHandleCounter;
 }
 
 unittest
@@ -55,12 +54,14 @@ unittest
 
     auto audioId1 = audio.register("audio/snd1");
     auto audioId2 = audio.register("audio/snd1");
+    auto audioId3 = audio.register("audio/snd2");
 
     assert(audioId1 != audioId2);
+    assert(audioId1 != audioId3);
 
     auto audioHandle1 = audio.play(audioId1);
-    assert(audioHandle1 !is null);
+    assert(audio.isValidHandle(audioHandle1));
 
     audio.stop(audioHandle1);
-    assert(audioHandle1 is null);
+    //assert(!audio.isValidHandle(audioHandle1));
 }
