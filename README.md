@@ -3,8 +3,8 @@ Note: This README covers the upcoming 3.0 release. View the latest 2.1.3 docs [h
 # 🍞 scone
 Create cross-platform console/terminal applications with ease
 
-![build+test](https://github.com/vladdeSV/scone/workflows/build+test/badge.svg)
-![license](https://img.shields.io/github/license/vladdeSV/scone?color=black)
+[![build+test](https://github.com/vladdeSV/scone/workflows/build+test/badge.svg)](https://github.com/vladdeSV/scone/actions?query=workflow%3Abuild%2Btest)
+[![license](https://img.shields.io/github/license/vladdeSV/scone?color=black)](https://github.com/vladdeSV/scone/blob/develop/LICENSE)
 
 ## Example
 
