@@ -16,6 +16,8 @@ jobs:
         - os: ubuntu-latest
           DUB: dub
           CODECOVERAGE: |
+            grep -Eh '^\s*(\d+)' -- *.lst
+            grep -Eh '^0000000' -- *.lst
             tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
             elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
             echo "code coverage:"
