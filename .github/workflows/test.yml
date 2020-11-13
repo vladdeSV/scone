@@ -17,7 +17,11 @@ jobs:
           DUB: dub
           CODECOVERAGE: |
             ls -la
-            
+
+            cat source-scone-output-buffer.lst
+
+            grep -Eh '^\s*(\d+)' cat source-scone-output-buffer.lst
+
             tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
             elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
             echo "code coverage:"
@@ -33,7 +37,7 @@ jobs:
 
         - os: windows-latest
           DUB: dub.exe
-          CODECOVERAGE: echo code coverage not implemented for windows
+          CODECOVERAGE: echo "code coverage not implemented for windows"
             
 
     steps:
