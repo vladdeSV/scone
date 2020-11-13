@@ -16,16 +16,9 @@ jobs:
         - os: ubuntu-latest
           DUB: dub
           CODECOVERAGE: |
-            ls -la
-
-            cat source-scone-output-buffer.lst
-
-            grep -Eh '^\s*(\d+)' source-scone-output-buffer.lst
-
-            tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
-            elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
-            echo "code coverage:"
-            echo "scale=2;1-($elc/$tlc)" | bc
+            tlc=$(echo "$(cat -- *.lst)" | grep -E '^ *[0-9]+' | wc -l | xargs)
+            elc=$(echo "$(cat -- *.lst)" | grep -E '^0000000'  | wc -l | xargs)
+            echo code coverage: $(echo "scale=2;1-($elc/$tlc)" | bc)
 
         - os: macos-latest
           DUB: dub
