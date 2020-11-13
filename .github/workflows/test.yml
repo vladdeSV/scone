@@ -21,7 +21,8 @@ jobs:
         run: dub test --config=ci --coverage
       
       - name: Simple code coverage
-        run: tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
-        run: elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
-        run: echo "code coverage:"
-        run: echo "scale=2;1-($elc/$tlc)" | bc
+        run: |
+          tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
+          elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
+          echo "code coverage:"
+          echo "scale=2;1-($elc/$tlc)" | bc
