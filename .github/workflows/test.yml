@@ -20,7 +20,7 @@ jobs:
 
             cat source-scone-output-buffer.lst
 
-            grep -Eh '^\s*(\d+)' cat source-scone-output-buffer.lst
+            grep -Eh '^\s*(\d+)' source-scone-output-buffer.lst
 
             tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
             elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
