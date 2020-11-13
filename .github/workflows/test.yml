@@ -13,14 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
-        - os: ubuntu-latest
-          dub: dub
-          code-coverage: |
-            tlc=$(echo "$(cat -- *.lst)" | grep -E '^ *[0-9]+' | wc -l | xargs)
-            elc=$(echo "$(cat -- *.lst)" | grep -E '^0000000'  | wc -l | xargs)
-            echo code coverage: $(echo "scale=2;1-($elc/$tlc)" | bc)
-
-        - os: macos-latest
+        - os: [ubuntu-latest, macos-latest]
           dub: dub
           code-coverage: |
             tlc=$(echo "$(cat -- *.lst)" | grep -E '^ *[0-9]+' | wc -l | xargs)
