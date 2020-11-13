@@ -18,11 +18,4 @@ jobs:
       - uses: dlang-community/setup-dlang@v1.0.3
 
       - name: Test
-        run: dub test --config=ci --coverage
-      
-      - name: Simple code coverage
-        run: |
-          tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
-          elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
-          echo "code coverage:"
-          echo "scale=2;1-($elc/$tlc)" | bc
+        run: dub test --config=ci
