@@ -42,4 +42,4 @@ jobs:
         run: ${{matrix.DUB}} test --config=ci
 
       - name: Simple code coverage
-        run: ${{CODECOVERAGE}}
+        run: ${{matrix.CODECOVERAGE}}
