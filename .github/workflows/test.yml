@@ -12,10 +12,34 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            DUB: dub
+            CODECOVERAGE: |
+              tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
+              elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
+              echo "code coverage:"
+              echo "scale=2;1-($elc/$tlc)" | bc
+              
+          - os: macos-latest
+            DUB: dub
+            CODECOVERAGE: |
+              tlc=$(grep -Eh '^\s*(\d+)' -- *.lst | wc -l | xargs)
+              elc=$(grep -Eh '^0000000' -- *.lst | wc -l | xargs)
+              echo "code coverage:"
+              echo "scale=2;1-($elc/$tlc)" | bc
+          
+          - os: windows-latest
+            DUB: dub.exe
+            CODECOVERAGE: echo code coverage not implemented for windows
+            
 
     steps:
       - uses: actions/checkout@v2
       - uses: dlang-community/setup-dlang@v1.0.3
 
       - name: Test
-        run: dub test --config=ci
+        run: ${{matrix.DUB}} test --config=ci
+
+      - name: Simple code coverage
+        run: ${{CODECOVERAGE}}
