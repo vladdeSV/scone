@@ -39,7 +39,7 @@ jobs:
       - uses: dlang-community/setup-dlang@v1.0.3
 
       - name: Test
-        run: ${{matrix.DUB}} test --config=ci
+        run: ${{matrix.DUB}} test --config=ci --coverage
 
       - name: Simple code coverage
         run: ${{matrix.CODECOVERAGE}}
