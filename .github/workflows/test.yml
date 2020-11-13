@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
         - os: ubuntu-latest
           DUB: dub
