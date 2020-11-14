@@ -1,5 +1,7 @@
 module scone.output.types.color;
 
+import scone.output.text_style : TextStyle;
+
 /**
  * All colors
  *
@@ -53,6 +55,29 @@ unittest
     // ensure there are 8 colors from Color.white(Dark) to Color.black(Dark)
     assert(Color.white - Color.black == 7);
     assert(Color.whiteDark - Color.blackDark == 7);
+}
+
+deprecated 
+{
+    TextStyle foreground(Color color)
+    {
+        return TextStyle().fg(color);
+    }
+    unittest
+    {
+        assert(TextStyle(Color.red, Color.same) == Color.red.foreground);
+        assert(TextStyle().fg(Color.red) == foreground(Color.red));
+    }
+
+    TextStyle background(Color color)
+    {
+        return TextStyle().bg(color);
+    }
+    unittest
+    {
+        assert(TextStyle(Color.same, Color.green) == Color.green.background);
+        assert(TextStyle().bg(Color.green) == background(Color.green));
+    }
 }
 
 pure auto isLight(Color color)
