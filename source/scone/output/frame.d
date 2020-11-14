@@ -181,6 +181,10 @@ unittest
     assert(frame.buffer.get(Coordinate(2, 0)) == Cell('X', TextStyle(Color.green, Color.initial)));
     assert(frame.buffer.get(Coordinate(3, 0)) == Cell(' ', TextStyle(Color.initial, Color.initial)));
     assert(frame.buffer.get(Coordinate(4, 0)) == Cell('4', TextStyle(Color.red, Color.initial)));
+
+    frame.print();
+    frame.write(0, 1, TextStyle().fg(Color.red), TextStyle().bg(Color.green), "X");
+    assert(frame.buffer.get(Coordinate(0, 1)) == Cell('X', TextStyle(Color.red, Color.green)));
 }
 /// cells use its own style, independen of previous text style
 unittest

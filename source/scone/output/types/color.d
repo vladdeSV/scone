@@ -55,111 +55,38 @@ unittest
     assert(Color.whiteDark - Color.blackDark == 7);
 }
 
-/// both `ForegroundColor` and `BackgroundColor` work the same way. this is not not have duplicate code :)
-private template ColorTemplate()
-{
-    this(Color c)
-    {
-        color = c;
-    }
-
-    Color color;
-    alias color this;
-}
-
-/// Container for foreground colors
-struct ForegroundColor
-{
-    mixin ColorTemplate;
-}
-
-/// Container for background colors
-struct BackgroundColor
-{
-    mixin ColorTemplate;
-}
-
-/**
- * Example:
- * ---
- * window.write(0,0, Color.red.foreground, "string");
- * ---
- */
-ForegroundColor foreground(Color color)
-{
-    return ForegroundColor(color);
-}
-
-/**
- * Example:
- * ---
- * window.write(0,0, Color.blue.background, "string");
- * ---
- */
-BackgroundColor background(Color color)
-{
-    return BackgroundColor(color);
-}
-
-/**
- * Check if a color is a light color
- * Params:
- *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- * Return: bool, true if light color, false otherwise
- */
-pure auto isLight(C)(C color) if (is(C : Color))
+pure auto isLight(Color color)
 {
     return color >= Color.black && color <= Color.white;
 }
-///
-@system unittest
+unittest
 {
     assert(Color.red.isLight);
     assert(!Color.redDark.isLight);
-    assert(Color.red.foreground.isLight);
-    assert(background(Color.red).isLight);
 }
 
-/**
- * Check if a color is a dark color
- * Params:
- *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- * Return: bool, true if dark color, false otherwise
- */
-pure auto isDark(C)(C color) if (is(C : Color))
+auto isDark(Color color)
 {
     return color >= Color.blackDark && color <= Color.whiteDark;
 }
-///
-@system unittest
+unittest
 {
     assert(!Color.red.isDark);
     assert(Color.redDark.isDark);
-    assert(Color.redDark.foreground.isDark);
-    assert(background(Color.redDark).isDark);
 }
 
-/**
- * See if color is a proper color
- */
-pure auto isActualColor(C)(C color) if (is(C : Color))
+pure auto isActualColor(Color color)
 {
     return color.isLight || color.isDark;
 }
-///
 @system unittest
 {
     assert(Color.red.isActualColor);
-    assert(Color.red.foreground.isActualColor);
     assert(Color.blueDark.isActualColor);
     assert(!Color.same.isActualColor);
 }
 
-/**
- * Params:
- *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- */
-pure C light(C)(C color) if (is(C : Color))
+pure Color light(Color color)
 {
     if (color.isDark)
     {
@@ -168,21 +95,14 @@ pure C light(C)(C color) if (is(C : Color))
 
     return color;
 }
-///
 unittest
 {
     assert(Color.redDark.light == Color.red);
     assert(Color.red.light == Color.red);
-    assert(Color.redDark.foreground.light == Color.red.foreground);
-    assert(Color.redDark.background.light == Color.red.background);
     assert(Color.same.light == Color.same);
 }
 
-/**
- * Params:
- *     color = A type of color. Either `Color`, `ForegroundColor`, or `BackgroundColor`
- */
-pure C dark(C)(C color) if (is(C : Color))
+pure Color dark(Color color)
 {
     if (color.isLight)
     {
@@ -191,12 +111,9 @@ pure C dark(C)(C color) if (is(C : Color))
 
     return color;
 }
-///
 unittest
 {
     assert(Color.redDark.dark == Color.redDark);
     assert(Color.red.dark == Color.redDark);
-    assert(Color.redDark.foreground.dark == Color.redDark.foreground);
-    assert(Color.redDark.background.dark == Color.redDark.background);
     assert(Color.same.dark == Color.same);
 }
