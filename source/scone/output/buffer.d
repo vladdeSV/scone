@@ -130,9 +130,9 @@ unittest
     assert(buffer.diffs == [Coordinate(1, 1)]);
     buffer.commit();
 
-    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.red.foreground, Color.green.background)));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.red, Color.green)));
     assert(buffer.diffs.length == 1);
     buffer.commit();
-    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.same.foreground, Color.same.background)));
+    buffer.stage(Coordinate(0, 0), Cell('2', TextStyle(Color.same, Color.same)));
     assert(buffer.diffs.length == 0);
 }
