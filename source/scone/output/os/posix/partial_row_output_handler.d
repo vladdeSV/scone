@@ -60,8 +60,10 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        auto foregroundNumber = AnsiColor(currentCell.style.foreground).foregroundNumber;
-                        auto backgroundNumber = AnsiColor(currentCell.style.background).backgroundNumber;
+                        auto foregroundNumber = AnsiColorHelper(currentCell.style.foreground)
+                            .foregroundNumber;
+                        auto backgroundNumber = AnsiColorHelper(currentCell.style.background)
+                            .backgroundNumber;
                         print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                     }
 
@@ -111,7 +113,7 @@ version (Posix)
         private Buffer buffer;
     }
 
-    private struct AnsiColor
+    private struct AnsiColorHelper
     {
         private Color color;
 
@@ -131,25 +133,27 @@ version (Posix)
             return this.ansiNumberCalculator(this.color) + backgroundColorOffset;
         }
 
-        private int ansiNumberCalculator(Color color) pure
+        private int ansiNumberCalculator(Color color)
         {
-            if (color == Color.initial)
+            auto ansi = color.ansi;
+
+            if (color.state == ColorState.same)
+            {
+                return cast(AnsiColor)-1;
+            }
+
+            if (ansi == AnsiColor.initial)
             {
                 return 39;
             }
 
-            if (color == Color.same)
-            {
-                return cast(Color)-1;
-            }
-
-            assert(color < 16);
+            assert(ansi < 16);
 
             enum light = 90;
             enum dark = 30;
 
-            auto startIndex = color.isLight ? light : dark;
-            auto colorOffset = (cast(ubyte) color) % 8;
+            auto startIndex = ansi < 8 ? light : dark;
+            auto colorOffset = (cast(ubyte) ansi) % 8;
 
             return startIndex + colorOffset;
         }
