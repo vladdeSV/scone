@@ -2,31 +2,7 @@ module scone.output.types.color;
 
 import scone.output.text_style : TextStyle;
 
-/**
- * All colors
- *
- * Example:
- * --------------------
- * // Available colors:
- * black       // darker grey
- * blackDark   // black
- * blue
- * blueDark
- * cyan
- * cyanDark
- * green
- * greenDark
- * magenta
- * magentaDark
- * red
- * redDark
- * white       // white
- * whiteDark   // lighter grey
- * yellow
- * yellowDark
- * --------------------
- */
-enum Color
+enum AnsiColor
 {
     black = 0,
     red = 1,
@@ -46,99 +22,92 @@ enum Color
     cyanDark = 14,
     whiteDark = 15,
 
-    same = 16,
-    initial = 17,
+    same,
+    initial,
 }
 
+struct RGB
+{
+    int r, g, b;
+}
+
+enum ColorState
+{
+    ansi,
+    rgb,
+}
+
+struct Color
+{
+    static typeof(this) rgb(int r, int g, int b)
+    {
+        auto color = Color.init;
+        color.state = ColorState.rgb;
+        color.rgbColor = RGB(r, g, b);
+        return color;
+    }
+
+    // generate creation methods from AnsiColor
+    import std.traits : EnumMembers;
+    import std.conv : to;
+    static foreach (member; EnumMembers!AnsiColor)
+    {
+        mixin("
+        static typeof(this) " ~ to!string(member) ~ "()
+        {
+            Color c = Color.init;
+            c.ansi = AnsiColor." ~ to!string(member) ~ ";
+            return c;
+        }
+        ");
+    }
+
+    ColorState state = ColorState.ansi;
+    AnsiColor ansi = AnsiColor.initial;
+    RGB rgbColor;
+}
+///
 unittest
 {
-    // ensure there are 8 colors from Color.white(Dark) to Color.black(Dark)
-    assert(Color.white - Color.black == 7);
-    assert(Color.whiteDark - Color.blackDark == 7);
+    Color a;
+    assert(a.ansi == AnsiColor.initial);
+    assert(a.state == ColorState.ansi);
+    assert(a.rgbColor == RGB.init);
+
+    Color b = Color.red;
+    assert(b.ansi == AnsiColor.red);
+    assert(b.state == ColorState.ansi);
+    assert(b.rgbColor == RGB.init);
+
+    Color c = Color.rgb(123, 232, 123);
+    assert(c.ansi == AnsiColor.initial);
+    assert(c.state == ColorState.rgb);
+    assert(c.rgbColor == RGB(123, 232, 123));
 }
 
-deprecated 
+deprecated
 {
+    ///
     TextStyle foreground(Color color)
     {
         return TextStyle().fg(color);
     }
+    ///
     unittest
     {
         assert(TextStyle(Color.red, Color.same) == Color.red.foreground);
         assert(TextStyle().fg(Color.red) == foreground(Color.red));
     }
 
+    ///
     TextStyle background(Color color)
     {
         return TextStyle().bg(color);
     }
+    ///
     unittest
     {
         assert(TextStyle(Color.same, Color.green) == Color.green.background);
         assert(TextStyle().bg(Color.green) == background(Color.green));
     }
-}
-
-pure auto isLight(Color color)
-{
-    return color >= Color.black && color <= Color.white;
-}
-unittest
-{
-    assert(Color.red.isLight);
-    assert(!Color.redDark.isLight);
-}
-
-auto isDark(Color color)
-{
-    return color >= Color.blackDark && color <= Color.whiteDark;
-}
-unittest
-{
-    assert(!Color.red.isDark);
-    assert(Color.redDark.isDark);
-}
-
-pure auto isActualColor(Color color)
-{
-    return color.isLight || color.isDark;
-}
-@system unittest
-{
-    assert(Color.red.isActualColor);
-    assert(Color.blueDark.isActualColor);
-    assert(!Color.same.isActualColor);
-}
-
-pure Color light(Color color)
-{
-    if (color.isDark)
-    {
-        color = cast(Color)(color - 8);
-    }
-
-    return color;
-}
-unittest
-{
-    assert(Color.redDark.light == Color.red);
-    assert(Color.red.light == Color.red);
-    assert(Color.same.light == Color.same);
-}
-
-pure Color dark(Color color)
-{
-    if (color.isLight)
-    {
-        color = cast(Color)(color + 8);
-    }
-
-    return color;
-}
-unittest
-{
-    assert(Color.redDark.dark == Color.redDark);
-    assert(Color.red.dark == Color.redDark);
-    assert(Color.same.dark == Color.same);
 }
