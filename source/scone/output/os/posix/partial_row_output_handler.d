@@ -115,34 +115,36 @@ version (Posix)
 
     private struct AnsiColorHelper
     {
-        private AnsiColor ansi;
+        private Color color;
 
         this(Color color)
         {
-            this.ansi = color.ansi;
+            this.color = color;
         }
 
         int foregroundNumber()
         {
-            return ansiNumberCalculator(this.ansi);
+            return ansiNumberCalculator(this.color);
         }
 
         int backgroundNumber()
         {
             enum backgroundColorOffset = 10;
-            return this.ansiNumberCalculator(this.ansi) + backgroundColorOffset;
+            return this.ansiNumberCalculator(this.color) + backgroundColorOffset;
         }
 
-        private int ansiNumberCalculator(AnsiColor ansi) pure
+        private int ansiNumberCalculator(Color color)
         {
+            auto ansi = color.ansi;
+
+            if (color.state == ColorState.same)
+            {
+                return cast(AnsiColor)-1;
+            }
+
             if (ansi == AnsiColor.initial)
             {
                 return 39;
-            }
-
-            if (ansi == AnsiColor.same)
-            {
-                return cast(AnsiColor)-1;
             }
 
             assert(ansi < 16);

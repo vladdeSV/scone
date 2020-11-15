@@ -4,6 +4,8 @@ import scone.output.text_style : TextStyle;
 
 enum AnsiColor
 {
+    initial = 16,
+
     black = 0,
     red = 1,
     green = 2,
@@ -21,9 +23,6 @@ enum AnsiColor
     magentaDark = 13,
     cyanDark = 14,
     whiteDark = 15,
-
-    same,
-    initial,
 }
 
 struct RGB
@@ -35,54 +34,96 @@ enum ColorState
 {
     ansi,
     rgb,
+    same,
 }
+
+import std.typecons : Nullable;
 
 struct Color
 {
-    static typeof(this) rgb(int r, int g, int b)
+    static Color same()
     {
-        auto color = Color.init;
-        color.state = ColorState.rgb;
-        color.rgbColor = RGB(r, g, b);
+        Color color = Color();
+        color.colorState = ColorState.same;
+        color.ansiColor.nullify();
+        color.rgbColor.nullify();
+
         return color;
     }
 
     // generate creation methods from AnsiColor
     import std.traits : EnumMembers;
     import std.conv : to;
+
     static foreach (member; EnumMembers!AnsiColor)
     {
         mixin("
-        static typeof(this) " ~ to!string(member) ~ "()
+        static Color " ~ to!string(member) ~ "()
         {
-            Color c = Color.init;
-            c.ansi = AnsiColor." ~ to!string(member) ~ ";
-            return c;
+            Color color = Color();
+            color.colorState = ColorState.ansi;
+            color.ansiColor = AnsiColor." ~ to!string(
+                member) ~ ";
+            color.rgbColor.nullify();
+
+            return color;
         }
         ");
     }
 
-    ColorState state = ColorState.ansi;
-    AnsiColor ansi = AnsiColor.initial;
-    RGB rgbColor;
+    static Color rgb(int r, int g, int b)
+    {
+        Color color = Color();
+        color.colorState = ColorState.rgb;
+        color.ansiColor.nullify();
+        color.rgbColor = RGB(r, g, b);
+
+        return color;
+    }
+
+    ColorState state()
+    {
+        return this.colorState;
+    }
+
+    AnsiColor ansi()
+    {
+        assert(!this.ansiColor.isNull);
+        return this.ansiColor.get();
+    }
+
+    RGB rgb()
+    {
+        assert(!this.rgbColor.isNull);
+        return this.rgbColor.get();
+    }
+
+    private ColorState colorState = ColorState.ansi;
+    private Nullable!AnsiColor ansiColor = AnsiColor.initial;
+    private Nullable!RGB rgbColor;
 }
 ///
 unittest
 {
     Color a;
-    assert(a.ansi == AnsiColor.initial);
-    assert(a.state == ColorState.ansi);
-    assert(a.rgbColor == RGB.init);
+    assert(a.colorState == ColorState.ansi);
+    assert(a.ansiColor == AnsiColor.initial);
+    assert(a.rgbColor.isNull());
 
     Color b = Color.red;
-    assert(b.ansi == AnsiColor.red);
-    assert(b.state == ColorState.ansi);
-    assert(b.rgbColor == RGB.init);
+    assert(b.colorState == ColorState.ansi);
+    assert(b.ansiColor == AnsiColor.red);
+    assert(b.rgbColor.isNull());
 
     Color c = Color.rgb(123, 232, 123);
-    assert(c.ansi == AnsiColor.initial);
-    assert(c.state == ColorState.rgb);
+    assert(c.colorState == ColorState.rgb);
+    assert(c.ansiColor.isNull());
     assert(c.rgbColor == RGB(123, 232, 123));
+
+    Color d = Color.same;
+    assert(d.colorState == ColorState.same);
+    assert(d.ansiColor.isNull());
+    assert(d.rgbColor.isNull());
 }
 
 deprecated
