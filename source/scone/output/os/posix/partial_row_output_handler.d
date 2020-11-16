@@ -8,14 +8,19 @@ version (Posix)
     import scone.output.types.coordinate : Coordinate;
     import std.algorithm.searching : minElement, maxElement;
     import std.conv : text;
-    import std.typecons : Tuple;
 
-    alias PartialRowOutput = Tuple!(Coordinate, "coordinate", string, "output");
+    struct PartialRowOutput
+    {
+        Coordinate coordinate;
+        string output;
+    }
 
     struct PartialRowOutputHandler
     {
-        private alias ModifiedRowSection = Tuple!(size_t, "row", size_t,
-                "firstChangedIndex", size_t, "lastChangedIndex");
+        private struct ModifiedRowSection
+        {
+            size_t row, firstChangedIndex, lastChangedIndex;
+        }
 
         this(Buffer buffer)
         {
@@ -60,11 +65,21 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        auto foregroundNumber = AnsiColorHelper(currentCell.style.foreground)
-                            .foregroundNumber;
-                        auto backgroundNumber = AnsiColorHelper(currentCell.style.background)
-                            .backgroundNumber;
-                        print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
+                        if (currentCell.style.foreground.state == ColorState.ansi
+                                && currentCell.style.background.state == ColorState.ansi)
+                        {
+                            auto foregroundNumber = AnsiColorHelper(currentCell.style.foreground)
+                                .foregroundNumber;
+                            auto backgroundNumber = AnsiColorHelper(currentCell.style.background)
+                                .backgroundNumber;
+                            print ~= text("\033[0;", foregroundNumber, ";",
+                                    backgroundNumber, "m",);
+                        }
+                        else
+                        {
+
+                        }
+
                     }
 
                     print ~= currentCell.character;
@@ -157,5 +172,16 @@ version (Posix)
 
             return startIndex + colorOffset;
         }
+    }
+
+    unittest
+    {
+        auto buffer = new Buffer(Size(3,1));
+        buffer.commit();
+
+        auto proh = PartialRowOutput(buffer);
+        auto partialRows = proh.partialRows();
+
+        assert()
     }
 }
