@@ -173,15 +173,4 @@ version (Posix)
             return startIndex + colorOffset;
         }
     }
-
-    unittest
-    {
-        auto buffer = new Buffer(Size(3,1));
-        buffer.commit();
-
-        auto proh = PartialRowOutput(buffer);
-        auto partialRows = proh.partialRows();
-
-        assert()
-    }
 }
