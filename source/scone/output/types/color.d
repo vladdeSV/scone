@@ -1,6 +1,7 @@
 module scone.output.types.color;
 
 import scone.output.text_style : TextStyle;
+import std.typecons : Nullable;
 
 enum AnsiColor
 {
@@ -27,7 +28,7 @@ enum AnsiColor
 
 struct RGB
 {
-    int r, g, b;
+    ubyte r, g, b;
 }
 
 enum ColorState
@@ -36,8 +37,6 @@ enum ColorState
     rgb,
     same,
 }
-
-import std.typecons : Nullable;
 
 struct Color
 {
@@ -71,7 +70,7 @@ struct Color
         ");
     }
 
-    static Color rgb(int r, int g, int b)
+    static Color rgb(ubyte r, ubyte g, ubyte b)
     {
         Color color = Color();
         color.colorState = ColorState.rgb;
