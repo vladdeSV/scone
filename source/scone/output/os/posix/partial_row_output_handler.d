@@ -66,29 +66,36 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        ColorState fgState = currentCell.style.foreground.state;
-                        ColorState bgState = currentCell.style.background.state;
-                        if (fgState == ColorState.ansi && bgState == ColorState.ansi)
+                        Color fg = currentCell.style.foreground;
+                        Color bg = currentCell.style.background;
+                        if (fg.state == ColorState.ansi && bg.state == ColorState.ansi)
                         {
-                            auto foregroundNumber = ansiNumber(currentCell.style.foreground.ansi, AnsiColorType.foreground);
-                            auto backgroundNumber = ansiNumber(currentCell.style.background.ansi, AnsiColorType.background);
-                            print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
+                            auto foregroundNumber = ansiNumber(fg.ansi, AnsiColorType.foreground);
+                            auto backgroundNumber = ansiNumber(bg.ansi, AnsiColorType.background);
+                            print ~= text("\033[0;", foregroundNumber, ";",
+                                    backgroundNumber, "m",);
                         }
                         else
                         {
-                            if (fgState == ColorState.ansi)
+                            // dfmt off
+                            if (fg.state == ColorState.ansi)
                             {
-                                print ~= text("\033[",ansiNumber(currentCell.style.foreground.ansi, AnsiColorType.foreground) ,"m");
-                            } else if (fgState == ColorState.rgb){
-
+                                print ~= text("\033[", ansiNumber(fg.ansi, AnsiColorType.foreground), "m");
                             }
-                            
-                            if (bgState == ColorState.ansi)
+                            else if (fg.state == ColorState.rgb)
                             {
-                                print ~= text("\033[",ansiNumber(currentCell.style.background.ansi, AnsiColorType.background) ,"m");
-                            } else if (fgState == ColorState.rgb){
-
+                                print ~= text("\033[38;2;", fg.rgb.r, ";", fg.rgb.g, ";", fg.rgb.b, "m");
                             }
+
+                            if (bg.state == ColorState.ansi)
+                            {
+                                print ~= text("\033[", ansiNumber(bg.ansi, AnsiColorType.background), "m");
+                            }
+                            else if (bg.state == ColorState.rgb)
+                            {
+                                print ~= text("\033[48;2;", bg.rgb.r, ";", bg.rgb.g, ";", bg.rgb.b, "m");
+                            }
+                            // dfmt on
                         }
 
                     }
