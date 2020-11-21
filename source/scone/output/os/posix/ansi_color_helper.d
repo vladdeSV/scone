@@ -17,7 +17,7 @@ auto ansiNumber(AnsiColor ansi, AnsiColorType type)
     default:
         assert(0);
     case AnsiColor.initial:
-        number = 99;
+        number = 39;
         break;
     case AnsiColor.black:
         number = 90;
