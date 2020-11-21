@@ -3,6 +3,7 @@ module scone.output.os.posix.partial_row_output_handler;
 version (Posix)
 {
     import scone.output.buffer : Buffer;
+    import scone.output.os.posix.ansi_color_helper : ansiNumber, AnsiColorType;
     import scone.output.types.cell : Cell;
     import scone.output.types.color;
     import scone.output.types.coordinate : Coordinate;
@@ -65,19 +66,29 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        if (currentCell.style.foreground.state == ColorState.ansi
-                                && currentCell.style.background.state == ColorState.ansi)
+                        ColorState fgState = currentCell.style.foreground.state;
+                        ColorState bgState = currentCell.style.background.state;
+                        if (fgState == ColorState.ansi && bgState == ColorState.ansi)
                         {
-                            auto foregroundNumber = AnsiColorHelper(currentCell.style.foreground)
-                                .foregroundNumber;
-                            auto backgroundNumber = AnsiColorHelper(currentCell.style.background)
-                                .backgroundNumber;
-                            print ~= text("\033[0;", foregroundNumber, ";",
-                                    backgroundNumber, "m",);
+                            auto foregroundNumber = ansiNumber(currentCell.style.foreground.ansi, AnsiColorType.foreground);
+                            auto backgroundNumber = ansiNumber(currentCell.style.background.ansi, AnsiColorType.background);
+                            print ~= text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
                         }
                         else
                         {
+                            if (fgState == ColorState.ansi)
+                            {
+                                print ~= text("\033[",ansiNumber(currentCell.style.foreground.ansi, AnsiColorType.foreground) ,"m");
+                            } else if (fgState == ColorState.rgb){
 
+                            }
+                            
+                            if (bgState == ColorState.ansi)
+                            {
+                                print ~= text("\033[",ansiNumber(currentCell.style.background.ansi, AnsiColorType.background) ,"m");
+                            } else if (fgState == ColorState.rgb){
+
+                            }
                         }
 
                     }
@@ -126,51 +137,5 @@ version (Posix)
         }
 
         private Buffer buffer;
-    }
-
-    private struct AnsiColorHelper
-    {
-        private Color color;
-
-        this(Color color)
-        {
-            this.color = color;
-        }
-
-        int foregroundNumber()
-        {
-            return ansiNumberCalculator(this.color);
-        }
-
-        int backgroundNumber()
-        {
-            enum backgroundColorOffset = 10;
-            return this.ansiNumberCalculator(this.color) + backgroundColorOffset;
-        }
-
-        private int ansiNumberCalculator(Color color)
-        {
-            auto ansi = color.ansi;
-
-            if (color.state == ColorState.same)
-            {
-                return cast(AnsiColor)-1;
-            }
-
-            if (ansi == AnsiColor.initial)
-            {
-                return 39;
-            }
-
-            assert(ansi < 16);
-
-            enum light = 90;
-            enum dark = 30;
-
-            auto startIndex = ansi < 8 ? light : dark;
-            auto colorOffset = (cast(ubyte) ansi) % 8;
-
-            return startIndex + colorOffset;
-        }
     }
 }
