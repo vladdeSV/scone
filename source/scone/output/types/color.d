@@ -125,29 +125,26 @@ unittest
     assert(d.rgbColor.isNull());
 }
 
-deprecated
+///
+TextStyle foreground(Color color)
 {
-    ///
-    TextStyle foreground(Color color)
-    {
-        return TextStyle().fg(color);
-    }
-    ///
-    unittest
-    {
-        assert(TextStyle(Color.red, Color.same) == Color.red.foreground);
-        assert(TextStyle().fg(Color.red) == foreground(Color.red));
-    }
+    return TextStyle().fg(color);
+}
+///
+unittest
+{
+    assert(TextStyle(Color.red, Color.same) == Color.red.foreground);
+    assert(TextStyle().fg(Color.red) == foreground(Color.red));
+}
 
-    ///
-    TextStyle background(Color color)
-    {
-        return TextStyle().bg(color);
-    }
-    ///
-    unittest
-    {
-        assert(TextStyle(Color.same, Color.green) == Color.green.background);
-        assert(TextStyle().bg(Color.green) == background(Color.green));
-    }
+///
+TextStyle background(Color color)
+{
+    return TextStyle().bg(color);
+}
+///
+unittest
+{
+    assert(TextStyle(Color.same, Color.green) == Color.green.background);
+    assert(TextStyle().bg(Color.green) == background(Color.green));
 }
