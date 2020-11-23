@@ -1,6 +1,6 @@
 module scone.output.os.posix.ansi_color_helper;
 
-import scone.output.types.color : AnsiColor, ColorState;
+import scone.output.types.color : Color, AnsiColor, ColorState;
 
 enum AnsiColorType
 {
@@ -121,4 +121,46 @@ unittest
     assert(ansiNumber(AnsiColor.magenta, AnsiColorType.background) == 105);
     assert(ansiNumber(AnsiColor.cyan, AnsiColorType.background) == 106);
     assert(ansiNumber(AnsiColor.white, AnsiColorType.background) == 107);
+}
+
+string ansiColorString(Color foreground, Color background)
+{
+    import std.conv : text;
+
+    if (foreground.state == ColorState.ansi && background.state == ColorState.ansi)
+    {
+        auto foregroundNumber = ansiNumber(foreground.ansi, AnsiColorType.foreground);
+        auto backgroundNumber = ansiNumber(background.ansi, AnsiColorType.background);
+        return text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
+    }
+
+    string ret;
+    if (foreground.state == ColorState.ansi)
+    {
+        ret ~= text("\033[", ansiNumber(foreground.ansi, AnsiColorType.foreground), "m");
+    }
+    else if (foreground.state == ColorState.rgb)
+    {
+        ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+    }
+
+    if (background.state == ColorState.ansi)
+    {
+        ret ~= text("\033[", ansiNumber(background.ansi, AnsiColorType.background), "m");
+    }
+    else if (background.state == ColorState.rgb)
+    {
+        ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
+    }
+
+    return ret;
+}
+///
+unittest
+{
+    assert(ansiColorString(Color.red, Color.red) == "\033[0;91;101m");
+    assert(ansiColorString(Color.red, Color.green) == "\033[0;91;102m");
+    assert(ansiColorString(Color.red, Color.rgb(10, 20, 30)) == "\033[91m\033[48;2;10;20;30m");
+    assert(ansiColorString(Color.rgb(10, 20, 30), Color.green) == "\033[38;2;10;20;30m\033[102m");
+    assert(ansiColorString(Color.rgb(10, 20, 30), Color.rgb(40, 50, 60)) == "\033[38;2;10;20;30m\033[48;2;40;50;60m");
 }
