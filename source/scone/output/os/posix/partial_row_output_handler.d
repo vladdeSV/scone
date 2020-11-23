@@ -66,38 +66,8 @@ version (Posix)
 
                     if (updateColors)
                     {
-                        Color fg = currentCell.style.foreground;
-                        Color bg = currentCell.style.background;
-                        if (fg.state == ColorState.ansi && bg.state == ColorState.ansi)
-                        {
-                            auto foregroundNumber = ansiNumber(fg.ansi, AnsiColorType.foreground);
-                            auto backgroundNumber = ansiNumber(bg.ansi, AnsiColorType.background);
-                            print ~= text("\033[0;", foregroundNumber, ";",
-                                    backgroundNumber, "m",);
-                        }
-                        else
-                        {
-                            // dfmt off
-                            if (fg.state == ColorState.ansi)
-                            {
-                                print ~= text("\033[", ansiNumber(fg.ansi, AnsiColorType.foreground), "m");
-                            }
-                            else if (fg.state == ColorState.rgb)
-                            {
-                                print ~= text("\033[38;2;", fg.rgb.r, ";", fg.rgb.g, ";", fg.rgb.b, "m");
-                            }
-
-                            if (bg.state == ColorState.ansi)
-                            {
-                                print ~= text("\033[", ansiNumber(bg.ansi, AnsiColorType.background), "m");
-                            }
-                            else if (bg.state == ColorState.rgb)
-                            {
-                                print ~= text("\033[48;2;", bg.rgb.r, ";", bg.rgb.g, ";", bg.rgb.b, "m");
-                            }
-                            // dfmt on
-                        }
-
+                        print ~= ansiColorString(currentCell.style.foreground,
+                                currentCell.style.background);
                     }
 
                     print ~= currentCell.character;
@@ -144,5 +114,44 @@ version (Posix)
         }
 
         private Buffer buffer;
+    }
+
+    string ansiColorString(Color foreground, Color background)
+    {
+        if (foreground.state == ColorState.ansi && background.state == ColorState.ansi)
+        {
+            auto foregroundNumber = ansiNumber(foreground.ansi, AnsiColorType.foreground);
+            auto backgroundNumber = ansiNumber(background.ansi, AnsiColorType.background);
+            return text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
+        }
+
+        string ret;
+        if (foreground.state == ColorState.ansi)
+        {
+            ret ~= text("\033[", ansiNumber(foreground.ansi, AnsiColorType.foreground), "m");
+        }
+        else if (foreground.state == ColorState.rgb)
+        {
+            ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+        }
+
+        if (background.state == ColorState.ansi)
+        {
+            ret ~= text("\033[", ansiNumber(background.ansi, AnsiColorType.background), "m");
+        }
+        else if (background.state == ColorState.rgb)
+        {
+            ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
+        }
+
+        return ret;
+    }
+    ///
+    unittest
+    {
+        assert(ansiColorString(Color.red, Color.red) == "\033[0;91;101m");
+        assert(ansiColorString(Color.red, Color.green) == "\033[0;91;102m");
+        assert(ansiColorString(Color.red, Color.rgb(10, 20, 30)) == "\033[91m\033[48;2;10;20;30m");
+        assert(ansiColorString(Color.rgb(10, 20, 30), Color.green) == "\033[38;2;10;20;30m\033[102m");
     }
 }
