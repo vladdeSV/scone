@@ -1,5 +1,4 @@
 .dub/
-.vscode/
 *.DS_Store
 *.exe
 *.lib
