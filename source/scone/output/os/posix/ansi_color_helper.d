@@ -163,6 +163,7 @@ version (Posix)
     unittest
     {
         //dfmt off
+        assert(ansiColorString(Color.initial, Color.initial) == "\033[0;39;49m");
         assert(ansiColorString(Color.red, Color.red) == "\033[0;91;101m");
         assert(ansiColorString(Color.red, Color.green) == "\033[0;91;102m");
         assert(ansiColorString(Color.red, Color.rgb(10, 20, 30)) == "\033[91m\033[48;2;10;20;30m");
