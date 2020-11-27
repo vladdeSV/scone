@@ -115,4 +115,36 @@ version (Posix)
 
         private Buffer buffer;
     }
+
+    unittest
+    {
+        import scone.output.buffer : Buffer;
+        import scone.output.types.size : Size;
+        import scone.output.text_style : TextStyle;
+
+        auto buffer = new Buffer(Size(5, 3));
+        auto proh = PartialRowOutputHandler(buffer);
+
+        buffer.commit();
+        assert(proh.partialRows.length == 0);
+        assert(proh.partialRows == []);
+
+        buffer.stage(Coordinate(1, 1), Cell('A', TextStyle(Color.red, Color.green)));
+        assert(proh.partialRows.length == 1);
+        assert(proh.partialRows == [PartialRowOutput(Coordinate(1, 1), "\033[0;91;102mA")]);
+
+        buffer.commit();
+        assert(proh.partialRows.length == 0);
+        assert(proh.partialRows == []);
+
+        buffer.stage(Coordinate(2, 1), Cell('B', TextStyle(Color.green, Color.red)));
+        buffer.stage(Coordinate(3, 1), Cell('B', TextStyle(Color.green, Color.red)));
+        assert(proh.partialRows.length == 1);
+        assert(proh.partialRows == [PartialRowOutput(Coordinate(2, 1), "\033[0;92;101mBB")]);
+
+        buffer.commit();
+        buffer.stage(Coordinate(2, 1), Cell('C', TextStyle(Color.green, Color.red)));
+        buffer.stage(Coordinate(3, 2), Cell('C', TextStyle(Color.green, Color.red)));
+        assert(proh.partialRows.length == 2);
+    }
 }
