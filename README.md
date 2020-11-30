@@ -24,7 +24,7 @@ void main() {
     frame.write(
       12, 9,
       TextStyle().fg(Color.yellow), "Hello ", // color text
-      TextStyle().fg(Color.red).bg(Color.red), "World"
+      TextStyle().fg(Color.red).bg(Color.white), "World"
     );
     frame.print();
   }
