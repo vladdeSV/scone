@@ -16,63 +16,60 @@ void main()
 
     string[] results;
 
-    sw.start();
-    foreach (i; 0 .. repeat)
-    {
-        auto pos = (i % 2) + 1;
-        writef("\033[%d;%dH", pos, pos);
-    }
-    stdout.flush();
-    sw.stop();
-    results ~= to!string(sw.peek);
-    sw.reset();
+    auto benchmarks = [
+        () {
+            foreach (i; 0 .. repeat)
+            {
+                auto pos = (i % 2) + 1;
+                writef("\033[%d;%dH", pos, pos);
+            }
 
-    sw.start();
-    foreach (i; 0 .. repeat)
-    {
-        auto pos = (i % 2) + 1;
-        writef("\033[%d;%dH", pos, pos);
-        stdout.flush();
-    }
-    sw.stop();
-    results ~= to!string(sw.peek);
-    sw.reset();
+            stdout.flush();
+        }, () {
+            foreach (i; 0 .. repeat)
+            {
+                auto pos = (i % 2) + 1;
+                writef("\033[%d;%dH", pos, pos);
+                stdout.flush();
+            }
+        }, () {
+            foreach (i; 0 .. repeatMultiplier)
+            {
+                string data = "";
 
-    sw.start();
-    foreach (i; 0 .. repeatMultiplier)
-    {
-        string data = "";
+                foreach (j; 0 .. height)
+                {
+                    auto pos = ((j * i) % 2) + 1;
+                    data ~= text("\033[", pos, ";", pos, "H");
+                }
 
-        foreach (j; 0 .. height)
-        {
-            auto pos = ((j * i) % 2) + 1;
-            data ~= text("\033[", pos, ";", pos, "H");
+                writef(data);
+            }
+        }, () {
+            foreach (i; 0 .. repeatMultiplier)
+            {
+                string data = "";
+
+                foreach (j; 0 .. height)
+                {
+                    auto pos = ((j * i) % 2) + 1;
+                    data ~= text("\033[", pos, ";", pos, "H");
+                }
+
+                writef(data);
+                stdout.flush();
+            }
         }
+    ];
 
-        writef(data);
-    }
-    stdout.flush();
-    sw.stop();
-    results ~= to!string(sw.peek);
-    sw.reset();
-
-    sw.start();
-    foreach (i; 0 .. repeatMultiplier)
+    foreach (benchmark; benchmarks)
     {
-        string data = "";
-
-        foreach (j; 0 .. height)
-        {
-            auto pos = ((j * i) % 2) + 1;
-            data ~= text("\033[", pos, ";", pos, "H");
-        }
-
-        writef(data);
-        stdout.flush();
+        sw.reset();
+        sw.start();
+        benchmark();
+        sw.stop();
+        results ~= to!string(sw.peek);  
     }
-    sw.stop();
-    results ~= to!string(sw.peek);
-    sw.reset();
 
     printResults(results);
 }
