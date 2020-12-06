@@ -6,7 +6,7 @@ version (Posix)
     import scone.output.types.size : Size;
     import scone.output.types.coordinate : Coordinate;
     import scone.output.buffer : Buffer;
-    import scone.output.os.posix.partial_row_output_handler : PartialRowOutputHandler, PartialRowOutput;
+    import scone.output.os.posix.partial_row_output_handler : PartialRowOutputHandler, PartialRowOutput, printDataFromPartialRowOutput;
 
     import core.sys.posix.sys.ioctl : ioctl, winsize, TIOCGWINSZ;
     import std.stdio : writef, stdout;
@@ -38,14 +38,10 @@ version (Posix)
                 lastSize = currentSize;
             }
 
-            auto foos = PartialRowOutputHandler(buffer);
+            auto proh = PartialRowOutputHandler(buffer);
 
-            foreach (PartialRowOutput data; foos.partialRows())
-            {
-                this.cursorPosition(data.coordinate);
-                .writef(data.output);
-            }
-
+            
+            .writef(proh.partialRows.printDataFromPartialRowOutput());
             .writef("\033[0m");
 
             stdout.flush();
