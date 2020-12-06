@@ -10,6 +10,30 @@ version (Posix)
     import std.algorithm.searching : minElement, maxElement;
     import std.conv : text;
 
+    string printDataFromPartialRowOutput(PartialRowOutput[] pros)
+    {
+        import std.array : join;
+        import std.algorithm.iteration : map;
+        import std.conv : text;
+
+        return pros.map!(pro => text("\033[", pro.coordinate.y + 1, ";",
+                pro.coordinate.x + 1, "H", pro.output)).join();
+    }
+    ///
+    unittest
+    {
+        PartialRowOutput[] pros;
+
+        pros = [PartialRowOutput(Coordinate(0, 2), "foo")];
+        assert(pros.printDataFromPartialRowOutput() == "\033[3;1Hfoo");
+
+        pros = [
+            PartialRowOutput(Coordinate(0, 0), "foo"),
+            PartialRowOutput(Coordinate(2, 3), "bar"),
+        ];
+        assert(pros.printDataFromPartialRowOutput() == "\033[1;1Hfoo\033[4;3Hbar");
+    }
+
     struct PartialRowOutput
     {
         Coordinate coordinate;
