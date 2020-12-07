@@ -17,7 +17,6 @@ void main()
 
     string[][] results;
 
-/+
     benchmarks = [
         () {
             foreach (i; 0 .. repeat)
@@ -63,18 +62,13 @@ void main()
             }
         }
     ];
-    +/
-    
 
     results ~= benchmark(benchmarks);
-
     /+ sample output on github codespaces
-
         1: 327 ms, 110 μs, and 7 hnsecs
         2: 5 secs, 931 ms, 412 μs, and 9 hnsecs
         3: 734 ms, 360 μs, and 3 hnsecs
         4: 597 ms, 116 μs, and 7 hnsecs
-
     +/
 
     benchmarks = [
