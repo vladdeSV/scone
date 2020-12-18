@@ -9,7 +9,6 @@ version (Posix)
     import scone.input.scone_key : SK;
     import scone.input.os.standard_input : StandardInput;
     import scone.input.os.posix.background_thread;
-    import scone.input.os.posix.keypress_tree : Keypress;
     import scone.input.os.posix.locale.input_map : InputMap;
     import scone.input.os.posix.locale.locale : Locale;
     import std.concurrency : spawn, Tid, thisTid, send, receiveTimeout, ownerTid;
@@ -59,9 +58,9 @@ version (Posix)
 
             // conversion to input events. refactor whole (winodws+posix) code to use keypresses instead of input events?
             KeyboardEvent[] keyboardEvents = [];
-            foreach (Keypress keypress; inputMap.keyboardEventsFromSequence(sequence))
+            foreach (KeyboardEvent keypress; inputMap.keyboardEventsFromSequence(sequence))
             {
-                keyboardEvents ~= KeyboardEvent(keypress.key, keypress.controlKey, true);
+                keyboardEvents ~= KeyboardEvent(keypress.key, keypress.controlKey);
             }
 
             return keyboardEvents;

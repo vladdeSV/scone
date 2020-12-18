@@ -35,9 +35,9 @@ unittest
     auto input = new Input(stdin);
     assert(input.keyboard() == []);
 
-    stdin.appendDummyKeyboardInput(KeyboardEvent(SK.a, SCK.none, true));
-    stdin.appendDummyKeyboardInput(KeyboardEvent(SK.b, SCK.none, true));
-    assert(input.keyboard() == [KeyboardEvent(SK.a, SCK.none, true), KeyboardEvent(SK.b, SCK.none, true)]);
+    stdin.appendDummyKeyboardEvent(KeyboardEvent(SK.a, SCK.none));
+    stdin.appendDummyKeyboardEvent(KeyboardEvent(SK.b, SCK.none));
+    assert(input.keyboard() == [KeyboardEvent(SK.a, SCK.none), KeyboardEvent(SK.b, SCK.none)]);
     assert(input.keyboard() == []);
 
     destroy(input);

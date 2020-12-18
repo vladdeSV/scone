@@ -1,27 +1,28 @@
-module scone.input.os.posix.keypress_tree;
+module scone.input.os.posix.keyboard_event_tree;
 
 version (Posix)
 {
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
+    import scone.input.keyboard_event : KeyboardEvent;
     import std.typecons : Nullable;
 
     // todo this logic for inserting values has some problems
     // i believe it does not safeguard a node from having both children and a value
     // also, getting multiple inputs from a sequence is not 100% reliable. it should work for known sequences, but i would not consider this reliable yet.
-    class KeypressTree
+    class KeyboardEventTree
     {
-        public Keypress[] find(uint[] sequence)
+        public KeyboardEvent[] find(uint[] sequence)
         {
             assert(sequence.length);
 
             // special case for escape key until i figure out this logic
             if (sequence == [27])
             {
-                return [Keypress(SK.escape, SCK.none)];
+                return [KeyboardEvent(SK.escape, SCK.none)];
             }
 
-            Keypress[] keypresses = [];
+            KeyboardEvent[] keypresses = [];
             auto node = this.root;
 
             foreach (n, number; sequence)
@@ -32,7 +33,7 @@ version (Posix)
                 {
                     if (!(keypresses.length && keypresses[$ - 1].key == SK.unknown))
                     {
-                        keypresses ~= Keypress(SK.unknown, SCK.none);
+                        keypresses ~= KeyboardEvent(SK.unknown, SCK.none);
                     }
 
                     node = this.root;
@@ -55,7 +56,7 @@ version (Posix)
             return keypresses;
         }
 
-        public bool insert(in uint[] sequence, Keypress data)
+        public bool insert(in uint[] sequence, KeyboardEvent data)
         {
             // special case for escape key until i figure out this logic
             if (sequence == [27])
@@ -74,7 +75,7 @@ version (Posix)
                         return false;
                     }
 
-                    node.children[number] = new KeypressNode();
+                    node.children[number] = new KeyboardEventNode();
                 }
 
                 node = node.children[number];
@@ -85,19 +86,19 @@ version (Posix)
             return true;
         }
 
-        private KeypressNode root = new KeypressNode();
+        private KeyboardEventNode root = new KeyboardEventNode();
     }
 
     unittest
     {
-        auto tree = new KeypressTree();
-        tree.insert([27], Keypress(SK.escape, SCK.none));
-        tree.insert([27, 91, 67], Keypress(SK.right, SCK.none));
-        tree.insert([27, 91, 66], Keypress(SK.down, SCK.none));
-        tree.insert([48], Keypress(SK.key_0, SCK.none));
-        tree.insert([49], Keypress(SK.key_1, SCK.none));
+        auto tree = new KeyboardEventTree();
+        tree.insert([27], KeyboardEvent(SK.escape, SCK.none));
+        tree.insert([27, 91, 67], KeyboardEvent(SK.right, SCK.none));
+        tree.insert([27, 91, 66], KeyboardEvent(SK.down, SCK.none));
+        tree.insert([48], KeyboardEvent(SK.key_0, SCK.none));
+        tree.insert([49], KeyboardEvent(SK.key_1, SCK.none));
 
-        Keypress[] find;
+        KeyboardEvent[] find;
 
         find = tree.find([1]);
         assert(find.length == 1);
@@ -135,16 +136,9 @@ version (Posix)
         assert(SK.down == find[1].key);
     }
 
-    /// todo move to own file. it is being used in multiple places
-    struct Keypress
+    private class KeyboardEventNode
     {
-        SK key;
-        SCK controlKey;
-    }
-
-    private class KeypressNode
-    {
-        KeypressNode[uint] children;
-        Nullable!Keypress value;
+        KeyboardEventNode[uint] children;
+        Nullable!KeyboardEvent value;
     }
 }
