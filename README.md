@@ -55,9 +55,9 @@ void main() {
 |control keys|✓|**|
 |key release detection|✓||
 
- *=Input is converted from arbitrary number sequences (may differ from system to system) to an input event. Basic ASCII should work no matter what system, however special keys like the up-arrow or function keys can vary drastically.
+\* Input is converted from arbitrary number sequences (may differ from system to system) to an input event. Basic ASCII should work no matter what system, however special keys like the up-arrow or function keys can vary drastically.
  
- **=Can only register the last pressed control key.
+\*\* Only registers the last pressed control key.
 
 ### Install with [dub](https://code.dlang.org/download)
 
