@@ -80,21 +80,24 @@ struct Color
         return color;
     }
 
-    ColorState state()
+    package(scone)
     {
-        return this.colorState;
-    }
+        ColorState state()
+        {
+            return this.colorState;
+        }
 
-    AnsiColor ansi()
-    {
-        assert(!this.ansiColor.isNull);
-        return this.ansiColor.get();
-    }
+        AnsiColor ansi()
+        {
+            assert(!this.ansiColor.isNull);
+            return this.ansiColor.get();
+        }
 
-    RGB rgb()
-    {
-        assert(!this.rgbColor.isNull);
-        return this.rgbColor.get();
+        RGB rgb()
+        {
+            assert(!this.rgbColor.isNull);
+            return this.rgbColor.get();
+        }
     }
 
     private ColorState colorState = ColorState.ansi;
