@@ -70,7 +70,7 @@ struct Color
         ");
     }
 
-    static Color rgb(ubyte r, ubyte g, ubyte b)
+    version (Posix) static Color rgb(ubyte r, ubyte g, ubyte b)
     {
         Color color = Color();
         color.colorState = ColorState.rgb;
@@ -80,21 +80,24 @@ struct Color
         return color;
     }
 
-    ColorState state()
+    package(scone)
     {
-        return this.colorState;
-    }
+        ColorState state()
+        {
+            return this.colorState;
+        }
 
-    AnsiColor ansi()
-    {
-        assert(!this.ansiColor.isNull);
-        return this.ansiColor.get();
-    }
+        AnsiColor ansi()
+        {
+            assert(!this.ansiColor.isNull);
+            return this.ansiColor.get();
+        }
 
-    RGB rgb()
-    {
-        assert(!this.rgbColor.isNull);
-        return this.rgbColor.get();
+        RGB rgb()
+        {
+            assert(!this.rgbColor.isNull);
+            return this.rgbColor.get();
+        }
     }
 
     private ColorState colorState = ColorState.ansi;
@@ -114,10 +117,13 @@ unittest
     assert(b.ansiColor == AnsiColor.red);
     assert(b.rgbColor.isNull());
 
-    Color c = Color.rgb(123, 232, 123);
-    assert(c.colorState == ColorState.rgb);
-    assert(c.ansiColor.isNull());
-    assert(c.rgbColor == RGB(123, 232, 123));
+    version (Posix)
+    {
+        Color c = Color.rgb(123, 232, 123);
+        assert(c.colorState == ColorState.rgb);
+        assert(c.ansiColor.isNull());
+        assert(c.rgbColor == RGB(123, 232, 123));
+    }
 
     Color d = Color.same;
     assert(d.colorState == ColorState.same);
