@@ -5,7 +5,7 @@ version (Posix)
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
-    import scone.input.os.posix.keypress_tree : KeypressTree, Keypress;
+    import scone.input.os.posix.keyboard_event_tree : KeyboardEventTree;
     import std.experimental.logger : sharedLog;
 
     /**
@@ -22,16 +22,16 @@ version (Posix)
     {
         this(string tsv)
         {
-            this.keypressTree = new KeypressTree();
-            loadKeypressTree(this.keypressTree, tsv);
+            this.keypressTree = new KeyboardEventTree();
+            loadKeyboardEventTree(this.keypressTree, tsv);
         }
 
-        Keypress[] keyboardEventsFromSequence(uint[] sequence)
+        KeyboardEvent[] keyboardEventsFromSequence(uint[] sequence)
         {
             return this.keypressTree.find(sequence);
         }
 
-        private void loadKeypressTree(KeypressTree tree, string tsv)
+        private void loadKeyboardEventTree(KeyboardEventTree tree, string tsv)
         {
             import std.file : exists, readText;
             import std.string : chomp;
@@ -67,7 +67,7 @@ version (Posix)
                     continue;
                 }
 
-                bool inserted = tree.insert(sequenceFromString(seq), Keypress(key, controlKey));
+                bool inserted = tree.insert(sequenceFromString(seq), KeyboardEvent(key, controlKey));
                 if(!inserted)
                 {
                     sharedLog.error("Could not map sequence ", seq, " to keypress ", key, "+", controlKey);
@@ -91,6 +91,6 @@ version (Posix)
             return sequence;
         }
 
-        private KeypressTree keypressTree;
+        private KeyboardEventTree keypressTree;
     }
 }

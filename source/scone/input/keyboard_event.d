@@ -6,13 +6,6 @@ import scone.core.flags : hasFlag;
 
 struct KeyboardEvent
 {
-    this(SK key, SCK controlKey, bool pressed)
-    {
-        this.key = key;
-        this.controlKey = controlKey;
-        this.pressed = pressed;
-    }
-
     auto hasControlKey(SCK ck)
     {
         return controlKey.hasFlag(ck);
@@ -20,16 +13,21 @@ struct KeyboardEvent
 
     public SK key;
     public SCK controlKey;
-    public bool pressed;
+    version (Windows) public bool pressed = true;
 }
 
 unittest
 {
-    assert(KeyboardEvent(SK.a, SCK.none, true).key == SK.a);
-    assert(KeyboardEvent(SK.a, SCK.ctrl, true).controlKey == SCK.ctrl);
-    assert(KeyboardEvent(SK.a, SCK.none, false).pressed == false);
+    assert(KeyboardEvent(SK.a, SCK.none).key == SK.a);
+    assert(KeyboardEvent(SK.a, SCK.ctrl).controlKey == SCK.ctrl);
 
-    auto keyboardEvent = KeyboardEvent(SK.a, SCK.ctrl | SCK.alt, true);
+    version (Windows)
+    {
+        assert(KeyboardEvent(SK.a, SCK.none, false).pressed == false);
+        assert(KeyboardEvent(SK.a, SCK.none, true).pressed == true);
+    }
+
+    auto keyboardEvent = KeyboardEvent(SK.a, SCK.ctrl | SCK.alt);
     assert(keyboardEvent.hasControlKey(SCK.ctrl));
     assert(keyboardEvent.hasControlKey(SCK.alt));
     assert(!keyboardEvent.hasControlKey(SCK.shift));

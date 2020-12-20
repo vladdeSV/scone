@@ -62,7 +62,7 @@ class DummyInput : StandardInput
 
     KeyboardEvent[] latestKeyboardEvents()
     {
-        scope(exit)
+        scope (exit)
         {
             this.latestDummyEvents = [];
         }
@@ -70,7 +70,7 @@ class DummyInput : StandardInput
         return this.latestDummyEvents;
     }
 
-    void appendDummyKeyboardInput(KeyboardEvent event)
+    void appendDummyKeyboardEvent(KeyboardEvent event)
     {
         this.latestDummyEvents ~= event;
     }
@@ -86,8 +86,20 @@ unittest
     auto input = new DummyInput();
     assert(input.latestKeyboardEvents == []);
 
-    input.appendDummyKeyboardInput(KeyboardEvent(SK.a, SCK.none, true));
-    input.appendDummyKeyboardInput(KeyboardEvent(SK.b, SCK.none, true));
-    assert(input.latestKeyboardEvents == [KeyboardEvent(SK.a, SCK.none, true), KeyboardEvent(SK.b, SCK.none, true)]);
-    assert(input.latestKeyboardEvents == []);
+    // dfmt off
+    version (Windows)
+    {
+        input.appendDummyKeyboardEvent(KeyboardEvent(SK.a, SCK.none, true));
+        input.appendDummyKeyboardEvent(KeyboardEvent(SK.b, SCK.none, true));
+        assert(input.latestKeyboardEvents == [KeyboardEvent(SK.a, SCK.none, true), KeyboardEvent(SK.b, SCK.none, true)]);
+        assert(input.latestKeyboardEvents == []);
+    }
+    else
+    {
+        input.appendDummyKeyboardEvent(KeyboardEvent(SK.a, SCK.none));
+        input.appendDummyKeyboardEvent(KeyboardEvent(SK.b, SCK.none));
+        assert(input.latestKeyboardEvents == [KeyboardEvent(SK.a, SCK.none), KeyboardEvent(SK.b, SCK.none)]);
+        assert(input.latestKeyboardEvents == []);
+    }
+    // dfmt on
 }
