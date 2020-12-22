@@ -46,6 +46,7 @@ void main() {
 |text|✓|✓|
 |emoji||✓|
 |ansi-color|✓|✓|
+|rgb-color||✓|
 |high performance output|✓||
 
 |input|Windows|POSIX|
