@@ -23,8 +23,8 @@ void main() {
 
     frame.write(
       12, 9,
-      TextStyle().fg(Color.yellow), "Hello ", // color text
-      TextStyle().fg(Color.red).bg(Color.white), "World"
+      TextStyle().fg(Color.yellow), "Hello ", // white foreground text (chainable pattern)
+      TextStyle().fg(Color.red).bg(Color.white), "World" // red foreground, white background
     );
     frame.print();
   }
