@@ -110,23 +110,30 @@ unittest
     Color a;
     assert(a.colorState == ColorState.ansi);
     assert(a.ansiColor == AnsiColor.initial);
+    assert(a.state() == ColorState.ansi);
+    assert(a.ansi() == AnsiColor.initial);
     assert(a.rgbColor.isNull());
 
     Color b = Color.red;
     assert(b.colorState == ColorState.ansi);
     assert(b.ansiColor == AnsiColor.red);
+    assert(b.state() == ColorState.ansi);
+    assert(b.ansi() == AnsiColor.red);
     assert(b.rgbColor.isNull());
 
     version (Posix)
     {
         Color c = Color.rgb(123, 232, 123);
         assert(c.colorState == ColorState.rgb);
+        assert(c.state() == ColorState.rgb);
         assert(c.ansiColor.isNull());
         assert(c.rgbColor == RGB(123, 232, 123));
+        assert(c.rgb() == RGB(123, 232, 123));
     }
 
     Color d = Color.same;
     assert(d.colorState == ColorState.same);
+    assert(d.state() == ColorState.same);
     assert(d.ansiColor.isNull());
     assert(d.rgbColor.isNull());
 }
