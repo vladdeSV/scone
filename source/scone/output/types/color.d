@@ -57,12 +57,14 @@ struct Color
     static foreach (member; EnumMembers!AnsiColor)
     {
         mixin("
-        static Color " ~ to!string(member) ~ "()
+        static Color "
+                ~ to!string(member) ~ "()
         {
             Color color = Color();
             color.colorState = ColorState.ansi;
-            color.ansiColor = AnsiColor." ~ to!string(
-                member) ~ ";
+            color.ansiColor = AnsiColor."
+                ~ to!string(
+                    member) ~ ";
             color.rgbColor.nullify();
 
             return color;
@@ -80,24 +82,21 @@ struct Color
         return color;
     }
 
-    package(scone)
+    ColorState state()
     {
-        ColorState state()
-        {
-            return this.colorState;
-        }
+        return this.colorState;
+    }
 
-        AnsiColor ansi()
-        {
-            assert(!this.ansiColor.isNull);
-            return this.ansiColor.get();
-        }
+    AnsiColor ansi()
+    {
+        assert(!this.ansiColor.isNull);
+        return this.ansiColor.get();
+    }
 
-        RGB rgb()
-        {
-            assert(!this.rgbColor.isNull);
-            return this.rgbColor.get();
-        }
+    version (Posix) RGB rgb()
+    {
+        assert(!this.rgbColor.isNull);
+        return this.rgbColor.get();
     }
 
     private ColorState colorState = ColorState.ansi;
