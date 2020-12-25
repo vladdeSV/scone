@@ -145,7 +145,11 @@ string ansiColorString(Color foreground, Color background)
     }
     else if (foreground.state == ColorState.rgb)
     {
-        ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+        version(Posix) {
+            ret ~= text("\03[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+        } else {
+            // warning: rgb not available on windows
+        }
     }
 
     if (background.state == ColorState.ansi)
@@ -154,7 +158,11 @@ string ansiColorString(Color foreground, Color background)
     }
     else if (background.state == ColorState.rgb)
     {
-        ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
+        version(Posix) {
+            ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
+        } else {
+            // warning: rgb not available on windows
+        }
     }
 
     return ret;
@@ -164,11 +172,15 @@ string ansiColorString(Color foreground, Color background)
 unittest
 {
     //dfmt off
-        assert(ansiColorString(Color.initial, Color.initial) == "\033[0;39;49m");
-        assert(ansiColorString(Color.red, Color.red) == "\033[0;91;101m");
-        assert(ansiColorString(Color.red, Color.green) == "\033[0;91;102m");
+    assert(ansiColorString(Color.initial, Color.initial) == "\033[0;39;49m");
+    assert(ansiColorString(Color.red, Color.red) == "\033[0;91;101m");
+    assert(ansiColorString(Color.red, Color.green) == "\033[0;91;102m");
+
+    version(Posix)
+    {
         assert(ansiColorString(Color.red, Color.rgb(10, 20, 30)) == "\033[91m\033[48;2;10;20;30m");
         assert(ansiColorString(Color.rgb(10, 20, 30), Color.green) == "\033[38;2;10;20;30m\033[102m");
         assert(ansiColorString(Color.rgb(10, 20, 30), Color.rgb(40, 50, 60)) == "\033[38;2;10;20;30m\033[48;2;40;50;60m");
-        //dfmt on
+    }
+    //dfmt on
 }
