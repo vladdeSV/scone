@@ -4,6 +4,7 @@ import scone.output.types.cell : Cell;
 import scone.output.types.color;
 import scone.output.text_style : TextStyle, StyledText;
 import std.conv : to;
+import std.traits : isImplicitlyConvertible;
 
 /// convert arguments to Cell[]
 class ArgumentsToCellsConverter(Args...)
@@ -27,7 +28,8 @@ class ArgumentsToCellsConverter(Args...)
         int i = 0;
         foreach (arg; args)
         {
-            static if (is(typeof(arg) == TextStyle))
+            alias Type = typeof(arg);
+            static if (isImplicitlyConvertible!(Type, TextStyle))
             {
                 if(arg.foreground != Color.same)
                 {
@@ -39,12 +41,12 @@ class ArgumentsToCellsConverter(Args...)
                     textStyle.background = arg.background;
                 }
             }
-            else static if (is(typeof(arg) == Cell))
+            else static if (isImplicitlyConvertible!(Type, Cell))
             {
                 cells[i] = arg;
                 ++i;
             }
-            else static if (is(typeof(arg) == Cell[]))
+            else static if (isImplicitlyConvertible!(Type, Cell[]))
             {
                 foreach (cell; arg)
                 {
@@ -52,7 +54,7 @@ class ArgumentsToCellsConverter(Args...)
                     ++i;
                 }
             }
-            else static if (is(typeof(arg) == StyledText))
+            else static if (isImplicitlyConvertible!(Type, StyledText))
             {
                 foreach (cell; arg.cells)
                 {
@@ -60,7 +62,7 @@ class ArgumentsToCellsConverter(Args...)
                     ++i;
                 }
             }
-            else static if (is(typeof(arg) == Color))
+            else static if (isImplicitlyConvertible!(Type, Color))
             {
                 //logger.warning("`write(x, y, ...)`: Type `Color` passed in, which has no effect");
             }
@@ -83,25 +85,26 @@ class ArgumentsToCellsConverter(Args...)
         int length = 0;
         foreach (arg; this.args)
         {
-            static if (is(typeof(arg) == TextStyle))
+            alias Type = typeof(arg);
+            static if (isImplicitlyConvertible!(Type, TextStyle))
             {
                 continue;
             }
-            else static if (is(typeof(arg) == Color))
+            else static if (isImplicitlyConvertible!(Type, Color))
             {
                 continue;
             }
-            else static if (is(typeof(arg) == Cell))
+            else static if (isImplicitlyConvertible!(Type, Cell))
             {
                 ++length;
                 continue;
             }
-            else static if (is(typeof(arg) == Cell[]))
+            else static if (isImplicitlyConvertible!(Type, Cell[]))
             {
                 length += arg.length;
                 continue;
             }
-            else static if (is(typeof(arg) == StyledText))
+            else static if (isImplicitlyConvertible!(Type, StyledText))
             {
                 length += arg.cells.length;
                 continue;
@@ -167,4 +170,13 @@ unittest
     auto converter1 = new ArgumentsToCellsConverter!(Color)(Color.green);
     assert(converter1.cells == []);
     assert(converter1.length == 0);
+}
+/// immutable and const
+unittest
+{
+    immutable(TextStyle) immutableStyle = TextStyle().fg(Color.yellow);
+    immutable(TextStyle) constStyle = TextStyle().fg(Color.red);
+    auto converter1 = new ArgumentsToCellsConverter!(immutable(TextStyle), const(TextStyle), string)(immutableStyle, constStyle, "1");
+    assert(converter1.length == 1);
+    assert(converter1.cells == [Cell('1', TextStyle().fg(Color.red))]);
 }
