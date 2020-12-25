@@ -146,7 +146,7 @@ string ansiColorString(Color foreground, Color background)
     else if (foreground.state == ColorState.rgb)
     {
         version(Posix) {
-            ret ~= text("\03[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+            ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
         } else {
             // warning: rgb not available on windows
         }
