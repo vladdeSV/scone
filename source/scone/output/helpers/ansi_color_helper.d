@@ -126,36 +126,39 @@ unittest
 string ansiColorString(Color foreground, Color background)
 {
     //dfmt off
-        import std.conv : text;
+    import std.conv : text;
 
-        if (foreground.state == ColorState.ansi && background.state == ColorState.ansi)
-        {
-            auto foregroundNumber = ansi16ColorNumber(foreground.ansi, AnsiColorType.foreground);
-            auto backgroundNumber = ansi16ColorNumber(background.ansi, AnsiColorType.background);
-            return text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
-        }
+    assert(!foreground.state != ColorState.same);
+    assert(!background.state != ColorState.same);
 
-        string ret;
-        if (foreground.state == ColorState.ansi)
-        {
-            ret ~= text("\033[", ansi16ColorNumber(foreground.ansi, AnsiColorType.foreground), "m");
-        }
-        else if (foreground.state == ColorState.rgb)
-        {
-            ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
-        }
+    if (foreground.state == ColorState.ansi && background.state == ColorState.ansi)
+    {
+        auto foregroundNumber = ansi16ColorNumber(foreground.ansi, AnsiColorType.foreground);
+        auto backgroundNumber = ansi16ColorNumber(background.ansi, AnsiColorType.background);
+        return text("\033[0;", foregroundNumber, ";", backgroundNumber, "m",);
+    }
 
-        if (background.state == ColorState.ansi)
-        {
-            ret ~= text("\033[", ansi16ColorNumber(background.ansi, AnsiColorType.background), "m");
-        }
-        else if (background.state == ColorState.rgb)
-        {
-            ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
-        }
+    string ret;
+    if (foreground.state == ColorState.ansi)
+    {
+        ret ~= text("\033[", ansi16ColorNumber(foreground.ansi, AnsiColorType.foreground), "m");
+    }
+    else if (foreground.state == ColorState.rgb)
+    {
+        ret ~= text("\033[38;2;", foreground.rgb.r, ";", foreground.rgb.g, ";", foreground.rgb.b, "m");
+    }
 
-        return ret;
-        //dfmt on
+    if (background.state == ColorState.ansi)
+    {
+        ret ~= text("\033[", ansi16ColorNumber(background.ansi, AnsiColorType.background), "m");
+    }
+    else if (background.state == ColorState.rgb)
+    {
+        ret ~= text("\033[48;2;", background.rgb.r, ";", background.rgb.g, ";", background.rgb.b, "m");
+    }
+
+    return ret;
+    //dfmt on
 }
 ///
 unittest
