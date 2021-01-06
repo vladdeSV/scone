@@ -3,7 +3,7 @@ module scone.output.os.posix.partial_row_output_handler;
 version (Posix)
 {
     import scone.output.buffer : Buffer;
-    import scone.output.os.posix.ansi_color_helper : ansiColorString, AnsiColorType;
+    import scone.output.helpers.ansi_color_helper : ansiColorString, AnsiColorType;
     import scone.output.types.cell : Cell;
     import scone.output.types.color;
     import scone.output.types.coordinate : Coordinate;
