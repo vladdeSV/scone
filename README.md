@@ -62,15 +62,17 @@ void main() {
 
 ### Install with [dub](https://code.dlang.org/download)
 
+**Note**: `3.0.0` is not yet availble!
+
 ```js
 /// dub.json
 "dependencies": {
-    "scone": "~develop", // do not use in production yet. unfinished
+    "scone": "~>3.0.0",
     ...
 }
 ```
 
 ```js
 /// dub.sdl
-dependency "scone" version="~develop", // do not use in production yet. unfinished
+dependency "scone" version="~>3.0.0"
 ```
