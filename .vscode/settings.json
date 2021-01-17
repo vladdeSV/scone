@@ -1,10 +1,13 @@
 {
-    "files.eol": "\n",
-    "files.trimFinalNewlines": true,
-    "files.insertFinalNewline": true,
     "dscanner.ignoredKeys": [
         "dscanner.suspicious.unmodified",
         "dscanner.style.undocumented_declaration",
         "dscanner.style.long_line"
-    ]
+    ],
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "files.eol": "\n",
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
 }
