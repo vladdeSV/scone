@@ -203,7 +203,8 @@ unittest
     assert(frame.buffer.get(Coordinate(1, 0)) == Cell('2', TextStyle(Color.blue, Color.yellow)));
 
     frame.print();
-    frame.write(0, 0, TextStyle(Color.green, Color.black), "a", StyledText("bc", TextStyle(Color.red, Color.black)), "d");
+    frame.write(0, 0, TextStyle(Color.green, Color.black), "a", StyledText("bc", TextStyle(Color.red, Color
+            .black)), "d");
     assert(frame.buffer.get(Coordinate(0, 0)) == Cell('a', TextStyle(Color.green, Color.black)));
     assert(frame.buffer.get(Coordinate(1, 0)) == Cell('b', TextStyle(Color.red, Color.black)));
     assert(frame.buffer.get(Coordinate(2, 0)) == Cell('c', TextStyle(Color.red, Color.black)));

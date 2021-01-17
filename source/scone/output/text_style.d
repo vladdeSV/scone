@@ -23,6 +23,7 @@ struct TextStyle
     Color foreground = Color.same;
     Color background = Color.same;
 }
+
 unittest
 {
     auto style1 = TextStyle();
@@ -37,6 +38,7 @@ unittest
     assert(style3.foreground == Color.red);
     assert(style3.background == Color.same);
 }
+
 unittest
 {
     auto style1 = TextStyle().fg(Color.red).bg(Color.green);
@@ -66,6 +68,7 @@ struct StyledText
 
     Cell[] cells;
 }
+
 unittest
 {
     //dfmt off

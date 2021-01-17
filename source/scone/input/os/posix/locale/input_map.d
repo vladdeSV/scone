@@ -53,8 +53,9 @@ version (Posix)
                 string[] arguments = split(s, '\t');
                 if (arguments.length != 3)
                 {
-                    sharedLog.warning("Reading input sequences CSV found %i arguments, exprected 3", arguments.length);
-                    
+                    sharedLog.warning("Reading input sequences CSV found %i arguments, exprected 3", arguments
+                            .length);
+
                     continue;
                 }
 
@@ -68,7 +69,7 @@ version (Posix)
                 }
 
                 bool inserted = tree.insert(sequenceFromString(seq), KeyboardEvent(key, controlKey));
-                if(!inserted)
+                if (!inserted)
                 {
                     sharedLog.error("Could not map sequence ", seq, " to keypress ", key, "+", controlKey);
                 }

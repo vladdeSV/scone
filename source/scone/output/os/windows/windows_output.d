@@ -147,7 +147,7 @@ version (Windows)
             COORD bufferCoord = {0, 0};
             SMALL_RECT writeRegion = {
                 cast(SHORT) coordinate.x, cast(SHORT) coordinate.y,
-                    cast(SHORT)(coordinate.x + 1), cast(SHORT)(coordinate.y + 1)
+                cast(SHORT)(coordinate.x + 1), cast(SHORT)(coordinate.y + 1)
             };
 
             WriteConsoleOutput(consoleOutputHandle, charBuffer.ptr, bufferSize,

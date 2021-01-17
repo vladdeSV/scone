@@ -38,7 +38,8 @@ version (Windows)
             {
             case AnsiColor.initial:
                 // take the inital colors, and filter out all flags except the foreground ones
-                attributes |= (initialAttributes & (FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
+                attributes |= (initialAttributes & (
+                        FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
                 break;
             case AnsiColor.blue:
                 attributes |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;
@@ -96,7 +97,8 @@ version (Windows)
             {
             case AnsiColor.initial:
                 // take the inital colors, and filter out all flags except the background ones
-                attributes |= (initialAttributes & (BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE));
+                attributes |= (initialAttributes & (
+                        BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE));
                 break;
             case AnsiColor.blue:
                 attributes |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;

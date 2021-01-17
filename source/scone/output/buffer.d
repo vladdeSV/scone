@@ -99,8 +99,8 @@ class Buffer
     private Cell[] buffer, staging;
     private bool willFlush = true;
 
-    invariant(this.buffer.length == this.staging.length);
-    invariant(this.buffer.length == (this.bufferSize.width * this.bufferSize.height));
+    invariant (this.buffer.length == this.staging.length);
+    invariant (this.buffer.length == (this.bufferSize.width * this.bufferSize.height));
 }
 
 unittest

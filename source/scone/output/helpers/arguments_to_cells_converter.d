@@ -31,12 +31,12 @@ class ArgumentsToCellsConverter(Args...)
             alias Type = typeof(arg);
             static if (isImplicitlyConvertible!(Type, TextStyle))
             {
-                if(arg.foreground != Color.same)
+                if (arg.foreground != Color.same)
                 {
                     textStyle.foreground = arg.foreground;
                 }
-                
-                if(arg.background != Color.same)
+
+                if (arg.background != Color.same)
                 {
                     textStyle.background = arg.background;
                 }
@@ -128,11 +128,13 @@ unittest
     assert(converter1.length == 0);
 
     auto converter2 = new ArgumentsToCellsConverter!(int, int, int)(0, 0, 0);
-    assert(converter2.cells == [Cell('0', TextStyle(Color.same, Color.same)), Cell('0', TextStyle(Color.same, Color.same)), Cell('0', TextStyle(Color.same, Color.same))]);
+    assert(converter2.cells == [Cell('0', TextStyle(Color.same, Color.same)), Cell('0', TextStyle(Color.same, Color
+                .same)), Cell('0', TextStyle(Color.same, Color.same))]);
     assert(converter2.length == 3);
 
     auto converter3 = new ArgumentsToCellsConverter!(string)("foo");
-    assert(converter3.cells == [Cell('f', TextStyle(Color.same, Color.same)), Cell('o', TextStyle(Color.same, Color.same)), Cell('o', TextStyle(Color.same, Color.same))]);
+    assert(converter3.cells == [Cell('f', TextStyle(Color.same, Color.same)), Cell('o', TextStyle(Color.same, Color
+                .same)), Cell('o', TextStyle(Color.same, Color.same))]);
     assert(converter3.length == 3);
 
     auto converter4 = new ArgumentsToCellsConverter!(Cell, Cell[])(Cell('1'), [Cell('2'), Cell('3')]);
@@ -144,7 +146,8 @@ unittest
 {
     import scone.output.text_style : TextStyle;
 
-    auto converter1 = new ArgumentsToCellsConverter!(TextStyle)(TextStyle().fg(Color.red).bg(Color.green));
+    auto converter1 = new ArgumentsToCellsConverter!(TextStyle)(TextStyle()
+            .fg(Color.red).bg(Color.green));
     assert(converter1.cells == []);
     assert(converter1.length == 0);
 
@@ -152,16 +155,20 @@ unittest
     assert(converter2.cells == []);
     assert(converter2.length == 0);
 
-    auto converter3 = new ArgumentsToCellsConverter!(TextStyle, string)(TextStyle().fg(Color.red), "1");
+    auto converter3 = new ArgumentsToCellsConverter!(TextStyle, string)(TextStyle()
+            .fg(Color.red), "1");
     assert(converter3.cells == [Cell('1', TextStyle().fg(Color.red))]);
     assert(converter3.length == 1);
 
-    auto converter4 = new ArgumentsToCellsConverter!(TextStyle, Cell)(TextStyle().fg(Color.red), Cell('1'));
+    auto converter4 = new ArgumentsToCellsConverter!(TextStyle, Cell)(TextStyle()
+            .fg(Color.red), Cell('1'));
     assert(converter4.cells == [Cell('1', TextStyle(Color.initial, Color.initial))]);
     assert(converter4.length == 1);
 
-    auto converter5 = new ArgumentsToCellsConverter!(StyledText)(StyledText("abc", TextStyle().fg(Color.red)));
-    assert(converter5.cells == [Cell('a', TextStyle(Color.red, Color.same)), Cell('b', TextStyle(Color.red, Color.same)), Cell('c', TextStyle(Color.red, Color.same))]);
+    auto converter5 = new ArgumentsToCellsConverter!(StyledText)(StyledText("abc", TextStyle().fg(
+            Color.red)));
+    assert(converter5.cells == [Cell('a', TextStyle(Color.red, Color.same)), Cell('b', TextStyle(Color.red, Color
+                .same)), Cell('c', TextStyle(Color.red, Color.same))]);
     assert(converter5.length == 3);
 }
 /// only color
@@ -176,7 +183,8 @@ unittest
 {
     immutable(TextStyle) immutableStyle = TextStyle().fg(Color.yellow);
     immutable(TextStyle) constStyle = TextStyle().fg(Color.red);
-    auto converter1 = new ArgumentsToCellsConverter!(immutable(TextStyle), const(TextStyle), string)(immutableStyle, constStyle, "1");
+    auto converter1 = new ArgumentsToCellsConverter!(immutable(TextStyle), const(TextStyle), string)(
+            immutableStyle, constStyle, "1");
     assert(converter1.length == 1);
     assert(converter1.cells == [Cell('1', TextStyle().fg(Color.red))]);
 }

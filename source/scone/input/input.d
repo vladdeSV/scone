@@ -30,6 +30,7 @@ unittest
     import scone.input.keyboard_event : KeyboardEvent;
     import scone.input.scone_control_key : SCK;
     import scone.input.scone_key : SK;
+
     auto stdin = new DummyInput();
 
     auto input = new Input(stdin);
