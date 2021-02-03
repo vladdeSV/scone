@@ -6,6 +6,13 @@ import scone.input.os.standard_input : StandardInput;
 import scone.output.os.standard_output : StandardOutput;
 import std.experimental.logger;
 
+enum SconeModule {
+  none = 0,
+  frame = 1,
+  input = 2,
+  // todo audio = 4,
+}
+
 Frame frame;
 Input input;
 
