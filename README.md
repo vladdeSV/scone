@@ -62,7 +62,7 @@ void main() {
 
 ### Install with [dub](https://code.dlang.org/download)
 
-**Note**: `3.0.0` is not yet availble!
+**Note**: `3.0.0` is not yet available.
 
 ```js
 /// dub.json
