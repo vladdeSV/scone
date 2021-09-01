@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: dlang-community/setup-dlang@v1.0.3
+      - uses: dlang-community/setup-dlang@v1.1.1
 
       - name: Build
         run: ${{matrix.dub}} build --config=ci
