@@ -1,5 +1,3 @@
-Note: This README covers the upcoming 3.0 release. View the latest 2.1.3 docs [here](https://github.com/vladdeSV/scone/tree/v2.1.3).
-
 # scone · [![build status](https://github.com/vladdeSV/scone/workflows/build+test/badge.svg)](https://github.com/vladdeSV/scone/actions?query=workflow:build+test) [![license](https://img.shields.io/github/license/vladdeSV/scone?color=black&labelColor=24292E)](https://github.com/vladdeSV/scone/blob/develop/LICENSE)
 Create cross-platform terminal applications.
 
